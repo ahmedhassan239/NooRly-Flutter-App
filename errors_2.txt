@@ -1,0 +1,216 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (93.0.0 available)
+  analyzer 6.4.1 (10.0.0 available)
+  analyzer_plugin 0.11.3 (0.14.0 available)
+  build 2.4.1 (4.0.3 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.10.4 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  characters 1.4.0 (1.4.1 available)
+  custom_lint 0.6.4 (0.8.1 available)
+  custom_lint_builder 0.6.4 (0.8.1 available)
+  custom_lint_core 0.6.3 (0.8.2 available)
+  dart_style 2.3.6 (3.1.3 available)
+  flutter_lints 3.0.2 (6.0.0 available)
+  flutter_riverpod 2.6.1 (3.1.0 available)
+  freezed_annotation 2.4.4 (3.1.0 available)
+  go_router 13.2.5 (17.0.1 available)
+  google_fonts 6.3.3 (7.0.0 available)
+  lints 3.0.0 (6.0.0 available)
+  matcher 0.12.17 (0.12.18 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  riverpod 2.6.1 (3.1.0 available)
+  riverpod_analyzer_utils 0.5.1 (0.5.10 available)
+  riverpod_annotation 2.6.1 (4.0.0 available)
+  riverpod_generator 2.4.0 (4.0.0+1 available)
+  riverpod_lint 2.3.10 (3.1.0 available)
+  rxdart 0.27.7 (0.28.0 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.1.1 available)
+  test_api 0.7.7 (0.7.9 available)
+  very_good_analysis 5.1.0 (10.0.0 available)
+Got dependencies!
+31 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Analyzing flutter_app...                                        
+
+  error • The getter 'defaultRadius' isn't defined for the type 'AppRadius' • lib/design_system/widgets/app_button.dart:103:55 • undefined_getter
+   info • To-do comment doesn't follow the Flutter style • lib/design_system/widgets/content_card.dart:145:5 • flutter_style_todos
+   info • To-do comment doesn't follow the Flutter style • lib/design_system/widgets/content_card.dart:157:5 • flutter_style_todos
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:204:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:205:47 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:206:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:213:35 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:231:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:283:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/content_card.dart:349:37 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/library_tabs.dart:28:32 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/library_tabs.dart:72:41 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/page_background.dart:32:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/design_system/widgets/page_background.dart:43:37 • deprecated_member_use
+   info • Invalid use of 'default' member in a switch • lib/design_system/widgets/page_background.dart:75:7 • no_default_cases
+warning • This default clause is covered by the previous cases • lib/design_system/widgets/page_background.dart:75:7 • unreachable_switch_default
+   info • 'value' is deprecated and shouldn't be used. Use component accessors like .r or .g, or toARGB32 for an explicit conversion • lib/design_system/widgets/page_background.dart:88:22 • deprecated_member_use
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/journey_summary_page.dart:4:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/journey_summary_page.dart:6:1 • directives_ordering
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/journey_summary_page.dart:29:36 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/journey_summary_page.dart:37:40 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/journey_summary_page.dart:45:39 • deprecated_member_use
+warning • The type argument(s) of the constructor 'Future.delayed' can't be inferred • lib/features/onboarding/presentation/pages/journey_summary_page.dart:56:11 • inference_failure_on_instance_creation
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:72 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:92:100 • missing_required_argument
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/journey_summary_page.dart:125:59 • deprecated_member_use
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:133:56 • undefined_method
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:58 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:139:86 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:184:74 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:186:74 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:192:71 • undefined_method
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/journey_summary_page.dart:197:74 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/journey_summary_page.dart:198:66 • missing_required_argument
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/learning_goal_page.dart:4:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/learning_goal_page.dart:6:1 • directives_ordering
+warning • Unused import: 'package:flutter_app/design_system/widgets/app_card.dart' • lib/features/onboarding/presentation/pages/learning_goal_page.dart:9:8 • unused_import
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:68 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:72:96 • missing_required_argument
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/learning_goal_page.dart:107:54 • deprecated_member_use
+  error • A value of type 'TextStyle Function({Color? color})' can't be assigned to a parameter of type 'TextStyle?' in a const constructor • lib/features/onboarding/presentation/pages/learning_goal_page.dart:119:33 • const_constructor_param_type_mismatch
+  error • The argument type 'TextStyle Function({Color? color})' can't be assigned to the parameter type 'TextStyle?'.  • lib/features/onboarding/presentation/pages/learning_goal_page.dart:119:40 • argument_type_not_assignable
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:59 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:124:81 • missing_required_argument
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/learning_goal_page.dart:148:69 • deprecated_member_use
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/learning_goal_page.dart:169:67 • undefined_method
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/learning_goal_page.dart:176:69 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/learning_goal_page.dart:177:62 • missing_required_argument
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/shahada_date_page.dart:4:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/shahada_date_page.dart:6:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/shahada_date_page.dart:7:1 • directives_ordering
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:68 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:94:96 • missing_required_argument
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/shahada_date_page.dart:129:54 • deprecated_member_use
+  error • A value of type 'TextStyle Function({Color? color})' can't be assigned to a parameter of type 'TextStyle?' in a const constructor • lib/features/onboarding/presentation/pages/shahada_date_page.dart:141:33 • const_constructor_param_type_mismatch
+  error • The argument type 'TextStyle Function({Color? color})' can't be assigned to the parameter type 'TextStyle?'.  • lib/features/onboarding/presentation/pages/shahada_date_page.dart:141:40 • argument_type_not_assignable
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:59 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:146:81 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:179:56 • undefined_method
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:56 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:180:84 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:56 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:192:84 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/shahada_date_page.dart:205:57 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/shahada_date_page.dart:207:88 • missing_required_argument
+   info • The import of 'package:flutter/rendering.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' • lib/features/onboarding/presentation/pages/welcome_page.dart:3:8 • unnecessary_import
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/welcome_page.dart:5:1 • directives_ordering
+   info • Sort directive sections alphabetically • lib/features/onboarding/presentation/pages/welcome_page.dart:7:1 • directives_ordering
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/welcome_page.dart:46:48 • deprecated_member_use
+   info • 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss • lib/features/onboarding/presentation/pages/welcome_page.dart:64:50 • deprecated_member_use
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/welcome_page.dart:97:60 • undefined_method
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/welcome_page.dart:116:51 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:117:60 • missing_required_argument
+  error • The method 'copyWith' isn't defined for the type 'Function' • lib/features/onboarding/presentation/pages/welcome_page.dart:144:54 • undefined_method
+  error • The named parameter 'brightness' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'error' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'onError' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'onPrimary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'onSecondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'onSurface' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'primary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+  error • The named parameter 'secondary' is required, but there's no corresponding argument • lib/features/onboarding/presentation/pages/welcome_page.dart:144:82 • missing_required_argument
+   info • Dependencies not sorted alphabetically • pubspec.yaml:41:3 • sort_pub_dependencies
+   info • Dependencies not sorted alphabetically • pubspec.yaml:63:3 • sort_pub_dependencies
+  error • The name 'MyApp' isn't a class • test/widget_test.dart:15:35 • creation_with_non_type
+
+176 issues found. (ran in 4.0s)

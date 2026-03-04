@@ -1,0 +1,32 @@
+{
+  "@@locale": "en",
+  "appTitle": "Noor Journey",
+  "welcomeTitle": "Welcome to Noor Journey",
+  "getStarted": "Get Started",
+  "home": "Home",
+  "settings": "Settings",
+  "profile": "Profile",
+  "otpTitle": "Verify Email",
+  "otpSubtitle": "Enter the 6-digit code sent to {email}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "otpResend": "Resend Code",
+  "otpResendIn": "Resend in {seconds}s",
+  "@otpResendIn": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "otpInvalid": "Invalid code. Please try again.",
+  "otpExpired": "Code expired. Please request a new one.",
+  "otpTooManyRequests": "Too many requests. Please wait and try later.",
+  "otpVerified": "Email verified successfully!",
+  "otpVerifyButton": "Verify"
+}

@@ -1,0 +1,600 @@
+{
+    "categories": [
+        {
+            "id": "morning-evening",
+            "title": "Morning & Evening",
+            "icon": "🌙",
+            "count": 8
+        },
+        {
+            "id": "meals",
+            "title": "Before & After Meals",
+            "icon": "🍽️",
+            "count": 4
+        },
+        {
+            "id": "sleep",
+            "title": "Sleep & Waking",
+            "icon": "🛌",
+            "count": 6
+        },
+        {
+            "id": "travel",
+            "title": "Travel",
+            "icon": "🚗",
+            "count": 4
+        },
+        {
+            "id": "protection",
+            "title": "Protection",
+            "icon": "🛡️",
+            "count": 5
+        },
+        {
+            "id": "gratitude",
+            "title": "Gratitude & Praise",
+            "icon": "🙏",
+            "count": 4
+        },
+        {
+            "id": "seeking-knowledge",
+            "title": "Knowledge & Guidance",
+            "icon": "📖",
+            "count": 4
+        },
+        {
+            "id": "health",
+            "title": "Health & Healing",
+            "icon": "💚",
+            "count": 3
+        }
+    ],
+    "duas": [
+        {
+            "id": "dua_1",
+            "category": "morning-evening",
+            "title": "Morning Protection",
+            "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ",
+            "transliteration": "Allahumma inni as'aluka al-'afiyah fid-dunya wal-akhirah",
+            "translation": "O Allah, I ask You for well-being in this world and the Hereafter",
+            "source": "Hisnul Muslim #8",
+            "tags": [
+                "morning",
+                "protection",
+                "health",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_2",
+            "category": "morning-evening",
+            "title": "Entering the Morning",
+            "arabic": "أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ",
+            "transliteration": "Asbahna wa asbahal-mulku lillahi wal-hamdulillah",
+            "translation": "We have entered the morning and the dominion belongs to Allah, and all praise is for Allah",
+            "source": "Hisnul Muslim #1",
+            "tags": [
+                "morning",
+                "praise",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_3",
+            "category": "morning-evening",
+            "title": "Evening Remembrance",
+            "arabic": "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ وَالْحَمْدُ لِلَّهِ",
+            "transliteration": "Amsayna wa amsal-mulku lillahi wal-hamdulillah",
+            "translation": "We have entered the evening and the dominion belongs to Allah, and all praise is for Allah",
+            "source": "Hisnul Muslim #2",
+            "tags": [
+                "evening",
+                "praise",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_4",
+            "category": "morning-evening",
+            "title": "Master of Forgiveness",
+            "arabic": "اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ خَلَقْتَنِي وَأَنَا عَبْدُكَ",
+            "transliteration": "Allahumma anta Rabbi la ilaha illa anta, khalaqtani wa ana 'abduka",
+            "translation": "O Allah, You are my Lord, there is no god but You. You created me and I am Your servant",
+            "source": "Sayyid al-Istighfar",
+            "tags": [
+                "morning",
+                "evening",
+                "forgiveness",
+                "important"
+            ]
+        },
+        {
+            "id": "dua_5",
+            "category": "morning-evening",
+            "title": "Seeking Refuge",
+            "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ",
+            "transliteration": "A'udhu bi kalimatillahit-tammati min sharri ma khalaq",
+            "translation": "I seek refuge in the perfect words of Allah from the evil of what He has created",
+            "source": "Hisnul Muslim #12",
+            "tags": [
+                "evening",
+                "protection",
+                "refuge"
+            ]
+        },
+        {
+            "id": "dua_6",
+            "category": "morning-evening",
+            "title": "Three Quls Protection",
+            "arabic": "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ قُلْ هُوَ اللَّهُ أَحَدٌ",
+            "transliteration": "Bismillahir-Rahmanir-Rahim. Qul huwa Allahu ahad",
+            "translation": "In the name of Allah, the Most Gracious, the Most Merciful. Say: He is Allah, the One",
+            "source": "Surah Al-Ikhlas",
+            "tags": [
+                "morning",
+                "evening",
+                "protection",
+                "quran"
+            ]
+        },
+        {
+            "id": "dua_7",
+            "category": "morning-evening",
+            "title": "Trust in Allah",
+            "arabic": "حَسْبِيَ اللَّهُ لَا إِلَهَ إِلَّا هُوَ عَلَيْهِ تَوَكَّلْتُ",
+            "transliteration": "Hasbiyal-lahu la ilaha illa huwa, 'alayhi tawakkaltu",
+            "translation": "Allah is sufficient for me. There is no god but Him. I have placed my trust in Him",
+            "source": "Quran 9:129",
+            "tags": [
+                "morning",
+                "evening",
+                "trust",
+                "tawakkul"
+            ]
+        },
+        {
+            "id": "dua_8",
+            "category": "morning-evening",
+            "title": "Protection from Evil Eye",
+            "arabic": "بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ",
+            "transliteration": "Bismillahil-ladhi la yadurru ma'asmihi shay'un fil-ardi wa la fis-sama'",
+            "translation": "In the name of Allah, with Whose name nothing can harm on earth or in heaven",
+            "source": "Hisnul Muslim #15",
+            "tags": [
+                "morning",
+                "evening",
+                "protection",
+                "evil eye"
+            ]
+        },
+        {
+            "id": "dua_9",
+            "category": "meals",
+            "title": "Before Eating",
+            "arabic": "بِسْمِ اللَّهِ",
+            "transliteration": "Bismillah",
+            "translation": "In the name of Allah",
+            "source": "Hisnul Muslim #50",
+            "tags": [
+                "meals",
+                "eating",
+                "before",
+                "short"
+            ]
+        },
+        {
+            "id": "dua_10",
+            "category": "meals",
+            "title": "After Eating",
+            "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ",
+            "transliteration": "Alhamdu lillahil-ladhi at'amana wa saqana wa ja'alana muslimin",
+            "translation": "All praise is for Allah Who has fed us, given us drink, and made us Muslims",
+            "source": "Hisnul Muslim #51",
+            "tags": [
+                "meals",
+                "eating",
+                "after",
+                "gratitude"
+            ]
+        },
+        {
+            "id": "dua_11",
+            "category": "meals",
+            "title": "When Forgetting Bismillah",
+            "arabic": "بِسْمِ اللَّهِ أَوَّلَهُ وَآخِرَهُ",
+            "transliteration": "Bismillahi awwalahu wa akhirahu",
+            "translation": "In the name of Allah at the beginning and at the end",
+            "source": "Abu Dawud",
+            "tags": [
+                "meals",
+                "eating",
+                "forgotten"
+            ]
+        },
+        {
+            "id": "dua_12",
+            "category": "meals",
+            "title": "When Breaking Fast",
+            "arabic": "ذَهَبَ الظَّمَأُ وَابْتَلَّتِ الْعُرُوقُ وَثَبَتَ الْأَجْرُ إِنْ شَاءَ اللَّهُ",
+            "transliteration": "Dhahaba zama'u wabtallatil-'uruqu wa thabatal-ajru insha'Allah",
+            "translation": "The thirst has gone, the veins are moistened, and the reward is confirmed, if Allah wills",
+            "source": "Abu Dawud",
+            "tags": [
+                "meals",
+                "fasting",
+                "iftar",
+                "ramadan"
+            ]
+        },
+        {
+            "id": "dua_13",
+            "category": "sleep",
+            "title": "Before Sleeping",
+            "arabic": "بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا",
+            "transliteration": "Bismika Allahumma amutu wa ahya",
+            "translation": "In Your name, O Allah, I die and I live",
+            "source": "Bukhari",
+            "tags": [
+                "sleep",
+                "night",
+                "before"
+            ]
+        },
+        {
+            "id": "dua_14",
+            "category": "sleep",
+            "title": "Upon Waking",
+            "arabic": "الْحَمْدُ لِلَّهِ الَّذِي أَحْيَانَا بَعْدَ مَا أَمَاتَنَا وَإِلَيْهِ النُّشُورُ",
+            "transliteration": "Alhamdu lillahil-ladhi ahyana ba'da ma amatana wa ilayhin-nushur",
+            "translation": "All praise is for Allah Who gave us life after causing us to die, and to Him is the resurrection",
+            "source": "Bukhari",
+            "tags": [
+                "sleep",
+                "waking",
+                "morning",
+                "gratitude"
+            ]
+        },
+        {
+            "id": "dua_15",
+            "category": "sleep",
+            "title": "Ayatul Kursi Before Sleep",
+            "arabic": "اللَّهُ لَا إِلَهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ",
+            "transliteration": "Allahu la ilaha illa huwal-Hayyul-Qayyum",
+            "translation": "Allah, there is no god but He, the Ever-Living, the Self-Sustaining",
+            "source": "Surah Al-Baqarah 2:255",
+            "tags": [
+                "sleep",
+                "protection",
+                "quran",
+                "important"
+            ]
+        },
+        {
+            "id": "dua_16",
+            "category": "sleep",
+            "title": "When Having Bad Dream",
+            "arabic": "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ",
+            "transliteration": "A'udhu billahi minash-shaytanir-rajim",
+            "translation": "I seek refuge in Allah from Satan, the accursed",
+            "source": "Muslim",
+            "tags": [
+                "sleep",
+                "nightmare",
+                "protection"
+            ]
+        },
+        {
+            "id": "dua_17",
+            "category": "sleep",
+            "title": "Unable to Sleep",
+            "arabic": "اللَّهُمَّ غَارَتِ النُّجُومُ وَهَدَأَتِ الْعُيُونُ وَأَنْتَ حَيٌّ قَيُّومٌ",
+            "transliteration": "Allahumma gharatin-nujum, wa hada'atil-'uyun, wa anta Hayyun Qayyum",
+            "translation": "O Allah, the stars have set and eyes have rested, and You are the Ever-Living, the Self-Sustaining",
+            "source": "Ibn As-Sunni",
+            "tags": [
+                "sleep",
+                "insomnia",
+                "night"
+            ]
+        },
+        {
+            "id": "dua_18",
+            "category": "sleep",
+            "title": "Last Verse Before Sleep",
+            "arabic": "آمَنَ الرَّسُولُ بِمَا أُنْزِلَ إِلَيْهِ مِنْ رَبِّهِ وَالْمُؤْمِنُونَ",
+            "transliteration": "Amanar-Rasulu bima unzila ilayhi mir-rabbihi wal-mu'minun",
+            "translation": "The Messenger has believed in what was revealed to him from his Lord, and so have the believers",
+            "source": "Surah Al-Baqarah 2:285",
+            "tags": [
+                "sleep",
+                "quran",
+                "protection"
+            ]
+        },
+        {
+            "id": "dua_19",
+            "category": "travel",
+            "title": "Starting a Journey",
+            "arabic": "سُبْحَانَ الَّذِي سَخَّرَ لَنَا هَذَا وَمَا كُنَّا لَهُ مُقْرِنِينَ",
+            "transliteration": "Subhanal-ladhi sakhkhara lana hadha wa ma kunna lahu muqrinin",
+            "translation": "Glory be to Him Who has subjected this to us, and we could not have accomplished it ourselves",
+            "source": "Hisnul Muslim #84",
+            "tags": [
+                "travel",
+                "journey",
+                "vehicle"
+            ]
+        },
+        {
+            "id": "dua_20",
+            "category": "travel",
+            "title": "Returning from Journey",
+            "arabic": "آيِبُونَ تَائِبُونَ عَابِدُونَ لِرَبِّنَا حَامِدُونَ",
+            "transliteration": "Ayibuna ta'ibuna 'abiduna lirabbina hamidun",
+            "translation": "We are returning, repenting, worshipping, and praising our Lord",
+            "source": "Bukhari & Muslim",
+            "tags": [
+                "travel",
+                "return",
+                "gratitude"
+            ]
+        },
+        {
+            "id": "dua_21",
+            "category": "travel",
+            "title": "Entering a Town",
+            "arabic": "اللَّهُمَّ رَبَّ السَّمَاوَاتِ السَّبْعِ وَمَا أَظْلَلْنَ",
+            "transliteration": "Allahumma Rabbas-samawatis-sab'i wa ma azlalna",
+            "translation": "O Allah, Lord of the seven heavens and all they shade",
+            "source": "Hakim",
+            "tags": [
+                "travel",
+                "town",
+                "city"
+            ]
+        },
+        {
+            "id": "dua_22",
+            "category": "travel",
+            "title": "Fear During Travel",
+            "arabic": "اللَّهُمَّ إِنَّا نَجْعَلُكَ فِي نُحُورِهِمْ وَنَعُوذُ بِكَ مِنْ شُرُورِهِمْ",
+            "transliteration": "Allahumma inna naj'aluka fi nuhurihim wa na'udhu bika min shururihim",
+            "translation": "O Allah, we place You before them and seek refuge in You from their evil",
+            "source": "Abu Dawud",
+            "tags": [
+                "travel",
+                "fear",
+                "protection"
+            ]
+        },
+        {
+            "id": "dua_23",
+            "category": "protection",
+            "title": "Against Evil",
+            "arabic": "أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّةِ مِنْ كُلِّ شَيْطَانٍ وَهَامَّةٍ",
+            "transliteration": "A'udhu bi kalimatillahit-tammati min kulli shaytanin wa hammah",
+            "translation": "I seek refuge in the perfect words of Allah from every devil and poisonous creature",
+            "source": "Bukhari",
+            "tags": [
+                "protection",
+                "evil",
+                "children"
+            ]
+        },
+        {
+            "id": "dua_24",
+            "category": "protection",
+            "title": "Leaving the House",
+            "arabic": "بِسْمِ اللَّهِ تَوَكَّلْتُ عَلَى اللَّهِ وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ",
+            "transliteration": "Bismillahi tawakkaltu 'alallahi wa la hawla wa la quwwata illa billah",
+            "translation": "In the name of Allah, I place my trust in Allah. There is no might or power except with Allah",
+            "source": "Hisnul Muslim #17",
+            "tags": [
+                "protection",
+                "leaving",
+                "home",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_25",
+            "category": "protection",
+            "title": "Entering the House",
+            "arabic": "بِسْمِ اللَّهِ وَلَجْنَا وَبِسْمِ اللَّهِ خَرَجْنَا وَعَلَى اللَّهِ رَبِّنَا تَوَكَّلْنَا",
+            "transliteration": "Bismillahi walajna, wa bismillahi kharajna, wa 'ala Allahi rabbina tawakkalna",
+            "translation": "In the name of Allah we enter, in the name of Allah we leave, and upon Allah our Lord we rely",
+            "source": "Abu Dawud",
+            "tags": [
+                "protection",
+                "entering",
+                "home"
+            ]
+        },
+        {
+            "id": "dua_26",
+            "category": "protection",
+            "title": "Against Anxiety",
+            "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ",
+            "transliteration": "Allahumma inni a'udhu bika minal-hammi wal-hazan",
+            "translation": "O Allah, I seek refuge in You from anxiety and sorrow",
+            "source": "Bukhari",
+            "tags": [
+                "protection",
+                "anxiety",
+                "sadness",
+                "mental health"
+            ]
+        },
+        {
+            "id": "dua_27",
+            "category": "protection",
+            "title": "Against Debt",
+            "arabic": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْمَأْثَمِ وَالْمَغْرَمِ",
+            "transliteration": "Allahumma inni a'udhu bika minal-ma'thami wal-maghram",
+            "translation": "O Allah, I seek refuge in You from sin and debt",
+            "source": "Bukhari & Muslim",
+            "tags": [
+                "protection",
+                "debt",
+                "sin"
+            ]
+        },
+        {
+            "id": "dua_28",
+            "category": "gratitude",
+            "title": "General Praise",
+            "arabic": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+            "transliteration": "Alhamdu lillahi Rabbil-'alamin",
+            "translation": "All praise is for Allah, Lord of all the worlds",
+            "source": "Surah Al-Fatiha",
+            "tags": [
+                "gratitude",
+                "praise",
+                "daily",
+                "short"
+            ]
+        },
+        {
+            "id": "dua_29",
+            "category": "gratitude",
+            "title": "After Sneezing",
+            "arabic": "الْحَمْدُ لِلَّهِ",
+            "transliteration": "Alhamdulillah",
+            "translation": "All praise is for Allah",
+            "source": "Bukhari",
+            "tags": [
+                "gratitude",
+                "sneezing",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_30",
+            "category": "gratitude",
+            "title": "When Something Good Happens",
+            "arabic": "الْحَمْدُ لِلَّهِ الَّذِي بِنِعْمَتِهِ تَتِمُّ الصَّالِحَاتُ",
+            "transliteration": "Alhamdu lillahil-ladhi bini'matihi tatimmus-salihat",
+            "translation": "All praise is for Allah by Whose grace good deeds are completed",
+            "source": "Ibn Majah",
+            "tags": [
+                "gratitude",
+                "blessings",
+                "good news"
+            ]
+        },
+        {
+            "id": "dua_31",
+            "category": "gratitude",
+            "title": "When Seeing Someone Afflicted",
+            "arabic": "الْحَمْدُ لِلَّهِ الَّذِي عَافَانِي مِمَّا ابْتَلَاكَ بِهِ",
+            "transliteration": "Alhamdu lillahil-ladhi 'afani mimma-btalaka bihi",
+            "translation": "All praise is for Allah Who has saved me from what He has afflicted you with",
+            "source": "Tirmidhi",
+            "tags": [
+                "gratitude",
+                "health",
+                "blessings"
+            ]
+        },
+        {
+            "id": "dua_32",
+            "category": "seeking-knowledge",
+            "title": "For Beneficial Knowledge",
+            "arabic": "اللَّهُمَّ إِنِّي أَسْأَلُكَ عِلْمًا نَافِعًا وَرِزْقًا طَيِّبًا وَعَمَلًا مُتَقَبَّلًا",
+            "transliteration": "Allahumma inni as'aluka 'ilman nafi'an wa rizqan tayyiban wa 'amalan mutaqabbalan",
+            "translation": "O Allah, I ask You for beneficial knowledge, good provision, and accepted deeds",
+            "source": "Ibn Majah",
+            "tags": [
+                "knowledge",
+                "study",
+                "morning"
+            ]
+        },
+        {
+            "id": "dua_33",
+            "category": "seeking-knowledge",
+            "title": "For Guidance",
+            "arabic": "اللَّهُمَّ اهْدِنِي وَسَدِّدْنِي",
+            "transliteration": "Allahumma-hdini wa saddidni",
+            "translation": "O Allah, guide me and keep me on the right path",
+            "source": "Muslim",
+            "tags": [
+                "guidance",
+                "direction",
+                "daily"
+            ]
+        },
+        {
+            "id": "dua_34",
+            "category": "seeking-knowledge",
+            "title": "When Studying",
+            "arabic": "رَبِّ زِدْنِي عِلْمًا",
+            "transliteration": "Rabbi zidni 'ilma",
+            "translation": "My Lord, increase me in knowledge",
+            "source": "Quran 20:114",
+            "tags": [
+                "knowledge",
+                "study",
+                "quran"
+            ]
+        },
+        {
+            "id": "dua_35",
+            "category": "seeking-knowledge",
+            "title": "For Understanding",
+            "arabic": "اللَّهُمَّ فَقِّهْنِي فِي الدِّينِ",
+            "transliteration": "Allahumma faqqihni fid-din",
+            "translation": "O Allah, grant me understanding in the religion",
+            "source": "Bukhari & Muslim",
+            "tags": [
+                "knowledge",
+                "understanding",
+                "religion"
+            ]
+        },
+        {
+            "id": "dua_36",
+            "category": "health",
+            "title": "When Visiting the Sick",
+            "arabic": "أَذْهِبِ الْبَأْسَ رَبَّ النَّاسِ اشْفِ أَنْتَ الشَّافِي لَا شِفَاءَ إِلَّا شِفَاؤُكَ",
+            "transliteration": "Adhhibil-ba'sa Rabban-nas, ishfi antash-Shafi, la shifa'a illa shifa'uka",
+            "translation": "Remove the hardship, O Lord of mankind. Grant healing, for You are the Healer. There is no healing except Your healing",
+            "source": "Bukhari & Muslim",
+            "tags": [
+                "health",
+                "healing",
+                "sick",
+                "visiting"
+            ]
+        },
+        {
+            "id": "dua_37",
+            "category": "health",
+            "title": "When in Pain",
+            "arabic": "أَعُوذُ بِعِزَّةِ اللَّهِ وَقُدْرَتِهِ مِنْ شَرِّ مَا أَجِدُ وَأُحَاذِرُ",
+            "transliteration": "A'udhu bi'izatillahi wa qudratihi min sharri ma ajidu wa uhadhir",
+            "translation": "I seek refuge in Allah's might and power from the evil of what I feel and fear",
+            "source": "Muslim",
+            "tags": [
+                "health",
+                "pain",
+                "healing"
+            ]
+        },
+        {
+            "id": "dua_38",
+            "category": "health",
+            "title": "For Good Health",
+            "arabic": "اللَّهُمَّ عَافِنِي فِي بَدَنِي اللَّهُمَّ عَافِنِي فِي سَمْعِي اللَّهُمَّ عَافِنِي فِي بَصَرِي",
+            "transliteration": "Allahumma 'afini fi badani, Allahumma 'afini fi sam'i, Allahumma 'afini fi basari",
+            "translation": "O Allah, grant me health in my body. O Allah, grant me health in my hearing. O Allah, grant me health in my sight",
+            "source": "Abu Dawud",
+            "tags": [
+                "health",
+                "body",
+                "daily"
+            ]
+        }
+    ]
+}

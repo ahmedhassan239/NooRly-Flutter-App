@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 220" fill="none">
+  <!-- Mosque silhouette: dome and two minarets, dark for contrast -->
+  <path fill="#0a1628" d="M0 220V90h50v130H0zm350 0V90h50v130h-50zM50 90C50 55 78 28 115 28h170c37 0 65 27 65 62v62H50V90zm150-52c30 0 55 24 55 52h-25c0-15-12-27-27-27s-27 12-27 27h-26c0-28 25-52 55-52z"/>
+  <path fill="#0a1628" d="M200 38c-20 0-36 16-36 36h72c0-20-16-36-36-36z"/>
+</svg>

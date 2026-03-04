@@ -1,0 +1,260 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
+import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
+import 'package:flutter_app/features/hadith/data/daily_hadith_api.dart';
+import 'package:flutter_app/features/home/presentation/widgets/home_card.dart';
+import 'package:flutter_app/features/saved/presentation/widgets/save_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lucide_icons/lucide_icons.dart';
+
+/// Daily Inspiration section: header row (title + "See All →") and card content.
+class DailyInspirationCard extends StatelessWidget {
+  const DailyInspirationCard({
+    required this.hadith,
+    required this.onRetry,
+    super.key,
+  });
+
+  final DailyHadithDto? hadith;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  LucideIcons.heart,
+                  size: 18,
+                  color: colorScheme.onSurface.withValues(alpha: 0.8),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Daily Inspiration',
+                  style: AppTypography.h3(color: colorScheme.onSurface),
+                ),
+              ],
+            ),
+            TextButton(
+              onPressed: () => context.push('/hadith'),
+              child: const Text('See All →'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        hadith == null
+            ? _PlaceholderCard(
+                colorScheme: colorScheme,
+                onRetry: onRetry,
+              )
+            : _ContentCard(hadith: hadith!, colorScheme: colorScheme),
+      ],
+    );
+  }
+}
+
+class _ContentCard extends StatelessWidget {
+  const _ContentCard({
+    required this.hadith,
+    required this.colorScheme,
+  });
+
+  final DailyHadithDto hadith;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final textEn = hadith.textEn ?? hadith.textAr;
+    final reference =
+        hadith.reference ?? hadith.collectionName ?? 'Hadith';
+
+    final lightBlueBg = AppColors.primaryLightBlue.withValues(alpha: 0.08);
+
+    return HomeCard(
+      backgroundColor: lightBlueBg,
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                'Hadith',
+                style: AppTypography.caption(color: colorScheme.primary)
+                    .copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            hadith.textAr,
+            style: AppTypography.arabicH2(color: colorScheme.onSurface),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
+          ),
+          if (hadith.transliteration != null &&
+              hadith.transliteration!.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              hadith.transliteration!,
+              style: AppTypography.bodySm(color: AppColors.primaryLightBlue)
+                  .copyWith(fontStyle: FontStyle.italic),
+              textAlign: TextAlign.center,
+            ),
+          ],
+          const SizedBox(height: 12),
+          Text(
+            textEn,
+            style: AppTypography.body(color: colorScheme.onSurface),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '— $reference',
+            style: AppTypography.caption(
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 20),
+          Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SaveButton(
+                    type: 'hadith',
+                    itemId: hadith.id.toString(),
+                    compact: true,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _InspirationActionButton(
+                  icon: LucideIcons.share2,
+                  label: 'Share',
+                  onPressed: () {
+                    ShareContentDialog.show(
+                      context,
+                      ShareableContent(
+                        id: 'hadith',
+                        arabic: hadith.textAr,
+                        transliteration: hadith.transliteration ?? '',
+                        translation: textEn,
+                        source: reference,
+                        title: 'Hadith',
+                      ),
+                    );
+                  },
+                  colorScheme: colorScheme,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _InspirationActionButton(
+                  icon: LucideIcons.volume2,
+                  label: 'Listen',
+                  onPressed: () {},
+                  colorScheme: colorScheme,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _InspirationActionButton extends StatelessWidget {
+  const _InspirationActionButton({
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+    required this.colorScheme,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(8),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 18, color: colorScheme.onSurface.withValues(alpha: 0.8)),
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: AppTypography.caption(
+                  color: colorScheme.onSurface.withValues(alpha: 0.8),
+                ).copyWith(fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PlaceholderCard extends StatelessWidget {
+  const _PlaceholderCard({
+    required this.colorScheme,
+    required this.onRetry,
+  });
+
+  final ColorScheme colorScheme;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return HomeCard(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Text(
+            'Hadith',
+            style: AppTypography.caption(color: colorScheme.primary),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'No daily hadith available right now.',
+            style: AppTypography.body(
+              color: colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: onRetry,
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+}

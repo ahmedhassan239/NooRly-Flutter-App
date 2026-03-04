@@ -1,0 +1,869 @@
+{
+  "weekTitles": {
+    "1": "Faith Basics",
+    "2": "Faith Basics (Cont.)",
+    "3": "Understanding Prayer",
+    "4": "Learning Salah",
+    "5": "Salah Practice",
+    "6": "Quran Introduction",
+    "7": "Quran Connection",
+    "8": "Daily Habits",
+    "9": "Islamic Character",
+    "10": "Community & Ummah",
+    "11": "Deepening Faith",
+    "12": "Journey Completion",
+    "13": "Bonus Week"
+  },
+  "lessons": [
+    {
+      "id": "lesson_1",
+      "dayNumber": 1,
+      "title": "Welcome to Islam",
+      "description": "Begin your beautiful journey into the faith",
+      "content": "# Welcome to Islam\\n\\nAssalamu Alaikum (Peace be upon you)! Welcome to the most beautiful journey of your life.\\n\\n## What is Islam?\\n\\nIslam is a complete way of life, a path of peace, purpose, and connection with your Creator. The word \\\"Islam\\\" comes from the Arabic root \\\"s-l-m,\\\" which means peace and submission to the will of Allah (God).\\n\\n## Your New Beginning\\n\\nTaking the Shahada (declaration of faith) is like being reborn. All your past mistakes are forgiven, and you start with a clean slate. This is one of the beautiful mercies of Allah.\\n\\n> \\\"Say, O My servants who have transgressed against themselves, do not despair of the mercy of Allah. Indeed, Allah forgives all sins. Indeed, it is He who is the Forgiving, the Merciful.\\\" — Quran 39:53\\n\\n## What to Expect\\n\\nOver the next 90 days, we will guide you through:\\n- **Core beliefs** — Understanding who Allah is and what Islam teaches\\n- **Prayer (Salah)** — Learning how to connect with Allah five times daily\\n- **Quran** — Beginning your relationship with Allahs words\\n- **Daily habits** — Building a life of purpose and remembrance\\n\\nTake your time. There is no rush. Allah brought you here at exactly the right moment.\\n\\n**Welcome home. 💚**",
+      "readTime": 3,
+      "category": "faith",
+      "weekNumber": 1
+    },
+    {
+      "id": "lesson_2",
+      "dayNumber": 2,
+      "title": "The Meaning of Shahada",
+      "description": "Understanding the declaration of faith",
+      "content": "# The Meaning of Shahada\\n\\nThe Shahada is the foundation of Islam. Let us understand its profound meaning.\\n\\n## The Two Parts\\n\\n**La ilaha illa Allah** — There is no god but Allah\\n**Muhammad rasul Allah** — Muhammad is the Messenger of Allah\\n\\n## First Part: Tawheed\\n\\n\\\"La ilaha illa Allah\\\" is a declaration of Tawheed (monotheism). It means:\\n- There is only ONE God worthy of worship\\n- Allah has no partners, children, or equals\\n- Only Allah can truly help us, guide us, and answer our prayers\\n\\nThis is liberating! We do not bow to money, fame, peoples opinions, or our own desires. We submit only to the One who created us.\\n\\n## Second Part: Prophethood\\n\\n\\\"Muhammad rasul Allah\\\" means we:\\n- Accept Muhammad ﷺ as the final prophet\\n- Follow his teachings (Sunnah)\\n- Love and respect him as our guide\\n\\n> \\\"Indeed in the Messenger of Allah you have a good example to follow...\\\" — Quran 33:21\\n\\n## Living the Shahada\\n\\nThe Shahada is not just words—it is a commitment to:\\n- Worship Allah alone\\n- Follow the Prophets example\\n- Live with purpose and gratitude\\n\\nYou have already taken this step. Now we build upon this beautiful foundation.",
+      "readTime": 5,
+      "category": "faith",
+      "weekNumber": 1
+    },
+    {
+      "id": "lesson_8",
+      "dayNumber": 8,
+      "weekNumber": 2,
+      "title": "Belief in the Hereafter",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Belief in the Hereafter\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_9",
+      "dayNumber": 9,
+      "weekNumber": 2,
+      "title": "Good & Evil",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Good & Evil\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_10",
+      "dayNumber": 10,
+      "weekNumber": 2,
+      "title": "Free Will in Islam",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Free Will in Islam\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_11",
+      "dayNumber": 11,
+      "weekNumber": 2,
+      "title": "Stories of the Prophets",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Stories of the Prophets\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_12",
+      "dayNumber": 12,
+      "weekNumber": 2,
+      "title": "Prophet Ibrahims Faith",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Prophet Ibrahims Faith\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_13",
+      "dayNumber": 13,
+      "weekNumber": 2,
+      "title": "Prophet Musas Journey",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Prophet Musas Journey\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_14",
+      "dayNumber": 14,
+      "weekNumber": 2,
+      "title": "Week 2 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 2 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_15",
+      "dayNumber": 15,
+      "weekNumber": 3,
+      "title": "Introduction to Salah",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Introduction to Salah\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_16",
+      "dayNumber": 16,
+      "weekNumber": 3,
+      "title": "The Importance of Prayer",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Importance of Prayer\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_17",
+      "dayNumber": 17,
+      "weekNumber": 3,
+      "title": "Preparing for Prayer",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Preparing for Prayer\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_18",
+      "dayNumber": 18,
+      "weekNumber": 3,
+      "title": "Learning Wudu - Part 1",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Learning Wudu - Part 1\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_19",
+      "dayNumber": 19,
+      "weekNumber": 3,
+      "title": "Learning Wudu - Part 2",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Learning Wudu - Part 2\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_20",
+      "dayNumber": 20,
+      "weekNumber": 3,
+      "title": "The Prayer Times",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Prayer Times\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_21",
+      "dayNumber": 21,
+      "weekNumber": 3,
+      "title": "Week 3 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 3 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_22",
+      "dayNumber": 22,
+      "weekNumber": 4,
+      "title": "Standing Before Allah",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Standing Before Allah\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_23",
+      "dayNumber": 23,
+      "weekNumber": 4,
+      "title": "The Movements of Salah",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Movements of Salah\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "community"
+    },
+    {
+      "id": "lesson_24",
+      "dayNumber": 24,
+      "weekNumber": 4,
+      "title": "What We Recite",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# What We Recite\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "community"
+    },
+    {
+      "id": "lesson_25",
+      "dayNumber": 25,
+      "weekNumber": 4,
+      "title": "Learning Al-Fatiha",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Learning Al-Fatiha\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_26",
+      "dayNumber": 26,
+      "weekNumber": 4,
+      "title": "The Tashahhud",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Tashahhud\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_27",
+      "dayNumber": 27,
+      "weekNumber": 4,
+      "title": "Completing Your Prayer",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Completing Your Prayer\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_28",
+      "dayNumber": 28,
+      "weekNumber": 4,
+      "title": "Week 4 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 4 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "community"
+    },
+    {
+      "id": "lesson_29",
+      "dayNumber": 29,
+      "weekNumber": 5,
+      "title": "Fajr Prayer Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Fajr Prayer Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_30",
+      "dayNumber": 30,
+      "weekNumber": 5,
+      "title": "Dhuhr Prayer Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Dhuhr Prayer Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_31",
+      "dayNumber": 31,
+      "weekNumber": 5,
+      "title": "Asr Prayer Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Asr Prayer Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_32",
+      "dayNumber": 32,
+      "weekNumber": 5,
+      "title": "Maghrib Prayer Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Maghrib Prayer Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_33",
+      "dayNumber": 33,
+      "weekNumber": 5,
+      "title": "Isha Prayer Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Isha Prayer Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_34",
+      "dayNumber": 34,
+      "weekNumber": 5,
+      "title": "Prayer Consistency",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Prayer Consistency\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_35",
+      "dayNumber": 35,
+      "weekNumber": 5,
+      "title": "Week 5 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 5 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_36",
+      "dayNumber": 36,
+      "weekNumber": 6,
+      "title": "The Miracle of Quran",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Miracle of Quran\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_37",
+      "dayNumber": 37,
+      "weekNumber": 6,
+      "title": "How to Hold the Quran",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# How to Hold the Quran\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_38",
+      "dayNumber": 38,
+      "weekNumber": 6,
+      "title": "Arabic Letters Basics",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Arabic Letters Basics\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_39",
+      "dayNumber": 39,
+      "weekNumber": 6,
+      "title": "Short Surahs to Learn",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Short Surahs to Learn\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_40",
+      "dayNumber": 40,
+      "weekNumber": 6,
+      "title": "Surah Al-Ikhlas",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Surah Al-Ikhlas\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_41",
+      "dayNumber": 41,
+      "weekNumber": 6,
+      "title": "Surah Al-Falaq",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Surah Al-Falaq\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_42",
+      "dayNumber": 42,
+      "weekNumber": 6,
+      "title": "Week 6 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 6 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_43",
+      "dayNumber": 43,
+      "weekNumber": 7,
+      "title": "Surah An-Nas",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Surah An-Nas\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_44",
+      "dayNumber": 44,
+      "weekNumber": 7,
+      "title": "Understanding What You Recite",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Understanding What You Recite\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_45",
+      "dayNumber": 45,
+      "weekNumber": 7,
+      "title": "Listening to Quran",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Listening to Quran\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_46",
+      "dayNumber": 46,
+      "weekNumber": 7,
+      "title": "Quran in Daily Life",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Quran in Daily Life\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_47",
+      "dayNumber": 47,
+      "weekNumber": 7,
+      "title": "Memorization Tips",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Memorization Tips\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_48",
+      "dayNumber": 48,
+      "weekNumber": 7,
+      "title": "Making Quran a Habit",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Making Quran a Habit\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_49",
+      "dayNumber": 49,
+      "weekNumber": 7,
+      "title": "Week 7 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 7 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_50",
+      "dayNumber": 50,
+      "weekNumber": 8,
+      "title": "Morning Adhkar",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Morning Adhkar\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_51",
+      "dayNumber": 51,
+      "weekNumber": 8,
+      "title": "Evening Adhkar",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Evening Adhkar\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_52",
+      "dayNumber": 52,
+      "weekNumber": 8,
+      "title": "Gratitude Practice",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Gratitude Practice\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_53",
+      "dayNumber": 53,
+      "weekNumber": 8,
+      "title": "Mindful Eating",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Mindful Eating\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_54",
+      "dayNumber": 54,
+      "weekNumber": 8,
+      "title": "Before Sleep Routine",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Before Sleep Routine\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_55",
+      "dayNumber": 55,
+      "weekNumber": 8,
+      "title": "Waking Up Routine",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Waking Up Routine\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_56",
+      "dayNumber": 56,
+      "weekNumber": 8,
+      "title": "Week 8 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 8 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_57",
+      "dayNumber": 57,
+      "weekNumber": 9,
+      "title": "Patience (Sabr)",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Patience (Sabr)\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "community"
+    },
+    {
+      "id": "lesson_58",
+      "dayNumber": 58,
+      "weekNumber": 9,
+      "title": "Gratitude (Shukr)",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Gratitude (Shukr)\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "community"
+    },
+    {
+      "id": "lesson_59",
+      "dayNumber": 59,
+      "weekNumber": 9,
+      "title": "Trust in Allah (Tawakkul)",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Trust in Allah (Tawakkul)\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_60",
+      "dayNumber": 60,
+      "weekNumber": 9,
+      "title": "Good Character",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Good Character\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "community"
+    },
+    {
+      "id": "lesson_61",
+      "dayNumber": 61,
+      "weekNumber": 9,
+      "title": "Dealing with Anger",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Dealing with Anger\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "community"
+    },
+    {
+      "id": "lesson_62",
+      "dayNumber": 62,
+      "weekNumber": 9,
+      "title": "Forgiveness",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Forgiveness\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "community"
+    },
+    {
+      "id": "lesson_63",
+      "dayNumber": 63,
+      "weekNumber": 9,
+      "title": "Week 9 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 9 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "community"
+    },
+    {
+      "id": "lesson_64",
+      "dayNumber": 64,
+      "weekNumber": 10,
+      "title": "Finding a Community",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Finding a Community\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_65",
+      "dayNumber": 65,
+      "weekNumber": 10,
+      "title": "The Masjid",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# The Masjid\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_66",
+      "dayNumber": 66,
+      "weekNumber": 10,
+      "title": "Friday Prayer (Jummah)",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Friday Prayer (Jummah)\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_67",
+      "dayNumber": 67,
+      "weekNumber": 10,
+      "title": "Islamic Brotherhood/Sisterhood",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Islamic Brotherhood/Sisterhood\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_68",
+      "dayNumber": 68,
+      "weekNumber": 10,
+      "title": "Helping Others",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Helping Others\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_69",
+      "dayNumber": 69,
+      "weekNumber": 10,
+      "title": "Being a Good Muslim",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Being a Good Muslim\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_70",
+      "dayNumber": 70,
+      "weekNumber": 10,
+      "title": "Week 10 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 10 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "faith"
+    },
+    {
+      "id": "lesson_71",
+      "dayNumber": 71,
+      "weekNumber": 11,
+      "title": "Deepening Your Salah",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Deepening Your Salah\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_72",
+      "dayNumber": 72,
+      "weekNumber": 11,
+      "title": "Connecting with Quran",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Connecting with Quran\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_73",
+      "dayNumber": 73,
+      "weekNumber": 11,
+      "title": "Increasing Dhikr",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Increasing Dhikr\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_74",
+      "dayNumber": 74,
+      "weekNumber": 11,
+      "title": "Night Prayer (Tahajjud)",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Night Prayer (Tahajjud)\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_75",
+      "dayNumber": 75,
+      "weekNumber": 11,
+      "title": "Fasting Benefits",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Fasting Benefits\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_76",
+      "dayNumber": 76,
+      "weekNumber": 11,
+      "title": "Charity & Giving",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Charity & Giving\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_77",
+      "dayNumber": 77,
+      "weekNumber": 11,
+      "title": "Week 11 Reflection",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Week 11 Reflection\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "salah"
+    },
+    {
+      "id": "lesson_78",
+      "dayNumber": 78,
+      "weekNumber": 12,
+      "title": "Your Journey So Far",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Your Journey So Far\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_79",
+      "dayNumber": 79,
+      "weekNumber": 12,
+      "title": "Setting Future Goals",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Setting Future Goals\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_80",
+      "dayNumber": 80,
+      "weekNumber": 12,
+      "title": "Continuing to Learn",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Continuing to Learn\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_81",
+      "dayNumber": 81,
+      "weekNumber": 12,
+      "title": "Finding a Teacher",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Finding a Teacher\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_82",
+      "dayNumber": 82,
+      "weekNumber": 12,
+      "title": "Resources for Growth",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Resources for Growth\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_83",
+      "dayNumber": 83,
+      "weekNumber": 12,
+      "title": "Your Muslim Identity",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Your Muslim Identity\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_84",
+      "dayNumber": 84,
+      "weekNumber": 12,
+      "title": "Journey Complete!",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Journey Complete!\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "quran"
+    },
+    {
+      "id": "lesson_85",
+      "dayNumber": 85,
+      "weekNumber": 13,
+      "title": "Bonus: Islamic History",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: Islamic History\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_86",
+      "dayNumber": 86,
+      "weekNumber": 13,
+      "title": "Bonus: The Prophets Life",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: The Prophets Life\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_87",
+      "dayNumber": 87,
+      "weekNumber": 13,
+      "title": "Bonus: His Character",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: His Character\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_88",
+      "dayNumber": 88,
+      "weekNumber": 13,
+      "title": "Bonus: Key Companions",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: Key Companions\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 3,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_89",
+      "dayNumber": 89,
+      "weekNumber": 13,
+      "title": "Bonus: Islamic Art",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: Islamic Art\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 5,
+      "category": "habits"
+    },
+    {
+      "id": "lesson_90",
+      "dayNumber": 90,
+      "weekNumber": 13,
+      "title": "Bonus: Keep Growing",
+      "description": "Continue your learning journey with todays lesson",
+      "content": "# Bonus: Keep Growing\\n\\nThis lesson content will be available soon. Keep up the great work on your journey!\\n\\n## Coming Soon\\n\\nWe are preparing beautiful, comprehensive content for this lesson. In the meantime, focus on practicing what you have learned so far.\\n\\n> \"And whoever puts their trust in Allah, He will be enough for them.\" — Quran 65:3",
+      "readTime": 4,
+      "category": "habits"
+    }
+  ]
+}

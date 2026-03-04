@@ -1,0 +1,40 @@
+# Codemagic CI/CD Configuration for NooRly-Flutter-App
+# This allows you to build iOS apps in the cloud without a Mac
+# Sign up at https://codemagic.io (free tier available)
+
+workflows:
+  ios-workflow:
+    name: iOS Build Workflow
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Get Flutter dependencies
+        script: |
+          flutter pub get
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios && pod install
+      - name: Flutter build ipa
+        script: |
+          flutter build ipa --release --export-options-plist ios/ExportOptions.plist || flutter build ipa --release
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/iphoneos/*.app
+    publishing:
+      email:
+        recipients:
+          - your-email@example.com
+        notify:
+          success: true
+          failure: true
+      scripts:
+        - name: Upload to TestFlight (optional)
+          script: |
+            # Uncomment and configure if you want automatic TestFlight upload
+            # xcrun altool --upload-app --type ios --file "build/ios/ipa/*.ipa" \
+            #   --username "$APP_STORE_CONNECT_USERNAME" \
+            #   --password "$APP_STORE_CONNECT_PASSWORD"

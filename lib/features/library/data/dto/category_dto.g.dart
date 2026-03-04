@@ -1,0 +1,25 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'category_dto.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$CategoryDtoImpl _$$CategoryDtoImplFromJson(Map<String, dynamic> json) =>
+    _$CategoryDtoImpl(
+      id: (json['id'] as num).toInt(),
+      title: json['title'] as String?,
+      icon: json['icon'] as String?,
+      color: json['color'] as String?,
+      itemsCount: (json['items_count'] as num?)?.toInt() ?? 0,
+    );
+
+Map<String, dynamic> _$$CategoryDtoImplToJson(_$CategoryDtoImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'title': instance.title,
+      'icon': instance.icon,
+      'color': instance.color,
+      'items_count': instance.itemsCount,
+    };
