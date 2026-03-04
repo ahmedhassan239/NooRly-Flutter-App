@@ -1,1 +1,0 @@
- /home/ahmed-hassan/Projects/Omicron/NooRly/Flutter-App/lib/l10n/generated/app_localizations_en.dart /home/ahmed-hassan/Projects/Omicron/NooRly/Flutter-App/lib/l10n/generated/app_localizations.dart:  /home/ahmed-hassan/Projects/Omicron/NooRly/Flutter-App/l10n.yaml /home/ahmed-hassan/Projects/Omicron/NooRly/Flutter-App/lib/l10n/arb/app_en.arb
