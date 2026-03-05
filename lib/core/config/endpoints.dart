@@ -108,12 +108,18 @@ abstract class HomeEndpoints {
 
   /// GET - Featured content for home
   static const String featured = '/home/featured';
+
+  /// GET - Daily inspiration (one random item: ayah, hadith, dhikr, dua)
+  static const String dailyInspiration = '/daily-inspiration';
 }
 
 /// Journey/Learning endpoints.
 abstract class JourneyEndpoints {
   /// GET - User's learning journey (weeks + lessons + progress)
   static const String journey = '/journey';
+
+  /// GET - Compact journey profile summary (day, streak, milestones, etc.)
+  static const String summary = '/journey/summary';
 
   /// GET - Journey progress/stats
   static const String progress = '/journey/progress';

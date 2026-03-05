@@ -52,6 +52,7 @@ import 'package:flutter_app/features/onboarding/presentation/pages/welcome_page.
 import 'package:flutter_app/features/prayer/presentation/pages/prayer_times_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/profile_page.dart';
+import 'package:flutter_app/features/saved/presentation/pages/saved_items_page.dart';
 import 'package:flutter_app/features/settings/presentation/pages/settings_page.dart';
 import 'package:flutter_app/features/remote_config/presentation/pages/feature_disabled_page.dart';
 import 'package:flutter_app/features/remote_config/presentation/pages/maintenance_page.dart';
@@ -101,6 +102,9 @@ abstract class AppRoutes {
   static const String adhkarHub = 'adhkar-hub';
   static const String adhkarCategory = 'adhkar-category';
   static const String adhkarSaved = 'adhkar-saved';
+
+  // Saved (unified: All / Duas / Adhkar / Verses / Hadith)
+  static const String saved = 'saved';
 
   // Library (unified tabs from API)
   static const String library = 'library';
@@ -338,6 +342,11 @@ List<RouteBase> get _appRoutes => [
       path: '/profile',
       name: AppRoutes.profile,
       builder: (context, state) => const ProfilePage(),
+    ),
+    GoRoute(
+      path: '/saved',
+      name: AppRoutes.saved,
+      builder: (context, state) => const SavedItemsPage(),
     ),
     GoRoute(
       path: '/settings',
@@ -593,6 +602,7 @@ List<RouteBase> get _appRoutes => [
 bool _isProtectedRoute(String loc) {
   return loc.startsWith('/home') ||
       loc.startsWith('/profile') ||
+      loc.startsWith('/saved') ||
       loc.startsWith('/journey') ||
       loc.startsWith('/prayer-times') ||
       loc.startsWith('/duas') ||

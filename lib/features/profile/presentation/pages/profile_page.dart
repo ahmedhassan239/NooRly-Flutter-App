@@ -9,6 +9,8 @@ import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
 import 'package:flutter_app/design_system/widgets/icon_helper.dart';
 import 'package:flutter_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
+import 'package:flutter_app/features/journey/domain/entities/journey_summary_entity.dart';
+import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 import 'package:flutter_app/features/profile/presentation/profile_mock_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,9 +24,10 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final isDarkMode = ref.watch(isDarkModeProvider);
+    final journeySummaryAsync = ref.watch(journeySummaryProvider);
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    
+
     return Scaffold(
       backgroundColor: colorScheme.surface,
       body: SafeArea(
@@ -40,13 +43,19 @@ class ProfilePage extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildHeader(context, ref, isDarkMode, colorScheme),
-                        _buildProfileAvatar(colorScheme, user?.displayName, user?.email),
+                        _buildProfileAvatar(
+                          ref,
+                          colorScheme,
+                          user?.displayName,
+                          user?.email,
+                          journeySummaryAsync,
+                        ),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildYourProgress(colorScheme),
+                        _buildYourProgress(ref, colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildJourneyProgress(colorScheme),
+                        _buildJourneyProgress(colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildMilestones(colorScheme),
+                        _buildMilestones(colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
                         _buildPersonalInfo(context, colorScheme, user),
                         const SizedBox(height: AppSpacing.lg),
@@ -101,7 +110,15 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileAvatar(ColorScheme colorScheme, String? name, String? email) {
+  Widget _buildProfileAvatar(
+    WidgetRef ref,
+    ColorScheme colorScheme,
+    String? name,
+    String? email,
+    AsyncValue<JourneySummaryEntity> summaryAsync,
+  ) {
+    final dayIndex = summaryAsync.valueOrNull?.dayIndex ?? 1;
+    final totalDays = summaryAsync.valueOrNull?.totalDays ?? 90;
     final initial = (name != null && name.isNotEmpty)
         ? name.substring(0, 1).toUpperCase()
         : (email != null && email.isNotEmpty)
@@ -168,7 +185,7 @@ class ProfilePage extends ConsumerWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Day ${ProfileMockData.currentDay} of ${ProfileMockData.totalDays}',
+                'Day $dayIndex of $totalDays',
                 style: AppTypography.bodySm(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w500),
               ),
@@ -179,7 +196,11 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildYourProgress(ColorScheme colorScheme) {
+  Widget _buildYourProgress(
+    WidgetRef ref,
+    ColorScheme colorScheme,
+    AsyncValue<JourneySummaryEntity> summaryAsync,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Column(
@@ -197,41 +218,82 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Row(
-            children: [
-              Expanded(
-                child: _buildProgressStatCard(
-                  icon: LucideIcons.flame,
-                  iconColor: AppColors.accentCoral,
-                  value: ProfileMockData.streakDays.toString(),
-                  label: 'Streak',
-                  sublabel: 'days',
-                  colorScheme: colorScheme,
+          summaryAsync.when(
+            data: (summary) => Row(
+              children: [
+                Expanded(
+                  child: _buildProgressStatCard(
+                    icon: LucideIcons.flame,
+                    iconColor: AppColors.accentCoral,
+                    value: summary.streakDays.toString(),
+                    label: 'Streak',
+                    sublabel: 'days',
+                    colorScheme: colorScheme,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildProgressStatCard(
-                  icon: LucideIcons.target,
-                  iconColor: colorScheme.primary,
-                  value: ProfileMockData.activeWeeks.toString(),
-                  label: 'Active',
-                  sublabel: 'weeks',
-                  colorScheme: colorScheme,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildProgressStatCard(
+                    icon: LucideIcons.target,
+                    iconColor: colorScheme.primary,
+                    value: summary.activeWeeks.toString(),
+                    label: 'Active',
+                    sublabel: 'weeks',
+                    colorScheme: colorScheme,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildProgressStatCard(
-                  icon: AppIcons.bonus,
-                  iconColor: AppColors.accentGreen,
-                  value: ProfileMockData.daysLeft.toString(),
-                  label: 'Left',
-                  sublabel: 'days',
-                  colorScheme: colorScheme,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildProgressStatCard(
+                    icon: AppIcons.bonus,
+                    iconColor: AppColors.accentGreen,
+                    value: summary.leftDays.toString(),
+                    label: 'Left',
+                    sublabel: 'days',
+                    colorScheme: colorScheme,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            loading: () => _buildProgressSkeleton(colorScheme),
+            error: (_, __) => _buildProgressError(ref, colorScheme),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProgressSkeleton(ColorScheme colorScheme) {
+    return Row(
+      children: [
+        Expanded(child: _buildProgressStatCard(icon: LucideIcons.flame, iconColor: AppColors.accentCoral, value: '—', label: 'Streak', sublabel: 'days', colorScheme: colorScheme)),
+        const SizedBox(width: 12),
+        Expanded(child: _buildProgressStatCard(icon: LucideIcons.target, iconColor: colorScheme.primary, value: '—', label: 'Active', sublabel: 'weeks', colorScheme: colorScheme)),
+        const SizedBox(width: 12),
+        Expanded(child: _buildProgressStatCard(icon: AppIcons.bonus, iconColor: AppColors.accentGreen, value: '—', label: 'Left', sublabel: 'days', colorScheme: colorScheme)),
+      ],
+    );
+  }
+
+  Widget _buildProgressError(WidgetRef ref, ColorScheme colorScheme) {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: colorScheme.outline.withAlpha(128)),
+      ),
+      child: Column(
+        children: [
+          Text(
+            'Could not load progress',
+            style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          TextButton.icon(
+            onPressed: () => ref.invalidate(journeySummaryProvider),
+            icon: const Icon(LucideIcons.refreshCw, size: 18),
+            label: const Text('Retry'),
           ),
         ],
       ),
@@ -265,7 +327,10 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildJourneyProgress(ColorScheme colorScheme) {
+  Widget _buildJourneyProgress(
+    ColorScheme colorScheme,
+    AsyncValue<JourneySummaryEntity> summaryAsync,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Column(
@@ -283,52 +348,84 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: colorScheme.outline.withAlpha(128)),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          summaryAsync.when(
+            data: (summary) {
+              final percent = summary.completionPercent.clamp(0.0, 100.0) / 100;
+              final percentInt = percent >= 1.0 ? 100 : summary.completionPercent.round();
+              return Container(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  border: Border.all(color: colorScheme.outline.withAlpha(128)),
+                ),
+                child: Column(
                   children: [
-                    Text(
-                      '${ProfileMockData.lessonsCompleted} lessons completed',
-                      style: AppTypography.bodySm(color: colorScheme.onSurface),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${summary.completedLessons} lessons completed',
+                          style: AppTypography.bodySm(color: colorScheme.onSurface),
+                        ),
+                        Text(
+                          '${summary.completedLessons}/${summary.totalLessons}',
+                          style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
+                        ),
+                      ],
                     ),
+                    const SizedBox(height: AppSpacing.sm),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: LinearProgressIndicator(
+                        value: percent,
+                        minHeight: 8,
+                        backgroundColor: colorScheme.outlineVariant,
+                        valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
-                      '${ProfileMockData.lessonsCompleted + 1}/${ProfileMockData.totalLessons}',
-                      style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
+                      '$percentInt% complete',
+                      style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppSpacing.sm),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: ProfileMockData.progressPercent,
-                    minHeight: 8,
-                    backgroundColor: colorScheme.outlineVariant,
-                    valueColor: AlwaysStoppedAnimation<Color>(colorScheme.primary),
+              );
+            },
+            loading: () => Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: colorScheme.outline.withAlpha(128)),
+              ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 24),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: LinearProgressIndicator(
+                      value: null,
+                      minHeight: 8,
+                      backgroundColor: colorScheme.outlineVariant,
+                    ),
                   ),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                Text(
-                  '${ProfileMockData.progressPercentInt}% complete',
-                  style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
-                ),
-              ],
+                  const SizedBox(height: 24),
+                ],
+              ),
             ),
+            error: (_, __) => const SizedBox.shrink(),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMilestones(ColorScheme colorScheme) {
+  Widget _buildMilestones(
+    ColorScheme colorScheme,
+    AsyncValue<JourneySummaryEntity> summaryAsync,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Column(
@@ -346,24 +443,71 @@ class ProfilePage extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: AppSpacing.md),
-          Container(
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(AppRadius.lg),
-              border: Border.all(color: colorScheme.outline.withAlpha(128)),
+          summaryAsync.when(
+            data: (summary) {
+              final milestones = summary.milestones
+                  .map((m) => MilestoneData(
+                        title: 'Week ${m.week} Complete',
+                        status: _milestoneStatusFromString(m.status),
+                      ))
+                  .toList();
+              if (milestones.isEmpty) {
+                return Container(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
+                    border: Border.all(color: colorScheme.outline.withAlpha(128)),
+                  ),
+                  child: Text(
+                    'No milestones yet',
+                    style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
+                  ),
+                );
+              }
+              return Container(
+                decoration: BoxDecoration(
+                  color: colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(AppRadius.lg),
+                  border: Border.all(color: colorScheme.outline.withAlpha(128)),
+                ),
+                child: Column(
+                  children: milestones.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final milestone = entry.value;
+                    final isLast = index == milestones.length - 1;
+                    return _buildMilestoneItem(milestone, isLast, colorScheme);
+                  }).toList(),
+                ),
+              );
+            },
+            loading: () => Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(AppRadius.lg),
+                border: Border.all(color: colorScheme.outline.withAlpha(128)),
+              ),
+              child: Column(
+                children: List.generate(4, (_) => const SizedBox(height: 48)),
+              ),
             ),
-            child: Column(
-              children: ProfileMockData.milestones.asMap().entries.map((entry) {
-                final index = entry.key;
-                final milestone = entry.value;
-                final isLast = index == ProfileMockData.milestones.length - 1;
-                return _buildMilestoneItem(milestone, isLast, colorScheme);
-              }).toList(),
-            ),
+            error: (_, __) => const SizedBox.shrink(),
           ),
         ],
       ),
     );
+  }
+
+  MilestoneStatus _milestoneStatusFromString(String status) {
+    switch (status) {
+      case 'completed':
+        return MilestoneStatus.completed;
+      case 'in_progress':
+        return MilestoneStatus.inProgress;
+      default:
+        return MilestoneStatus.locked;
+    }
   }
 
   Widget _buildMilestoneItem(MilestoneData milestone, bool isLast, ColorScheme colorScheme) {
@@ -379,12 +523,14 @@ class ProfilePage extends ConsumerWidget {
         iconColor = AppColors.accentGreen;
         bgColor = Colors.transparent;
         textColor = colorScheme.onSurface;
+        break;
       case MilestoneStatus.inProgress:
         icon = LucideIcons.circle;
         iconColor = colorScheme.primary;
         bgColor = colorScheme.primary.withAlpha(15);
         textColor = colorScheme.onSurface;
         statusText = '(In Progress)';
+        break;
       case MilestoneStatus.locked:
         icon = LucideIcons.lock;
         iconColor = colorScheme.onSurface.withAlpha(100);
@@ -519,7 +665,7 @@ class ProfilePage extends ConsumerWidget {
             iconColor: colorScheme.primary,
             title: 'Saved Duas',
             subtitle: 'View your saved duas collection',
-            onTap: () => context.push('/duas/saved'),
+            onTap: () => context.push('/saved'),
             colorScheme: colorScheme,
           ),
           const SizedBox(height: AppSpacing.sm),

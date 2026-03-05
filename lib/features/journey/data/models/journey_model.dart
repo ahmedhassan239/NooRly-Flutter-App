@@ -248,6 +248,7 @@ class LessonModel extends LessonEntity {
     required super.id,
     required super.dayNumber,
     required super.title,
+    super.weekNumber,
     super.titleAr,
     super.description,
     super.descriptionAr,
@@ -268,9 +269,10 @@ class LessonModel extends LessonEntity {
 
   factory LessonModel.fromJson(Map<String, dynamic> json) {
     return LessonModel(
-      id: (json['id'] ?? json['_id'] ?? '').toString(),
+      id: (json['id'] ?? json['lesson_id'] ?? json['_id'] ?? '').toString(),
       dayNumber: json['day_number'] as int? ?? json['day'] as int? ?? 1,
       title: json['title'] as String? ?? '',
+      weekNumber: json['week_number'] as int? ?? json['week'] as int?,
       titleAr: json['title_ar'] as String?,
       description: json['description'] as String?,
       descriptionAr: json['description_ar'] as String?,
@@ -279,7 +281,9 @@ class LessonModel extends LessonEntity {
       videoUrl: json['video_url'] as String? ?? json['video'] as String?,
       audioUrl: json['audio_url'] as String? ?? json['audio'] as String?,
       imageUrl: json['image_url'] as String? ?? json['image'] as String?,
-      duration: json['duration'] as int? ?? json['estimated_minutes'] as int?,
+      duration: json['duration'] as int? ??
+          json['estimated_read_time'] as int? ??
+          json['estimated_minutes'] as int?,
       category: json['category'] as String?,
       objectives: (json['objectives'] as List<dynamic>?)?.cast<String>() ?? [],
       keyPoints: (json['key_points'] as List<dynamic>?)?.cast<String>() ?? [],
@@ -301,6 +305,7 @@ class LessonModel extends LessonEntity {
     return {
       'id': id,
       'day_number': dayNumber,
+      'week_number': weekNumber,
       'title': title,
       'title_ar': titleAr,
       'description': description,

@@ -84,24 +84,38 @@ class HomeLayoutColumn extends StatelessWidget {
   const HomeLayoutColumn({
     required this.child,
     super.key,
+    this.onRefresh,
   });
 
   final Widget child;
+  final Future<void> Function()? onRefresh;
 
   @override
   Widget build(BuildContext context) {
+    final scrollView = SingleChildScrollView(
+      physics: onRefresh != null
+          ? const AlwaysScrollableScrollPhysics()
+          : null,
+      padding: const EdgeInsets.fromLTRB(
+        HomeLayout.contentPaddingHorizontal,
+        AppSpacing.md,
+        HomeLayout.contentPaddingHorizontal,
+        HomeLayout.scrollBottomPadding,
+      ),
+      child: child,
+    );
+
+    final content = onRefresh != null
+        ? RefreshIndicator(
+            onRefresh: onRefresh!,
+            child: scrollView,
+          )
+        : scrollView;
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: HomeLayout.maxContentWidth),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            HomeLayout.contentPaddingHorizontal,
-            AppSpacing.md,
-            HomeLayout.contentPaddingHorizontal,
-            HomeLayout.scrollBottomPadding,
-          ),
-          child: child,
-        ),
+        child: content,
       ),
     );
   }

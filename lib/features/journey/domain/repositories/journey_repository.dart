@@ -2,11 +2,15 @@
 library;
 
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
+import 'package:flutter_app/features/journey/domain/entities/journey_summary_entity.dart';
 
 /// Journey repository interface.
 abstract class JourneyRepository {
   /// Get user's journey data.
   Future<JourneyEntity> getJourney();
+
+  /// Get compact journey profile summary for Profile screen (GET /journey/summary).
+  Future<JourneySummaryEntity> getJourneySummary();
 
   /// Get lesson by id.
   Future<LessonEntity> getLesson(String id);

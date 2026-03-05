@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/journey/data/repositories/journey_repository_impl.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
+import 'package:flutter_app/features/journey/domain/entities/journey_summary_entity.dart';
 import 'package:flutter_app/features/journey/domain/repositories/journey_repository.dart';
 
 /// Journey repository provider.
@@ -53,6 +54,13 @@ final journeyWeeksProvider = Provider<List<WeekEntity>>((ref) {
     data: (journey) => journey.weeks,
     orElse: () => [],
   );
+});
+
+/// Journey profile summary for Profile screen (GET /journey/summary).
+final journeySummaryProvider =
+    FutureProvider<JourneySummaryEntity>((ref) async {
+  final repository = ref.watch(journeyRepositoryProvider);
+  return repository.getJourneySummary();
 });
 
 /// Today's / next lesson for home dashboard (GET /lessons/today). Fallback: first uncompleted from journey.
@@ -112,9 +120,11 @@ final completeLessonProvider =
   return CompleteLessonNotifier(ref);
 });
 
-/// Refresh journey provider.
+/// Refresh journey provider (invalidates journey + current lesson + summary for home/profile).
 final refreshJourneyProvider = Provider<Future<void> Function()>((ref) {
   return () async {
     ref.invalidate(journeyProvider);
+    ref.invalidate(todayLessonProvider);
+    ref.invalidate(journeySummaryProvider);
   };
 });

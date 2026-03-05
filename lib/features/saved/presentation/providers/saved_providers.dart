@@ -134,6 +134,15 @@ FutureProvider<Set<String>> _idsProviderForType(String type) {
 // Saved list providers (full hydrated items for Saved pages)
 // =============================================================================
 
+/// Unified list of all saved items for Saved (All) tab. GET /saved?type=all.
+final savedAllListProvider = FutureProvider<SavedAllListResult>((ref) async {
+  final auth = ref.watch(authProvider);
+  if (!auth.isAuthenticated) {
+    return const SavedAllListResult(items: [], pagination: SavedAllPagination());
+  }
+  return fetchSavedAll(ref: ref, page: 1, perPage: 50);
+});
+
 /// Full list of saved hadith for Saved Hadith page.
 final savedHadithListProvider = FutureProvider<List<SavedHadithItem>>((ref) async {
   final auth = ref.watch(authProvider);
@@ -315,6 +324,7 @@ class ToggleSaveNotifier extends Notifier<void> {
   }
 
   void _invalidateProvidersForType(String type) {
+    ref.invalidate(savedAllListProvider);
     switch (type) {
       case 'hadith':
         ref.invalidate(savedHadithIdsProvider);
@@ -386,4 +396,5 @@ void clearAllSavedState(WidgetRef ref) {
   ref.invalidate(savedDuaListProvider);
   ref.invalidate(savedLessonIdsProvider);
   ref.invalidate(savedLessonListProvider);
+  ref.invalidate(savedAllListProvider);
 }

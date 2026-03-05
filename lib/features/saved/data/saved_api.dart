@@ -428,6 +428,78 @@ class SavedLessonListResult {
   final bool hasMore;
 }
 
+/// Unified saved item from GET /saved?type=all (all types in one shape).
+class UnifiedSavedItem {
+  const UnifiedSavedItem({
+    required this.id,
+    required this.type,
+    required this.title,
+    this.arabic,
+    this.translation,
+    this.source,
+    required this.referenceId,
+  });
+  final int id;
+  final String type;
+  final String title;
+  final String? arabic;
+  final String? translation;
+  final String? source;
+  final dynamic referenceId;
+
+  static UnifiedSavedItem fromJson(Map<String, dynamic> json) {
+    final refId = json['reference_id'];
+    return UnifiedSavedItem(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      type: json['type'] as String? ?? 'dua',
+      title: json['title'] as String? ?? '',
+      arabic: json['arabic'] as String?,
+      translation: json['translation'] as String?,
+      source: json['source'] as String?,
+      referenceId: refId is num ? refId.toInt() : refId?.toString(),
+    );
+  }
+
+  String get snippet {
+    final t = translation ?? arabic ?? '';
+    if (t.length <= 80) return t;
+    return '${t.substring(0, 80)}…';
+  }
+}
+
+/// Result of fetchSavedAll (unified list + pagination).
+class SavedAllListResult {
+  const SavedAllListResult({
+    required this.items,
+    required this.pagination,
+  });
+  final List<UnifiedSavedItem> items;
+  final SavedAllPagination pagination;
+}
+
+class SavedAllPagination {
+  const SavedAllPagination({
+    this.page = 1,
+    this.perPage = 20,
+    this.total = 0,
+    this.hasMore = false,
+  });
+  final int page;
+  final int perPage;
+  final int total;
+  final bool hasMore;
+
+  static SavedAllPagination fromJson(Map<String, dynamic>? json) {
+    if (json == null) return const SavedAllPagination();
+    return SavedAllPagination(
+      page: (json['page'] as num?)?.toInt() ?? 1,
+      perPage: (json['per_page'] as num?)?.toInt() ?? 20,
+      total: (json['total'] as num?)?.toInt() ?? 0,
+      hasMore: json['has_more'] as bool? ?? false,
+    );
+  }
+}
+
 // =============================================================================
 // Response helpers (support both legacy wrapper and Laravel pagination)
 // =============================================================================
@@ -518,6 +590,39 @@ bool _extractHasMore(
 // =============================================================================
 // Fetchers
 // =============================================================================
+
+/// GET /saved?type=all — unified list of all saved items (paginated).
+Future<SavedAllListResult> fetchSavedAll({
+  required Ref ref,
+  int page = 1,
+  int perPage = 20,
+}) async {
+  final client = ref.read(apiClientProvider);
+  final url = SavedEndpoints.list;
+  final query = {'type': 'all', 'page': page, 'per_page': perPage};
+  _log('GET $url query=$query');
+
+  final res = await client.dio.get<dynamic>(url, queryParameters: query);
+  final raw = res.data;
+  _log('GET $url status=${res.statusCode} body=${_truncate(raw, _logBodyChars)}');
+
+  if (raw is! Map<String, dynamic>) {
+    return const SavedAllListResult(items: [], pagination: SavedAllPagination());
+  }
+  final data = raw['data'];
+  if (data is! Map<String, dynamic>) {
+    return const SavedAllListResult(items: [], pagination: SavedAllPagination());
+  }
+  final itemsList = data['items'] as List<dynamic>? ?? [];
+  final paginationMap = data['pagination'] as Map<String, dynamic>?;
+  final list = itemsList
+      .whereType<Map<String, dynamic>>()
+      .map((e) => UnifiedSavedItem.fromJson(e))
+      .toList();
+  final pagination = SavedAllPagination.fromJson(paginationMap);
+  _log('GET all parsed items=${list.length} total=${pagination.total}');
+  return SavedAllListResult(items: list, pagination: pagination);
+}
 
 /// GET /saved?type=hadith — paginated hydrated hadith list.
 Future<SavedHadithListResult> fetchSavedHadith({

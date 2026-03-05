@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
-import 'package:flutter_app/features/hadith/data/daily_hadith_api.dart';
+import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter_app/features/saved/presentation/widgets/save_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-/// Daily Inspiration section: header row (title + "See All →") and card content.
+/// Daily Inspiration section: one random item from library (ayah, hadith, dhikr, dua).
+/// Header row (title + "See All →") and card content with Arabic, translation, source, Save/Share/Listen.
 class DailyInspirationCard extends StatelessWidget {
   const DailyInspirationCard({
-    required this.hadith,
+    required this.inspiration,
     required this.onRetry,
     super.key,
   });
 
-  final DailyHadithDto? hadith;
+  /// Fetched from GET /api/v1/daily-inspiration (from database).
+  final DailyInspirationDto? inspiration;
   final VoidCallback onRetry;
 
   @override
@@ -45,18 +47,19 @@ class DailyInspirationCard extends StatelessWidget {
               ],
             ),
             TextButton(
-              onPressed: () => context.push('/hadith'),
+              onPressed: () => context.push('/duas'),
               child: const Text('See All →'),
             ),
           ],
         ),
         const SizedBox(height: 8),
-        hadith == null
-            ? _PlaceholderCard(
-                colorScheme: colorScheme,
-                onRetry: onRetry,
-              )
-            : _ContentCard(hadith: hadith!, colorScheme: colorScheme),
+        if (inspiration == null)
+          _PlaceholderCard(
+            colorScheme: colorScheme,
+            onRetry: onRetry,
+          )
+        else
+          _ContentCard(inspiration: inspiration!, colorScheme: colorScheme),
       ],
     );
   }
@@ -64,19 +67,22 @@ class DailyInspirationCard extends StatelessWidget {
 
 class _ContentCard extends StatelessWidget {
   const _ContentCard({
-    required this.hadith,
+    required this.inspiration,
     required this.colorScheme,
   });
 
-  final DailyHadithDto hadith;
+  final DailyInspirationDto inspiration;
   final ColorScheme colorScheme;
+
+  String get _typeLabel =>
+      inspiration.title ??
+      _capitalize(inspiration.type);
+
+  static String _capitalize(String s) =>
+      s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
 
   @override
   Widget build(BuildContext context) {
-    final textEn = hadith.textEn ?? hadith.textAr;
-    final reference =
-        hadith.reference ?? hadith.collectionName ?? 'Hadith';
-
     final lightBlueBg = AppColors.primaryLightBlue.withValues(alpha: 0.08);
 
     return HomeCard(
@@ -93,51 +99,44 @@ class _ContentCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                'Hadith',
+                _typeLabel,
                 style: AppTypography.caption(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
             ),
           ),
           const SizedBox(height: 12),
-          Text(
-            hadith.textAr,
-            style: AppTypography.arabicH2(color: colorScheme.onSurface),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-          ),
-          if (hadith.transliteration != null &&
-              hadith.transliteration!.isNotEmpty) ...[
-            const SizedBox(height: 12),
+          if (inspiration.arabic.isNotEmpty)
             Text(
-              hadith.transliteration!,
-              style: AppTypography.bodySm(color: AppColors.primaryLightBlue)
-                  .copyWith(fontStyle: FontStyle.italic),
+              inspiration.arabic,
+              style: AppTypography.arabicH2(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
             ),
-          ],
           const SizedBox(height: 12),
           Text(
-            textEn,
+            inspiration.translation,
             style: AppTypography.body(color: colorScheme.onSurface),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
-            '— $reference',
-            style: AppTypography.caption(
-              color: colorScheme.onSurface.withValues(alpha: 0.7),
+          if (inspiration.reference.isNotEmpty) ...[
+            const SizedBox(height: 8),
+            Text(
+              '— ${inspiration.reference}',
+              style: AppTypography.caption(
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
+          ],
           const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
                 child: Center(
                   child: SaveButton(
-                    type: 'hadith',
-                    itemId: hadith.id.toString(),
+                    type: inspiration.saveButtonType,
+                    itemId: inspiration.id.toString(),
                     compact: true,
                   ),
                 ),
@@ -151,12 +150,12 @@ class _ContentCard extends StatelessWidget {
                     ShareContentDialog.show(
                       context,
                       ShareableContent(
-                        id: 'hadith',
-                        arabic: hadith.textAr,
-                        transliteration: hadith.transliteration ?? '',
-                        translation: textEn,
-                        source: reference,
-                        title: 'Hadith',
+                        id: inspiration.type,
+                        arabic: inspiration.arabic,
+                        transliteration: '',
+                        translation: inspiration.translation,
+                        source: inspiration.reference,
+                        title: _typeLabel,
                       ),
                     );
                   },
@@ -168,7 +167,9 @@ class _ContentCard extends StatelessWidget {
                 child: _InspirationActionButton(
                   icon: LucideIcons.volume2,
                   label: 'Listen',
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO(username): Integrate TTS or audio when available
+                  },
                   colorScheme: colorScheme,
                 ),
               ),
@@ -205,7 +206,11 @@ class _InspirationActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 18, color: colorScheme.onSurface.withValues(alpha: 0.8)),
+              Icon(
+                icon,
+                size: 18,
+                color: colorScheme.onSurface.withValues(alpha: 0.8),
+              ),
               const SizedBox(width: 6),
               Text(
                 label,
@@ -237,12 +242,12 @@ class _PlaceholderCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Hadith',
+            'Daily Inspiration',
             style: AppTypography.caption(color: colorScheme.primary),
           ),
           const SizedBox(height: 12),
           Text(
-            'No daily hadith available right now.',
+            'No daily inspiration available right now.',
             style: AppTypography.body(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),

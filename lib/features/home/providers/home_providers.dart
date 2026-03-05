@@ -1,12 +1,12 @@
 /// Home dashboard providers.
 library;
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
-import 'package:flutter_app/features/hadith/data/daily_hadith_api.dart';
+import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/data/repositories/home_repository_impl.dart';
 import 'package:flutter_app/features/home/domain/entities/home_entity.dart';
 import 'package:flutter_app/features/home/domain/repositories/home_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Home repository provider.
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
@@ -65,10 +65,10 @@ final quickStatsProvider = Provider<List<QuickStatEntity>>((ref) {
   );
 });
 
-/// Daily hadith for home inspiration (GET /hadith/daily).
-final dailyHadithProvider = FutureProvider<DailyHadithDto?>((ref) {
-  return fetchDailyHadith(ref);
-});
+/// Daily inspiration for home (GET /api/v1/daily-inspiration).
+/// One random item from library: ayah, hadith, dhikr, or dua.
+/// Uses local cache when mode is per_day (same item for the calendar day).
+final dailyInspirationProvider = FutureProvider<DailyInspirationDto?>(getDailyInspiration);
 
 /// Refresh home dashboard.
 final refreshHomeDashboardProvider = Provider<Future<void> Function()>((ref) {

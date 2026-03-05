@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
-import 'package:flutter_app/features/hadith/data/daily_hadith_api.dart';
+import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/presentation/widgets/daily_inspiration_card.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_layout.dart';
 import 'package:flutter_app/features/home/presentation/widgets/journey_card.dart';
@@ -15,6 +15,7 @@ import 'package:flutter_app/features/home/presentation/widgets/prayer_next_card.
 import 'package:flutter_app/features/home/presentation/widgets/ramadan_banner_card.dart';
 import 'package:flutter_app/features/home/presentation/widgets/today_focus_card.dart';
 import 'package:flutter_app/features/home/providers/home_providers.dart';
+import 'package:flutter_app/core/errors/api_exception.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 import 'package:flutter_app/features/prayer/data/prayer_models.dart';
@@ -87,6 +88,10 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
               children: [
                 Expanded(
                   child: HomeLayoutColumn(
+                    onRefresh: () async {
+                      ref.invalidate(todayLessonProvider);
+                      ref.invalidate(journeyProvider);
+                    },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -227,12 +232,24 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
     return todayLessonAsync.when(
       data: (LessonEntity? lesson) {
         if (lesson == null) {
-          return const JourneyCard(isEmpty: true);
+          return JourneyCard(
+            isEmpty: true,
+            onRetry: () => ref.invalidate(todayLessonProvider),
+          );
         }
         return JourneyCard(lesson: lesson);
       },
-      loading: () => const JourneyCard(isEmpty: true),
-      error: (_, __) => const JourneyCard(isEmpty: true),
+      loading: () => const JourneyCard(isLoading: true),
+      error: (Object err, _) {
+        final isSessionExpired = err is UnauthorizedException;
+        return JourneyCard(
+          errorMessage: isSessionExpired
+              ? 'Session expired. Please sign in again.'
+              : 'Could not load your lesson. Try again or open Journey.',
+          onRetry: () => ref.invalidate(todayLessonProvider),
+          onSignIn: isSessionExpired ? () => context.go('/') : null,
+        );
+      },
     );
   }
 
@@ -261,22 +278,22 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   }
 
   Widget _buildDailyInspirationSection() {
-    final dailyHadithAsync = ref.watch(dailyHadithProvider);
+    final dailyInspirationAsync = ref.watch(dailyInspirationProvider);
 
-    return dailyHadithAsync.when(
-      data: (DailyHadithDto? hadith) {
+    return dailyInspirationAsync.when(
+      data: (DailyInspirationDto? inspiration) {
         return DailyInspirationCard(
-          hadith: hadith,
-          onRetry: () => ref.invalidate(dailyHadithProvider),
+          inspiration: inspiration,
+          onRetry: () => ref.invalidate(dailyInspirationProvider),
         );
       },
       loading: () => DailyInspirationCard(
-        hadith: null,
-        onRetry: () => ref.invalidate(dailyHadithProvider),
+        inspiration: null,
+        onRetry: () => ref.invalidate(dailyInspirationProvider),
       ),
       error: (_, __) => DailyInspirationCard(
-        hadith: null,
-        onRetry: () => ref.invalidate(dailyHadithProvider),
+        inspiration: null,
+        onRetry: () => ref.invalidate(dailyInspirationProvider),
       ),
     );
   }

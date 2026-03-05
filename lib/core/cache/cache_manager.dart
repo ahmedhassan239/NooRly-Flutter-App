@@ -27,6 +27,8 @@ abstract class CacheKeys {
   static const String prayerTimes = 'prayer_times';
   static const String journey = 'journey';
   static const String lessons = 'lessons';
+  /// Current/active lesson for home (GET /lessons/today).
+  static const String currentLesson = 'current_lesson';
 }
 
 /// Cache manager for local storage using Hive.

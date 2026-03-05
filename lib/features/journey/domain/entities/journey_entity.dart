@@ -185,13 +185,14 @@ class LessonSummaryEntity {
   }
 }
 
-/// Full lesson entity.
+/// Full lesson entity (current/active lesson for home, or lesson detail from API).
 @immutable
 class LessonEntity {
   const LessonEntity({
     required this.id,
     required this.dayNumber,
     required this.title,
+    this.weekNumber,
     this.titleAr,
     this.description,
     this.descriptionAr,
@@ -215,6 +216,9 @@ class LessonEntity {
 
   /// Day number (1-40).
   final int dayNumber;
+
+  /// Week number (1-based), when available from API (e.g. GET /lessons/today).
+  final int? weekNumber;
 
   /// Lesson title (English).
   final String title;
