@@ -8,7 +8,7 @@ import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Active content scopes from API. Used for Library tabs.
-/// Order, label, icon, and color come from API. No hardcoded tabs.
+/// Order and label from API. Icon uses shared icon system (scope-key fallback when API does not send icon).
 /// On API failure or empty response, returns empty list (no fallback tabs).
 final contentScopesProvider =
     FutureProvider<List<ContentScopeEntity>>((ref) async {

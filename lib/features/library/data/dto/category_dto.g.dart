@@ -10,16 +10,14 @@ _$CategoryDtoImpl _$$CategoryDtoImplFromJson(Map<String, dynamic> json) =>
     _$CategoryDtoImpl(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String?,
-      icon: json['icon'] as String?,
-      color: json['color'] as String?,
       itemsCount: (json['items_count'] as num?)?.toInt() ?? 0,
+      icon: json['icon'] as String?,
     );
 
 Map<String, dynamic> _$$CategoryDtoImplToJson(_$CategoryDtoImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'icon': instance.icon,
-      'color': instance.color,
       'items_count': instance.itemsCount,
+      'icon': instance.icon,
     };

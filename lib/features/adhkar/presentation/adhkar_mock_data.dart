@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-/// Mock data for Adhkar Hub page
-
+/// Mock data for Adhkar Hub page.
+/// Icons use allowed set only (Mosque, Quran, Tasbih, Prayer, Kaaba, Crescent Moon); presentation is neutral.
 class AdhkarMockData {
   AdhkarMockData._();
 
@@ -12,15 +12,15 @@ class AdhkarMockData {
       id: 'saved',
       title: 'Saved Adhkar',
       subtitle: '0 saved',
-      icon: LucideIcons.bookmark,
+      icon: LucideIcons.landmark,
       iconColor: AppColors.primary,
     ),
     AdhkarCategory(
       id: 'morning',
       title: 'Morning Adhkar',
       subtitle: '5 adhkar',
-      icon: LucideIcons.sun,
-      iconColor: AppColors.accentGold,
+      icon: LucideIcons.moon,
+      iconColor: AppColors.primary,
     ),
     AdhkarCategory(
       id: 'evening',
@@ -33,15 +33,15 @@ class AdhkarMockData {
       id: 'after-prayer',
       title: 'After Prayer',
       subtitle: '5 adhkar',
-      icon: LucideIcons.landmark,
+      icon: LucideIcons.hand,
       iconColor: AppColors.primary,
     ),
     AdhkarCategory(
       id: 'daily',
       title: 'Daily Dhikr',
       subtitle: '5 adhkar',
-      icon: LucideIcons.circleDot,
-      iconColor: AppColors.accentGreen,
+      icon: LucideIcons.repeat,
+      iconColor: AppColors.primary,
     ),
   ];
 }

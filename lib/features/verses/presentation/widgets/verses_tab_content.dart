@@ -7,13 +7,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app/design_system/spacing.dart';
+import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
+    show noorlyEmojiBookmark;
 import 'package:flutter_app/features/library/presentation/widgets/app_search_field.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
-import 'package:flutter_app/features/library/utils/library_utils.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class VersesTabContent extends ConsumerStatefulWidget {
   const VersesTabContent({super.key});
@@ -56,7 +57,7 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
           RoundedListCard(
             title: 'Saved Verses',
             subtitle: '$savedCount saved',
-            icon: LucideIcons.bookmark,
+            icon: noorlyEmojiBookmark,
             onTap: () => context.push('/verses/saved'),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -85,8 +86,7 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
                     return RoundedListCard(
                       title: c.title,
                       subtitle: subtitle,
-                      icon: iconKeyToIconData(c.icon),
-                      iconColor: parseHexColor(c.color),
+                      icon: iconForVerseCollection(c.icon),
                       onTap: () =>
                           context.push('/verses/collection/${c.id}'),
                     );

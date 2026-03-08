@@ -23,8 +23,6 @@ HadithCollectionDetailsDto _$HadithCollectionDetailsDtoFromJson(
 mixin _$HadithCollectionDetailsDto {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String? get icon => throw _privateConstructorUsedError;
-  String? get color => throw _privateConstructorUsedError;
   List<HadithItemDto> get items => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -40,12 +38,7 @@ abstract class $HadithCollectionDetailsDtoCopyWith<$Res> {
       _$HadithCollectionDetailsDtoCopyWithImpl<$Res,
           HadithCollectionDetailsDto>;
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String? icon,
-      String? color,
-      List<HadithItemDto> items});
+  $Res call({int id, String title, List<HadithItemDto> items});
 }
 
 /// @nodoc
@@ -64,8 +57,6 @@ class _$HadithCollectionDetailsDtoCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? items = null,
   }) {
     return _then(_value.copyWith(
@@ -77,14 +68,6 @@ class _$HadithCollectionDetailsDtoCopyWithImpl<$Res,
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
@@ -102,12 +85,7 @@ abstract class _$$HadithCollectionDetailsDtoImplCopyWith<$Res>
       __$$HadithCollectionDetailsDtoImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String title,
-      String? icon,
-      String? color,
-      List<HadithItemDto> items});
+  $Res call({int id, String title, List<HadithItemDto> items});
 }
 
 /// @nodoc
@@ -125,8 +103,6 @@ class __$$HadithCollectionDetailsDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? items = null,
   }) {
     return _then(_$HadithCollectionDetailsDtoImpl(
@@ -138,14 +114,6 @@ class __$$HadithCollectionDetailsDtoImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       items: null == items
           ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
@@ -160,8 +128,6 @@ class _$HadithCollectionDetailsDtoImpl implements _HadithCollectionDetailsDto {
   const _$HadithCollectionDetailsDtoImpl(
       {required this.id,
       required this.title,
-      this.icon,
-      this.color,
       final List<HadithItemDto> items = const []})
       : _items = items;
 
@@ -173,10 +139,6 @@ class _$HadithCollectionDetailsDtoImpl implements _HadithCollectionDetailsDto {
   final int id;
   @override
   final String title;
-  @override
-  final String? icon;
-  @override
-  final String? color;
   final List<HadithItemDto> _items;
   @override
   @JsonKey()
@@ -188,7 +150,7 @@ class _$HadithCollectionDetailsDtoImpl implements _HadithCollectionDetailsDto {
 
   @override
   String toString() {
-    return 'HadithCollectionDetailsDto(id: $id, title: $title, icon: $icon, color: $color, items: $items)';
+    return 'HadithCollectionDetailsDto(id: $id, title: $title, items: $items)';
   }
 
   @override
@@ -198,15 +160,13 @@ class _$HadithCollectionDetailsDtoImpl implements _HadithCollectionDetailsDto {
             other is _$HadithCollectionDetailsDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.color, color) || other.color == color) &&
             const DeepCollectionEquality().equals(other._items, _items));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, icon, color,
-      const DeepCollectionEquality().hash(_items));
+  int get hashCode => Object.hash(
+      runtimeType, id, title, const DeepCollectionEquality().hash(_items));
 
   @JsonKey(ignore: true)
   @override
@@ -228,8 +188,6 @@ abstract class _HadithCollectionDetailsDto
   const factory _HadithCollectionDetailsDto(
       {required final int id,
       required final String title,
-      final String? icon,
-      final String? color,
       final List<HadithItemDto> items}) = _$HadithCollectionDetailsDtoImpl;
 
   factory _HadithCollectionDetailsDto.fromJson(Map<String, dynamic> json) =
@@ -239,10 +197,6 @@ abstract class _HadithCollectionDetailsDto
   int get id;
   @override
   String get title;
-  @override
-  String? get icon;
-  @override
-  String? get color;
   @override
   List<HadithItemDto> get items;
   @override

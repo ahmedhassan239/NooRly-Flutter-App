@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
+import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
+    show noorlyEmojiBookmark;
 import 'package:flutter_app/features/hadith/data/library_hadith_api.dart';
+import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -72,7 +74,12 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSavedHadithCard(context, colorScheme, savedCount),
+                        RoundedListCard(
+                          title: 'Saved Hadith',
+                          subtitle: '$savedCount saved',
+                          icon: noorlyEmojiBookmark,
+                          onTap: () => context.push('/hadith/saved'),
+                        ),
                         const SizedBox(height: AppSpacing.lg),
                         collectionsAsync.when(
                           data: (collections) {
@@ -119,69 +126,6 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
     );
   }
 
-  Widget _buildSavedHadithCard(
-    BuildContext context,
-    ColorScheme colorScheme,
-    int savedCount,
-  ) {
-    return InkWell(
-      onTap: () => context.push('/hadith/saved'),
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(
-              color: colorScheme.outline.withAlpha(128)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withAlpha(25),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Icon(
-                LucideIcons.bookmark,
-                size: 24,
-                color: colorScheme.primary,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Saved Hadith',
-                    style: AppTypography.bodySm(
-                            color: colorScheme.onSurface)
-                        .copyWith(fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    '$savedCount saved',
-                    style: AppTypography.caption(
-                      color: colorScheme.onSurface.withAlpha(150),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Icon(
-              LucideIcons.chevronRight,
-              size: 20,
-              color: colorScheme.onSurface.withAlpha(100),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _buildEmpty(ColorScheme colorScheme) {
     return Center(
       child: Padding(
@@ -212,74 +156,16 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
   ) {
     return Column(
       children: collections.map((c) {
-        final color = c.color != null
-            ? AppColors.fromHex(c.color)
-            : colorScheme.primary;
-        final resolvedColor = color ?? colorScheme.primary;
         final subtitle = (c.itemsCount ?? 0) > 0
             ? '${c.itemsCount} hadith'
-            : null;
+            : '';
         return Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-          child: InkWell(
+          child: RoundedListCard(
+            title: c.title,
+            subtitle: subtitle,
+            icon: iconForHadithCollection(c.icon),
             onTap: () => context.push('/hadith/collection/${c.id}'),
-            borderRadius: BorderRadius.circular(AppRadius.lg),
-            child: Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(AppRadius.lg),
-                border: Border.all(
-                    color: colorScheme.outline.withAlpha(128)),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: resolvedColor.withAlpha(25),
-                      borderRadius:
-                          BorderRadius.circular(AppRadius.sm),
-                    ),
-                    child: Icon(
-                      iconFromKey(c.icon),
-                      size: 24,
-                      color: resolvedColor,
-                    ),
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          c.title,
-                          style: AppTypography.bodySm(
-                                  color: colorScheme.onSurface)
-                              .copyWith(fontWeight: FontWeight.w500),
-                        ),
-                        if (subtitle != null) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            subtitle,
-                            style: AppTypography.caption(
-                              color: colorScheme.onSurface
-                                  .withAlpha(150),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    LucideIcons.chevronRight,
-                    size: 20,
-                    color: colorScheme.onSurface.withAlpha(100),
-                  ),
-                ],
-              ),
-            ),
           ),
         );
       }).toList(),

@@ -11,9 +11,8 @@ class CollectionDto with _$CollectionDto {
   const factory CollectionDto({
     required int id,
     required String title,
-    String? icon,
-    String? color,
     @JsonKey(name: 'items_count') @Default(0) int itemsCount,
+    String? icon,
   }) = _CollectionDto;
 
   factory CollectionDto.fromJson(Map<String, dynamic> json) =>

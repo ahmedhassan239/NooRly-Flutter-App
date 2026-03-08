@@ -22,10 +22,9 @@ CategoryDto _$CategoryDtoFromJson(Map<String, dynamic> json) {
 mixin _$CategoryDto {
   int get id => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
-  String? get icon => throw _privateConstructorUsedError;
-  String? get color => throw _privateConstructorUsedError;
   @JsonKey(name: 'items_count')
   int get itemsCount => throw _privateConstructorUsedError;
+  String? get icon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,9 +41,8 @@ abstract class $CategoryDtoCopyWith<$Res> {
   $Res call(
       {int id,
       String? title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -62,9 +60,8 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
   $Res call({
     Object? id = null,
     Object? title = freezed,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -75,18 +72,14 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -102,9 +95,8 @@ abstract class _$$CategoryDtoImplCopyWith<$Res>
   $Res call(
       {int id,
       String? title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -120,9 +112,8 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = freezed,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_$CategoryDtoImpl(
       id: null == id
@@ -133,18 +124,14 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String?,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -155,9 +142,8 @@ class _$CategoryDtoImpl implements _CategoryDto {
   const _$CategoryDtoImpl(
       {required this.id,
       this.title,
-      this.icon,
-      this.color,
-      @JsonKey(name: 'items_count') this.itemsCount = 0});
+      @JsonKey(name: 'items_count') this.itemsCount = 0,
+      this.icon});
 
   factory _$CategoryDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryDtoImplFromJson(json);
@@ -167,16 +153,14 @@ class _$CategoryDtoImpl implements _CategoryDto {
   @override
   final String? title;
   @override
-  final String? icon;
-  @override
-  final String? color;
-  @override
   @JsonKey(name: 'items_count')
   final int itemsCount;
+  @override
+  final String? icon;
 
   @override
   String toString() {
-    return 'CategoryDto(id: $id, title: $title, icon: $icon, color: $color, itemsCount: $itemsCount)';
+    return 'CategoryDto(id: $id, title: $title, itemsCount: $itemsCount, icon: $icon)';
   }
 
   @override
@@ -186,16 +170,14 @@ class _$CategoryDtoImpl implements _CategoryDto {
             other is _$CategoryDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.itemsCount, itemsCount) ||
-                other.itemsCount == itemsCount));
+                other.itemsCount == itemsCount) &&
+            (identical(other.icon, icon) || other.icon == icon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, icon, color, itemsCount);
+  int get hashCode => Object.hash(runtimeType, id, title, itemsCount, icon);
 
   @JsonKey(ignore: true)
   @override
@@ -215,9 +197,8 @@ abstract class _CategoryDto implements CategoryDto {
   const factory _CategoryDto(
       {required final int id,
       final String? title,
-      final String? icon,
-      final String? color,
-      @JsonKey(name: 'items_count') final int itemsCount}) = _$CategoryDtoImpl;
+      @JsonKey(name: 'items_count') final int itemsCount,
+      final String? icon}) = _$CategoryDtoImpl;
 
   factory _CategoryDto.fromJson(Map<String, dynamic> json) =
       _$CategoryDtoImpl.fromJson;
@@ -227,12 +208,10 @@ abstract class _CategoryDto implements CategoryDto {
   @override
   String? get title;
   @override
-  String? get icon;
-  @override
-  String? get color;
-  @override
   @JsonKey(name: 'items_count')
   int get itemsCount;
+  @override
+  String? get icon;
   @override
   @JsonKey(ignore: true)
   _$$CategoryDtoImplCopyWith<_$CategoryDtoImpl> get copyWith =>

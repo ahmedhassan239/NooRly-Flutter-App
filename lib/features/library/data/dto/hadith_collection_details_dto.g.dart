@@ -11,8 +11,6 @@ _$HadithCollectionDetailsDtoImpl _$$HadithCollectionDetailsDtoImplFromJson(
     _$HadithCollectionDetailsDtoImpl(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String,
-      icon: json['icon'] as String?,
-      color: json['color'] as String?,
       items: (json['items'] as List<dynamic>?)
               ?.map((e) => HadithItemDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -24,7 +22,5 @@ Map<String, dynamic> _$$HadithCollectionDetailsDtoImplToJson(
     <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
-      'icon': instance.icon,
-      'color': instance.color,
       'items': instance.items,
     };

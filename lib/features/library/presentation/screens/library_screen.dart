@@ -16,7 +16,8 @@ import 'package:flutter_app/features/duas/presentation/widgets/duas_tab_content.
 import 'package:flutter_app/features/library/presentation/widgets/hadith_tab_view.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/verses_tab_content.dart';
-import 'package:flutter_app/features/library/utils/library_utils.dart';
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show resolveContentScopeEmoji;
 
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key, this.initialTabKey});
@@ -140,8 +141,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       ),
       child: Row(
         children: tabs.map((t) {
-          final icon = iconKeyToIconData(t.icon);
-          final color = parseHexColor(t.color, colorScheme.primary);
+          final emoji = resolveContentScopeEmoji(t.icon, t.key);
           final isActive = t.key == currentKey;
           return Expanded(
             child: Padding(
@@ -171,7 +171,10 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(icon, size: 16, color: isActive ? color : colorScheme.onSurface.withAlpha(150)),
+                      Text(
+                        emoji,
+                        style: const TextStyle(fontSize: 14),
+                      ),
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(

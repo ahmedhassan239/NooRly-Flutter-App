@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show NoorlySectionIcon, noorlySectionIconGap;
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/save_verse_button.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,11 +80,6 @@ class VerseCollectionPage extends ConsumerWidget {
     LibraryVerseCollectionItem collection,
     ColorScheme colorScheme,
   ) {
-    final color = collection.color != null
-        ? AppColors.fromHex(collection.color)
-        : colorScheme.primary;
-    final resolvedColor = color ?? colorScheme.primary;
-
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -104,13 +100,9 @@ class VerseCollectionPage extends ConsumerWidget {
             icon: const Icon(LucideIcons.arrowLeft),
             color: colorScheme.onSurface,
           ),
-          const SizedBox(width: AppSpacing.sm),
-          Icon(
-            iconFromKey(collection.icon),
-            size: 24,
-            color: resolvedColor,
-          ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: noorlySectionIconGap),
+          NoorlySectionIcon(icon: iconForVerseCollection(collection.icon)),
+          const SizedBox(width: noorlySectionIconGap),
           Expanded(
             child: Text(
               collection.title,

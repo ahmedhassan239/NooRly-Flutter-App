@@ -11,7 +11,9 @@ import 'package:flutter_app/features/adhkar/providers/saved_adhkar_provider.dart
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/library/data/dto/category_dto.dart';
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
-import 'package:flutter_app/features/library/utils/library_utils.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show NoorlySectionIcon, noorlySectionIconGap;
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart'
     show ToggleSaveResult;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -194,13 +196,9 @@ class CategoryAdhkarPage extends ConsumerWidget {
             icon: const Icon(LucideIcons.arrowLeft),
             color: colorScheme.onSurface,
           ),
-          const SizedBox(width: AppSpacing.sm),
-          Icon(
-            iconKeyToIconData(category.icon),
-            color: parseHexColor(category.color),
-            size: 24,
-          ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(width: noorlySectionIconGap),
+          NoorlySectionIcon(icon: iconForCategory(category.icon, fallbackKey: kCategoryIconFallbackTasbih)),
+          const SizedBox(width: noorlySectionIconGap),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

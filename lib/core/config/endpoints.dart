@@ -49,7 +49,7 @@ abstract class ConfigEndpoints {
 
 /// Content scopes endpoints (Library tabs: Duas, Hadith, Verses, Adhkar).
 abstract class ContentScopeEndpoints {
-  /// GET - List active content scopes (key, label, icon, color)
+  /// GET - List active content scopes (key, label)
   static const String list = '/content-scopes';
 
   /// GET - Library tabs only (active + show_in_library_tabs), ordered by display_order

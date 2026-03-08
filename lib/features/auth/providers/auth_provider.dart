@@ -1,6 +1,8 @@
 /// Authentication state provider.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -57,8 +59,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   GoRouter get _router => _ref.read(routerProvider);
 
   /// Initialize auth state on app start: read token -> GET /me -> GET /me/onboarding.
+  /// Never leaves app in [AuthState.initial] on failure; sets error so UI can show retry.
   Future<void> initialize() async {
     try {
+      // Show loading immediately when retrying from error (so spinner replaces error screen)
+      if (state.errorMessage != null) {
+        state = const AuthState.loading();
+      }
+
       // Check if in guest mode
       final isGuest = await _tokenStorage.isGuestMode();
       if (isGuest) {
@@ -75,36 +83,64 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       // Validate token and load user (401 throws UnauthorizedException)
       state = const AuthState.loading();
-      final user = await _authRepository.getCurrentUser();
+
+      // Timeout so release never hangs indefinitely (e.g. no network)
+      const initTimeout = Duration(seconds: 20);
+      final user = await _authRepository.getCurrentUser().timeout(
+            initTimeout,
+            onTimeout: () => throw TimeoutException(),
+          );
 
       // Fetch full onboarding state for routing and prefill
       OnboardingEntity? onboarding;
       try {
-        onboarding = await _onboardingRepository.getOnboarding();
+        onboarding = await _onboardingRepository.getOnboarding().timeout(
+          const Duration(seconds: 10),
+        );
       } catch (e) {
-        if (kDebugMode) {
-          print('[Auth] Onboarding fetch error (continuing with user): $e');
-        }
+        _logSafe('[Auth] Onboarding fetch error (continuing with user)');
         // Offline or error: still set user; router can use user.onboardingCompleted/currentStep
       }
 
       state = AuthState.authenticated(user, onboarding: onboarding);
     } on UnauthorizedException {
-      // Token expired or invalid (401)
       await _tokenStorage.clearAll();
       state = const AuthState.unauthenticated();
-    } catch (e) {
+    } on TimeoutException {
+      _logSafe('[Auth] Initialize timeout');
+      state = AuthState.error(
+        'Connection timed out. Check your network and try again.',
+      );
+    } catch (e, st) {
+      _logSafe('[Auth] Initialize error: ${e.runtimeType}');
       if (kDebugMode) {
-        print('[Auth] Initialize error: $e');
+        print('[Auth] Initialize stack: $st');
       }
-      final hasToken = await _tokenStorage.getAccessToken() != null;
-      if (hasToken) {
-        // Token exists but /me failed (e.g. offline) - keep initial to show loading/retry
-        state = const AuthState.initial();
-      } else {
-        state = const AuthState.unauthenticated();
-      }
+      final message = _safeErrorMessage(e);
+      state = AuthState.error(message);
     }
+  }
+
+  /// Log without leaking tokens or sensitive data.
+  void _logSafe(String message) {
+    if (kDebugMode) {
+      print(message);
+    }
+  }
+
+  /// Map exception to user-facing message (no tokens or internal details).
+  String _safeErrorMessage(Object e) {
+    final s = e.toString().toLowerCase();
+    if (s.contains('socket') || s.contains('connection') || s.contains('network')) {
+      return 'Connection failed. Check your network and try again.';
+    }
+    if (s.contains('timeout') || s.contains('timed out')) {
+      return 'Connection timed out. Please try again.';
+    }
+    if (s.contains('failed host lookup') || s.contains('name or service not known')) {
+      return 'Cannot reach server. Check your network.';
+    }
+    return 'Something went wrong. Please try again.';
   }
 
   /// Login with email and password.

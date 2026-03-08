@@ -32,28 +32,25 @@ class LibraryVerseCollectionItem {
     required this.id,
     required this.title,
     this.slug,
-    this.icon,
-    this.color,
     this.displayOrder,
     this.itemsCount,
+    this.icon,
   });
   final int id;
   final String title;
   final String? slug;
-  final String? icon;
-  final String? color;
   final int? displayOrder;
   final int? itemsCount;
+  final String? icon;
 
   static LibraryVerseCollectionItem fromJson(Map<String, dynamic> json) {
     return LibraryVerseCollectionItem(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? '',
       slug: json['slug'] as String?,
-      icon: json['icon'] as String?,
-      color: json['color'] as String?,
       displayOrder: (json['display_order'] as num?)?.toInt(),
       itemsCount: (json['items_count'] as num?)?.toInt(),
+      icon: json['icon'] as String?,
     );
   }
 }

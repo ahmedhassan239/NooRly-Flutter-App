@@ -1,13 +1,13 @@
 // Duas tab body only (search + categories). Used by LibraryScreen; no header/tabs.
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/design_system/widgets/icon_helper.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -210,9 +210,6 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
     ColorScheme colorScheme, {
     bool isSaved = false,
   }) {
-    final iconData = iconFromKey(category.iconKey);
-    final iconColorValue = _resolveIconColor(category.iconColor, colorScheme);
-
     return InkWell(
       onTap: () {
         if (isSaved || category.id == 'saved') {
@@ -231,22 +228,8 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         ),
         child: Row(
           children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: iconColorValue.withAlpha(25),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Center(
-                child: IconHelper(
-                  icon: iconData,
-                  size: 24,
-                  color: iconColorValue,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
+            NoorlySectionIcon(icon: iconForCategory(category.iconKey, fallbackKey: kCategoryIconFallbackPrayer)),
+            const SizedBox(width: noorlySectionIconGap),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,33 +260,5 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         ),
       ),
     );
-  }
-
-  Color _resolveIconColor(String? colorKey, ColorScheme colorScheme) {
-    if (colorKey == null || colorKey.isEmpty) return colorScheme.primary;
-    final k = colorKey.trim().toLowerCase();
-    if (k == 'primary') return colorScheme.primary;
-    if (k.contains('gold') || k == 'accent') return AppColors.accentGold;
-    if (k.contains('coral')) return AppColors.accentCoral;
-    if (k.contains('green')) return AppColors.accentGreen;
-    if (k.contains('error') || k.contains('red')) return colorScheme.error;
-    if (k.startsWith('#')) {
-      final hex = k.replaceFirst('#', '').replaceAll(' ', '');
-      if (hex.length == 6) {
-        try {
-          return Color(int.parse('FF$hex', radix: 16));
-        } catch (_) {
-          return colorScheme.primary;
-        }
-      }
-      if (hex.length == 8) {
-        try {
-          return Color(int.parse(hex, radix: 16));
-        } catch (_) {
-          return colorScheme.primary;
-        }
-      }
-    }
-    return colorScheme.primary;
   }
 }

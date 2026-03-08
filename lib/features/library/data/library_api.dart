@@ -47,12 +47,10 @@ class LibraryApi {
     return res.data ?? [];
   }
 
-  /// Normalize backend "name" to "title", "icon_key" to "icon", "icon_color" to "color".
+  /// Normalize backend "name" to "title"; forward "icon" key from API.
   CategoryDto _categoryFromJson(Map<String, dynamic> json) {
     final m = Map<String, dynamic>.from(json);
     m['title'] ??= m['name'];
-    m['icon'] ??= m['icon_key'];
-    m['color'] ??= m['icon_color'];
     return CategoryDto.fromJson(m);
   }
 

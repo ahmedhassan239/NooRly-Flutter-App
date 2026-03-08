@@ -11,9 +11,8 @@ class HadithCollectionDto with _$HadithCollectionDto {
   const factory HadithCollectionDto({
     required int id,
     required String title,
-    String? icon,
-    String? color,
     @JsonKey(name: 'items_count') @Default(0) int itemsCount,
+    String? icon,
   }) = _HadithCollectionDto;
 
   factory HadithCollectionDto.fromJson(Map<String, dynamic> json) =>

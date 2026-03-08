@@ -22,10 +22,9 @@ HadithCollectionDto _$HadithCollectionDtoFromJson(Map<String, dynamic> json) {
 mixin _$HadithCollectionDto {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String? get icon => throw _privateConstructorUsedError;
-  String? get color => throw _privateConstructorUsedError;
   @JsonKey(name: 'items_count')
   int get itemsCount => throw _privateConstructorUsedError;
+  String? get icon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,9 +41,8 @@ abstract class $HadithCollectionDtoCopyWith<$Res> {
   $Res call(
       {int id,
       String title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -62,9 +60,8 @@ class _$HadithCollectionDtoCopyWithImpl<$Res, $Val extends HadithCollectionDto>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -75,18 +72,14 @@ class _$HadithCollectionDtoCopyWithImpl<$Res, $Val extends HadithCollectionDto>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -102,9 +95,8 @@ abstract class _$$HadithCollectionDtoImplCopyWith<$Res>
   $Res call(
       {int id,
       String title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -120,9 +112,8 @@ class __$$HadithCollectionDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_$HadithCollectionDtoImpl(
       id: null == id
@@ -133,18 +124,14 @@ class __$$HadithCollectionDtoImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -155,9 +142,8 @@ class _$HadithCollectionDtoImpl implements _HadithCollectionDto {
   const _$HadithCollectionDtoImpl(
       {required this.id,
       required this.title,
-      this.icon,
-      this.color,
-      @JsonKey(name: 'items_count') this.itemsCount = 0});
+      @JsonKey(name: 'items_count') this.itemsCount = 0,
+      this.icon});
 
   factory _$HadithCollectionDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$HadithCollectionDtoImplFromJson(json);
@@ -167,16 +153,14 @@ class _$HadithCollectionDtoImpl implements _HadithCollectionDto {
   @override
   final String title;
   @override
-  final String? icon;
-  @override
-  final String? color;
-  @override
   @JsonKey(name: 'items_count')
   final int itemsCount;
+  @override
+  final String? icon;
 
   @override
   String toString() {
-    return 'HadithCollectionDto(id: $id, title: $title, icon: $icon, color: $color, itemsCount: $itemsCount)';
+    return 'HadithCollectionDto(id: $id, title: $title, itemsCount: $itemsCount, icon: $icon)';
   }
 
   @override
@@ -186,16 +170,14 @@ class _$HadithCollectionDtoImpl implements _HadithCollectionDto {
             other is _$HadithCollectionDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.itemsCount, itemsCount) ||
-                other.itemsCount == itemsCount));
+                other.itemsCount == itemsCount) &&
+            (identical(other.icon, icon) || other.icon == icon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, icon, color, itemsCount);
+  int get hashCode => Object.hash(runtimeType, id, title, itemsCount, icon);
 
   @JsonKey(ignore: true)
   @override
@@ -214,12 +196,10 @@ class _$HadithCollectionDtoImpl implements _HadithCollectionDto {
 
 abstract class _HadithCollectionDto implements HadithCollectionDto {
   const factory _HadithCollectionDto(
-          {required final int id,
-          required final String title,
-          final String? icon,
-          final String? color,
-          @JsonKey(name: 'items_count') final int itemsCount}) =
-      _$HadithCollectionDtoImpl;
+      {required final int id,
+      required final String title,
+      @JsonKey(name: 'items_count') final int itemsCount,
+      final String? icon}) = _$HadithCollectionDtoImpl;
 
   factory _HadithCollectionDto.fromJson(Map<String, dynamic> json) =
       _$HadithCollectionDtoImpl.fromJson;
@@ -229,12 +209,10 @@ abstract class _HadithCollectionDto implements HadithCollectionDto {
   @override
   String get title;
   @override
-  String? get icon;
-  @override
-  String? get color;
-  @override
   @JsonKey(name: 'items_count')
   int get itemsCount;
+  @override
+  String? get icon;
   @override
   @JsonKey(ignore: true)
   _$$HadithCollectionDtoImplCopyWith<_$HadithCollectionDtoImpl> get copyWith =>

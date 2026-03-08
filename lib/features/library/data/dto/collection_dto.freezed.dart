@@ -22,10 +22,9 @@ CollectionDto _$CollectionDtoFromJson(Map<String, dynamic> json) {
 mixin _$CollectionDto {
   int get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String? get icon => throw _privateConstructorUsedError;
-  String? get color => throw _privateConstructorUsedError;
   @JsonKey(name: 'items_count')
   int get itemsCount => throw _privateConstructorUsedError;
+  String? get icon => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,9 +41,8 @@ abstract class $CollectionDtoCopyWith<$Res> {
   $Res call(
       {int id,
       String title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -62,9 +60,8 @@ class _$CollectionDtoCopyWithImpl<$Res, $Val extends CollectionDto>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -75,18 +72,14 @@ class _$CollectionDtoCopyWithImpl<$Res, $Val extends CollectionDto>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -102,9 +95,8 @@ abstract class _$$CollectionDtoImplCopyWith<$Res>
   $Res call(
       {int id,
       String title,
-      String? icon,
-      String? color,
-      @JsonKey(name: 'items_count') int itemsCount});
+      @JsonKey(name: 'items_count') int itemsCount,
+      String? icon});
 }
 
 /// @nodoc
@@ -120,9 +112,8 @@ class __$$CollectionDtoImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? title = null,
-    Object? icon = freezed,
-    Object? color = freezed,
     Object? itemsCount = null,
+    Object? icon = freezed,
   }) {
     return _then(_$CollectionDtoImpl(
       id: null == id
@@ -133,18 +124,14 @@ class __$$CollectionDtoImplCopyWithImpl<$Res>
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      icon: freezed == icon
-          ? _value.icon
-          : icon // ignore: cast_nullable_to_non_nullable
-              as String?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
-              as String?,
       itemsCount: null == itemsCount
           ? _value.itemsCount
           : itemsCount // ignore: cast_nullable_to_non_nullable
               as int,
+      icon: freezed == icon
+          ? _value.icon
+          : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -155,9 +142,8 @@ class _$CollectionDtoImpl implements _CollectionDto {
   const _$CollectionDtoImpl(
       {required this.id,
       required this.title,
-      this.icon,
-      this.color,
-      @JsonKey(name: 'items_count') this.itemsCount = 0});
+      @JsonKey(name: 'items_count') this.itemsCount = 0,
+      this.icon});
 
   factory _$CollectionDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$CollectionDtoImplFromJson(json);
@@ -167,16 +153,14 @@ class _$CollectionDtoImpl implements _CollectionDto {
   @override
   final String title;
   @override
-  final String? icon;
-  @override
-  final String? color;
-  @override
   @JsonKey(name: 'items_count')
   final int itemsCount;
+  @override
+  final String? icon;
 
   @override
   String toString() {
-    return 'CollectionDto(id: $id, title: $title, icon: $icon, color: $color, itemsCount: $itemsCount)';
+    return 'CollectionDto(id: $id, title: $title, itemsCount: $itemsCount, icon: $icon)';
   }
 
   @override
@@ -186,16 +170,14 @@ class _$CollectionDtoImpl implements _CollectionDto {
             other is _$CollectionDtoImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.icon, icon) || other.icon == icon) &&
-            (identical(other.color, color) || other.color == color) &&
             (identical(other.itemsCount, itemsCount) ||
-                other.itemsCount == itemsCount));
+                other.itemsCount == itemsCount) &&
+            (identical(other.icon, icon) || other.icon == icon));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, icon, color, itemsCount);
+  int get hashCode => Object.hash(runtimeType, id, title, itemsCount, icon);
 
   @JsonKey(ignore: true)
   @override
@@ -213,12 +195,10 @@ class _$CollectionDtoImpl implements _CollectionDto {
 
 abstract class _CollectionDto implements CollectionDto {
   const factory _CollectionDto(
-          {required final int id,
-          required final String title,
-          final String? icon,
-          final String? color,
-          @JsonKey(name: 'items_count') final int itemsCount}) =
-      _$CollectionDtoImpl;
+      {required final int id,
+      required final String title,
+      @JsonKey(name: 'items_count') final int itemsCount,
+      final String? icon}) = _$CollectionDtoImpl;
 
   factory _CollectionDto.fromJson(Map<String, dynamic> json) =
       _$CollectionDtoImpl.fromJson;
@@ -228,12 +208,10 @@ abstract class _CollectionDto implements CollectionDto {
   @override
   String get title;
   @override
-  String? get icon;
-  @override
-  String? get color;
-  @override
   @JsonKey(name: 'items_count')
   int get itemsCount;
+  @override
+  String? get icon;
   @override
   @JsonKey(ignore: true)
   _$$CollectionDtoImplCopyWith<_$CollectionDtoImpl> get copyWith =>

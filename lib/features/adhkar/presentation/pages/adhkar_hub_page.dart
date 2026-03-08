@@ -3,9 +3,12 @@ import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/design_system/widgets/icon_helper.dart';
 import 'package:flutter_app/design_system/widgets/library_tabs.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/adhkar/presentation/adhkar_mock_data.dart';
+import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
+    show noorlyEmojiTasbih;
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -193,23 +196,8 @@ class _AdhkarHubPageState extends State<AdhkarHubPage> {
         ),
         child: Row(
           children: [
-            // Icon
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: category.iconColor.withAlpha(25),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Center(
-                child: IconHelper(
-                  icon: category.icon,
-                  size: 24,
-                  color: category.iconColor,
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
+            NoorlySectionIcon(icon: noorlyEmojiTasbih),
+            const SizedBox(width: noorlySectionIconGap),
             // Content
             Expanded(
               child: Column(

@@ -84,7 +84,7 @@ class DuaCategoryModel {
       title: json['name'] as String? ?? '',
       description: json['description'] as String?,
       slug: json['slug'] as String?,
-      iconKey: json['icon_key'] as String? ?? '',
+      iconKey: json['icon_key'] as String? ?? json['icon'] as String? ?? '',
       iconColor: json['icon_color'] as String?,
       count: (json['duas_count'] as int?) ?? 0,
     );

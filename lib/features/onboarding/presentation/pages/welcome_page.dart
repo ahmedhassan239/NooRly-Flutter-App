@@ -53,6 +53,16 @@ class WelcomePage extends ConsumerWidget {
       );
     }
 
+    // Startup error (e.g. network failure during auth init): show message + retry
+    if (auth.errorMessage != null) {
+      return _StartupErrorScreen(
+        message: auth.errorMessage!,
+        onRetry: () => ref.read(authProvider.notifier).initialize(),
+        onGuest: () => context.go('/onboarding/shahada-date'),
+        onLogin: () => context.go('/login'),
+      );
+    }
+
     return Scaffold(
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -272,6 +282,85 @@ class WelcomePage extends ConsumerWidget {
             .fadeIn(duration: 500.ms)
             .moveY(begin: 20, end: 0),
       ],
+    );
+  }
+}
+
+/// Shown when auth initialization fails (e.g. network error). Offers retry and fallbacks.
+class _StartupErrorScreen extends StatelessWidget {
+  const _StartupErrorScreen({
+    required this.message,
+    required this.onRetry,
+    required this.onGuest,
+    required this.onLogin,
+  });
+
+  final String message;
+  final VoidCallback onRetry;
+  final VoidCallback onGuest;
+  final VoidCallback onLogin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [WelcomePage._blueDark, WelcomePage._blueBottom],
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    LucideIcons.wifiOff,
+                    size: 48,
+                    color: Colors.white.withValues(alpha: 0.8),
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Connection problem',
+                    style: AppTypography.h1(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    message,
+                    style: AppTypography.body().copyWith(
+                      color: Colors.white.withValues(alpha: 0.85),
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: onRetry,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: WelcomePage._accentOrange,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      child: const Text('Retry'),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  TextButton(onPressed: onLogin, child: const Text('Sign in')),
+                  TextButton(onPressed: onGuest, child: const Text('Continue as guest')),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

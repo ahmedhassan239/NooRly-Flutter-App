@@ -13,8 +13,6 @@ class HadithCollectionDetailsDto with _$HadithCollectionDetailsDto {
   const factory HadithCollectionDetailsDto({
     required int id,
     required String title,
-    String? icon,
-    String? color,
     @Default([]) List<HadithItemDto> items,
   }) = _HadithCollectionDetailsDto;
 

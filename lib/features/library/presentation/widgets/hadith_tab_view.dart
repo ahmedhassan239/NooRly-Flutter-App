@@ -9,11 +9,14 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show noorlySectionIconGap;
+import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
+    show noorlyEmojiBookmark;
 import 'package:flutter_app/features/library/presentation/widgets/app_search_field.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
-import 'package:flutter_app/features/library/utils/library_utils.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 
 class HadithTabView extends ConsumerStatefulWidget {
   const HadithTabView({super.key});
@@ -56,7 +59,7 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
           RoundedListCard(
             title: 'Saved Hadith',
             subtitle: '$savedCount saved',
-            icon: LucideIcons.bookmark,
+            icon: noorlyEmojiBookmark,
             onTap: () => context.push('/hadith/saved'),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -85,8 +88,7 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
                     return RoundedListCard(
                       title: c.title,
                       subtitle: subtitle,
-                      icon: iconKeyToIconData(c.icon),
-                      iconColor: parseHexColor(c.color),
+                      icon: iconForHadithCollection(c.icon),
                       onTap: () =>
                           context.push('/hadith/collection/${c.id}'),
                     );

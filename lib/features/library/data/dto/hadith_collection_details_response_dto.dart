@@ -18,7 +18,7 @@ class HadithCollectionDetailsResponseDto {
     return HadithCollectionDetailsResponseDto(
       collection: coll is Map<String, dynamic>
           ? HadithCollectionMetaDto.fromJson(coll)
-          : HadithCollectionMetaDto(id: 0, title: '', slug: null, icon: null, color: null),
+          : HadithCollectionMetaDto(id: 0, title: '', slug: null),
       hadiths: list
           .whereType<Map<String, dynamic>>()
           .map((e) => HadithDto.fromJson(e))
@@ -32,23 +32,17 @@ class HadithCollectionMetaDto {
     required this.id,
     required this.title,
     this.slug,
-    this.icon,
-    this.color,
   });
 
   final int id;
   final String title;
   final String? slug;
-  final String? icon;
-  final String? color;
 
   static HadithCollectionMetaDto fromJson(Map<String, dynamic> json) {
     return HadithCollectionMetaDto(
       id: (json['id'] as num).toInt(),
       title: json['title'] as String? ?? json['name'] as String? ?? '',
       slug: json['slug'] as String?,
-      icon: json['icon'] as String?,
-      color: json['color'] as String?,
     );
   }
 }

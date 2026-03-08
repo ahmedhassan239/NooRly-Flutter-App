@@ -11,9 +11,8 @@ class CategoryDto with _$CategoryDto {
   const factory CategoryDto({
     required int id,
     String? title,
-    String? icon,
-    String? color,
     @JsonKey(name: 'items_count') @Default(0) int itemsCount,
+    String? icon,
   }) = _CategoryDto;
 
   factory CategoryDto.fromJson(Map<String, dynamic> json) =>

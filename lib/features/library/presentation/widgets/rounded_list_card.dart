@@ -1,4 +1,7 @@
-/// Rounded card for category/collection list: left icon circle, title, subtitle, chevron.
+/// Rounded card for category/collection list: left emoji icon (Journey Week style), title, subtitle, chevron.
+///
+/// Pass [icon] as an emoji string from the backend-driven mapper
+/// (e.g. [iconForHadithCollection], [iconForVerseCollection], [iconForCategory]).
 library;
 
 import 'package:flutter/material.dart';
@@ -6,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
+    show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:lucide_icons/lucide_icons.dart';
 
 class RoundedListCard extends StatelessWidget {
@@ -15,20 +20,19 @@ class RoundedListCard extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.icon,
-    this.iconColor,
   });
 
   final String title;
   final String subtitle;
   final VoidCallback onTap;
-  final IconData? icon;
-  final Color? iconColor;
+
+  /// Emoji string for the icon. Falls back to 🔖 when null.
+  final String? icon;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final effectiveIcon = icon ?? LucideIcons.bookmark;
-    final effectiveColor = iconColor ?? colorScheme.primary;
+    final effectiveIcon = icon ?? '🔖';
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -46,20 +50,8 @@ class RoundedListCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: effectiveColor.withAlpha(25),
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                ),
-                child: Icon(
-                  effectiveIcon,
-                  size: 24,
-                  color: effectiveColor,
-                ),
-              ),
-              const SizedBox(width: AppSpacing.md),
+              NoorlySectionIcon(icon: effectiveIcon),
+              const SizedBox(width: noorlySectionIconGap),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

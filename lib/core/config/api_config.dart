@@ -20,6 +20,11 @@ enum AppEnvironment {
 ///
 /// IMPORTANT: Base URLs already include `/api/v1`.
 /// Do NOT add `/api/v1` to endpoint paths.
+///
+/// Override at build time:
+///   flutter build apk --dart-define=API_BASE_URL=https://192.168.1.10/api/v1
+///   flutter run --dart-define=ENV=staging
+///   flutter run --dart-define=ENV=dev --dart-define=API_BASE_URL=http://10.0.2.2:8000/api/v1
 class ApiConfig {
   const ApiConfig._();
 
@@ -37,9 +42,19 @@ class ApiConfig {
 
   /// Base URL for API requests (includes /api/v1).
   ///
+  /// If [API_BASE_URL] is set via --dart-define, that value is used.
+  /// Otherwise uses the URL for the current [environment].
   /// All endpoints should be relative paths without /api/v1 prefix.
   /// Example: Use `/auth/login` not `/api/v1/auth/login`
   static String get baseUrl {
+    const fromDefine = String.fromEnvironment(
+      'API_BASE_URL',
+      defaultValue: '',
+    );
+    if (fromDefine.isNotEmpty) {
+      final url = fromDefine.trim();
+      return url.endsWith('/api/v1') ? url : '$url/api/v1';
+    }
     switch (_environment) {
       case AppEnvironment.dev:
         return 'http://localhost:8000/api/v1';

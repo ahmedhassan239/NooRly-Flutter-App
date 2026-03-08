@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
+import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -137,55 +137,16 @@ class CategoryVersesPage extends ConsumerWidget {
     LibraryVerseCollectionItem collection,
     ColorScheme colorScheme,
   ) {
-    final color = collection.color != null
-        ? AppColors.fromHex(collection.color)
-        : colorScheme.primary;
-    final resolvedColor = color ?? colorScheme.primary;
-
-    return InkWell(
-      onTap: () =>
-          context.push('/verses/collection/${collection.id}'),
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border:
-              Border.all(color: colorScheme.outline.withAlpha(128)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: resolvedColor.withAlpha(25),
-                borderRadius:
-                    BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Icon(
-                iconFromKey(collection.icon),
-                size: 24,
-                color: resolvedColor,
-              ),
-            ),
-            const SizedBox(width: AppSpacing.md),
-            Expanded(
-              child: Text(
-                collection.title,
-                style: AppTypography.bodySm(
-                        color: colorScheme.onSurface)
-                    .copyWith(fontWeight: FontWeight.w500),
-              ),
-            ),
-            Icon(
-              LucideIcons.chevronRight,
-              size: 20,
-              color: colorScheme.onSurface.withAlpha(100),
-            ),
-          ],
-        ),
+    final subtitle = (collection.itemsCount ?? 0) > 0
+        ? '${collection.itemsCount} verses'
+        : '';
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: RoundedListCard(
+        title: collection.title,
+        subtitle: subtitle,
+        icon: iconForVerseCollection(collection.icon),
+        onTap: () => context.push('/verses/collection/${collection.id}'),
       ),
     );
   }

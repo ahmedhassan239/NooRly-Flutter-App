@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app/design_system/spacing.dart';
+import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/features/library/presentation/widgets/app_search_field.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
-import 'package:flutter_app/features/library/utils/library_utils.dart';
 
 class CollectionsScreen extends ConsumerStatefulWidget {
   const CollectionsScreen({
@@ -95,8 +95,9 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                             return RoundedListCard(
                               title: c.title,
                               subtitle: subtitle,
-                              icon: iconKeyToIconData(c.icon),
-                              iconColor: parseHexColor(c.color),
+                              icon: widget.scopeKey == 'hadith'
+                              ? iconForHadithCollection(c.icon)
+                              : iconForVerseCollection(c.icon),
                               onTap: () => context.push(
                                 '/library/${widget.scopeKey}/collection/${c.id}',
                               ),
@@ -123,3 +124,4 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
     );
   }
 }
+
