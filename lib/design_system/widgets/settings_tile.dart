@@ -176,6 +176,7 @@ class SettingsDropdownTile extends StatelessWidget {
     required this.value,
     required this.options,
     required this.onChanged,
+    this.optionLabels,
     this.showDivider = true,
     super.key,
   });
@@ -186,6 +187,10 @@ class SettingsDropdownTile extends StatelessWidget {
   final String value;
   final List<String> options;
   final ValueChanged<String?> onChanged;
+
+  /// Optional map of option value → display label.
+  /// When provided, uses the label for display; otherwise shows the raw option value.
+  final Map<String, String>? optionLabels;
   final bool showDivider;
 
   @override
@@ -224,10 +229,11 @@ class SettingsDropdownTile extends StatelessWidget {
           style: AppTypography.bodySm(color: colorScheme.onSurface),
           dropdownColor: colorScheme.surfaceContainerHighest,
           items: options.map((option) {
+            final label = optionLabels?[option] ?? option;
             return DropdownMenuItem<String>(
               value: option,
               child: Text(
-                option,
+                label,
                 style: AppTypography.bodySm(color: colorScheme.onSurface),
               ),
             );

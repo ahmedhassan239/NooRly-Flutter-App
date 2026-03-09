@@ -8,6 +8,7 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -42,7 +43,7 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
             constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
               children: [
-                _buildHeader(colorScheme),
+                _buildHeader(context, colorScheme),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -66,13 +67,13 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
     );
   }
 
-  Widget _buildHeader(ColorScheme colorScheme) {
+  Widget _buildHeader(BuildContext context, ColorScheme colorScheme) {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
         children: [
           Text(
-            'Library',
+            AppLocalizations.of(context)!.libraryTitle,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -219,9 +220,9 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
           child: _buildCategoryCard(
             context,
-            const DuaCategoryEntity(
+            DuaCategoryEntity(
               id: 'saved',
-              title: 'Saved Duas',
+              title: AppLocalizations.of(context)!.savedCardDuas,
               iconKey: 'bookmark',
               count: 0,
             ),
@@ -282,8 +283,10 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
                   const SizedBox(height: 4),
                   Text(
                     category.count > 0
-                        ? '${category.count} duas'
-                        : (isSaved ? 'Your saved duas' : '0 duas'),
+                        ? AppLocalizations.of(context)!.duasCountLabel(category.count)
+                        : (isSaved
+                            ? AppLocalizations.of(context)!.duasYourSavedDuas
+                            : AppLocalizations.of(context)!.duasCountLabel(0)),
                     style: AppTypography.caption(
                       color: colorScheme.onSurface.withAlpha(150),
                     ),

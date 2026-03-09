@@ -5,6 +5,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/share_content_dia
 import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter_app/features/saved/presentation/widgets/save_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -24,6 +25,7 @@ class DailyInspirationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,14 +43,14 @@ class DailyInspirationCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Daily Inspiration',
+                  l10n.dailyInspiration,
                   style: AppTypography.h3(color: colorScheme.onSurface),
                 ),
               ],
             ),
             TextButton(
               onPressed: () => context.push('/duas'),
-              child: const Text('See All →'),
+              child: Text(l10n.seeAll),
             ),
           ],
         ),
@@ -57,6 +59,7 @@ class DailyInspirationCard extends StatelessWidget {
           _PlaceholderCard(
             colorScheme: colorScheme,
             onRetry: onRetry,
+            l10n: l10n,
           )
         else
           _ContentCard(inspiration: inspiration!, colorScheme: colorScheme),
@@ -74,9 +77,18 @@ class _ContentCard extends StatelessWidget {
   final DailyInspirationDto inspiration;
   final ColorScheme colorScheme;
 
-  String get _typeLabel =>
-      inspiration.title ??
-      _capitalize(inspiration.type);
+  String _typeLabel(BuildContext context) {
+    if (inspiration.title != null && inspiration.title!.isNotEmpty) {
+      return inspiration.title!;
+    }
+    final t = inspiration.type.toLowerCase();
+    final l10n = AppLocalizations.of(context)!;
+    if (t == 'hadith') return l10n.libraryHadith;
+    if (t == 'quran' || t == 'verse') return l10n.libraryVerses;
+    if (t == 'dua') return l10n.libraryDuas;
+    if (t == 'dhikr' || t == 'adhkar') return l10n.libraryAdhkar;
+    return _capitalize(inspiration.type);
+  }
 
   static String _capitalize(String s) =>
       s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
@@ -99,7 +111,7 @@ class _ContentCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                _typeLabel,
+                _typeLabel(context),
                 style: AppTypography.caption(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -145,7 +157,7 @@ class _ContentCard extends StatelessWidget {
               Expanded(
                 child: _InspirationActionButton(
                   icon: LucideIcons.share2,
-                  label: 'Share',
+                  label: AppLocalizations.of(context)!.actionShare,
                   onPressed: () {
                     ShareContentDialog.show(
                       context,
@@ -155,7 +167,7 @@ class _ContentCard extends StatelessWidget {
                         transliteration: '',
                         translation: inspiration.translation,
                         source: inspiration.reference,
-                        title: _typeLabel,
+                        title: _typeLabel(context),
                       ),
                     );
                   },
@@ -166,7 +178,7 @@ class _ContentCard extends StatelessWidget {
               Expanded(
                 child: _InspirationActionButton(
                   icon: LucideIcons.volume2,
-                  label: 'Listen',
+                  label: AppLocalizations.of(context)!.actionListen,
                   onPressed: () {
                     // TODO(username): Integrate TTS or audio when available
                   },
@@ -230,10 +242,12 @@ class _PlaceholderCard extends StatelessWidget {
   const _PlaceholderCard({
     required this.colorScheme,
     required this.onRetry,
+    required this.l10n,
   });
 
   final ColorScheme colorScheme;
   final VoidCallback onRetry;
+  final AppLocalizations l10n;
 
   @override
   Widget build(BuildContext context) {
@@ -242,12 +256,12 @@ class _PlaceholderCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Daily Inspiration',
+            l10n.dailyInspiration,
             style: AppTypography.caption(color: colorScheme.primary),
           ),
           const SizedBox(height: 12),
           Text(
-            'No daily inspiration available right now.',
+            l10n.noDailyInspiration,
             style: AppTypography.body(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ),
@@ -256,7 +270,7 @@ class _PlaceholderCard extends StatelessWidget {
           const SizedBox(height: 12),
           TextButton(
             onPressed: onRetry,
-            child: const Text('Retry'),
+            child: Text(l10n.actionRetry),
           ),
         ],
       ),

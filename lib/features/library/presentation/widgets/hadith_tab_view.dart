@@ -17,6 +17,7 @@ import 'package:flutter_app/features/library/presentation/widgets/app_search_fie
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class HadithTabView extends ConsumerStatefulWidget {
   const HadithTabView({super.key});
@@ -37,6 +38,7 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final collectionsAsync = ref.watch(hadithCollectionsAllProvider);
     final savedListAsync = ref.watch(savedHadithListProvider);
     final savedCount = savedListAsync.when(
@@ -52,13 +54,13 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
         children: [
           AppSearchField(
             controller: _searchController,
-            hintText: 'Search hadith...',
+            hintText: l10n.searchHadith,
             onChanged: (v) => setState(() => _searchQuery = v),
           ),
           const SizedBox(height: AppSpacing.md),
           RoundedListCard(
-            title: 'Saved Hadith',
-            subtitle: '$savedCount saved',
+            title: l10n.savedCardHadith,
+            subtitle: l10n.savedCountLabel(savedCount),
             icon: noorlyEmojiBookmark,
             onTap: () => context.push('/hadith/saved'),
           ),
@@ -74,8 +76,8 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
                             c.title.toLowerCase().contains(q))
                         .toList();
                 if (filtered.isEmpty) {
-                  return const LibraryEmptyView(
-                    message: 'No collections yet',
+                  return LibraryEmptyView(
+                    message: l10n.libraryNoCollectionsYet,
                   );
                 }
                 return ListView.builder(
@@ -83,7 +85,7 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
                   itemBuilder: (_, i) {
                     final c = filtered[i];
                     final subtitle = c.itemsCount > 0
-                        ? '${c.itemsCount} hadith'
+                        ? l10n.itemCountHadith(c.itemsCount)
                         : '';
                     return RoundedListCard(
                       title: c.title,

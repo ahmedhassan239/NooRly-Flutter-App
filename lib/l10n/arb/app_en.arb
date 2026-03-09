@@ -1,32 +1,365 @@
 {
   "@@locale": "en",
+
   "appTitle": "Noor Journey",
   "welcomeTitle": "Welcome to Noor Journey",
   "getStarted": "Get Started",
   "home": "Home",
   "settings": "Settings",
   "profile": "Profile",
+
   "otpTitle": "Verify Email",
   "otpSubtitle": "Enter the 6-digit code sent to {email}",
   "@otpSubtitle": {
     "placeholders": {
-      "email": {
-        "type": "String"
-      }
+      "email": { "type": "String" }
     }
   },
   "otpResend": "Resend Code",
   "otpResendIn": "Resend in {seconds}s",
   "@otpResendIn": {
     "placeholders": {
-      "seconds": {
-        "type": "int"
-      }
+      "seconds": { "type": "int" }
     }
   },
   "otpInvalid": "Invalid code. Please try again.",
   "otpExpired": "Code expired. Please request a new one.",
   "otpTooManyRequests": "Too many requests. Please wait and try later.",
   "otpVerified": "Email verified successfully!",
-  "otpVerifyButton": "Verify"
+  "otpVerifyButton": "Verify",
+
+  "navHome": "Home",
+  "navLibrary": "Library",
+  "navJourney": "Journey",
+  "navPrayer": "Prayer",
+  "navProfile": "Profile",
+
+  "actionRetry": "Retry",
+  "actionSignIn": "Sign In",
+  "actionContinue": "Continue",
+  "actionSave": "Save",
+  "actionCancel": "Cancel",
+  "actionDelete": "Delete",
+  "actionSaveChanges": "Save Changes",
+  "actionExport": "Export",
+  "actionSend": "Send",
+  "actionOpen": "Open",
+  "actionCopy": "Copy",
+  "copiedToClipboard": "Copied to clipboard!",
+
+  "homeGreeting": "Assalamu Alaikum",
+  "homeEncouragement": "You're doing great. Every step counts.",
+  "homeFriendFallback": "Friend",
+  "homeExitTitle": "Exit app?",
+  "homeExitContent": "Do you want to exit NooRly?",
+  "homeExitConfirm": "Exit",
+
+  "nextPrayer": "Next Prayer",
+  "setLocationForTimes": "Set location for times",
+
+  "yourJourney": "YOUR JOURNEY",
+  "noLessonRightNow": "No lesson right now",
+  "viewJourney": "View Journey",
+  "signInToContinueLessons": "Sign in to continue your lessons",
+  "journeyErrorSession": "Session expired. Please sign in again.",
+  "journeyErrorLoad": "Could not load your lesson. Try again or open Journey.",
+  "journeyWeekDayLabel": "Week {week} / Day {day}",
+  "@journeyWeekDayLabel": {
+    "placeholders": {
+      "week": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "journeyDayLabel": "Day {day}",
+  "@journeyDayLabel": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  },
+  "journeyDurationMinRead": "{duration} min read",
+  "@journeyDurationMinRead": {
+    "placeholders": {
+      "duration": { "type": "int" }
+    }
+  },
+
+  "todaysFocus": "Today's Focus",
+  "continueYourLesson": "Continue your lesson",
+  "takeTwoMinutesForDhikr": "Take 2 minutes for dhikr",
+  "prepareForNextPrayer": "Prepare for next prayer",
+
+  "ramadanIsHere": "Ramadan is here",
+  "prepareForTheBlessedMonth": "Prepare for the blessed month",
+  "startRamadanGuide": "Start Ramadan Guide",
+
+  "journeyTitle": "Your Journey",
+  "journeyLearningPath": "90-Day Learning Path",
+  "journeyStatProgress": "Progress",
+  "journeyStatDone": "Done",
+  "journeyStatCurrent": "Current",
+  "journeyOverallProgress": "Overall Progress",
+  "journeyEncouragement": "Keep going! You're doing great!",
+  "journeyCouldNotLoad": "Could not load journey",
+  "journeyCompletePreviousFirst": "Complete previous lessons first.",
+
+  "prayerNotificationsMuted": "Notifications muted",
+  "prayerNotificationsEnabled": "Notifications enabled",
+  "prayerNotificationPermissionRequired": "Notification permission is required. Please enable it in settings.",
+  "prayerGettingLocation": "Getting location...",
+  "prayerTodaysPrayers": "TODAY'S PRAYERS",
+  "prayerNoPrayerTimesForLocation": "No prayer times for this location",
+  "prayerLocationUnavailable": "Location unavailable",
+  "prayerEnterCityHint": "Enter city, country (e.g. Cairo, Egypt)",
+  "prayerLocationPermissionDeniedForever": "Location permission was permanently denied. Open app settings to enable it.",
+  "prayerOpenSettings": "Open settings",
+  "prayerLocationPermissionDenied": "Location permission denied",
+  "prayerLocationServicesDisabled": "Location services are disabled",
+  "prayerLocationUpdated": "Location updated",
+  "prayerUseCurrentLocation": "Use current location",
+  "prayerLocationRefreshed": "Location refreshed",
+  "prayerRefreshLocation": "Refresh location",
+  "prayerUseAddress": "Use address",
+
+  "profileTitle": "Profile",
+  "profileYourProgress": "Your Progress",
+  "profileStreakLabel": "Streak",
+  "profileDaysLabel": "days",
+  "profileActiveLabel": "Active",
+  "profileWeeksLabel": "weeks",
+  "profileLeftLabel": "Left",
+  "profileCouldNotLoadProgress": "Could not load progress",
+  "profileJourneyProgress": "Journey Progress",
+  "profileLessonsCompleted": "{count} lessons completed",
+  "@profileLessonsCompleted": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "profilePercentComplete": "{percent}% complete",
+  "@profilePercentComplete": {
+    "placeholders": {
+      "percent": { "type": "int" }
+    }
+  },
+  "profileMilestones": "Milestones",
+  "profileWeekComplete": "Week {week} Complete",
+  "@profileWeekComplete": {
+    "placeholders": {
+      "week": { "type": "int" }
+    }
+  },
+  "profileNoMilestonesYet": "No milestones yet",
+  "profileInProgress": "(In Progress)",
+  "profileNotSet": "Not set",
+  "profilePersonalInfo": "Personal Info",
+  "profileLabelName": "Name",
+  "profileLabelEmail": "Email",
+  "profileLabelGender": "Gender",
+  "profileLabelBirthDate": "Birth date",
+  "profileLabelLocale": "Locale",
+  "profileLabelShahadaDate": "Shahada Date",
+  "profileLabelLearningGoals": "Learning Goals",
+  "profileEditProfile": "Edit Profile",
+  "profileQuickActions": "Quick Actions",
+  "profileSavedDuas": "Saved Duas",
+  "profileViewSavedDuas": "View your saved duas collection",
+  "profileYourReflections": "Your Reflections",
+  "profileReviewReflections": "Review your lesson reflections",
+  "profileManagePreferences": "Manage app preferences",
+  "profileLogOut": "Log Out",
+  "profileLogOutTitle": "Log Out",
+  "profileLogOutConfirm": "Are you sure you want to log out?",
+  "profileDayOfTotal": "Day {day} of {total}",
+  "@profileDayOfTotal": {
+    "placeholders": {
+      "day": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "libraryTitle": "Library",
+  "libraryNoTabsAvailable": "No library tabs available",
+  "libraryDuas": "Duas",
+  "libraryHadith": "Hadith",
+  "libraryVerses": "Verses",
+  "libraryAdhkar": "Adhkar",
+  "libraryNoCollectionsYet": "No collections yet",
+  "libraryNoAdhkarCategoriesYet": "No adhkar categories yet",
+
+  "searchDuas": "Search duas...",
+  "searchHadith": "Search hadith...",
+  "searchVerses": "Search verses...",
+  "searchAdhkar": "Search adhkar...",
+
+  "savedCountLabel": "{count} saved",
+  "@savedCountLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "itemCountDuas": "{count} duas",
+  "@itemCountDuas": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountHadith": "{count} hadith",
+  "@itemCountHadith": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountVerses": "{count} verses",
+  "@itemCountVerses": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountAdhkar": "{count} adhkar",
+  "@itemCountAdhkar": { "placeholders": { "count": { "type": "int" } } },
+
+  "savedCardDuas": "Saved Duas",
+  "savedCardHadith": "Saved Hadith",
+  "savedCardVerses": "Saved Verses",
+  "savedCardAdhkar": "Saved Adhkar",
+
+  "prayerSchedule": "Prayer Schedule",
+  "dailyProgress": "Daily Progress",
+  "prayerRemaining": "Remaining",
+  "prayerMissed": "Missed",
+  "prayerCompleted": "Completed",
+  "prayerDone": "Done",
+  "prayerNext": "Next",
+  "prayerUpcoming": "Upcoming",
+  "prayerFajr": "Fajr",
+  "prayerDhuhr": "Dhuhr",
+  "prayerAsr": "Asr",
+  "prayerMaghrib": "Maghrib",
+  "prayerIsha": "Isha",
+  "remainingNow": "now",
+  "remainingInMinutes": "in {minutes}m",
+  "@remainingInMinutes": { "placeholders": { "minutes": { "type": "int" } } },
+  "remainingInHours": "in {hours}h",
+  "@remainingInHours": { "placeholders": { "hours": { "type": "int" } } },
+  "remainingInHoursMinutes": "in {hours}h {minutes}m",
+  "@remainingInHoursMinutes": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "needHelpNow": "Need Help Now?",
+  "quickSupportWhenYouNeedIt": "Quick support when you need it",
+  "dailyInspiration": "Daily Inspiration",
+  "seeAll": "See All",
+  "noDailyInspiration": "No daily inspiration available right now.",
+  "actionListen": "Listen",
+  "actionShare": "Share",
+  "actionSaved": "Saved",
+
+  "savedToFavorites": "Saved to favorites",
+  "removedFromSaved": "Removed from saved",
+  "couldNotUpdateSavedState": "Could not update saved state. Try again.",
+  "loginRequired": "Login Required",
+  "pleaseSignInToSave": "Please sign in to save items to your favorites.",
+
+  "duasSearchHint": "Search duas...",
+  "duasCouldNotLoadCategories": "Could not load categories",
+  "duasNoCategoriesYet": "No categories yet",
+  "duasNoDuasFound": "No duas found",
+  "duasSavedDuas": "Saved Duas",
+  "duasYourSavedDuas": "Your saved duas",
+  "duasCountLabel": "{count} duas",
+  "@duasCountLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "savedTitle": "Saved",
+  "savedSignInToView": "Sign in to view saved items",
+  "savedTabAll": "All",
+  "savedTabDuas": "Duas",
+  "savedTabAdhkar": "Adhkar",
+  "savedTabVerses": "Verses",
+  "savedTabHadith": "Hadith",
+  "savedNoItems": "No saved items",
+  "savedEmptyHint": "Save items from the library to see them here.",
+  "savedNoSearchResults": "No items match your search",
+  "savedCouldNotLoad": "Could not load saved items",
+  "savedSyncedToAccount": "Your saved items are synced to your account.",
+  "savedTypeDua": "Dua",
+  "savedTypeAdhkar": "Dhikr",
+  "savedTypeHadith": "Hadith",
+  "savedTypeVerse": "Verse",
+
+  "editProfileTitle": "Edit Profile",
+  "editProfileTapToChange": "Tap to change photo",
+  "editProfileNameLabel": "Name",
+  "editProfileNameHint": "Enter your name",
+  "editProfileShahadaDateLabel": "Shahada Date (Optional)",
+  "editProfileShahadaHelper": "When did you take your shahada?",
+  "editProfileSelectDate": "Select date",
+  "editProfileSaveChanges": "Save Changes",
+  "editProfileTakePhoto": "Take Photo",
+  "editProfileCameraComingSoon": "Camera functionality coming soon",
+  "editProfileChooseFromGallery": "Choose from Gallery",
+  "editProfileGalleryComingSoon": "Gallery picker coming soon",
+  "editProfileEnterNameError": "Please enter your name",
+  "editProfileSavedSuccess": "Profile saved successfully!",
+
+  "settingsTitle": "Settings",
+  "settingsNotifications": "Notifications",
+  "settingsPrayerReminders": "Prayer Reminders",
+  "settingsDailyLesson": "Daily Lesson",
+  "settingsMilestoneAlerts": "Milestone Alerts",
+  "settingsAppearance": "Appearance",
+  "settingsLanguage": "Language",
+  "settingsDarkMode": "Dark Mode",
+  "settingsUseDarkTheme": "Use dark theme",
+  "settingsFontSize": "Font Size",
+  "settingsFontSizeSubtitle": "Adjust text size",
+  "settingsPrayerTimes": "Prayer Times",
+  "settingsCalculationMethod": "Calculation Method",
+  "settingsDefaultMadhab": "Default Madhab",
+  "settingsAdjustTimes": "Adjust Times",
+  "settingsAdjustTimesSubtitle": "Fine-tune prayer times ±5 min",
+  "settingsPrivacyData": "Privacy & Data",
+  "settingsExportMyData": "Export My Data",
+  "settingsExportMyDataSubtitle": "Download all your progress",
+  "settingsDeleteAllData": "Delete All Data",
+  "settingsDeleteAllDataSubtitle": "Permanently delete everything",
+  "settingsAbout": "About",
+  "settingsApp": "App",
+  "settingsVersion": "Version",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsHelpSupport": "Help & Support",
+  "settingsSendFeedback": "Send Feedback",
+
+  "languageEnglish": "English",
+  "languageArabic": "العربية",
+
+  "dialogExternalLinkTitle": "External Link",
+  "dialogExternalLinkContent": "This will open in your browser:",
+  "dialogOpeningInBrowser": "Opening in browser...",
+  "dialogDeleteAllDataTitle": "Delete All Data",
+  "dialogDeleteAllDataContent": "This will permanently delete all your progress, reflections, and saved content. This action cannot be undone.",
+  "dialogDataDeletedSuccess": "All data deleted successfully",
+  "dialogExportTitle": "Export My Data",
+  "dialogExportContent": "Your data export will include:",
+  "dialogExportPreparing": "Preparing your data export...",
+  "dialogExportSuccess": "Data exported successfully! Check your downloads.",
+  "dialogFeedbackTitle": "Send Feedback",
+  "dialogFeedbackContent": "We'd love to hear from you! Share your thoughts, suggestions, or report issues.",
+  "dialogFeedbackHint": "Write your feedback here...",
+  "dialogFeedbackThanks": "Thank you for your feedback!",
+  "dialogAdjustTimesTitle": "Adjust Prayer Times",
+  "dialogAdjustTimesContent": "Fine-tune individual prayer times by ±5 minutes",
+  "dialogPrayerTimesAdjusted": "Prayer times adjusted",
+
+  "darkModeEnabled": "Dark mode enabled",
+  "lightModeEnabled": "Light mode enabled",
+
+  "languageChanged": "Language: {language}",
+  "@languageChanged": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+
+  "listenComingSoon": "Listen — coming soon",
+  "comingSoon": "Coming Soon",
+  "goHome": "Go Home",
+  "needHelp": "Need Help",
+  "startupFailed": "Startup failed",
+  "startupPleaseReopen": "Please close and reopen the app."
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/dotted_card_background.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -18,6 +19,7 @@ class TodayFocusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return DottedCard(
       padding: const EdgeInsets.all(16),
@@ -25,20 +27,20 @@ class TodayFocusCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Today's Focus",
+            l10n.todaysFocus,
             style: AppTypography.h3(color: colorScheme.onSurface),
           ),
           const SizedBox(height: 12),
           _FocusRow(
             icon: LucideIcons.bookOpen,
-            label: 'Continue your lesson',
+            label: l10n.continueYourLesson,
             onTap: onContinueLesson,
             colorScheme: colorScheme,
           ),
           const SizedBox(height: 10),
           _FocusRow(
             icon: LucideIcons.sparkles,
-            label: 'Take 2 minutes for dhikr',
+            label: l10n.takeTwoMinutesForDhikr,
             onTap: () => context.push('/adhkar'),
             colorScheme: colorScheme,
           ),
@@ -46,7 +48,7 @@ class TodayFocusCard extends StatelessWidget {
             const SizedBox(height: 10),
             _FocusRow(
               icon: LucideIcons.clock,
-              label: 'Prepare for next prayer',
+              label: l10n.prepareForNextPrayer,
               onTap: onPrepareForPrayer,
               colorScheme: colorScheme,
             ),
@@ -79,17 +81,10 @@ class _FocusRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
           children: [
-            Icon(
-              icon,
-              size: 18,
-              color: colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
+            Icon(icon, size: 18, color: colorScheme.onSurface.withValues(alpha: 0.7)),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                label,
-                style: AppTypography.body(color: colorScheme.onSurface),
-              ),
+              child: Text(label, style: AppTypography.body(color: colorScheme.onSurface)),
             ),
             Icon(
               LucideIcons.chevronRight,

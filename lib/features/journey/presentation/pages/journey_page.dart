@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/design_system/app_icons.dart';
 import 'package:flutter_app/design_system/colors.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_app/features/journey/presentation/journey_mock_data.dart
 import 'package:flutter_app/features/journey/presentation/widgets/journey_stat_card.dart';
 import 'package:flutter_app/features/journey/presentation/widgets/week_card.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
+import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -21,8 +23,6 @@ class JourneyPage extends ConsumerStatefulWidget {
 }
 
 class _JourneyPageState extends ConsumerState<JourneyPage> {
-  int _selectedNavIndex = 2; // Journey tab selected
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -73,6 +73,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                           child: CircularProgressIndicator(),
                         )),
                         error: (err, st) {
+                          final l10n = AppLocalizations.of(context)!;
                           final message = err is ApiException
                               ? err.message
                               : (err is Exception
@@ -85,7 +86,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Could not load journey',
+                                    l10n.journeyCouldNotLoad,
                                     style: AppTypography.body(
                                         color: Theme.of(context)
                                             .colorScheme
@@ -109,7 +110,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                                     onPressed: () =>
                                         ref.invalidate(journeyProvider),
                                     icon: const Icon(Icons.refresh),
-                                    label: const Text('Retry'),
+                                    label: Text(l10n.actionRetry),
                                   ),
                                 ],
                               ),
@@ -123,17 +124,17 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
+      bottomNavigationBar: const BottomNav(),
     );
   }
 
   Widget _buildHeader() {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       child: Row(
         children: [
-          // Back button
           IconButton(
             onPressed: () {
               if (context.canPop()) {
@@ -142,25 +143,24 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                 context.go('/home');
               }
             },
-            icon: Icon(LucideIcons.home),
+            icon: const Icon(LucideIcons.home),
             color: colorScheme.onSurface,
           ),
-          // Title
           Expanded(
             child: Column(
               children: [
                 Text(
-                  'Your Journey',
+                  l10n.journeyTitle,
                   style: AppTypography.h2(color: colorScheme.onSurface),
                 ),
                 Text(
-                  '90-Day Learning Path',
-                  style: AppTypography.caption(color: colorScheme.onSurface.withValues(alpha: 0.7)),
+                  l10n.journeyLearningPath,
+                  style: AppTypography.caption(
+                      color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 ),
               ],
             ),
           ),
-          // Placeholder for symmetry
           const SizedBox(width: 48),
         ],
       ),
@@ -168,6 +168,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
   }
 
   Widget _buildStatsRow(int progressPercent, int doneCount, int currentWeek) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Row(
@@ -175,7 +176,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
           Expanded(
             child: JourneyStatCard(
               value: '$progressPercent%',
-              label: 'Progress',
+              label: l10n.journeyStatProgress,
               icon: LucideIcons.target,
               iconColor: AppColors.primary,
             ),
@@ -184,7 +185,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
           Expanded(
             child: JourneyStatCard(
               value: '$doneCount',
-              label: 'Done',
+              label: l10n.journeyStatDone,
               icon: LucideIcons.trophy,
               iconColor: AppColors.accentGold,
             ),
@@ -193,7 +194,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
           Expanded(
             child: JourneyStatCard(
               value: 'W$currentWeek',
-              label: 'Current',
+              label: l10n.journeyStatCurrent,
               icon: LucideIcons.flame,
               iconColor: AppColors.accentCoral,
             ),
@@ -224,7 +225,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Overall Progress',
+                    AppLocalizations.of(context)!.journeyOverallProgress,
                     style: AppTypography.bodySm(color: colorScheme.onSurface)
                         .copyWith(fontWeight: FontWeight.w500),
                   ),
@@ -255,8 +256,8 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
   void _openLesson(BuildContext context, LessonData lesson) {
     if (lesson.isLocked) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Complete previous lessons first.'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.journeyCompletePreviousFirst),
         ),
       );
       return;
@@ -300,7 +301,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
             ),
             const SizedBox(width: 8),
             Text(
-              "Keep going! You're doing great!",
+              AppLocalizations.of(context)!.journeyEncouragement,
               style: AppTypography.bodySm(color: colorScheme.onSurface),
             ),
             const SizedBox(width: 8),
@@ -315,75 +316,6 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
     );
   }
 
-  Widget _buildBottomNav() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final brightness = Theme.of(context).brightness;
-    return Material(
-      color: brightness == Brightness.dark
-          ? colorScheme.surface
-          : colorScheme.surface.withValues(alpha: 0.95),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: colorScheme.outline.withAlpha(128)),
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(0, LucideIcons.home, 'Home', '/home'),
-                _buildNavItem(1, LucideIcons.library, 'Library', '/duas'),
-                _buildNavItem(2, LucideIcons.bookOpen, 'Journey', '/journey'),
-                _buildNavItem(3, LucideIcons.clock, 'Prayer', '/prayer-times'),
-                _buildNavItem(4, LucideIcons.user, 'Profile', '/profile'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label, String route) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isSelected = _selectedNavIndex == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() => _selectedNavIndex = index);
-        context.go(route);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primary.withValues(alpha: 0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 22,
-              color: isSelected ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: isSelected ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.6),
-              ).copyWith(
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 

@@ -1,16 +1,16 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/app/router.dart';
 import 'package:flutter_app/app/theme_provider.dart';
-import 'package:flutter_app/core/api/api_client.dart';
 import 'package:flutter_app/core/deep_link/deep_link_handler.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/design_system/app_theme.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:overlay_support/overlay_support.dart';
-import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class App extends ConsumerStatefulWidget {
   const App({super.key});
@@ -26,6 +26,11 @@ class _AppState extends ConsumerState<App> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Apply saved locale to ApiClient immediately on startup so the very
+      // first request already carries the correct Accept-Language header.
+      final savedLocale = ref.read(localeControllerProvider);
+      ref.read(apiClientProvider).setLocale(savedLocale);
+
       ref.read(authProvider.notifier).initialize();
       _handleInitialDeepLink();
       _listenToDeepLinks();
@@ -56,12 +61,11 @@ class _AppState extends ConsumerState<App> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
-    final locale = ref.watch(localeProvider);
+    final locale = ref.watch(localeControllerProvider);
 
-    // Update API client locale when app locale changes
-    ref.listen<Locale>(localeProvider, (previous, next) {
-      final apiClient = ref.read(apiClientProvider);
-      apiClient.setLocale(next);
+    // Keep ApiClient locale in sync whenever the user switches language.
+    ref.listen<Locale>(localeControllerProvider, (_, next) {
+      ref.read(apiClientProvider).setLocale(next);
     });
 
     return OverlaySupport.global(
@@ -84,8 +88,3 @@ class _AppState extends ConsumerState<App> {
     );
   }
 }
-
-/// Locale provider for app language.
-final localeProvider = StateProvider<Locale>((ref) {
-  return const Locale('en');
-});

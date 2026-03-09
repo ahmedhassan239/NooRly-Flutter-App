@@ -3,6 +3,7 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/dotted_card_background.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -31,26 +32,17 @@ class JourneyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    if (isGuest) {
-      return _buildGuestCard(context, colorScheme);
-    }
-
-    if (isLoading) {
-      return _buildLoadingCard(context, colorScheme);
-    }
-
+    if (isGuest) return _buildGuestCard(context, colorScheme);
+    if (isLoading) return _buildLoadingCard(context, colorScheme);
     if (errorMessage != null && errorMessage!.isNotEmpty) {
       return _buildErrorCard(context, colorScheme);
     }
-
-    if (isEmpty || lesson == null) {
-      return _buildEmptyCard(context, colorScheme);
-    }
-
+    if (isEmpty || lesson == null) return _buildEmptyCard(context, colorScheme);
     return _buildLessonCard(context, colorScheme, lesson!);
   }
 
   Widget _buildGuestCard(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return DottedCard(
       padding: const EdgeInsets.all(20),
       onTap: () => context.go('/login'),
@@ -60,7 +52,7 @@ class JourneyCard extends StatelessWidget {
           _labelChip(context, colorScheme),
           const SizedBox(height: 8),
           Text(
-            'Sign in to continue your lessons',
+            l10n.signInToContinueLessons,
             style: AppTypography.body(color: colorScheme.onSurface),
           ),
           const SizedBox(height: 16),
@@ -68,7 +60,7 @@ class JourneyCard extends StatelessWidget {
             width: double.infinity,
             child: FilledButton(
               onPressed: () => context.go('/login'),
-              child: const Text('Sign In'),
+              child: Text(l10n.actionSignIn),
             ),
           ),
         ],
@@ -116,6 +108,7 @@ class JourneyCard extends StatelessWidget {
   }
 
   Widget _buildErrorCard(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return DottedCard(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -126,8 +119,7 @@ class JourneyCard extends StatelessWidget {
           Text(
             errorMessage!,
             style: AppTypography.body(
-              color: colorScheme.onSurface.withValues(alpha: 0.8),
-            ),
+                color: colorScheme.onSurface.withValues(alpha: 0.8)),
           ),
           const SizedBox(height: 12),
           Row(
@@ -135,16 +127,16 @@ class JourneyCard extends StatelessWidget {
               if (onSignIn != null)
                 TextButton(
                   onPressed: onSignIn,
-                  child: const Text('Sign In'),
+                  child: Text(l10n.actionSignIn),
                 ),
               if (onRetry != null)
                 TextButton(
                   onPressed: onRetry,
-                  child: const Text('Retry'),
+                  child: Text(l10n.actionRetry),
                 ),
               TextButton(
                 onPressed: () => context.go('/journey'),
-                child: const Text('View Journey'),
+                child: Text(l10n.viewJourney),
               ),
             ],
           ),
@@ -154,6 +146,7 @@ class JourneyCard extends StatelessWidget {
   }
 
   Widget _buildEmptyCard(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return DottedCard(
       padding: const EdgeInsets.all(20),
       onTap: () => context.go('/journey'),
@@ -162,14 +155,12 @@ class JourneyCard extends StatelessWidget {
         children: [
           _labelChip(context, colorScheme),
           const SizedBox(height: 8),
-          Text(
-            'No lesson right now',
-            style: AppTypography.body(color: colorScheme.onSurface),
-          ),
+          Text(l10n.noLessonRightNow,
+              style: AppTypography.body(color: colorScheme.onSurface)),
           const SizedBox(height: 12),
           TextButton(
             onPressed: () => context.go('/journey'),
-            child: const Text('View Journey'),
+            child: Text(l10n.viewJourney),
           ),
         ],
       ),
@@ -181,10 +172,13 @@ class JourneyCard extends StatelessWidget {
     ColorScheme colorScheme,
     LessonEntity l,
   ) {
-    final durationStr = l.duration != null ? '${l.duration} min read' : '';
+    final loc = AppLocalizations.of(context)!;
+    final durationStr = l.duration != null
+        ? loc.journeyDurationMinRead(l.duration!)
+        : '';
     final weekDayStr = l.weekNumber != null
-        ? 'Week ${l.weekNumber} / Day ${l.dayNumber}'
-        : 'Day ${l.dayNumber}';
+        ? loc.journeyWeekDayLabel(l.weekNumber!, l.dayNumber)
+        : loc.journeyDayLabel(l.dayNumber);
 
     return DottedCard(
       padding: const EdgeInsets.all(20),
@@ -194,32 +188,24 @@ class JourneyCard extends StatelessWidget {
         children: [
           _labelChip(context, colorScheme),
           const SizedBox(height: 8),
-          Text(
-            l.title,
-            style: AppTypography.h2(color: colorScheme.onSurface),
-          ),
+          Text(l.title, style: AppTypography.h2(color: colorScheme.onSurface)),
           const SizedBox(height: 4),
           Text(
             weekDayStr,
             style: AppTypography.bodySm(
-              color: colorScheme.onSurface.withValues(alpha: 0.7),
-            ),
+                color: colorScheme.onSurface.withValues(alpha: 0.7)),
           ),
           if (durationStr.isNotEmpty) ...[
             const SizedBox(height: 4),
             Row(
               children: [
-                Icon(
-                  LucideIcons.clock,
-                  size: 14,
-                  color: colorScheme.onSurface.withValues(alpha: 0.7),
-                ),
+                Icon(LucideIcons.clock, size: 14,
+                    color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 const SizedBox(width: 6),
                 Text(
                   durationStr,
                   style: AppTypography.bodySm(
-                    color: colorScheme.onSurface.withValues(alpha: 0.7),
-                  ),
+                      color: colorScheme.onSurface.withValues(alpha: 0.7)),
                 ),
               ],
             ),
@@ -230,7 +216,7 @@ class JourneyCard extends StatelessWidget {
             child: FilledButton.icon(
               onPressed: () => context.push('/lessons/${l.id}'),
               icon: const Icon(LucideIcons.arrowRight, size: 18),
-              label: const Text('Continue'),
+              label: Text(loc.actionContinue),
               style: FilledButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(
@@ -245,8 +231,9 @@ class JourneyCard extends StatelessWidget {
   }
 
   Widget _labelChip(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Text(
-      'YOUR JOURNEY',
+      l10n.yourJourney,
       style: AppTypography.caption(
         color: colorScheme.onSurface.withValues(alpha: 0.7),
       ).copyWith(fontWeight: FontWeight.w600, letterSpacing: 0.5),

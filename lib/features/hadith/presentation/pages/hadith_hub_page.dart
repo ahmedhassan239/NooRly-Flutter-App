@@ -8,6 +8,7 @@ import 'package:flutter_app/features/hadith/data/library_hadith_api.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -59,7 +60,7 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
                       filled: true,
                       fillColor: colorScheme.surfaceContainerHighest,
                       prefixIcon: const Icon(Icons.search),
-                      hintText: 'Search hadith...',
+                      hintText: AppLocalizations.of(context)!.searchHadith,
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(AppRadius.lg),
@@ -75,8 +76,8 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         RoundedListCard(
-                          title: 'Saved Hadith',
-                          subtitle: '$savedCount saved',
+                          title: AppLocalizations.of(context)!.savedCardHadith,
+                          subtitle: AppLocalizations.of(context)!.savedCountLabel(savedCount),
                           icon: noorlyEmojiBookmark,
                           onTap: () => context.push('/hadith/saved'),
                         ),

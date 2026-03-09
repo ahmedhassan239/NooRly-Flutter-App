@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/remote_config/providers/remote_config_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -14,11 +15,11 @@ class BottomNav extends ConsumerWidget {
   const BottomNav({super.key});
 
   static const List<_NavItem> _navItems = [
-    _NavItem(icon: LucideIcons.home, label: 'Home', path: '/home', featureSlug: null),
-    _NavItem(icon: LucideIcons.library, label: 'Library', path: '/library', featureSlug: 'library'),
-    _NavItem(icon: LucideIcons.bookOpen, label: 'Journey', path: '/journey', featureSlug: 'lessons'),
-    _NavItem(icon: LucideIcons.clock, label: 'Prayer', path: '/prayer-times', featureSlug: 'prayer_times'),
-    _NavItem(icon: LucideIcons.user, label: 'Profile', path: '/profile', featureSlug: null),
+    _NavItem(icon: LucideIcons.home, path: '/home', featureSlug: null),
+    _NavItem(icon: LucideIcons.library, path: '/library', featureSlug: 'library'),
+    _NavItem(icon: LucideIcons.bookOpen, path: '/journey', featureSlug: 'lessons'),
+    _NavItem(icon: LucideIcons.clock, path: '/prayer-times', featureSlug: 'prayer_times'),
+    _NavItem(icon: LucideIcons.user, path: '/profile', featureSlug: null),
   ];
 
   bool _isActive(String currentPath, String navPath) {
@@ -26,7 +27,6 @@ class BottomNav extends ConsumerWidget {
       return currentPath == '/journey' || currentPath.startsWith('/lesson');
     }
     if (navPath == '/library') {
-      // Library tab is active for unified library and legacy content hub paths
       return currentPath.startsWith('/library') ||
           currentPath.startsWith('/duas') ||
           currentPath.startsWith('/hadith') ||
@@ -34,12 +34,9 @@ class BottomNav extends ConsumerWidget {
           currentPath.startsWith('/adhkar');
     }
     if (navPath == '/prayer-times') {
-      // Prayer tab is active for prayer-related pages
-      return currentPath == '/prayer-times' ||
-          currentPath.startsWith('/prayer');
+      return currentPath == '/prayer-times' || currentPath.startsWith('/prayer');
     }
     if (navPath == '/profile') {
-      // Profile tab is active for profile-related pages
       return currentPath == '/profile' ||
           currentPath.startsWith('/settings') ||
           currentPath.startsWith('/edit-profile');
@@ -96,6 +93,25 @@ class BottomNav extends ConsumerWidget {
   }
 }
 
+String _localizedNavLabel(BuildContext context, String path) {
+  final l10n = AppLocalizations.of(context);
+  if (l10n == null) return '';
+  switch (path) {
+    case '/home':
+      return l10n.navHome;
+    case '/library':
+      return l10n.navLibrary;
+    case '/journey':
+      return l10n.navJourney;
+    case '/prayer-times':
+      return l10n.navPrayer;
+    case '/profile':
+      return l10n.navProfile;
+    default:
+      return '';
+  }
+}
+
 class _NavButton extends StatelessWidget {
   const _NavButton({
     required this.item,
@@ -116,10 +132,7 @@ class _NavButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12,
-          vertical: 8,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: isActive
               ? colorScheme.primary.withValues(alpha: 0.1)
@@ -142,7 +155,7 @@ class _NavButton extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              item.label,
+              _localizedNavLabel(context, item.path),
               style: AppTypography.caption(
                 color: isActive
                     ? colorScheme.primary
@@ -159,14 +172,11 @@ class _NavButton extends StatelessWidget {
 class _NavItem {
   const _NavItem({
     required this.icon,
-    required this.label,
     required this.path,
     this.featureSlug,
   });
 
   final IconData icon;
-  final String label;
   final String path;
-  /// Feature slug from remote config (e.g. prayer_times, lessons). null = always show.
   final String? featureSlug;
 }

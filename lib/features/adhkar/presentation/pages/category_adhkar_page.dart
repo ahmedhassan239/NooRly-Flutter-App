@@ -16,6 +16,7 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart'
     show ToggleSaveResult;
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -385,16 +386,16 @@ class CategoryAdhkarPage extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.copy,
-            label: 'Copy',
+            label: AppLocalizations.of(context)!.actionCopy,
             colorScheme: colorScheme,
             onTap: () {
               final textToCopy =
                   '$arabic\n\n$transliteration\n\n"$translation"\n\n— $source';
               Clipboard.setData(ClipboardData(text: textToCopy));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Copied to clipboard! ✓'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
@@ -405,7 +406,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.share2,
-            label: 'Share',
+            label: AppLocalizations.of(context)!.actionShare,
             colorScheme: colorScheme,
             onTap: () {
               ShareContentDialog.show(
@@ -416,7 +417,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                   transliteration: transliteration,
                   translation: translation,
                   source: source,
-                  title: 'Share Adhkar',
+                  title: AppLocalizations.of(context)!.libraryAdhkar,
                 ),
               );
             },
@@ -437,30 +438,31 @@ class CategoryAdhkarPage extends ConsumerWidget {
           currentlySaved,
         );
     if (!context.mounted) return;
+    final l10n = AppLocalizations.of(context)!;
     switch (result) {
       case ToggleSaveResult.success:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
               currentlySaved
-                  ? 'Removed from favorites'
-                  : 'Saved to favorites',
+                  ? l10n.removedFromSaved
+                  : l10n.savedToFavorites,
             ),
             duration: const Duration(seconds: 2),
           ),
         );
       case ToggleSaveResult.failure:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not update. Please try again.'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n.couldNotUpdateSavedState),
+            duration: const Duration(seconds: 2),
           ),
         );
       case ToggleSaveResult.notAuthenticated:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Please sign in to save items.'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n.pleaseSignInToSave),
+            duration: const Duration(seconds: 2),
           ),
         );
       case ToggleSaveResult.skipped:
@@ -479,7 +481,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
     return _buildActionButton(
       context: context,
       icon: LucideIcons.heart,
-      label: isSaved ? 'Saved' : 'Save',
+      label: isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.actionSave,
       colorScheme: colorScheme,
       isActive: isSaved,
       isEnabled: !isSavePending,

@@ -12,6 +12,7 @@ import 'package:flutter_app/features/library/presentation/widgets/library_state_
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class AdhkarTabContent extends ConsumerStatefulWidget {
   const AdhkarTabContent({super.key});
@@ -32,6 +33,7 @@ class _AdhkarTabContentState extends ConsumerState<AdhkarTabContent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final categoriesAsync = ref.watch(libraryAdhkarCategoriesProvider);
     final savedListAsync = ref.watch(savedAdhkarListProvider);
     final savedCount = savedListAsync.when(
@@ -47,13 +49,13 @@ class _AdhkarTabContentState extends ConsumerState<AdhkarTabContent> {
         children: [
           AppSearchField(
             controller: _searchController,
-            hintText: 'Search adhkar...',
+            hintText: l10n.searchAdhkar,
             onChanged: (v) => setState(() => _searchQuery = v),
           ),
           const SizedBox(height: AppSpacing.md),
           RoundedListCard(
-            title: 'Saved Adhkar',
-            subtitle: '$savedCount saved',
+            title: l10n.savedCardAdhkar,
+            subtitle: l10n.savedCountLabel(savedCount),
             icon: iconForCategory(null, fallbackKey: kCategoryIconFallbackTasbih),
             onTap: () => context.push('/adhkar/saved'),
           ),
@@ -71,8 +73,8 @@ class _AdhkarTabContentState extends ConsumerState<AdhkarTabContent> {
                                 .contains(q))
                         .toList();
                 if (filtered.isEmpty) {
-                  return const LibraryEmptyView(
-                    message: 'No adhkar categories yet',
+                  return LibraryEmptyView(
+                    message: l10n.libraryNoAdhkarCategoriesYet,
                   );
                 }
                 return ListView.builder(
@@ -80,7 +82,7 @@ class _AdhkarTabContentState extends ConsumerState<AdhkarTabContent> {
                   itemBuilder: (_, i) {
                     final c = filtered[i];
                     final subtitle = c.itemsCount > 0
-                        ? '${c.itemsCount} adhkar'
+                        ? l10n.itemCountAdhkar(c.itemsCount)
                         : '';
                     return RoundedListCard(
                       title: c.title ?? '',

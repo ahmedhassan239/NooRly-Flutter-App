@@ -9,6 +9,7 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/save_verse_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -226,7 +227,7 @@ class VerseCollectionPage extends ConsumerWidget {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
-                label: 'Copy',
+                label: AppLocalizations.of(context)!.actionCopy,
                 colorScheme: colorScheme,
                 onTap: () {
                   final toCopy = verse.textAr != null
@@ -234,9 +235,10 @@ class VerseCollectionPage extends ConsumerWidget {
                       : '$text\n\n— $refStr';
                   Clipboard.setData(ClipboardData(text: toCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Copied to clipboard! ✓'),
-                        duration: Duration(seconds: 2)),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                      duration: const Duration(seconds: 2),
+                    ),
                   );
                 },
               ),
@@ -244,7 +246,7 @@ class VerseCollectionPage extends ConsumerWidget {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: AppLocalizations.of(context)!.actionShare,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -255,7 +257,7 @@ class VerseCollectionPage extends ConsumerWidget {
                       transliteration: '',
                       translation: text,
                       source: refStr,
-                      title: 'Share Verse',
+                      title: AppLocalizations.of(context)!.libraryVerses,
                     ),
                   );
                 },
@@ -264,13 +266,13 @@ class VerseCollectionPage extends ConsumerWidget {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.volume2,
-                label: 'Listen',
+                label: AppLocalizations.of(context)!.actionListen,
                 colorScheme: colorScheme,
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Listen — coming soon'),
-                      duration: Duration(seconds: 2),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.listenComingSoon),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },

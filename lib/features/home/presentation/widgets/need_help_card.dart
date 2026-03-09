@@ -3,6 +3,7 @@ import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_card.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// Section 5: Need Help Now? – white card, green icon in circle, title, subtitle, chevron.
@@ -42,13 +43,13 @@ class NeedHelpCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Need Help Now?',
+                  AppLocalizations.of(context)!.needHelpNow,
                   style: AppTypography.body(color: colorScheme.onSurface)
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Quick support when you need it',
+                  AppLocalizations.of(context)!.quickSupportWhenYouNeedIt,
                   style: AppTypography.bodySm(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),

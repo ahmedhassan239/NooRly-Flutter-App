@@ -15,6 +15,7 @@ import 'package:flutter_app/features/library/presentation/widgets/rounded_list_c
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class VersesTabContent extends ConsumerStatefulWidget {
   const VersesTabContent({super.key});
@@ -35,6 +36,7 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final collectionsAsync = ref.watch(verseCollectionsAllProvider);
     final savedListAsync = ref.watch(savedVerseListProvider);
     final savedCount = savedListAsync.when(
@@ -50,13 +52,13 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
         children: [
           AppSearchField(
             controller: _searchController,
-            hintText: 'Search verses...',
+            hintText: l10n.searchVerses,
             onChanged: (v) => setState(() => _searchQuery = v),
           ),
           const SizedBox(height: AppSpacing.md),
           RoundedListCard(
-            title: 'Saved Verses',
-            subtitle: '$savedCount saved',
+            title: l10n.savedCardVerses,
+            subtitle: l10n.savedCountLabel(savedCount),
             icon: noorlyEmojiBookmark,
             onTap: () => context.push('/verses/saved'),
           ),
@@ -72,16 +74,17 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
                             c.title.toLowerCase().contains(q))
                         .toList();
                 if (filtered.isEmpty) {
-                  return const LibraryEmptyView(
-                    message: 'No collections yet',
+                  return LibraryEmptyView(
+                    message: l10n.libraryNoCollectionsYet,
                   );
                 }
                 return ListView.builder(
                   itemCount: filtered.length,
                   itemBuilder: (_, i) {
                     final c = filtered[i];
-                    final subtitle = c.itemsCount != null && c.itemsCount! > 0
-                        ? '${c.itemsCount} verses'
+                    final count = c.itemsCount ?? 0;
+                    final subtitle = count > 0
+                        ? l10n.itemCountVerses(count)
                         : '';
                     return RoundedListCard(
                       title: c.title,

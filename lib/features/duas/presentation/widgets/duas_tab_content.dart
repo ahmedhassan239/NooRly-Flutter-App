@@ -8,6 +8,7 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -59,7 +60,7 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         onChanged: (value) => setState(() => _searchQuery = value),
         style: AppTypography.body(color: colorScheme.onSurface),
         decoration: InputDecoration(
-          hintText: 'Search duas...',
+          hintText: AppLocalizations.of(context)!.duasSearchHint,
           hintStyle:
               AppTypography.body(color: colorScheme.onSurface.withAlpha(100)),
           prefixIcon: Icon(
@@ -123,7 +124,7 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
               Icon(LucideIcons.alertCircle, size: 48, color: colorScheme.error),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Could not load categories',
+                AppLocalizations.of(context)!.duasCouldNotLoadCategories,
                 style: AppTypography.body(color: colorScheme.onSurface),
                 textAlign: TextAlign.center,
               ),
@@ -161,8 +162,8 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
               const SizedBox(height: AppSpacing.md),
               Text(
                 _searchQuery.isEmpty
-                    ? 'No categories yet'
-                    : 'No duas found',
+                    ? AppLocalizations.of(context)!.duasNoCategoriesYet
+                    : AppLocalizations.of(context)!.duasNoDuasFound,
                 style: AppTypography.body(
                     color: colorScheme.onSurface.withAlpha(150)),
               ),
@@ -177,11 +178,11 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-          child: _buildCategoryCard(
+          child:         _buildCategoryCard(
             context,
-            const DuaCategoryEntity(
+            DuaCategoryEntity(
               id: 'saved',
-              title: 'Saved Duas',
+              title: AppLocalizations.of(context)!.duasSavedDuas,
               iconKey: 'bookmark',
               count: 0,
             ),
@@ -242,8 +243,10 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
                   const SizedBox(height: 4),
                   Text(
                     category.count > 0
-                        ? '${category.count} duas'
-                        : (isSaved ? 'Your saved duas' : '0 duas'),
+                        ? AppLocalizations.of(context)!.duasCountLabel(category.count)
+                        : (isSaved
+                            ? AppLocalizations.of(context)!.duasYourSavedDuas
+                            : AppLocalizations.of(context)!.duasCountLabel(0)),
                     style: AppTypography.caption(
                       color: colorScheme.onSurface.withAlpha(150),
                     ),

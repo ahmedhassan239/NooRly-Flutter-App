@@ -1,0 +1,365 @@
+{
+  "@@locale": "ar",
+
+  "appTitle": "رحلة النور",
+  "welcomeTitle": "مرحباً برحلة النور",
+  "getStarted": "ابدأ الآن",
+  "home": "الرئيسية",
+  "settings": "الإعدادات",
+  "profile": "الملف الشخصي",
+
+  "otpTitle": "التحقق من البريد الإلكتروني",
+  "otpSubtitle": "أدخل الرمز المكون من 6 أرقام المرسل إلى {email}",
+  "@otpSubtitle": {
+    "placeholders": {
+      "email": { "type": "String" }
+    }
+  },
+  "otpResend": "إعادة إرسال الرمز",
+  "otpResendIn": "إعادة الإرسال خلال {seconds}ث",
+  "@otpResendIn": {
+    "placeholders": {
+      "seconds": { "type": "int" }
+    }
+  },
+  "otpInvalid": "رمز غير صحيح. يرجى المحاولة مرة أخرى.",
+  "otpExpired": "انتهت صلاحية الرمز. يرجى طلب رمز جديد.",
+  "otpTooManyRequests": "طلبات كثيرة جداً. يرجى الانتظار والمحاولة لاحقاً.",
+  "otpVerified": "تم التحقق من البريد الإلكتروني بنجاح!",
+  "otpVerifyButton": "تحقق",
+
+  "navHome": "الرئيسية",
+  "navLibrary": "المكتبة",
+  "navJourney": "رحلتي",
+  "navPrayer": "الصلاة",
+  "navProfile": "ملفي",
+
+  "actionRetry": "إعادة المحاولة",
+  "actionSignIn": "تسجيل الدخول",
+  "actionContinue": "متابعة",
+  "actionSave": "حفظ",
+  "actionCancel": "إلغاء",
+  "actionDelete": "حذف",
+  "actionSaveChanges": "حفظ التغييرات",
+  "actionExport": "تصدير",
+  "actionSend": "إرسال",
+  "actionOpen": "فتح",
+  "actionCopy": "نسخ",
+  "copiedToClipboard": "تم النسخ!",
+
+  "homeGreeting": "السلام عليكم",
+  "homeEncouragement": "أنت تسير بشكل رائع. كل خطوة تُحسب.",
+  "homeFriendFallback": "صديقي",
+  "homeExitTitle": "الخروج من التطبيق؟",
+  "homeExitContent": "هل تريد الخروج من نُورلي؟",
+  "homeExitConfirm": "خروج",
+
+  "nextPrayer": "الصلاة القادمة",
+  "setLocationForTimes": "حدد موقعك لمعرفة الأوقات",
+
+  "yourJourney": "رحلتك",
+  "noLessonRightNow": "لا يوجد درس الآن",
+  "viewJourney": "عرض الرحلة",
+  "signInToContinueLessons": "سجل دخولك لمتابعة دروسك",
+  "journeyErrorSession": "انتهت الجلسة. يرجى تسجيل الدخول مجدداً.",
+  "journeyErrorLoad": "تعذّر تحميل الدرس. حاول مرة أخرى أو افتح رحلتك.",
+  "journeyWeekDayLabel": "الأسبوع {week} / اليوم {day}",
+  "@journeyWeekDayLabel": {
+    "placeholders": {
+      "week": { "type": "int" },
+      "day": { "type": "int" }
+    }
+  },
+  "journeyDayLabel": "اليوم {day}",
+  "@journeyDayLabel": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  },
+  "journeyDurationMinRead": "{duration} دقيقة قراءة",
+  "@journeyDurationMinRead": {
+    "placeholders": {
+      "duration": { "type": "int" }
+    }
+  },
+
+  "todaysFocus": "تركيز اليوم",
+  "continueYourLesson": "تابع درسك",
+  "takeTwoMinutesForDhikr": "خصص دقيقتين للذكر",
+  "prepareForNextPrayer": "استعد للصلاة القادمة",
+
+  "ramadanIsHere": "رمضان قادم",
+  "prepareForTheBlessedMonth": "استعد للشهر الكريم",
+  "startRamadanGuide": "ابدأ دليل رمضان",
+
+  "journeyTitle": "رحلتك",
+  "journeyLearningPath": "مسار تعلم 90 يوماً",
+  "journeyStatProgress": "التقدم",
+  "journeyStatDone": "منجز",
+  "journeyStatCurrent": "الحالي",
+  "journeyOverallProgress": "التقدم الإجمالي",
+  "journeyEncouragement": "واصل المسير! أنت تبلي حسناً!",
+  "journeyCouldNotLoad": "تعذّر تحميل الرحلة",
+  "journeyCompletePreviousFirst": "أكمل الدروس السابقة أولاً.",
+
+  "prayerNotificationsMuted": "تم كتم الإشعارات",
+  "prayerNotificationsEnabled": "تم تفعيل الإشعارات",
+  "prayerNotificationPermissionRequired": "إذن الإشعارات مطلوب. يرجى تفعيله في الإعدادات.",
+  "prayerGettingLocation": "جارٍ تحديد الموقع...",
+  "prayerTodaysPrayers": "صلوات اليوم",
+  "prayerNoPrayerTimesForLocation": "لا توجد أوقات صلاة لهذا الموقع",
+  "prayerLocationUnavailable": "الموقع غير متاح",
+  "prayerEnterCityHint": "أدخل المدينة والبلد (مثال: القاهرة، مصر)",
+  "prayerLocationPermissionDeniedForever": "تم رفض إذن الموقع بشكل دائم. افتح إعدادات التطبيق لتفعيله.",
+  "prayerOpenSettings": "فتح الإعدادات",
+  "prayerLocationPermissionDenied": "تم رفض إذن الموقع",
+  "prayerLocationServicesDisabled": "خدمات الموقع معطّلة",
+  "prayerLocationUpdated": "تم تحديث الموقع",
+  "prayerUseCurrentLocation": "استخدام الموقع الحالي",
+  "prayerLocationRefreshed": "تم تحديث الموقع",
+  "prayerRefreshLocation": "تحديث الموقع",
+  "prayerUseAddress": "استخدام العنوان",
+
+  "profileTitle": "الملف الشخصي",
+  "profileYourProgress": "تقدمك",
+  "profileStreakLabel": "تتالي",
+  "profileDaysLabel": "أيام",
+  "profileActiveLabel": "نشاط",
+  "profileWeeksLabel": "أسابيع",
+  "profileLeftLabel": "متبقي",
+  "profileCouldNotLoadProgress": "تعذّر تحميل التقدم",
+  "profileJourneyProgress": "تقدم الرحلة",
+  "profileLessonsCompleted": "{count} دروس مكتملة",
+  "@profileLessonsCompleted": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "profilePercentComplete": "{percent}% مكتمل",
+  "@profilePercentComplete": {
+    "placeholders": {
+      "percent": { "type": "int" }
+    }
+  },
+  "profileMilestones": "الإنجازات",
+  "profileWeekComplete": "الأسبوع {week} مكتمل",
+  "@profileWeekComplete": {
+    "placeholders": {
+      "week": { "type": "int" }
+    }
+  },
+  "profileNoMilestonesYet": "لا توجد إنجازات بعد",
+  "profileInProgress": "(جارٍ)",
+  "profileNotSet": "غير محدد",
+  "profilePersonalInfo": "المعلومات الشخصية",
+  "profileLabelName": "الاسم",
+  "profileLabelEmail": "البريد الإلكتروني",
+  "profileLabelGender": "الجنس",
+  "profileLabelBirthDate": "تاريخ الميلاد",
+  "profileLabelLocale": "اللغة",
+  "profileLabelShahadaDate": "تاريخ الشهادة",
+  "profileLabelLearningGoals": "أهداف التعلم",
+  "profileEditProfile": "تعديل الملف الشخصي",
+  "profileQuickActions": "إجراءات سريعة",
+  "profileSavedDuas": "الأدعية المحفوظة",
+  "profileViewSavedDuas": "عرض مجموعة أدعيتك المحفوظة",
+  "profileYourReflections": "تأملاتك",
+  "profileReviewReflections": "راجع تأملات دروسك",
+  "profileManagePreferences": "إدارة تفضيلات التطبيق",
+  "profileLogOut": "تسجيل الخروج",
+  "profileLogOutTitle": "تسجيل الخروج",
+  "profileLogOutConfirm": "هل أنت متأكد من تسجيل الخروج؟",
+  "profileDayOfTotal": "اليوم {day} من {total}",
+  "@profileDayOfTotal": {
+    "placeholders": {
+      "day": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+
+  "libraryTitle": "المكتبة",
+  "libraryNoTabsAvailable": "لا تتوفر تبويبات المكتبة",
+  "libraryDuas": "أدعية",
+  "libraryHadith": "أحاديث",
+  "libraryVerses": "آيات",
+  "libraryAdhkar": "أذكار",
+  "libraryNoCollectionsYet": "لا توجد مجموعات بعد",
+  "libraryNoAdhkarCategoriesYet": "لا توجد فئات أذكار بعد",
+
+  "searchDuas": "ابحث في الأدعية...",
+  "searchHadith": "ابحث في الأحاديث...",
+  "searchVerses": "ابحث في الآيات...",
+  "searchAdhkar": "ابحث في الأذكار...",
+
+  "savedCountLabel": "{count} محفوظ",
+  "@savedCountLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "itemCountDuas": "{count} دعاء",
+  "@itemCountDuas": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountHadith": "{count} حديث",
+  "@itemCountHadith": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountVerses": "{count} آية",
+  "@itemCountVerses": { "placeholders": { "count": { "type": "int" } } },
+  "itemCountAdhkar": "{count} ذكر",
+  "@itemCountAdhkar": { "placeholders": { "count": { "type": "int" } } },
+
+  "savedCardDuas": "الأدعية المحفوظة",
+  "savedCardHadith": "الأحاديث المحفوظة",
+  "savedCardVerses": "الآيات المحفوظة",
+  "savedCardAdhkar": "الأذكار المحفوظة",
+
+  "prayerSchedule": "جدول الصلاة",
+  "dailyProgress": "التقدم اليومي",
+  "prayerRemaining": "متبقي",
+  "prayerMissed": "فائتة",
+  "prayerCompleted": "مكتملة",
+  "prayerDone": "منجز",
+  "prayerNext": "القادمة",
+  "prayerUpcoming": "قادمة",
+  "prayerFajr": "الفجر",
+  "prayerDhuhr": "الظهر",
+  "prayerAsr": "العصر",
+  "prayerMaghrib": "المغرب",
+  "prayerIsha": "العشاء",
+  "remainingNow": "الآن",
+  "remainingInMinutes": "خلال {minutes} د",
+  "@remainingInMinutes": { "placeholders": { "minutes": { "type": "int" } } },
+  "remainingInHours": "خلال {hours} س",
+  "@remainingInHours": { "placeholders": { "hours": { "type": "int" } } },
+  "remainingInHoursMinutes": "خلال {hours} س {minutes} د",
+  "@remainingInHoursMinutes": {
+    "placeholders": {
+      "hours": { "type": "int" },
+      "minutes": { "type": "int" }
+    }
+  },
+
+  "needHelpNow": "تحتاج مساعدة الآن؟",
+  "quickSupportWhenYouNeedIt": "دعم سريع عندما تحتاجه",
+  "dailyInspiration": "إلهام اليوم",
+  "seeAll": "عرض الكل",
+  "noDailyInspiration": "لا يوجد إلهام يومي متاح حالياً.",
+  "actionListen": "استماع",
+  "actionShare": "مشاركة",
+  "actionSaved": "محفوظ",
+
+  "savedToFavorites": "تم الحفظ في المفضلة",
+  "removedFromSaved": "تمت الإزالة من المحفوظات",
+  "couldNotUpdateSavedState": "تعذّر تحديث الحالة. حاول مرة أخرى.",
+  "loginRequired": "تسجيل الدخول مطلوب",
+  "pleaseSignInToSave": "سجّل دخولك لحفظ العناصر في المفضلة.",
+
+  "duasSearchHint": "ابحث في الأدعية...",
+  "duasCouldNotLoadCategories": "تعذّر تحميل الفئات",
+  "duasNoCategoriesYet": "لا توجد فئات بعد",
+  "duasNoDuasFound": "لم يتم العثور على أدعية",
+  "duasSavedDuas": "الأدعية المحفوظة",
+  "duasYourSavedDuas": "أدعيتك المحفوظة",
+  "duasCountLabel": "{count} دعاء",
+  "@duasCountLabel": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+
+  "savedTitle": "المحفوظات",
+  "savedSignInToView": "سجل دخولك لعرض العناصر المحفوظة",
+  "savedTabAll": "الكل",
+  "savedTabDuas": "أدعية",
+  "savedTabAdhkar": "أذكار",
+  "savedTabVerses": "آيات",
+  "savedTabHadith": "أحاديث",
+  "savedNoItems": "لا توجد عناصر محفوظة",
+  "savedEmptyHint": "احفظ العناصر من المكتبة لتراها هنا.",
+  "savedNoSearchResults": "لا توجد عناصر تطابق البحث",
+  "savedCouldNotLoad": "تعذّر تحميل المحفوظات",
+  "savedSyncedToAccount": "عناصرك المحفوظة مزامنة مع حسابك.",
+  "savedTypeDua": "دعاء",
+  "savedTypeAdhkar": "ذكر",
+  "savedTypeHadith": "حديث",
+  "savedTypeVerse": "آية",
+
+  "editProfileTitle": "تعديل الملف الشخصي",
+  "editProfileTapToChange": "اضغط لتغيير الصورة",
+  "editProfileNameLabel": "الاسم",
+  "editProfileNameHint": "أدخل اسمك",
+  "editProfileShahadaDateLabel": "تاريخ الشهادة (اختياري)",
+  "editProfileShahadaHelper": "متى أعلنت شهادتك؟",
+  "editProfileSelectDate": "اختر تاريخاً",
+  "editProfileSaveChanges": "حفظ التغييرات",
+  "editProfileTakePhoto": "التقاط صورة",
+  "editProfileCameraComingSoon": "ميزة الكاميرا قريباً",
+  "editProfileChooseFromGallery": "اختيار من المعرض",
+  "editProfileGalleryComingSoon": "اختيار من المعرض قريباً",
+  "editProfileEnterNameError": "يرجى إدخال اسمك",
+  "editProfileSavedSuccess": "تم حفظ الملف الشخصي بنجاح!",
+
+  "settingsTitle": "الإعدادات",
+  "settingsNotifications": "الإشعارات",
+  "settingsPrayerReminders": "تذكيرات الصلاة",
+  "settingsDailyLesson": "الدرس اليومي",
+  "settingsMilestoneAlerts": "تنبيهات الإنجازات",
+  "settingsAppearance": "المظهر",
+  "settingsLanguage": "اللغة",
+  "settingsDarkMode": "الوضع الداكن",
+  "settingsUseDarkTheme": "استخدام السمة الداكنة",
+  "settingsFontSize": "حجم الخط",
+  "settingsFontSizeSubtitle": "ضبط حجم النص",
+  "settingsPrayerTimes": "أوقات الصلاة",
+  "settingsCalculationMethod": "طريقة الحساب",
+  "settingsDefaultMadhab": "المذهب الافتراضي",
+  "settingsAdjustTimes": "ضبط الأوقات",
+  "settingsAdjustTimesSubtitle": "ضبط أوقات الصلاة ±5 دقائق",
+  "settingsPrivacyData": "الخصوصية والبيانات",
+  "settingsExportMyData": "تصدير بياناتي",
+  "settingsExportMyDataSubtitle": "تنزيل كل تقدمك",
+  "settingsDeleteAllData": "حذف جميع البيانات",
+  "settingsDeleteAllDataSubtitle": "حذف كل شيء نهائياً",
+  "settingsAbout": "حول",
+  "settingsApp": "التطبيق",
+  "settingsVersion": "الإصدار",
+  "settingsPrivacyPolicy": "سياسة الخصوصية",
+  "settingsHelpSupport": "المساعدة والدعم",
+  "settingsSendFeedback": "إرسال ملاحظات",
+
+  "languageEnglish": "English",
+  "languageArabic": "العربية",
+
+  "dialogExternalLinkTitle": "رابط خارجي",
+  "dialogExternalLinkContent": "سيتم الفتح في المتصفح:",
+  "dialogOpeningInBrowser": "جاري الفتح في المتصفح...",
+  "dialogDeleteAllDataTitle": "حذف جميع البيانات",
+  "dialogDeleteAllDataContent": "سيؤدي هذا إلى حذف جميع تقدمك وتأملاتك ومحتواك المحفوظ نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+  "dialogDataDeletedSuccess": "تم حذف جميع البيانات بنجاح",
+  "dialogExportTitle": "تصدير بياناتي",
+  "dialogExportContent": "سيتضمن تصدير بياناتك:",
+  "dialogExportPreparing": "جاري تحضير تصدير بياناتك...",
+  "dialogExportSuccess": "تم تصدير البيانات بنجاح! تحقق من التنزيلات.",
+  "dialogFeedbackTitle": "إرسال ملاحظات",
+  "dialogFeedbackContent": "يسعدنا سماع رأيك! شاركنا أفكارك واقتراحاتك أو أبلغنا عن المشكلات.",
+  "dialogFeedbackHint": "اكتب ملاحظاتك هنا...",
+  "dialogFeedbackThanks": "شكراً على ملاحظاتك!",
+  "dialogAdjustTimesTitle": "ضبط أوقات الصلاة",
+  "dialogAdjustTimesContent": "ضبط أوقات الصلاة الفردية بمقدار ±5 دقائق",
+  "dialogPrayerTimesAdjusted": "تم ضبط أوقات الصلاة",
+
+  "darkModeEnabled": "تم تفعيل الوضع الداكن",
+  "lightModeEnabled": "تم تفعيل الوضع الفاتح",
+
+  "languageChanged": "اللغة: {language}",
+  "@languageChanged": {
+    "placeholders": {
+      "language": { "type": "String" }
+    }
+  },
+
+  "listenComingSoon": "الاستماع — قريباً",
+  "comingSoon": "قريباً",
+  "goHome": "الصفحة الرئيسية",
+  "needHelp": "تحتاج مساعدة؟",
+  "startupFailed": "فشل التشغيل",
+  "startupPleaseReopen": "يرجى إغلاق التطبيق وإعادة فتحه."
+}

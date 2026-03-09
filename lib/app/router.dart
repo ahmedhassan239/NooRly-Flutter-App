@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
@@ -124,6 +125,7 @@ class PlaceholderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -146,11 +148,11 @@ class PlaceholderPage extends StatelessWidget {
             const SizedBox(height: 16),
             Text(title, style: Theme.of(context).textTheme.headlineSmall),
             const SizedBox(height: 8),
-            const Text('Coming Soon'),
+            Text(l10n.comingSoon),
             const SizedBox(height: 24),
             ElevatedButton(
               onPressed: () => context.go('/home'),
-              child: const Text('Go Home'),
+              child: Text(l10n.goHome),
             ),
           ],
         ),
@@ -366,7 +368,8 @@ List<RouteBase> get _appRoutes => [
     GoRoute(
       path: '/support',
       name: AppRoutes.support,
-      builder: (context, state) => const PlaceholderPage(title: 'Need Help'),
+      builder: (context, state) =>
+          PlaceholderPage(title: AppLocalizations.of(context)!.needHelp),
     ),
     GoRoute(
       path: '/need-help',

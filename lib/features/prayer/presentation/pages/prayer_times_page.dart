@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -50,13 +51,14 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
     final isCurrentlyMuted = ref.read(notificationMuteProvider);
     final notificationsService = PrayerNotificationsService.instance;
 
+    final l10n = AppLocalizations.of(context)!;
     if (!isCurrentlyMuted) {
       await ref.read(notificationMuteProvider.notifier).toggleMute();
       await notificationsService.cancelAllPrayerReminders();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Notifications muted'),
+            content: Text(l10n.prayerNotificationsMuted),
             duration: const Duration(seconds: 2),
             backgroundColor: colorScheme.surfaceContainerHighest,
           ),
@@ -70,7 +72,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Notifications enabled'),
+              content: Text(l10n.prayerNotificationsEnabled),
               duration: const Duration(seconds: 2),
               backgroundColor: colorScheme.surfaceContainerHighest,
             ),
@@ -79,9 +81,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
       } else if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'Notification permission is required. Please enable it in settings.',
-            ),
+            content: Text(l10n.prayerNotificationPermissionRequired),
             duration: const Duration(seconds: 3),
             backgroundColor: colorScheme.surfaceContainerHighest,
           ),
@@ -146,7 +146,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
     String? address,
     AsyncValue<LocationResult?> locationAsync,
   ) {
-    final locationLabel = address ?? 'Getting location...';
+    final locationLabel = address ?? AppLocalizations.of(context)!.prayerGettingLocation;
     final dateLabel = formatDateForDisplay(now);
     final timeLabel = DateFormat('HH:mm').format(now);
     final isMuted = ref.watch(notificationMuteProvider);
@@ -185,7 +185,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "TODAY'S PRAYERS",
+            AppLocalizations.of(context)!.prayerTodaysPrayers,
             style: AppTypography.caption(
               color: colorScheme.onSurface.withValues(alpha: 0.7),
             ).copyWith(
@@ -201,7 +201,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(AppSpacing.xl),
                     child: Text(
-                      'No prayer times for this location',
+                      AppLocalizations.of(context)!.prayerNoPrayerTimesForLocation,
                       style: AppTypography.body(
                         color: colorScheme.onSurface.withValues(alpha: 0.7),
                       ),
@@ -250,7 +250,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
                           ..invalidate(prayerTimingsTodayProvider)
                           ..invalidate(prayerTimingsTomorrowProvider);
                       },
-                      child: const Text('Retry'),
+                      child: Text(AppLocalizations.of(context)!.actionRetry),
                     ),
                   ],
                 ),
@@ -305,7 +305,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Location unavailable',
+            AppLocalizations.of(context)!.prayerLocationUnavailable,
             style: AppTypography.h3(color: colorScheme.onSurface),
           ),
           if (errorText != null && errorText.isNotEmpty) ...[
@@ -321,9 +321,9 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
           TextField(
             controller: _addressController,
             focusNode: _addressFocusNode,
-            decoration: const InputDecoration(
-              hintText: 'Enter city, country (e.g. Cairo, Egypt)',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.prayerEnterCityHint,
+              border: const OutlineInputBorder(),
             ),
             onSubmitted: (value) {
               if (value.trim().isNotEmpty) {
@@ -338,14 +338,14 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
               final scheme = Theme.of(context).colorScheme;
               final result = await ref.read(locationNotifierProvider.notifier).requestLocation();
               if (!mounted) return;
+              if (!mounted) return;
+              final l10n = AppLocalizations.of(context)!;
               if (result == LocationRequestResult.permissionDeniedForever) {
                 messenger.showSnackBar(
                   SnackBar(
-                    content: const Text(
-                      'Location permission was permanently denied. Open app settings to enable it.',
-                    ),
+                    content: Text(l10n.prayerLocationPermissionDeniedForever),
                     action: SnackBarAction(
-                      label: 'Open settings',
+                      label: l10n.prayerOpenSettings,
                       onPressed: Geolocator.openAppSettings,
                     ),
                     duration: const Duration(seconds: 5),
@@ -355,21 +355,21 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
               } else if (result == LocationRequestResult.permissionDenied) {
                 messenger.showSnackBar(
                   SnackBar(
-                    content: const Text('Location permission denied'),
+                    content: Text(l10n.prayerLocationPermissionDenied),
                     backgroundColor: scheme.surfaceContainerHighest,
                   ),
                 );
               } else if (result == LocationRequestResult.serviceDisabled) {
                 messenger.showSnackBar(
                   SnackBar(
-                    content: const Text('Location services are disabled'),
+                    content: Text(l10n.prayerLocationServicesDisabled),
                     backgroundColor: scheme.surfaceContainerHighest,
                   ),
                 );
               } else if (result == LocationRequestResult.success && mounted) {
                 messenger.showSnackBar(
                   SnackBar(
-                    content: const Text('Location updated'),
+                    content: Text(l10n.prayerLocationUpdated),
                     duration: const Duration(seconds: 2),
                     backgroundColor: scheme.surfaceContainerHighest,
                   ),
@@ -377,7 +377,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
               }
             },
             icon: const Icon(LucideIcons.mapPin, size: 18),
-            label: const Text('Use current location'),
+            label: Text(AppLocalizations.of(context)!.prayerUseCurrentLocation),
           ),
           const SizedBox(height: AppSpacing.sm),
           OutlinedButton.icon(
@@ -385,12 +385,15 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
               final result = await ref.read(locationNotifierProvider.notifier).requestLocation();
               if (mounted && result == LocationRequestResult.success) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Location refreshed'), duration: Duration(seconds: 2)),
+                  SnackBar(
+                    content: Text(AppLocalizations.of(context)!.prayerLocationRefreshed),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
               }
             },
             icon: const Icon(LucideIcons.refreshCw, size: 18),
-            label: const Text('Refresh location'),
+            label: Text(AppLocalizations.of(context)!.prayerRefreshLocation),
           ),
           const SizedBox(height: AppSpacing.sm),
           Row(
@@ -404,7 +407,7 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
                     }
                   },
                   icon: const Icon(LucideIcons.edit, size: 18),
-                  label: const Text('Use address'),
+                  label: Text(AppLocalizations.of(context)!.prayerUseAddress),
                 ),
               ),
             ],

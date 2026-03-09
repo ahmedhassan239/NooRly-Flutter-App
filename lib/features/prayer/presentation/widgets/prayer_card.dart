@@ -7,6 +7,7 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/prayer/data/prayer_models.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class PrayerCard extends StatelessWidget {
@@ -20,8 +21,11 @@ class PrayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final isNext = data.status == PrayerStatus.next;
     final isDone = data.status == PrayerStatus.done;
+    final displayName = _localizedPrayerName(l10n, data.name);
+    final remainingText = _localizedRemaining(context, data);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -56,7 +60,7 @@ class PrayerCard extends StatelessWidget {
           const SizedBox(width: AppSpacing.md),
           Expanded(
             child: Text(
-              data.name,
+              displayName,
               style: AppTypography.body(color: colorScheme.onSurface)
                   .copyWith(fontWeight: FontWeight.w500),
             ),
@@ -70,9 +74,9 @@ class PrayerCard extends StatelessWidget {
                   color: isNext ? colorScheme.primary : colorScheme.onSurface,
                 ).copyWith(fontWeight: FontWeight.w600),
               ),
-              if (data.remaining != null && data.remaining!.isNotEmpty)
+              if (remainingText != null && remainingText.isNotEmpty)
                 Text(
-                  data.remaining!,
+                  remainingText,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -84,6 +88,35 @@ class PrayerCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _localizedPrayerName(AppLocalizations l10n, String name) {
+    switch (name) {
+      case 'Fajr': return l10n.prayerFajr;
+      case 'Dhuhr': return l10n.prayerDhuhr;
+      case 'Asr': return l10n.prayerAsr;
+      case 'Maghrib': return l10n.prayerMaghrib;
+      case 'Isha': return l10n.prayerIsha;
+      default: return name;
+    }
+  }
+
+  static String? _localizedRemaining(BuildContext context, PrayerCardData data) {
+    if (data.status != PrayerStatus.next && data.status != PrayerStatus.upcoming) {
+      return null;
+    }
+    final timeDt = data.timeAsDateTime;
+    if (timeDt == null) return data.remaining;
+    final l10n = AppLocalizations.of(context)!;
+    final now = DateTime.now();
+    if (timeDt.isBefore(now) || timeDt.isAtSameMomentAs(now)) return l10n.remainingNow;
+    final duration = timeDt.difference(now);
+    final totalMinutes = duration.inMinutes;
+    if (totalMinutes < 60) return l10n.remainingInMinutes(totalMinutes);
+    final h = duration.inHours;
+    final m = totalMinutes - (h * 60);
+    if (m == 0) return l10n.remainingInHours(h);
+    return l10n.remainingInHoursMinutes(h, m);
   }
 }
 
@@ -109,6 +142,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     String label;
     Color bgColor;
     Color textColor;
@@ -116,17 +150,17 @@ class _StatusBadge extends StatelessWidget {
 
     switch (status) {
       case PrayerStatus.done:
-        label = 'Done';
+        label = l10n.prayerDone;
         bgColor = AppColors.accentGreen;
         textColor = Colors.white;
         icon = LucideIcons.check;
       case PrayerStatus.next:
-        label = 'Next';
+        label = l10n.prayerNext;
         bgColor = colorScheme.primary;
         textColor = colorScheme.onPrimary;
         icon = null;
       case PrayerStatus.upcoming:
-        label = 'Upcoming';
+        label = l10n.prayerUpcoming;
         bgColor = colorScheme.outlineVariant;
         textColor = colorScheme.onSurface.withValues(alpha: 0.7);
         icon = null;

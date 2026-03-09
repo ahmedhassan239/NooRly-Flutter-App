@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/radius.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
@@ -15,18 +16,27 @@ class SavedItemsPage extends ConsumerWidget {
   const SavedItemsPage({super.key});
 
   static const List<String> _tabTypes = ['all', 'dua', 'adhkar', 'verse', 'hadith'];
-  static const List<String> _tabLabels = ['All', 'Duas', 'Adhkar', 'Verses', 'Hadith'];
+
+  List<String> _tabLabels(AppLocalizations l10n) => [
+    l10n.savedTabAll,
+    l10n.savedTabDuas,
+    l10n.savedTabAdhkar,
+    l10n.savedTabVerses,
+    l10n.savedTabHadith,
+  ];
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
     final auth = ref.watch(authProvider);
 
+    final l10n = AppLocalizations.of(context)!;
+
     if (!auth.isAuthenticated) {
       return Scaffold(
         backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          title: const Text('Saved'),
+          title: Text(l10n.savedTitle),
           leading: IconButton(
             icon: const Icon(LucideIcons.arrowLeft),
             onPressed: () => context.pop(),
@@ -34,7 +44,7 @@ class SavedItemsPage extends ConsumerWidget {
         ),
         body: Center(
           child: Text(
-            'Sign in to view saved items',
+            l10n.savedSignInToView,
             style: AppTypography.body(color: colorScheme.onSurface),
           ),
         ),
@@ -46,7 +56,7 @@ class SavedItemsPage extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: colorScheme.surface,
         appBar: AppBar(
-          title: const Text('Saved'),
+          title: Text(l10n.savedTitle),
           leading: IconButton(
             icon: const Icon(LucideIcons.arrowLeft),
             onPressed: () => context.pop(),
@@ -54,7 +64,7 @@ class SavedItemsPage extends ConsumerWidget {
           bottom: TabBar(
             isScrollable: true,
             tabAlignment: TabAlignment.start,
-            tabs: _tabLabels.map((l) => Tab(text: l)).toList(),
+            tabs: _tabLabels(l10n).map((label) => Tab(text: label)).toList(),
           ),
         ),
         body: TabBarView(
@@ -106,7 +116,7 @@ class _TabContent extends ConsumerWidget {
           items
               .map((u) => _DisplayItem(
                     type: 'dua',
-                    title: u.title ?? 'Dua',
+                    title: u.title ?? AppLocalizations.of(context)!.savedTypeDua,
                     snippet: (u.text ?? u.textAr ?? '').length > 80
                         ? '${(u.text ?? u.textAr ?? '').substring(0, 80)}…'
                         : (u.text ?? u.textAr ?? ''),
@@ -131,7 +141,7 @@ class _TabContent extends ConsumerWidget {
           items
               .map((u) => _DisplayItem(
                     type: 'adhkar',
-                    title: u.title ?? 'Dhikr',
+                    title: u.title ?? AppLocalizations.of(context)!.savedTypeAdhkar,
                     snippet: (u.text ?? u.textAr ?? '').length > 80
                         ? '${(u.text ?? u.textAr ?? '').substring(0, 80)}…'
                         : (u.text ?? u.textAr ?? ''),
@@ -181,7 +191,7 @@ class _TabContent extends ConsumerWidget {
           items
               .map((u) => _DisplayItem(
                     type: 'hadith',
-                    title: u.collectionName ?? u.collection ?? 'Hadith',
+                    title: u.collectionName ?? u.collection ?? AppLocalizations.of(context)!.savedTypeHadith,
                     snippet: (u.text ?? u.textAr ?? u.textEn ?? '').length > 80
                         ? '${(u.text ?? u.textAr ?? u.textEn ?? '').substring(0, 80)}…'
                         : (u.text ?? u.textAr ?? u.textEn ?? ''),
@@ -215,7 +225,7 @@ class _TabContent extends ConsumerWidget {
             Icon(LucideIcons.bookMarked, size: 48, color: colorScheme.outline),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No saved items',
+              AppLocalizations.of(context)!.savedNoItems,
               style: AppTypography.body(color: colorScheme.onSurface.withAlpha(150)),
             ),
           ],
@@ -271,7 +281,7 @@ class _TabContent extends ConsumerWidget {
             Icon(LucideIcons.alertCircle, size: 48, color: colorScheme.error),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Could not load saved items',
+              AppLocalizations.of(context)!.savedCouldNotLoad,
               style: AppTypography.body(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),
@@ -279,7 +289,7 @@ class _TabContent extends ConsumerWidget {
             FilledButton.icon(
               onPressed: onRetry,
               icon: const Icon(LucideIcons.refreshCw, size: 18),
-              label: const Text('Retry'),
+              label: Text(AppLocalizations.of(context)!.actionRetry),
             ),
           ],
         ),
@@ -311,16 +321,17 @@ class _SavedItemCard extends StatelessWidget {
   final ColorScheme colorScheme;
   final VoidCallback onTap;
 
-  static String _typeLabel(String type) {
+  static String _typeLabel(BuildContext context, String type) {
+    final l10n = AppLocalizations.of(context)!;
     switch (type) {
       case 'hadith':
-        return 'Hadith';
+        return l10n.savedTypeHadith;
       case 'verse':
-        return 'Verse';
+        return l10n.savedTypeVerse;
       case 'dua':
-        return 'Dua';
+        return l10n.savedTypeDua;
       case 'adhkar':
-        return 'Dhikr';
+        return l10n.savedTypeAdhkar;
       default:
         return type;
     }
@@ -346,7 +357,7 @@ class _SavedItemCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _typeLabel(item.type),
+                    _typeLabel(context, item.type),
                     style: AppTypography.caption(
                       color: colorScheme.primary,
                     ).copyWith(fontWeight: FontWeight.w600),

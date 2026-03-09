@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -32,7 +34,6 @@ class HomeDashboardPage extends ConsumerStatefulWidget {
 }
 
 class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
-  int _selectedNavIndex = 0;
   static bool _debugChecklistPrinted = false;
   bool _ramadanBannerDismissed = false;
 
@@ -59,19 +60,20 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
+        final l10n = AppLocalizations.of(context)!;
         final leave = await showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Exit app?'),
-            content: const Text('Do you want to exit NooRly?'),
+            title: Text(l10n.homeExitTitle),
+            content: Text(l10n.homeExitContent),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Cancel'),
+                child: Text(l10n.actionCancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Exit'),
+                child: Text(l10n.homeExitConfirm),
               ),
             ],
           ),
@@ -125,9 +127,11 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
 
   Widget _buildHeader() {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
     final header = ref.watch(homeHeaderDisplayProvider);
-    final name =
-        header.displayName.trim().isEmpty ? 'Friend' : header.displayName;
+    final name = header.displayName.trim().isEmpty
+        ? l10n.homeFriendFallback
+        : header.displayName;
     final initial = name.isNotEmpty ? name[0].toUpperCase() : 'F';
 
     return Padding(
@@ -148,7 +152,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Assalamu Alaikum',
+                  l10n.homeGreeting,
                   style: AppTypography.bodySm(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -160,7 +164,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "You're doing great. Every step counts.",
+                  l10n.homeEncouragement,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -241,11 +245,12 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
       },
       loading: () => const JourneyCard(isLoading: true),
       error: (Object err, _) {
+        final l10n = AppLocalizations.of(context)!;
         final isSessionExpired = err is UnauthorizedException;
         return JourneyCard(
           errorMessage: isSessionExpired
-              ? 'Session expired. Please sign in again.'
-              : 'Could not load your lesson. Try again or open Journey.',
+              ? l10n.journeyErrorSession
+              : l10n.journeyErrorLoad,
           onRetry: () => ref.invalidate(todayLessonProvider),
           onSignIn: isSessionExpired ? () => context.go('/') : null,
         );
@@ -299,79 +304,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   }
 
   Widget _buildBottomNav() {
-    final colorScheme = Theme.of(context).colorScheme;
-    final brightness = Theme.of(context).brightness;
-    return Material(
-      color: brightness == Brightness.dark
-          ? colorScheme.surface
-          : colorScheme.surface.withValues(alpha: 0.95),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: colorScheme.outline.withAlpha(128)),
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(0, LucideIcons.home, 'Home', '/home'),
-                _buildNavItem(1, LucideIcons.library, 'Library', '/duas'),
-                _buildNavItem(2, LucideIcons.bookOpen, 'Journey', '/journey'),
-                _buildNavItem(3, LucideIcons.clock, 'Prayer', '/prayer-times'),
-                _buildNavItem(4, LucideIcons.user, 'Profile', '/profile'),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(int index, IconData icon, String label, String route) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final isSelected = _selectedNavIndex == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() => _selectedNavIndex = index);
-        context.go(route);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: isSelected
-              ? colorScheme.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 22,
-              color: isSelected
-                  ? colorScheme.primary
-                  : colorScheme.onSurface.withValues(alpha: 0.6),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: isSelected
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withValues(alpha: 0.6),
-              ).copyWith(
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    return const BottomNav();
   }
 
   void _printDebugChecklistAndSearchResults() {

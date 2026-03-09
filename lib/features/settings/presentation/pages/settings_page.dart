@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/app/theme_provider.dart';
-import 'package:flutter_app/app/app.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -9,6 +9,7 @@ import 'package:flutter_app/design_system/widgets/settings_card.dart';
 import 'package:flutter_app/design_system/widgets/settings_section_header.dart';
 import 'package:flutter_app/design_system/widgets/settings_tile.dart';
 import 'package:flutter_app/features/remote_config/providers/remote_config_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -45,6 +46,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       backgroundColor: colorScheme.surface,
@@ -57,9 +59,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               context.go('/profile');
             }
           },
-          icon: Icon(LucideIcons.arrowLeft),
+          icon: Directionality.of(context) == TextDirection.rtl
+              ? const Icon(LucideIcons.arrowRight)
+              : const Icon(LucideIcons.arrowLeft),
         ),
-        title: const Text('Settings'),
+        title: Text(l10n.settingsTitle),
         centerTitle: false,
       ),
       body: SafeArea(
@@ -71,15 +75,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildNotificationsSection(),
+                  _buildNotificationsSection(l10n),
                   const SizedBox(height: AppSpacing.lg),
-                  _buildAppearanceSection(),
+                  _buildAppearanceSection(l10n),
                   const SizedBox(height: AppSpacing.lg),
-                  _buildPrayerTimesSection(),
+                  _buildPrayerTimesSection(l10n),
                   const SizedBox(height: AppSpacing.lg),
-                  _buildPrivacyDataSection(),
+                  _buildPrivacyDataSection(l10n),
                   const SizedBox(height: AppSpacing.lg),
-                  _buildAboutSection(),
+                  _buildAboutSection(l10n),
                 ],
               ),
             ),
@@ -95,27 +99,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     'ISNA', 'Gulf', 'Kuwait', 'Qatar', 'Singapore', 'Dubai', 'MoonsightingCommittee',
   ];
 
-  Widget _buildNotificationsSection() {
+  Widget _buildNotificationsSection(AppLocalizations l10n) {
     final notificationsMaster = ref.watch(notificationsEnabledConfigProvider);
     final prayerDefault = ref.watch(prayerNotificationsDefaultProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsSectionHeader(title: 'Notifications'),
+        SettingsSectionHeader(title: l10n.settingsNotifications),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
               SettingsSwitchTile(
                 icon: LucideIcons.bell,
-                title: 'Notifications',
+                title: l10n.settingsNotifications,
                 subtitle: 'Master switch from app config (notifications_enabled)',
                 value: notificationsMaster,
-                onChanged: (_) {}, // Read-only: set in admin
+                onChanged: (_) {},
               ),
               SettingsSwitchTile(
                 icon: LucideIcons.bell,
-                title: 'Prayer Reminders',
+                title: l10n.settingsPrayerReminders,
                 subtitle: 'Get notified before each prayer (default from config: ${prayerDefault ? "on" : "off"})',
                 value: notificationsMaster ? _prayerReminders : false,
                 onChanged: (value) {
@@ -125,14 +129,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               SettingsSwitchTile(
                 icon: LucideIcons.bell,
-                title: 'Daily Lesson',
+                title: l10n.settingsDailyLesson,
                 subtitle: 'Reminder to complete daily lesson',
                 value: _dailyLesson,
                 onChanged: (value) => setState(() => _dailyLesson = value),
               ),
               SettingsSwitchTile(
                 icon: LucideIcons.bell,
-                title: 'Milestone Alerts',
+                title: l10n.settingsMilestoneAlerts,
                 subtitle: 'Celebrate when you reach milestones',
                 value: _milestoneAlerts,
                 onChanged: (value) => setState(() => _milestoneAlerts = value),
@@ -145,50 +149,42 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildAppearanceSection() {
+  Widget _buildAppearanceSection(AppLocalizations l10n) {
     final isDarkMode = ref.watch(isDarkModeProvider);
-    final supportedLocales = ref.watch(supportedLocalesProvider);
-    final defaultLocaleFromConfig = ref.watch(defaultLocaleConfigProvider);
-    final currentLocale = ref.watch(localeProvider);
-    final currentLocaleCode = currentLocale.languageCode;
-    final localeOptions = supportedLocales.isEmpty ? ['en'] : supportedLocales;
-    final displayLocale = currentLocaleCode.isEmpty ? defaultLocaleFromConfig : currentLocaleCode;
+    final currentLocale = ref.watch(localeControllerProvider);
+    final currentCode = currentLocale.languageCode;
+
+    final languageLabels = {
+      'en': l10n.languageEnglish,
+      'ar': l10n.languageArabic,
+    };
+    final currentLabel = languageLabels[currentCode] ?? currentCode;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsSectionHeader(title: 'Appearance'),
+        SettingsSectionHeader(title: l10n.settingsAppearance),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
-              SettingsDropdownTile(
-                title: 'Language',
-                subtitle: 'Supported: ${localeOptions.join(", ")} (default: $defaultLocaleFromConfig)',
-                value: displayLocale,
-                options: localeOptions,
-                onChanged: (value) {
-                  if (value != null && value.isNotEmpty) {
-                    ref.read(localeProvider.notifier).state = Locale(value);
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Language: $value'), duration: const Duration(seconds: 2)),
-                      );
-                    }
-                  }
-                },
+              SettingsNavigationTile(
+                icon: LucideIcons.languages,
+                title: l10n.settingsLanguage,
+                subtitle: currentLabel,
+                onTap: () => _showLanguagePickerSheet(l10n, currentCode, languageLabels),
               ),
               SettingsSwitchTile(
                 icon: isDarkMode ? LucideIcons.moon : LucideIcons.sun,
-                title: 'Dark Mode',
-                subtitle: 'Use dark theme',
+                title: l10n.settingsDarkMode,
+                subtitle: l10n.settingsUseDarkTheme,
                 value: isDarkMode,
                 onChanged: (value) {
                   ref.read(themeModeProvider.notifier).toggleTheme();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        value ? 'Dark mode enabled 🌙' : 'Light mode enabled ☀️',
+                        value ? l10n.darkModeEnabled : l10n.lightModeEnabled,
                       ),
                       duration: const Duration(seconds: 2),
                     ),
@@ -196,10 +192,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 },
               ),
               SettingsDropdownTile(
-                title: 'Font Size',
-                subtitle: 'Adjust text size',
+                title: l10n.settingsFontSize,
+                subtitle: l10n.settingsFontSizeSubtitle,
                 value: _fontSize,
-                options: ['Small', 'Medium', 'Large'],
+                options: const ['Small', 'Medium', 'Large'],
                 onChanged: (value) {
                   if (value != null) setState(() => _fontSize = value);
                 },
@@ -212,20 +208,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildPrayerTimesSection() {
+  Widget _buildPrayerTimesSection(AppLocalizations l10n) {
     final methodId = ref.watch(defaultPrayerMethodConfigProvider);
     final madhabId = ref.watch(defaultMadhabConfigProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsSectionHeader(title: 'Prayer Times'),
+        SettingsSectionHeader(title: l10n.settingsPrayerTimes),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
               SettingsDropdownTile(
                 icon: LucideIcons.clock,
-                title: 'Calculation Method',
+                title: l10n.settingsCalculationMethod,
                 subtitle: 'Default from app config (id: $methodId). User override via /me/settings when backend supports it.',
                 value: _calculationMethod,
                 options: _prayerMethodNames,
@@ -234,13 +230,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 },
               ),
               SettingsInfoTile(
-                title: 'Default Madhab',
+                title: l10n.settingsDefaultMadhab,
                 value: 'Id: $madhabId (0=Shafi, 1=Hanafi)',
               ),
               SettingsNavigationTile(
-                title: 'Adjust Times',
-                subtitle: 'Fine-tune prayer times ±5 min',
-                onTap: () => _showAdjustTimesDialog(),
+                title: l10n.settingsAdjustTimes,
+                subtitle: l10n.settingsAdjustTimesSubtitle,
+                onTap: () => _showAdjustTimesDialog(l10n),
                 showDivider: false,
               ),
             ],
@@ -250,28 +246,28 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildPrivacyDataSection() {
+  Widget _buildPrivacyDataSection(AppLocalizations l10n) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsSectionHeader(title: 'Privacy & Data'),
+        SettingsSectionHeader(title: l10n.settingsPrivacyData),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
               SettingsNavigationTile(
                 icon: LucideIcons.download,
-                title: 'Export My Data',
-                subtitle: 'Download all your progress',
-                onTap: () => _showExportDataDialog(),
+                title: l10n.settingsExportMyData,
+                subtitle: l10n.settingsExportMyDataSubtitle,
+                onTap: () => _showExportDataDialog(l10n),
               ),
               SettingsNavigationTile(
                 icon: LucideIcons.trash2,
                 iconColor: AppColors.error,
-                title: 'Delete All Data',
+                title: l10n.settingsDeleteAllData,
                 titleColor: AppColors.error,
-                subtitle: 'Permanently delete everything',
-                onTap: () => _showDeleteConfirmation(),
+                subtitle: l10n.settingsDeleteAllDataSubtitle,
+                onTap: () => _showDeleteConfirmation(l10n),
                 showDivider: false,
               ),
             ],
@@ -281,39 +277,39 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  Widget _buildAboutSection() {
+  Widget _buildAboutSection(AppLocalizations l10n) {
     final appName = ref.watch(appNameConfigProvider);
     final appVersion = ref.watch(appVersionConfigProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SettingsSectionHeader(title: 'About'),
+        SettingsSectionHeader(title: l10n.settingsAbout),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
               SettingsInfoTile(
-                title: 'App',
+                title: l10n.settingsApp,
                 value: appName,
               ),
               SettingsInfoTile(
-                title: 'Version',
+                title: l10n.settingsVersion,
                 value: appVersion,
               ),
               SettingsExternalLinkTile(
                 icon: LucideIcons.shield,
-                title: 'Privacy Policy',
-                onTap: () => _openUrl('https://noorjourney.app/privacy'),
+                title: l10n.settingsPrivacyPolicy,
+                onTap: () => _openUrl(l10n, 'https://noorjourney.app/privacy'),
               ),
               SettingsExternalLinkTile(
                 icon: LucideIcons.helpCircle,
-                title: 'Help & Support',
-                onTap: () => _openUrl('https://noorjourney.app/support'),
+                title: l10n.settingsHelpSupport,
+                onTap: () => _openUrl(l10n, 'https://noorjourney.app/support'),
               ),
               SettingsExternalLinkTile(
                 icon: LucideIcons.messageSquare,
-                title: 'Send Feedback',
-                onTap: () => _showFeedbackDialog(),
+                title: l10n.settingsSendFeedback,
+                onTap: () => _showFeedbackDialog(l10n),
                 showDivider: false,
               ),
             ],
@@ -323,36 +319,134 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  void _showDeleteConfirmation() {
+  void _showLanguagePickerSheet(
+    AppLocalizations l10n,
+    String currentCode,
+    Map<String, String> labels,
+  ) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final options = [
+      ('en', labels['en'] ?? 'English'),
+      ('ar', labels['ar'] ?? 'العربية'),
+    ];
+
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: colorScheme.surfaceContainerHighest,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: AppSpacing.lg),
+                  decoration: BoxDecoration(
+                    color: colorScheme.outline.withValues(alpha: 0.3),
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(
+                      l10n.settingsLanguage,
+                      style: AppTypography.h3(color: colorScheme.onSurface),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ...options.map((entry) {
+                  final (code, label) = entry;
+                  final isSelected = code == currentCode;
+                  return InkWell(
+                    onTap: () async {
+                      Navigator.pop(sheetContext);
+                      if (!isSelected) {
+                        await ref
+                            .read(localeControllerProvider.notifier)
+                            .setLocale(Locale(code));
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                        vertical: AppSpacing.md,
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              label,
+                              style: AppTypography.body(
+                                color: isSelected
+                                    ? colorScheme.primary
+                                    : colorScheme.onSurface,
+                              ).copyWith(
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          if (isSelected)
+                            Icon(
+                              LucideIcons.check,
+                              size: 20,
+                              color: colorScheme.primary,
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: AppSpacing.sm),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showDeleteConfirmation(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: colorScheme.surfaceContainerHighest,
         title: Text(
-          'Delete All Data',
+          l10n.dialogDeleteAllDataTitle,
           style: AppTypography.h3(color: colorScheme.onSurface),
         ),
         content: Text(
-          'This will permanently delete all your progress, reflections, and saved content. This action cannot be undone.',
+          l10n.dialogDeleteAllDataContent,
           style: AppTypography.bodySm(color: colorScheme.onSurface),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.actionCancel,
               style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7)),
             ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _showSnackBar('All data deleted successfully');
+              _showSnackBar(l10n.dialogDataDeletedSuccess);
               context.go('/');
             },
             child: Text(
-              'Delete',
+              l10n.actionDelete,
               style: TextStyle(color: AppColors.error),
             ),
           ),
@@ -361,7 +455,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  void _showAdjustTimesDialog() {
+  void _showAdjustTimesDialog(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     showModalBottomSheet<void>(
       context: context,
@@ -388,12 +482,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
-                'Adjust Prayer Times',
+                l10n.dialogAdjustTimesTitle,
                 style: AppTypography.h3(color: colorScheme.onSurface),
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Fine-tune individual prayer times by ±5 minutes',
+                l10n.dialogAdjustTimesContent,
                 style: AppTypography.bodySm(
                   color: colorScheme.onSurface.withValues(alpha: 0.7),
                 ),
@@ -410,7 +504,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    _showSnackBar('Prayer times adjusted');
+                    _showSnackBar(l10n.dialogPrayerTimesAdjusted);
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: colorScheme.primary,
@@ -420,7 +514,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                       borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
                   ),
-                  child: const Text('Save Changes'),
+                  child: Text(l10n.actionSaveChanges),
                 ),
               ),
             ],
@@ -454,7 +548,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               children: [
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(LucideIcons.minus, size: 16),
+                  icon: const Icon(LucideIcons.minus, size: 16),
                   color: colorScheme.onSurface,
                   constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
@@ -464,7 +558,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                 ),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(LucideIcons.plus, size: 16),
+                  icon: const Icon(LucideIcons.plus, size: 16),
                   color: colorScheme.onSurface,
                   constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
@@ -476,14 +570,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  void _showExportDataDialog() {
+  void _showExportDataDialog(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: colorScheme.surfaceContainerHighest,
         title: Text(
-          'Export My Data',
+          l10n.dialogExportTitle,
           style: AppTypography.h3(color: colorScheme.onSurface),
         ),
         content: Column(
@@ -491,7 +585,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Your data export will include:',
+              l10n.dialogExportContent,
               style: AppTypography.bodySm(color: colorScheme.onSurface),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -506,22 +600,22 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.actionCancel,
               style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7)),
             ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _showSnackBar('Preparing your data export...');
+              _showSnackBar(l10n.dialogExportPreparing);
               Future.delayed(const Duration(seconds: 2), () {
                 if (mounted) {
-                  _showSnackBar('Data exported successfully! Check your downloads.');
+                  _showSnackBar(l10n.dialogExportSuccess);
                 }
               });
             },
             child: Text(
-              'Export',
+              l10n.actionExport,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),
@@ -546,7 +640,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  void _showFeedbackDialog() {
+  void _showFeedbackDialog(AppLocalizations l10n) {
     final colorScheme = Theme.of(context).colorScheme;
     final feedbackController = TextEditingController();
 
@@ -555,14 +649,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       builder: (context) => AlertDialog(
         backgroundColor: colorScheme.surfaceContainerHighest,
         title: Text(
-          'Send Feedback',
+          l10n.dialogFeedbackTitle,
           style: AppTypography.h3(color: colorScheme.onSurface),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "We'd love to hear from you! Share your thoughts, suggestions, or report issues.",
+              l10n.dialogFeedbackContent,
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -572,7 +666,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               controller: feedbackController,
               maxLines: 4,
               decoration: InputDecoration(
-                hintText: 'Write your feedback here...',
+                hintText: l10n.dialogFeedbackHint,
                 hintStyle: AppTypography.bodySm(
                   color: colorScheme.onSurface.withValues(alpha: 0.5),
                 ),
@@ -607,7 +701,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.actionCancel,
               style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7)),
             ),
           ),
@@ -615,11 +709,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             onPressed: () {
               Navigator.pop(context);
               if (feedbackController.text.isNotEmpty) {
-                _showSnackBar('Thank you for your feedback! 💚');
+                _showSnackBar(l10n.dialogFeedbackThanks);
               }
             },
             child: Text(
-              'Send',
+              l10n.actionSend,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),
@@ -628,14 +722,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     );
   }
 
-  void _openUrl(String url) {
+  void _openUrl(AppLocalizations l10n, String url) {
     final colorScheme = Theme.of(context).colorScheme;
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: colorScheme.surfaceContainerHighest,
         title: Text(
-          'External Link',
+          l10n.dialogExternalLinkTitle,
           style: AppTypography.h3(color: colorScheme.onSurface),
         ),
         content: Column(
@@ -643,7 +737,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'This will open in your browser:',
+              l10n.dialogExternalLinkContent,
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
@@ -669,17 +763,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.actionCancel,
               style: TextStyle(color: colorScheme.onSurface.withValues(alpha: 0.7)),
             ),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              _showSnackBar('Opening in browser...');
+              _showSnackBar(l10n.dialogOpeningInBrowser);
             },
             child: Text(
-              'Open',
+              l10n.actionOpen,
               style: TextStyle(color: colorScheme.primary),
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/theme_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/app_icons.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -44,6 +45,7 @@ class ProfilePage extends ConsumerWidget {
                       children: [
                         _buildHeader(context, ref, isDarkMode, colorScheme),
                         _buildProfileAvatar(
+                          context,
                           ref,
                           colorScheme,
                           user?.displayName,
@@ -51,11 +53,11 @@ class ProfilePage extends ConsumerWidget {
                           journeySummaryAsync,
                         ),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildYourProgress(ref, colorScheme, journeySummaryAsync),
+                        _buildYourProgress(context, ref, colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildJourneyProgress(colorScheme, journeySummaryAsync),
+                        _buildJourneyProgress(context, colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildMilestones(colorScheme, journeySummaryAsync),
+                        _buildMilestones(context, colorScheme, journeySummaryAsync),
                         const SizedBox(height: AppSpacing.lg),
                         _buildPersonalInfo(context, colorScheme, user),
                         const SizedBox(height: AppSpacing.lg),
@@ -63,7 +65,7 @@ class ProfilePage extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.lg),
                         _buildLogoutButton(context, ref, colorScheme),
                         const SizedBox(height: AppSpacing.md),
-                        _buildAppVersion(colorScheme),
+                        _buildAppVersion(context, colorScheme),
                       ],
                     ),
                   ),
@@ -85,7 +87,7 @@ class ProfilePage extends ConsumerWidget {
         children: [
           const SizedBox(width: 48),
           Text(
-            'Profile',
+            AppLocalizations.of(context)!.profileTitle,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
           Container(
@@ -111,6 +113,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildProfileAvatar(
+    BuildContext context,
     WidgetRef ref,
     ColorScheme colorScheme,
     String? name,
@@ -165,7 +168,7 @@ class ProfilePage extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            name ?? email ?? 'Profile',
+            name ?? email ?? AppLocalizations.of(context)!.profileTitle,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
           const SizedBox(height: 4),
@@ -185,7 +188,7 @@ class ProfilePage extends ConsumerWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                'Day $dayIndex of $totalDays',
+                AppLocalizations.of(context)!.profileDayOfTotal(dayIndex, totalDays),
                 style: AppTypography.bodySm(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w500),
               ),
@@ -197,6 +200,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildYourProgress(
+    BuildContext context,
     WidgetRef ref,
     ColorScheme colorScheme,
     AsyncValue<JourneySummaryEntity> summaryAsync,
@@ -211,7 +215,7 @@ class ProfilePage extends ConsumerWidget {
               Icon(LucideIcons.trophy, size: 18, color: AppColors.accentGold),
               const SizedBox(width: 8),
               Text(
-                'Your Progress',
+                AppLocalizations.of(context)!.profileYourProgress,
                 style: AppTypography.body(color: colorScheme.onSurface)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -219,63 +223,67 @@ class ProfilePage extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.md),
           summaryAsync.when(
-            data: (summary) => Row(
-              children: [
-                Expanded(
-                  child: _buildProgressStatCard(
-                    icon: LucideIcons.flame,
-                    iconColor: AppColors.accentCoral,
-                    value: summary.streakDays.toString(),
-                    label: 'Streak',
-                    sublabel: 'days',
-                    colorScheme: colorScheme,
+            data: (summary) {
+              final l10n = AppLocalizations.of(context)!;
+              return Row(
+                children: [
+                  Expanded(
+                    child: _buildProgressStatCard(
+                      icon: LucideIcons.flame,
+                      iconColor: AppColors.accentCoral,
+                      value: summary.streakDays.toString(),
+                      label: l10n.profileStreakLabel,
+                      sublabel: l10n.profileDaysLabel,
+                      colorScheme: colorScheme,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildProgressStatCard(
-                    icon: LucideIcons.target,
-                    iconColor: colorScheme.primary,
-                    value: summary.activeWeeks.toString(),
-                    label: 'Active',
-                    sublabel: 'weeks',
-                    colorScheme: colorScheme,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildProgressStatCard(
+                      icon: LucideIcons.target,
+                      iconColor: colorScheme.primary,
+                      value: summary.activeWeeks.toString(),
+                      label: l10n.profileActiveLabel,
+                      sublabel: l10n.profileWeeksLabel,
+                      colorScheme: colorScheme,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: _buildProgressStatCard(
-                    icon: AppIcons.bonus,
-                    iconColor: AppColors.accentGreen,
-                    value: summary.leftDays.toString(),
-                    label: 'Left',
-                    sublabel: 'days',
-                    colorScheme: colorScheme,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildProgressStatCard(
+                      icon: AppIcons.bonus,
+                      iconColor: AppColors.accentGreen,
+                      value: summary.leftDays.toString(),
+                      label: l10n.profileLeftLabel,
+                      sublabel: l10n.profileDaysLabel,
+                      colorScheme: colorScheme,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            loading: () => _buildProgressSkeleton(colorScheme),
-            error: (_, __) => _buildProgressError(ref, colorScheme),
+                ],
+              );
+            },
+            loading: () => _buildProgressSkeleton(context, colorScheme),
+            error: (_, __) => _buildProgressError(context, ref, colorScheme),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildProgressSkeleton(ColorScheme colorScheme) {
+  Widget _buildProgressSkeleton(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
-        Expanded(child: _buildProgressStatCard(icon: LucideIcons.flame, iconColor: AppColors.accentCoral, value: '—', label: 'Streak', sublabel: 'days', colorScheme: colorScheme)),
+        Expanded(child: _buildProgressStatCard(icon: LucideIcons.flame, iconColor: AppColors.accentCoral, value: '—', label: l10n.profileStreakLabel, sublabel: l10n.profileDaysLabel, colorScheme: colorScheme)),
         const SizedBox(width: 12),
-        Expanded(child: _buildProgressStatCard(icon: LucideIcons.target, iconColor: colorScheme.primary, value: '—', label: 'Active', sublabel: 'weeks', colorScheme: colorScheme)),
+        Expanded(child: _buildProgressStatCard(icon: LucideIcons.target, iconColor: colorScheme.primary, value: '—', label: l10n.profileActiveLabel, sublabel: l10n.profileWeeksLabel, colorScheme: colorScheme)),
         const SizedBox(width: 12),
-        Expanded(child: _buildProgressStatCard(icon: AppIcons.bonus, iconColor: AppColors.accentGreen, value: '—', label: 'Left', sublabel: 'days', colorScheme: colorScheme)),
+        Expanded(child: _buildProgressStatCard(icon: AppIcons.bonus, iconColor: AppColors.accentGreen, value: '—', label: l10n.profileLeftLabel, sublabel: l10n.profileDaysLabel, colorScheme: colorScheme)),
       ],
     );
   }
 
-  Widget _buildProgressError(WidgetRef ref, ColorScheme colorScheme) {
+  Widget _buildProgressError(BuildContext context, WidgetRef ref, ColorScheme colorScheme) {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -286,14 +294,14 @@ class ProfilePage extends ConsumerWidget {
       child: Column(
         children: [
           Text(
-            'Could not load progress',
+            AppLocalizations.of(context)!.profileCouldNotLoadProgress,
             style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
           ),
           const SizedBox(height: AppSpacing.sm),
           TextButton.icon(
             onPressed: () => ref.invalidate(journeySummaryProvider),
             icon: const Icon(LucideIcons.refreshCw, size: 18),
-            label: const Text('Retry'),
+            label: Text(AppLocalizations.of(context)!.actionRetry),
           ),
         ],
       ),
@@ -328,6 +336,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildJourneyProgress(
+    BuildContext context,
     ColorScheme colorScheme,
     AsyncValue<JourneySummaryEntity> summaryAsync,
   ) {
@@ -341,7 +350,7 @@ class ProfilePage extends ConsumerWidget {
               Icon(LucideIcons.target, size: 18, color: colorScheme.primary),
               const SizedBox(width: 8),
               Text(
-                'Journey Progress',
+                AppLocalizations.of(context)!.profileJourneyProgress,
                 style: AppTypography.body(color: colorScheme.onSurface)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -365,7 +374,7 @@ class ProfilePage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${summary.completedLessons} lessons completed',
+                          AppLocalizations.of(context)!.profileLessonsCompleted(summary.completedLessons),
                           style: AppTypography.bodySm(color: colorScheme.onSurface),
                         ),
                         Text(
@@ -386,7 +395,7 @@ class ProfilePage extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      '$percentInt% complete',
+                      AppLocalizations.of(context)!.profilePercentComplete(percentInt),
                       style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
                     ),
                   ],
@@ -423,6 +432,7 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildMilestones(
+    BuildContext context,
     ColorScheme colorScheme,
     AsyncValue<JourneySummaryEntity> summaryAsync,
   ) {
@@ -436,7 +446,7 @@ class ProfilePage extends ConsumerWidget {
               Icon(LucideIcons.trophy, size: 18, color: AppColors.accentGold),
               const SizedBox(width: 8),
               Text(
-                'Milestones',
+                AppLocalizations.of(context)!.profileMilestones,
                 style: AppTypography.body(color: colorScheme.onSurface)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -445,9 +455,10 @@ class ProfilePage extends ConsumerWidget {
           const SizedBox(height: AppSpacing.md),
           summaryAsync.when(
             data: (summary) {
+              final l10n = AppLocalizations.of(context)!;
               final milestones = summary.milestones
                   .map((m) => MilestoneData(
-                        title: 'Week ${m.week} Complete',
+                        title: l10n.profileWeekComplete(m.week),
                         status: _milestoneStatusFromString(m.status),
                       ))
                   .toList();
@@ -460,7 +471,7 @@ class ProfilePage extends ConsumerWidget {
                     border: Border.all(color: colorScheme.outline.withAlpha(128)),
                   ),
                   child: Text(
-                    'No milestones yet',
+                    AppLocalizations.of(context)!.profileNoMilestonesYet,
                     style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
                   ),
                 );
@@ -476,7 +487,7 @@ class ProfilePage extends ConsumerWidget {
                     final index = entry.key;
                     final milestone = entry.value;
                     final isLast = index == milestones.length - 1;
-                    return _buildMilestoneItem(milestone, isLast, colorScheme);
+                    return _buildMilestoneItem(context, milestone, isLast, colorScheme);
                   }).toList(),
                 ),
               );
@@ -510,7 +521,7 @@ class ProfilePage extends ConsumerWidget {
     }
   }
 
-  Widget _buildMilestoneItem(MilestoneData milestone, bool isLast, ColorScheme colorScheme) {
+  Widget _buildMilestoneItem(BuildContext context, MilestoneData milestone, bool isLast, ColorScheme colorScheme) {
     IconData icon;
     Color iconColor;
     Color bgColor;
@@ -529,7 +540,7 @@ class ProfilePage extends ConsumerWidget {
         iconColor = colorScheme.primary;
         bgColor = colorScheme.primary.withAlpha(15);
         textColor = colorScheme.onSurface;
-        statusText = '(In Progress)';
+        statusText = AppLocalizations.of(context)!.profileInProgress;
         break;
       case MilestoneStatus.locked:
         icon = LucideIcons.lock;
@@ -565,9 +576,10 @@ class ProfilePage extends ConsumerWidget {
   }
 
   Widget _buildPersonalInfo(BuildContext context, ColorScheme colorScheme, UserEntity? user) {
+    final l10n = AppLocalizations.of(context)!;
     final shahadaStr = user?.shahadaDate != null
         ? DateFormat.yMMMd().format(user!.shahadaDate!)
-        : 'Not set';
+        : l10n.profileNotSet;
     final goalsStr = (user?.learningGoals != null && user!.learningGoals!.isNotEmpty)
         ? user.learningGoals!.join(', ')
         : ProfileMockData.learningGoal;
@@ -583,7 +595,7 @@ class ProfilePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Personal Info',
+            l10n.profilePersonalInfo,
             style: AppTypography.body(color: colorScheme.onSurface)
                 .copyWith(fontWeight: FontWeight.w600),
           ),
@@ -596,20 +608,20 @@ class ProfilePage extends ConsumerWidget {
             ),
             child: Column(
               children: [
-                _buildInfoRow('Name', user?.name ?? user?.email ?? '—', colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelName, user?.name ?? user?.email ?? '—', colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Email', user?.email ?? '—', colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelEmail, user?.email ?? '—', colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Gender', genderStr, colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelGender, genderStr, colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Birth date', birthStr, colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelBirthDate, birthStr, colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Locale', localeStr, colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelLocale, localeStr, colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Shahada Date', shahadaStr,
+                _buildInfoRow(l10n.profileLabelShahadaDate, shahadaStr,
                     isValueMuted: user?.shahadaDate == null, colorScheme: colorScheme),
                 Container(height: 1, color: colorScheme.outline.withAlpha(128)),
-                _buildInfoRow('Learning Goals', goalsStr, colorScheme: colorScheme),
+                _buildInfoRow(l10n.profileLabelLearningGoals, goalsStr, colorScheme: colorScheme),
               ],
             ),
           ),
@@ -620,7 +632,7 @@ class ProfilePage extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Edit Profile',
+                  l10n.profileEditProfile,
                   style: AppTypography.bodySm(color: colorScheme.primary)
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
@@ -654,7 +666,7 @@ class ProfilePage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Quick Actions',
+            AppLocalizations.of(context)!.profileQuickActions,
             style: AppTypography.body(color: colorScheme.onSurface)
                 .copyWith(fontWeight: FontWeight.w600),
           ),
@@ -663,8 +675,8 @@ class ProfilePage extends ConsumerWidget {
             icon: LucideIcons.bookMarked,
             iconBgColor: colorScheme.primary.withAlpha(25),
             iconColor: colorScheme.primary,
-            title: 'Saved Duas',
-            subtitle: 'View your saved duas collection',
+            title: AppLocalizations.of(context)!.profileSavedDuas,
+            subtitle: AppLocalizations.of(context)!.profileViewSavedDuas,
             onTap: () => context.push('/saved'),
             colorScheme: colorScheme,
           ),
@@ -673,8 +685,8 @@ class ProfilePage extends ConsumerWidget {
             icon: LucideIcons.heart,
             iconBgColor: AppColors.accentCoral.withAlpha(25),
             iconColor: AppColors.accentCoral,
-            title: 'Your Reflections',
-            subtitle: 'Review your lesson reflections',
+            title: AppLocalizations.of(context)!.profileYourReflections,
+            subtitle: AppLocalizations.of(context)!.profileReviewReflections,
             onTap: () {},
             colorScheme: colorScheme,
           ),
@@ -683,8 +695,8 @@ class ProfilePage extends ConsumerWidget {
             icon: LucideIcons.settings,
             iconBgColor: colorScheme.onSurface.withAlpha(25),
             iconColor: colorScheme.onSurface.withAlpha(150),
-            title: 'Settings',
-            subtitle: 'Manage app preferences',
+            title: AppLocalizations.of(context)!.settingsTitle,
+            subtitle: AppLocalizations.of(context)!.profileManagePreferences,
             onTap: () => context.push('/settings'),
             colorScheme: colorScheme,
           ),
@@ -745,22 +757,23 @@ class ProfilePage extends ConsumerWidget {
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: InkWell(
         onTap: () {
+          final l10n = AppLocalizations.of(context)!;
           showDialog(
             context: context,
             builder: (dialogContext) => AlertDialog(
-              title: const Text('Log Out'),
-              content: const Text('Are you sure you want to log out?'),
+              title: Text(l10n.profileLogOutTitle),
+              content: Text(l10n.profileLogOutConfirm),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
-                  child: const Text('Cancel'),
+                  child: Text(l10n.actionCancel),
                 ),
                 TextButton(
                   onPressed: () {
                     Navigator.pop(dialogContext);
                     ref.read(authProvider.notifier).logout();
                   },
-                  child: Text('Log Out', style: TextStyle(color: AppColors.error)),
+                  child: Text(l10n.profileLogOut, style: TextStyle(color: AppColors.error)),
                 ),
               ],
             ),
@@ -780,7 +793,7 @@ class ProfilePage extends ConsumerWidget {
             children: [
               Icon(LucideIcons.logOut, size: 18, color: AppColors.error),
               const SizedBox(width: 8),
-              Text('Log Out', style: AppTypography.body(color: AppColors.error).copyWith(fontWeight: FontWeight.w500)),
+              Text(AppLocalizations.of(context)!.profileLogOut, style: AppTypography.body(color: AppColors.error).copyWith(fontWeight: FontWeight.w500)),
             ],
           ),
         ),
@@ -788,10 +801,10 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildAppVersion(ColorScheme colorScheme) {
+  Widget _buildAppVersion(BuildContext context, ColorScheme colorScheme) {
     return Center(
       child: Text(
-        'Noor Journey ${ProfileMockData.appVersion}',
+        '${AppLocalizations.of(context)!.appTitle} ${ProfileMockData.appVersion}',
         style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(100)),
       ),
     );

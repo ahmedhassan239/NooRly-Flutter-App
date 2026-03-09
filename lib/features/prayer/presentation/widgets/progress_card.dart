@@ -6,6 +6,7 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/prayer/data/prayer_models.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ProgressCard extends StatelessWidget {
@@ -41,7 +42,7 @@ class ProgressCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'Daily Progress',
+                  AppLocalizations.of(context)!.dailyProgress,
                   style: AppTypography.bodySm(color: colorScheme.onSurface)
                       .copyWith(fontWeight: FontWeight.w500),
                 ),
@@ -59,7 +60,7 @@ class ProgressCard extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     value: progress.completed.toString(),
-                    label: 'COMPLETED',
+                    label: AppLocalizations.of(context)!.prayerCompleted,
                     valueColor: colorScheme.primary,
                     colorScheme: colorScheme,
                   ),
@@ -68,7 +69,7 @@ class ProgressCard extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     value: progress.missed.toString(),
-                    label: 'MISSED',
+                    label: AppLocalizations.of(context)!.prayerMissed,
                     valueColor: colorScheme.error,
                     colorScheme: colorScheme,
                   ),
@@ -77,7 +78,7 @@ class ProgressCard extends StatelessWidget {
                 Expanded(
                   child: _StatBox(
                     value: progress.remaining.toString(),
-                    label: 'REMAINING',
+                    label: AppLocalizations.of(context)!.prayerRemaining,
                     valueColor: colorScheme.onSurface,
                     colorScheme: colorScheme,
                   ),

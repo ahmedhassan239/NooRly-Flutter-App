@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -63,7 +64,7 @@ class PrayerHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Prayer Schedule',
+                  AppLocalizations.of(context)!.prayerSchedule,
                   style: AppTypography.bodySm(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),

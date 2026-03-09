@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/theme_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -98,18 +99,18 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               }
             },
             child: Text(
-              'Cancel',
+              AppLocalizations.of(context)!.actionCancel,
               style: AppTypography.body(color: colorScheme.onSurface),
             ),
           ),
           Text(
-            'Edit Profile',
+            AppLocalizations.of(context)!.editProfileTitle,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
           TextButton(
             onPressed: () => _saveProfile(context),
             child: Text(
-              'Save',
+              AppLocalizations.of(context)!.actionSave,
               style: AppTypography.body(color: colorScheme.primary)
                   .copyWith(fontWeight: FontWeight.w600),
             ),
@@ -166,7 +167,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
         ),
         const SizedBox(height: AppSpacing.md),
         Text(
-          'Tap to change photo',
+          AppLocalizations.of(context)!.editProfileTapToChange,
           style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(150)),
         ),
       ],
@@ -178,7 +179,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Name',
+          AppLocalizations.of(context)!.editProfileNameLabel,
           style: AppTypography.bodySm(color: colorScheme.onSurface)
               .copyWith(fontWeight: FontWeight.w500),
         ),
@@ -194,7 +195,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             }
           },
           decoration: InputDecoration(
-            hintText: 'Enter your name',
+            hintText: AppLocalizations.of(context)!.editProfileNameHint,
             hintStyle: AppTypography.body(color: colorScheme.onSurface.withAlpha(100)),
             filled: true,
             fillColor: colorScheme.surfaceContainerHighest,
@@ -222,13 +223,13 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Shahada Date (Optional)',
+          AppLocalizations.of(context)!.editProfileShahadaDateLabel,
           style: AppTypography.bodySm(color: colorScheme.onSurface)
               .copyWith(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 4),
         Text(
-          'When did you take your shahada?',
+          AppLocalizations.of(context)!.editProfileShahadaHelper,
           style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
         ),
         const SizedBox(height: AppSpacing.sm),
@@ -237,7 +238,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
           readOnly: true,
           style: AppTypography.body(color: colorScheme.onSurface),
           decoration: InputDecoration(
-            hintText: 'Select date',
+            hintText: AppLocalizations.of(context)!.editProfileSelectDate,
             hintStyle: AppTypography.body(color: colorScheme.onSurface.withAlpha(100)),
             filled: true,
             fillColor: colorScheme.surfaceContainerHighest,
@@ -286,7 +287,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
       child: ElevatedButton.icon(
         onPressed: () => _saveProfile(context),
         icon: const Icon(LucideIcons.check, size: 20),
-        label: const Text('Save Changes'),
+        label: Text(AppLocalizations.of(context)!.editProfileSaveChanges),
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
           elevation: 0,
@@ -321,27 +322,21 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               const SizedBox(height: AppSpacing.lg),
               ListTile(
                 leading: Icon(LucideIcons.camera, color: colorScheme.onSurface),
-                title: Text('Take Photo', style: AppTypography.body(color: colorScheme.onSurface)),
+                title: Text(AppLocalizations.of(context)!.editProfileTakePhoto, style: AppTypography.body(color: colorScheme.onSurface)),
                 onTap: () {
                   Navigator.pop(context);
-                  // Implement camera functionality
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Camera functionality coming soon'),
-                      ),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.editProfileCameraComingSoon)),
                   );
                 },
               ),
               ListTile(
                 leading: Icon(LucideIcons.image, color: colorScheme.onSurface),
-                title: Text('Choose from Gallery', style: AppTypography.body(color: colorScheme.onSurface)),
+                title: Text(AppLocalizations.of(context)!.editProfileChooseFromGallery, style: AppTypography.body(color: colorScheme.onSurface)),
                 onTap: () {
                   Navigator.pop(context);
-                  // Implement gallery picker
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Gallery picker coming soon'),
-                      ),
+                    SnackBar(content: Text(AppLocalizations.of(context)!.editProfileGalleryComingSoon)),
                   );
                 },
               ),
@@ -382,9 +377,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Please enter your name'),
+          content: Text(AppLocalizations.of(context)!.editProfileEnterNameError),
           backgroundColor: Theme.of(context).colorScheme.error,
-          ),
+        ),
       );
       return;
     }
@@ -392,7 +387,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     // Save profile data (in a real app, this would save to a provider or backend)
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Text('Profile saved successfully! ✓'),
+        content: Text(AppLocalizations.of(context)!.editProfileSavedSuccess),
         duration: const Duration(seconds: 2),
       ),
     );

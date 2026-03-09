@@ -17,6 +17,7 @@ import 'package:flutter_app/features/library/presentation/providers/library_prov
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/utils/library_utils.dart'
     show resolveContentScopeEmoji;
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 /// Fixed branch order: matches StatefulShellRoute branches (duas=0, adhkar=1, hadith=2, verses=3).
 const List<String> _libraryTabKeys = ['duas', 'adhkar', 'hadith', 'verses'];
@@ -49,8 +50,8 @@ class LibraryShellScreen extends ConsumerWidget {
                     data: (apiTabs) {
                       final tabs = _tabsInBranchOrder(apiTabs);
                       if (tabs.isEmpty) {
-                        return const LibraryEmptyView(
-                          message: 'No library tabs available',
+                        return LibraryEmptyView(
+                          message: AppLocalizations.of(context)!.libraryNoTabsAvailable,
                         );
                       }
                       return Column(
@@ -96,15 +97,17 @@ class LibraryShellScreen extends ConsumerWidget {
   }
 
   static Widget _buildHeader(ColorScheme colorScheme) {
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Row(
-        children: [
-          Text(
-            'Library',
-            style: AppTypography.h2(color: colorScheme.onSurface),
-          ),
-        ],
+    return Builder(
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Row(
+          children: [
+            Text(
+              AppLocalizations.of(context)!.libraryTitle,
+              style: AppTypography.h2(color: colorScheme.onSurface),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -170,7 +173,7 @@ class LibraryShellScreen extends ConsumerWidget {
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
-                          t.label,
+                          _localizedTabLabel(context, t),
                           style: AppTypography.caption(
                             color: isActive
                                 ? colorScheme.onSurface
@@ -188,5 +191,16 @@ class LibraryShellScreen extends ConsumerWidget {
         }),
       ),
     );
+  }
+
+  static String _localizedTabLabel(BuildContext context, ContentScopeDto t) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (t.key) {
+      case 'duas': return l10n.libraryDuas;
+      case 'hadith': return l10n.libraryHadith;
+      case 'verses': return l10n.libraryVerses;
+      case 'adhkar': return l10n.libraryAdhkar;
+      default: return t.label;
+    }
   }
 }

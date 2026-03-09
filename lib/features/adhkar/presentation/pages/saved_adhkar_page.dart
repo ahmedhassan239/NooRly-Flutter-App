@@ -6,6 +6,7 @@ import 'package:flutter_app/features/adhkar/presentation/widgets/save_adhkar_but
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -98,7 +99,7 @@ class SavedAdhkarPage extends ConsumerWidget {
                             ),
                             const SizedBox(height: AppSpacing.md),
                             Text(
-                              'Could not load saved adhkar',
+                              AppLocalizations.of(context)!.savedCouldNotLoad,
                               textAlign: TextAlign.center,
                               style: AppTypography.body(
                                 color: colorScheme.onSurface.withAlpha(180),
@@ -108,7 +109,7 @@ class SavedAdhkarPage extends ConsumerWidget {
                             TextButton(
                               onPressed: () =>
                                   ref.invalidate(savedAdhkarListProvider),
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.actionRetry),
                             ),
                           ],
                         ),
@@ -150,7 +151,7 @@ class SavedAdhkarPage extends ConsumerWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Saved Adhkar',
+            AppLocalizations.of(context)!.savedCardAdhkar,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -172,7 +173,7 @@ class SavedAdhkarPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Sign in to view saved adhkar',
+              AppLocalizations.of(context)!.savedSignInToView,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -180,7 +181,7 @@ class SavedAdhkarPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Your saved items are synced to your account.',
+              AppLocalizations.of(context)!.savedSyncedToAccount,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),
@@ -190,7 +191,7 @@ class SavedAdhkarPage extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () => context.go('/login'),
               icon: const Icon(LucideIcons.logIn),
-              label: const Text('Sign In'),
+              label: Text(AppLocalizations.of(context)!.actionSignIn),
             ),
           ],
         ),
@@ -212,7 +213,7 @@ class SavedAdhkarPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No saved adhkar yet',
+              AppLocalizations.of(context)!.savedNoItems,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -220,7 +221,7 @@ class SavedAdhkarPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Save adhkar from any category to see them here.',
+              AppLocalizations.of(context)!.savedEmptyHint,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),

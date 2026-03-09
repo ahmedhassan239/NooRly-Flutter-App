@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// Section 4: Ramadan banner – beige/tan card, crescent, title, subtitle, CTA, close (X).
@@ -22,6 +23,8 @@ class RamadanBannerCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -42,30 +45,20 @@ class RamadanBannerCard extends StatelessWidget {
                   color: _titleColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
-                child: const Icon(
-                  LucideIcons.moon,
-                  size: 22,
-                  color: _titleColor,
-                ),
+                child: const Icon(LucideIcons.moon, size: 22, color: _titleColor),
               ),
               const SizedBox(width: 14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Ramadan is here',
-                      style: AppTypography.h3(color: _titleColor),
-                    ),
+                    Text(l10n.ramadanIsHere, style: AppTypography.h3(color: _titleColor)),
                     const SizedBox(height: 4),
-                    Text(
-                      'Prepare for the blessed month',
-                      style: AppTypography.bodySm(color: _subtitleColor),
-                    ),
+                    Text(l10n.prepareForTheBlessedMonth, style: AppTypography.bodySm(color: _subtitleColor)),
                     const SizedBox(height: 12),
                     TextButton(
                       onPressed: onCta ?? () {},
-                      child: const Text('Start Ramadan Guide'),
+                      child: Text(l10n.startRamadanGuide),
                     ),
                   ],
                 ),

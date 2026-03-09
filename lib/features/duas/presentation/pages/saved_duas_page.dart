@@ -5,6 +5,7 @@ import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -98,7 +99,7 @@ class SavedDuasPage extends ConsumerWidget {
                             ),
                             const SizedBox(height: AppSpacing.md),
                             Text(
-                              'Could not load saved duas',
+                              AppLocalizations.of(context)!.savedCouldNotLoad,
                               textAlign: TextAlign.center,
                               style: AppTypography.body(
                                 color: colorScheme.onSurface.withAlpha(180),
@@ -108,7 +109,7 @@ class SavedDuasPage extends ConsumerWidget {
                             TextButton(
                               onPressed: () =>
                                   ref.invalidate(savedDuaListProvider),
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.actionRetry),
                             ),
                           ],
                         ),
@@ -157,12 +158,12 @@ class SavedDuasPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Saved Duas',
+                AppLocalizations.of(context)!.savedCardDuas,
                 style: AppTypography.h2(color: colorScheme.onSurface),
               ),
               if (count != null)
                 Text(
-                  '$count saved',
+                  AppLocalizations.of(context)!.savedCountLabel(count),
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withAlpha(130),
                   ),
@@ -188,7 +189,7 @@ class SavedDuasPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Sign in to view saved duas',
+              AppLocalizations.of(context)!.savedSignInToView,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -196,7 +197,7 @@ class SavedDuasPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Your saved items are synced to your account.',
+              AppLocalizations.of(context)!.savedSyncedToAccount,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),
@@ -206,7 +207,7 @@ class SavedDuasPage extends ConsumerWidget {
             FilledButton.icon(
               onPressed: () => context.go('/login'),
               icon: const Icon(LucideIcons.logIn),
-              label: const Text('Sign In'),
+              label: Text(AppLocalizations.of(context)!.actionSignIn),
             ),
           ],
         ),
@@ -228,7 +229,7 @@ class SavedDuasPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No saved duas yet',
+              AppLocalizations.of(context)!.savedNoItems,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -236,7 +237,7 @@ class SavedDuasPage extends ConsumerWidget {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Save duas from any category to see them here.',
+              AppLocalizations.of(context)!.savedEmptyHint,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),
@@ -254,12 +255,13 @@ class SavedDuasPage extends ConsumerWidget {
     SavedDuaItem dua,
     ColorScheme colorScheme,
   ) {
+    final l10n = AppLocalizations.of(context)!;
     final rawTitle = dua.title ?? dua.titleAr ?? dua.source;
     final title = rawTitle != null && rawTitle.isNotEmpty
         ? rawTitle
         : (dua.text != null && dua.text!.trim().isNotEmpty
             ? (dua.text!.trim().length > 35 ? '${dua.text!.trim().substring(0, 35)}…' : dua.text!.trim())
-            : 'Dua');
+            : l10n.savedTypeDua);
     final arabic = dua.textAr ?? '';
     final source = dua.source ?? '';
 

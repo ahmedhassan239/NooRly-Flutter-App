@@ -6,6 +6,7 @@ import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/hadith/data/library_hadith_api.dart';
 import 'package:flutter_app/features/hadith/presentation/widgets/save_hadith_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
     show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
@@ -201,7 +202,7 @@ class HadithCollectionPage extends ConsumerWidget {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
-                label: 'Copy',
+                label: AppLocalizations.of(context)!.actionCopy,
                 colorScheme: colorScheme,
                 onTap: () {
                   final toCopy = hadith.textAr != null
@@ -209,9 +210,10 @@ class HadithCollectionPage extends ConsumerWidget {
                       : '$text\n\n— $source';
                   Clipboard.setData(ClipboardData(text: toCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text('Copied to clipboard! ✓'),
-                        duration: Duration(seconds: 2)),
+                    SnackBar(
+                      content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+                      duration: const Duration(seconds: 2),
+                    ),
                   );
                 },
               ),
@@ -219,7 +221,7 @@ class HadithCollectionPage extends ConsumerWidget {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: AppLocalizations.of(context)!.actionShare,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -230,7 +232,7 @@ class HadithCollectionPage extends ConsumerWidget {
                       transliteration: '',
                       translation: text,
                       source: source,
-                      title: 'Share Hadith',
+                      title: AppLocalizations.of(context)!.libraryHadith,
                     ),
                   );
                 },

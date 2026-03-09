@@ -8,6 +8,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/share_content_dia
 import 'package:flutter_app/features/hadith/presentation/widgets/save_hadith_button.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -92,7 +93,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                       filled: true,
                       fillColor: colorScheme.surfaceContainerHighest,
                       prefixIcon: const Icon(LucideIcons.search, size: 20),
-                      hintText: 'Search hadith...',
+                      hintText: AppLocalizations.of(context)!.searchHadith,
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(AppRadius.lg),
@@ -151,7 +152,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                             ),
                             const SizedBox(height: AppSpacing.md),
                             Text(
-                              'Could not load saved hadith',
+                              AppLocalizations.of(context)!.savedCouldNotLoad,
                               style: AppTypography.body(
                                 color: colorScheme.onSurface,
                               ),
@@ -162,7 +163,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                               onPressed: () {
                                 ref.invalidate(savedHadithListProvider);
                               },
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.actionRetry),
                             ),
                           ],
                         ),
@@ -206,7 +207,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Saved Hadith',
+            AppLocalizations.of(context)!.savedCardHadith,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -228,7 +229,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Sign in to view saved hadith',
+              AppLocalizations.of(context)!.savedSignInToView,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -236,7 +237,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Your saved items are synced to your account.',
+              AppLocalizations.of(context)!.savedSyncedToAccount,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),
@@ -246,7 +247,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
             FilledButton.icon(
               onPressed: () => context.go('/login'),
               icon: const Icon(LucideIcons.logIn),
-              label: const Text('Sign In'),
+              label: Text(AppLocalizations.of(context)!.actionSignIn),
             ),
           ],
         ),
@@ -275,8 +276,8 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
             const SizedBox(height: AppSpacing.lg),
             Text(
               noSavedAtAll
-                  ? 'No saved hadith yet'
-                  : 'No hadith match your search',
+                  ? AppLocalizations.of(context)!.savedNoItems
+                  : AppLocalizations.of(context)!.savedNoSearchResults,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(180),
               ),
@@ -361,7 +362,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: AppLocalizations.of(context)!.actionShare,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -372,7 +373,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                       transliteration: '',
                       translation: text,
                       source: source,
-                      title: 'Share Hadith',
+                      title: AppLocalizations.of(context)!.libraryHadith,
                     ),
                   );
                 },

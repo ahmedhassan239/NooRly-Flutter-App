@@ -3,7 +3,7 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_app/app/app.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/app/theme_provider.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/settings/data/repositories/settings_repository_impl.dart';
@@ -40,8 +40,8 @@ class SettingsNotifier extends StateNotifier<SettingsEntity> {
     state = state.copyWith(language: language);
     await _saveAndSync();
 
-    // Update app locale
-    _ref.read(localeProvider.notifier).state = Locale(language);
+    // Update app locale persistently
+    await _ref.read(localeProvider.notifier).setLocale(Locale(language));
   }
 
   Future<void> setThemeMode(ThemeMode themeMode) async {

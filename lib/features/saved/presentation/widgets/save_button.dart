@@ -8,6 +8,7 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -85,7 +86,7 @@ class SaveButton extends ConsumerWidget {
                 ),
               SizedBox(width: compact ? 6 : 8),
               Text(
-                isPending ? '...' : (isSaved ? 'Saved' : 'Save'),
+                isPending ? '...' : (isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.actionSave),
                 style: (compact
                         ? AppTypography.caption(
                             color: isSaved
@@ -129,12 +130,13 @@ class SaveButton extends ConsumerWidget {
 
     if (!context.mounted) return;
 
+    final l10n = AppLocalizations.of(context)!;
     switch (result) {
       case ToggleSaveResult.success:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              currentIsSaved ? 'Removed from saved' : 'Saved to favorites',
+              currentIsSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
             ),
             duration: const Duration(seconds: 2),
           ),
@@ -145,9 +147,9 @@ class SaveButton extends ConsumerWidget {
         break;
       case ToggleSaveResult.failure:
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Could not update saved state. Try again.'),
-            duration: Duration(seconds: 2),
+          SnackBar(
+            content: Text(l10n.couldNotUpdateSavedState),
+            duration: const Duration(seconds: 2),
           ),
         );
         break;
@@ -157,24 +159,23 @@ class SaveButton extends ConsumerWidget {
   }
 
   void _showLoginPrompt(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Login Required'),
-        content: const Text(
-          'Please sign in to save items to your favorites.',
-        ),
+        title: Text(l10n.loginRequired),
+        content: Text(l10n.pleaseSignInToSave),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
+            child: Text(l10n.actionCancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.of(ctx).pop();
               context.go('/login');
             },
-            child: const Text('Sign In'),
+            child: Text(l10n.actionSignIn),
           ),
         ],
       ),

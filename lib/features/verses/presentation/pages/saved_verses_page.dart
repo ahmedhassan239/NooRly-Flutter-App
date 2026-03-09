@@ -8,6 +8,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/share_content_dia
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/save_verse_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -96,7 +97,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                       filled: true,
                       fillColor: colorScheme.surfaceContainerHighest,
                       prefixIcon: const Icon(LucideIcons.search, size: 20),
-                      hintText: 'Search verses...',
+                      hintText: AppLocalizations.of(context)!.searchVerses,
                       border: OutlineInputBorder(
                         borderRadius:
                             BorderRadius.circular(AppRadius.lg),
@@ -155,7 +156,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                             ),
                             const SizedBox(height: AppSpacing.md),
                             Text(
-                              'Could not load saved verses',
+                              AppLocalizations.of(context)!.savedCouldNotLoad,
                               style: AppTypography.body(
                                 color: colorScheme.onSurface,
                               ),
@@ -166,7 +167,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                               onPressed: () {
                                 ref.invalidate(savedVerseListProvider);
                               },
-                              child: const Text('Retry'),
+                              child: Text(AppLocalizations.of(context)!.actionRetry),
                             ),
                           ],
                         ),
@@ -210,7 +211,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Saved Verses',
+            AppLocalizations.of(context)!.savedCardVerses,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -232,7 +233,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Sign in to view saved verses',
+              AppLocalizations.of(context)!.savedSignInToView,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
@@ -240,7 +241,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
             ),
             const SizedBox(height: AppSpacing.sm),
             Text(
-              'Your saved items are synced to your account.',
+              AppLocalizations.of(context)!.savedSyncedToAccount,
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(120),
               ),
@@ -250,7 +251,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
             FilledButton.icon(
               onPressed: () => context.go('/login'),
               icon: const Icon(LucideIcons.logIn),
-              label: const Text('Sign In'),
+              label: Text(AppLocalizations.of(context)!.actionSignIn),
             ),
           ],
         ),
@@ -279,8 +280,8 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
             const SizedBox(height: AppSpacing.lg),
             Text(
               noSavedAtAll
-                  ? 'No saved verses yet'
-                  : 'No verses match your search',
+                  ? AppLocalizations.of(context)!.savedNoItems
+                  : AppLocalizations.of(context)!.savedNoSearchResults,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(180),
               ),
@@ -389,7 +390,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: AppLocalizations.of(context)!.actionShare,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -409,7 +410,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
               _buildActionButton(
                 context: context,
                 icon: LucideIcons.volume2,
-                label: 'Listen',
+                label: AppLocalizations.of(context)!.actionListen,
                 colorScheme: colorScheme,
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
