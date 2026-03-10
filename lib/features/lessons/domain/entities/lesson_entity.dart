@@ -1,3 +1,4 @@
+import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_quran_hadith_models.dart';
 
 /// Lesson Category
@@ -14,6 +15,7 @@ class LessonEntity {
     required this.content,
     required this.readTime,
     required this.category,
+    this.blocks = const [],
     this.quranVerses = const [],
     this.hadithItems = const [],
   });
@@ -23,30 +25,32 @@ class LessonEntity {
   final int weekNumber;
   final String title;
   final String description;
-  final String content; // Markdown content
-  final int readTime; // Minutes
+
+  /// Raw content string (kept for legacy fallback / debugging only).
+  /// The UI renders [blocks] instead of this field.
+  final String content;
+
+  final int readTime;
   final LessonCategory category;
 
-  /// Quran verses attached to this lesson (from API or resolved by refs).
-  final List<QuranVerse> quranVerses;
+  /// Structured content blocks — primary rendering source.
+  /// Populated from `blocks` JSON array (new API) or converted from [content]
+  /// Markdown via [MarkdownToBlocks] (legacy). Always non-null; may be empty.
+  final List<LessonBlock> blocks;
 
-  /// Hadith items attached to this lesson (from API or resolved by refs).
+  // Legacy separate arrays — kept for backward compat; also represented
+  // as [VerseBlock] / [HadithBlock] entries inside [blocks].
+  final List<QuranVerse> quranVerses;
   final List<HadithItem> hadithItems;
 
-  /// Map from API lesson payload (e.g. GET /lessons/:id).
   static LessonCategory categoryFromString(String? value) {
     if (value == null || value.isEmpty) return LessonCategory.faith;
-    switch (value.toLowerCase()) {
-      case 'salah':
-        return LessonCategory.salah;
-      case 'quran':
-        return LessonCategory.quran;
-      case 'habits':
-        return LessonCategory.habits;
-      case 'community':
-        return LessonCategory.community;
-      default:
-        return LessonCategory.faith;
-    }
+    return switch (value.toLowerCase()) {
+      'salah'     => LessonCategory.salah,
+      'quran'     => LessonCategory.quran,
+      'habits'    => LessonCategory.habits,
+      'community' => LessonCategory.community,
+      _           => LessonCategory.faith,
+    };
   }
 }

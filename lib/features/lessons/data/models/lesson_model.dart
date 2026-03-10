@@ -1,5 +1,7 @@
+import 'package:flutter_app/features/lessons/data/lesson_block_parser.dart';
 import 'package:flutter_app/features/lessons/data/lesson_quran_hadith_parser.dart';
 import 'package:flutter_app/features/lessons/domain/entities/lesson_entity.dart';
+import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_quran_hadith_models.dart';
 
 /// Lesson Model (Data Layer)
@@ -13,6 +15,7 @@ class LessonModel {
     required this.content,
     required this.readTime,
     required this.category,
+    this.blocks = const [],
     this.quranVerses = const [],
     this.hadithItems = const [],
   });
@@ -36,6 +39,7 @@ class LessonModel {
       content: (json['content'] as String? ?? '').replaceAll(r'\n', '\n'),
       readTime: json['readTime'] as int? ?? json['estimated_minutes'] as int? ?? json['duration'] as int? ?? 0,
       category: json['category'] as String? ?? 'faith',
+      blocks: parseBlocks(json),
       quranVerses: parseQuranVersesFromJson(quranRaw),
       hadithItems: parseHadithItemsFromJson(hadithRaw),
     );
@@ -49,6 +53,7 @@ class LessonModel {
   final String content;
   final int readTime;
   final String category;
+  final List<LessonBlock> blocks;
   final List<QuranVerse> quranVerses;
   final List<HadithItem> hadithItems;
 
@@ -76,6 +81,7 @@ class LessonModel {
       content: content,
       readTime: readTime,
       category: _categoryFromString(category),
+      blocks: blocks,
       quranVerses: quranVerses,
       hadithItems: hadithItems,
     );

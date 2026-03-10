@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_app/core/api/api_client.dart';
 import 'package:flutter_app/core/config/endpoints.dart';
 import 'package:flutter_app/features/lessons/data/datasources/lessons_local_datasource.dart';
+import 'package:flutter_app/features/lessons/data/lesson_block_parser.dart';
 import 'package:flutter_app/features/lessons/data/lesson_quran_hadith_parser.dart';
 import 'package:flutter_app/features/lessons/domain/entities/lesson_entity.dart';
 import 'package:flutter_app/features/lessons/domain/repositories/lessons_repository.dart';
@@ -79,6 +80,10 @@ class LessonsRepositoryImpl implements LessonsRepository {
       }
       final rawContent = d['content'];
       final contentStr = (rawContent is String ? rawContent : rawContent?.toString() ?? '').replaceAll(r'\n', '\n');
+      final blocks = parseBlocks(d);
+      if (kDebugMode) {
+        print('[LessonRepo] blocks=${blocks.length}');
+      }
       return LessonEntity(
         id: (d['id'] ?? id).toString(),
         dayNumber: d['day_number'] as int? ?? 0,
@@ -89,6 +94,7 @@ class LessonsRepositoryImpl implements LessonsRepository {
         readTime:
             d['estimated_minutes'] as int? ?? d['duration'] as int? ?? 0,
         category: LessonEntity.categoryFromString(d['category'] as String?),
+        blocks: blocks,
         quranVerses: quranVerses,
         hadithItems: hadithItems,
       );

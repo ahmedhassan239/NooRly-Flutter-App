@@ -207,25 +207,27 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
         border: Border.all(color: colorScheme.outline.withAlpha(128)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withAlpha(25),
-              borderRadius: BorderRadius.circular(AppRadius.sm),
-            ),
-            child: Text(
-              'Dua',
-              style: AppTypography.caption(color: colorScheme.primary)
-                  .copyWith(fontWeight: FontWeight.w600),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withAlpha(25),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              child: Text(
+                'Dua',
+                style: AppTypography.caption(color: colorScheme.primary)
+                    .copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
             e.arabicText,
             style: AppTypography.arabicH2(color: colorScheme.onSurface),
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.center,
             textDirection: TextDirection.rtl,
           ),
           const SizedBox(height: AppSpacing.md),
@@ -234,12 +236,14 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
               e.transliteration!,
               style: AppTypography.bodySm(color: colorScheme.primary)
                   .copyWith(fontStyle: FontStyle.italic),
+              textAlign: TextAlign.center,
             ),
           if ((e.transliteration ?? '').isNotEmpty) const SizedBox(height: AppSpacing.sm),
           if ((e.translation ?? '').isNotEmpty)
             Text(
               '"${e.translation}"',
               style: AppTypography.bodySm(color: colorScheme.onSurface),
+              textAlign: TextAlign.center,
             ),
           if ((e.translation ?? '').isNotEmpty) const SizedBox(height: AppSpacing.sm),
           if ((e.source ?? '').isNotEmpty)
@@ -248,6 +252,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
+              textAlign: TextAlign.center,
             ),
           const SizedBox(height: AppSpacing.md),
           _buildActionButtons(context, ref, e, isSaved, colorScheme),

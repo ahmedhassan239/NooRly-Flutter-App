@@ -161,19 +161,21 @@ class CategoryDuasPage extends ConsumerWidget {
         border: Border.all(color: colorScheme.outline.withAlpha(128)),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Dua label
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: colorScheme.primary.withAlpha(25),
-              borderRadius: BorderRadius.circular(AppRadius.sm),
-            ),
-            child: Text(
-              'Dua',
-              style: AppTypography.caption(color: colorScheme.primary)
-                  .copyWith(fontWeight: FontWeight.w600),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withAlpha(25),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
+              ),
+              child: Text(
+                'Dua',
+                style: AppTypography.caption(color: colorScheme.primary)
+                    .copyWith(fontWeight: FontWeight.w600),
+              ),
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -181,7 +183,7 @@ class CategoryDuasPage extends ConsumerWidget {
           Text(
             dua.arabic,
             style: AppTypography.arabicH2(color: colorScheme.onSurface),
-            textAlign: TextAlign.right,
+            textAlign: TextAlign.center,
             textDirection: TextDirection.rtl,
           ),
           const SizedBox(height: AppSpacing.md),
@@ -190,18 +192,21 @@ class CategoryDuasPage extends ConsumerWidget {
             dua.transliteration,
             style: AppTypography.bodySm(color: colorScheme.primary)
                 .copyWith(fontStyle: FontStyle.italic),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.sm),
           // Translation
           Text(
             '"${dua.translation}"',
             style: AppTypography.bodySm(color: colorScheme.onSurface),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.sm),
           // Source
           Text(
             '- ${dua.source}',
             style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.md),
           // Action buttons

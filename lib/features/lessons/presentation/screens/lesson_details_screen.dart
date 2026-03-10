@@ -11,9 +11,7 @@ import 'package:flutter_app/design_system/widgets/app_button.dart';
 import 'package:flutter_app/features/lessons/domain/entities/lesson_entity.dart';
 import 'package:flutter_app/features/lessons/presentation/providers/lesson_details_provider.dart';
 import 'package:flutter_app/features/lessons/presentation/state/lesson_details_state.dart';
-import 'package:flutter_app/features/lessons/presentation/widgets/lesson_html_content.dart';
-import 'package:flutter_app/features/lessons/presentation/widgets/quran_verses_section.dart';
-import 'package:flutter_app/features/lessons/presentation/widgets/hadith_section.dart';
+import 'package:flutter_app/features/lessons/presentation/widgets/lesson_renderer.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 
 class LessonDetailsScreen extends ConsumerWidget {
@@ -144,8 +142,6 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
     final subtitle = lesson.description;
     final readMinutes = lesson.readTime > 0 ? lesson.readTime : 0;
     final categoryLabel = _categoryLabel(lesson.category);
-    final bodyContent = _normalizeContent(lesson.content);
-
     return Column(
       children: [
         Expanded(
@@ -224,22 +220,11 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                   ),
                   const SizedBox(height: AppSpacing.xl2),
 
-                  // Main content: API only (HTML or plain text with newlines)
-                  if (bodyContent.isNotEmpty) ...[
-                    _buildContentWidget(context, bodyContent, colorScheme),
+                  // Structured content blocks (native Flutter widgets).
+                  // Includes verses, hadith, callouts, steps, quotes, etc.
+                  if (lesson.blocks.isNotEmpty) ...[
+                    LessonRenderer(blocks: lesson.blocks),
                     const SizedBox(height: AppSpacing.xl2),
-                  ],
-
-                  // Quran verses (from API)
-                  if (lesson.quranVerses.isNotEmpty) ...[
-                    QuranVersesSection(verses: lesson.quranVerses),
-                    const SizedBox(height: AppSpacing.xl),
-                  ],
-
-                  // Hadith items (from lesson; hide if empty)
-                  if (lesson.hadithItems.isNotEmpty) ...[
-                    HadithSection(items: lesson.hadithItems),
-                    const SizedBox(height: AppSpacing.xl),
                   ],
 
                   // Personal Reflection
@@ -303,27 +288,6 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
     );
   }
 
-  /// Unescape backend escaped newlines (e.g. "\\n" -> newline).
-  static String _normalizeContent(String s) {
-    if (s.isEmpty) return s;
-    return s.replaceAll(r'\n', '\n');
-  }
-
-  /// Render API content: HTML via LessonHtmlContent, else plain text with newlines.
-  static Widget _buildContentWidget(BuildContext context, String bodyContent, ColorScheme colorScheme) {
-    final trimmed = bodyContent.trim();
-    final looksLikeHtml = trimmed.startsWith('<') ||
-        trimmed.contains('<p>') ||
-        trimmed.contains('<div') ||
-        trimmed.contains('<br');
-    if (looksLikeHtml) {
-      return LessonHtmlContent(html: bodyContent, textColor: colorScheme.onSurface);
-    }
-    return SelectableText(
-      bodyContent,
-      style: AppTypography.body(color: colorScheme.onSurface),
-    );
-  }
 
   String _categoryLabel(dynamic category) {
     if (category is String) {
