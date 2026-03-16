@@ -90,6 +90,9 @@
 
   "ramadanIsHere": "رمضان قادم",
   "prepareForTheBlessedMonth": "استعد للشهر الكريم",
+  "ramadanGuideTitle": "دليل رمضان",
+  "ramadanGuideEmpty": "لا يوجد محتوى للدليل حالياً.",
+  "ramadanGuideError": "حدث خطأ. يرجى المحاولة مرة أخرى.",
   "startRamadanGuide": "ابدأ دليل رمضان",
 
   "journeyTitle": "رحلتك",
@@ -262,6 +265,12 @@
 
   "needHelpNow": "تحتاج مساعدة الآن؟",
   "quickSupportWhenYouNeedIt": "دعم سريع عندما تحتاجه",
+  "howCanWeHelp": "كيف يمكننا مساعدتك؟",
+  "helpNowSubtitle": "أنت لست وحدك. نحن هنا من أجلك.",
+  "helpNowEmpty": "لا توجد مواضيع مساعدة متاحة حالياً.",
+  "helpNowError": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+  "helpNowItemNotFound": "لم يتم العثور على موضوع المساعدة.",
+  "goBack": "رجوع",
   "dailyInspiration": "إلهام اليوم",
   "seeAll": "عرض الكل",
   "noDailyInspiration": "لا يوجد إلهام يومي متاح حالياً.",

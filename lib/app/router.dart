@@ -26,6 +26,7 @@ import 'package:flutter_app/features/auth/presentation/pages/debug_auth_screen.d
 import 'package:flutter_app/features/debug/presentation/pages/debug_network_screen.dart';
 import 'package:flutter_app/features/home/presentation/pages/home_dashboard_page.dart';
 import 'package:flutter_app/features/home/presentation/pages/ramadan_guide_page.dart';
+import 'package:flutter_app/features/help_now/presentation/screens/help_now_detail_screen.dart';
 import 'package:flutter_app/features/need_help/need_help_page.dart';
 import 'package:flutter_app/features/verses/presentation/pages/category_verses_page.dart';
 import 'package:flutter_app/features/verses/presentation/pages/verse_collection_page.dart';
@@ -393,6 +394,14 @@ List<RouteBase> get _appRoutes => [
       path: '/need-help',
       name: AppRoutes.needHelp,
       builder: (context, state) => const NeedHelpPage(),
+    ),
+    GoRoute(
+      path: '/help-now/item/:slug',
+      name: 'help-now-detail',
+      builder: (context, state) {
+        final slug = state.pathParameters['slug'] ?? '';
+        return HelpNowDetailScreen(slug: slug);
+      },
     ),
     GoRoute(
       path: '/help/:category/:topic',

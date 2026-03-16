@@ -189,6 +189,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get startRamadanGuide => 'Start Ramadan Guide';
 
   @override
+  String get ramadanGuideTitle => 'Ramadan Guide';
+
+  @override
+  String get ramadanGuideEmpty => 'No guide content available right now.';
+
+  @override
+  String get ramadanGuideError => 'Something went wrong. Please try again.';
+
+  @override
   String get journeyTitle => 'Your Journey';
 
   @override
@@ -569,6 +578,24 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quickSupportWhenYouNeedIt => 'Quick support when you need it';
+
+  @override
+  String get howCanWeHelp => 'How Can We Help?';
+
+  @override
+  String get helpNowSubtitle => 'You\'re not alone. We\'re here for you.';
+
+  @override
+  String get helpNowEmpty => 'No help topics available right now.';
+
+  @override
+  String get helpNowError => 'Something went wrong. Please try again.';
+
+  @override
+  String get helpNowItemNotFound => 'Help topic not found.';
+
+  @override
+  String get goBack => 'Go back';
 
   @override
   String get dailyInspiration => 'Daily Inspiration';

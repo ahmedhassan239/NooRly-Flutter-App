@@ -295,23 +295,6 @@ class CategoryDuasPage extends ConsumerWidget {
             },
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.volume2,
-            label: 'Listen',
-            colorScheme: colorScheme,
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Audio playback coming soon 🔊'),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            },
-          ),
-        ),
       ],
     );
   }

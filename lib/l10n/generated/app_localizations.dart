@@ -434,6 +434,24 @@ abstract class AppLocalizations {
   /// **'Start Ramadan Guide'**
   String get startRamadanGuide;
 
+  /// No description provided for @ramadanGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ramadan Guide'**
+  String get ramadanGuideTitle;
+
+  /// No description provided for @ramadanGuideEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No guide content available right now.'**
+  String get ramadanGuideEmpty;
+
+  /// No description provided for @ramadanGuideError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get ramadanGuideError;
+
   /// No description provided for @journeyTitle.
   ///
   /// In en, this message translates to:
@@ -1135,6 +1153,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Quick support when you need it'**
   String get quickSupportWhenYouNeedIt;
+
+  /// No description provided for @howCanWeHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'How Can We Help?'**
+  String get howCanWeHelp;
+
+  /// No description provided for @helpNowSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not alone. We\'re here for you.'**
+  String get helpNowSubtitle;
+
+  /// No description provided for @helpNowEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No help topics available right now.'**
+  String get helpNowEmpty;
+
+  /// No description provided for @helpNowError.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong. Please try again.'**
+  String get helpNowError;
+
+  /// No description provided for @helpNowItemNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Help topic not found.'**
+  String get helpNowItemNotFound;
+
+  /// No description provided for @goBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Go back'**
+  String get goBack;
 
   /// No description provided for @dailyInspiration.
   ///

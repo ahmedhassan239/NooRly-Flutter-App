@@ -275,23 +275,6 @@ class AdhkarDetailPage extends ConsumerWidget {
                 },
               ),
             ),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: _buildActionButton(
-                context: context,
-                icon: LucideIcons.volume2,
-                label: 'Listen',
-                colorScheme: colorScheme,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Audio playback coming soon'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ],

@@ -189,6 +189,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get startRamadanGuide => 'ابدأ دليل رمضان';
 
   @override
+  String get ramadanGuideTitle => 'دليل رمضان';
+
+  @override
+  String get ramadanGuideEmpty => 'لا يوجد محتوى للدليل حالياً.';
+
+  @override
+  String get ramadanGuideError => 'حدث خطأ. يرجى المحاولة مرة أخرى.';
+
+  @override
   String get journeyTitle => 'رحلتك';
 
   @override
@@ -568,6 +577,24 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quickSupportWhenYouNeedIt => 'دعم سريع عندما تحتاجه';
+
+  @override
+  String get howCanWeHelp => 'كيف يمكننا مساعدتك؟';
+
+  @override
+  String get helpNowSubtitle => 'أنت لست وحدك. نحن هنا من أجلك.';
+
+  @override
+  String get helpNowEmpty => 'لا توجد مواضيع مساعدة متاحة حالياً.';
+
+  @override
+  String get helpNowError => 'حدث خطأ. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get helpNowItemNotFound => 'لم يتم العثور على موضوع المساعدة.';
+
+  @override
+  String get goBack => 'رجوع';
 
   @override
   String get dailyInspiration => 'إلهام اليوم';

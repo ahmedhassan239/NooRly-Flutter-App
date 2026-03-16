@@ -355,32 +355,6 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
             },
           ),
         ),
-        const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.volume2,
-            label: 'Listen',
-            colorScheme: colorScheme,
-            onTap: () {
-              if ((e.audioUrl ?? '').isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Audio not available 🔊'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Play: ${e.audioUrl}'),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
-          ),
-        ),
       ],
     );
   }

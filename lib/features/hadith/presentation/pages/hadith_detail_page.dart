@@ -111,7 +111,7 @@ class HadithDetailPage extends ConsumerWidget {
     ColorScheme colorScheme,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Hadith label
         Container(
@@ -131,7 +131,7 @@ class HadithDetailPage extends ConsumerWidget {
         Text(
           hadith.arabic,
           style: AppTypography.arabicH1(color: colorScheme.onSurface),
-          textAlign: TextAlign.right,
+          textAlign: TextAlign.center,
           textDirection: TextDirection.rtl,
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -146,6 +146,7 @@ class HadithDetailPage extends ConsumerWidget {
             hadith.transliteration,
             style: AppTypography.body(color: colorScheme.primary)
                 .copyWith(fontStyle: FontStyle.italic),
+            textAlign: TextAlign.center,
           ),
         ),
         const SizedBox(height: AppSpacing.lg),
@@ -153,11 +154,13 @@ class HadithDetailPage extends ConsumerWidget {
         Text(
           'Translation',
           style: AppTypography.h3(color: colorScheme.onSurface),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: AppSpacing.sm),
         Text(
           hadith.translation,
           style: AppTypography.body(color: colorScheme.onSurface),
+          textAlign: TextAlign.center,
         ),
         const SizedBox(height: AppSpacing.lg),
         // Source
@@ -169,6 +172,8 @@ class HadithDetailPage extends ConsumerWidget {
             border: Border.all(color: colorScheme.outline.withAlpha(128)),
           ),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 LucideIcons.bookOpen,
@@ -198,15 +203,15 @@ class HadithDetailPage extends ConsumerWidget {
     ColorScheme colorScheme,
   ) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: SaveHadithButton(hadithId: hadithIdInt),
-            ),
+            SaveHadithButton(hadithId: hadithIdInt),
             const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: _buildActionButton(
+            _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
                 label: 'Copy',
@@ -222,49 +227,31 @@ class HadithDetailPage extends ConsumerWidget {
                   );
                 },
               ),
-            ),
           ],
         ),
         const SizedBox(height: AppSpacing.sm),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: _buildActionButton(
-                context: context,
-                icon: LucideIcons.share2,
-                label: 'Share',
-                colorScheme: colorScheme,
-                onTap: () {
-                  ShareContentDialog.show(
-                    context,
-                    ShareableContent(
-                      id: hadith.id,
-                      arabic: hadith.arabic,
-                      transliteration: hadith.transliteration,
-                      translation: hadith.translation,
-                      source: hadith.source,
-                      title: 'Share Hadith',
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Expanded(
-              child: _buildActionButton(
-                context: context,
-                icon: LucideIcons.volume2,
-                label: 'Listen',
-                colorScheme: colorScheme,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: const Text('Audio playback coming soon 🔊'),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
+            _buildActionButton(
+              context: context,
+              icon: LucideIcons.share2,
+              label: 'Share',
+              colorScheme: colorScheme,
+              onTap: () {
+                ShareContentDialog.show(
+                  context,
+                  ShareableContent(
+                    id: hadith.id,
+                    arabic: hadith.arabic,
+                    transliteration: hadith.transliteration,
+                    translation: hadith.translation,
+                    source: hadith.source,
+                    title: 'Share Hadith',
+                  ),
+                );
+              },
             ),
           ],
         ),

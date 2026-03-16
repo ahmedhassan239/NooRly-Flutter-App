@@ -116,7 +116,7 @@ class _HadithItemCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (showText)
             Text(
@@ -124,6 +124,8 @@ class _HadithItemCard extends StatelessWidget {
               style: AppTypography.body(
                 color: colorScheme.onSurface,
               ),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
             ),
           if (showTextAr) ...[
             if (showText) const SizedBox(height: AppSpacing.sm),
@@ -132,6 +134,8 @@ class _HadithItemCard extends StatelessWidget {
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(200),
               ),
+              textAlign: TextAlign.center,
+              textDirection: TextDirection.rtl,
             ),
           ],
           if (showTextEn) ...[
@@ -141,6 +145,7 @@ class _HadithItemCard extends StatelessWidget {
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withAlpha(180),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
           if (item.collectionName != null && item.collectionName!.isNotEmpty) ...[
@@ -150,6 +155,7 @@ class _HadithItemCard extends StatelessWidget {
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
           if (item.hadithNumber != null || item.chapterNumber != null) ...[
@@ -162,11 +168,12 @@ class _HadithItemCard extends StatelessWidget {
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
           const SizedBox(height: AppSpacing.sm),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SaveHadithButton(hadithId: item.id, compact: true),
               const SizedBox(width: AppSpacing.sm),
@@ -179,12 +186,6 @@ class _HadithItemCard extends StatelessWidget {
               _PlaceholderAction(
                 icon: LucideIcons.share2,
                 label: 'Share',
-                colorScheme: colorScheme,
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              _PlaceholderAction(
-                icon: LucideIcons.volume2,
-                label: 'Listen',
                 colorScheme: colorScheme,
               ),
             ],

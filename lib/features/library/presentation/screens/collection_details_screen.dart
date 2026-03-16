@@ -102,11 +102,13 @@ class _ItemCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             item.text,
             style: AppTypography.body(color: colorScheme.onSurface),
+            textAlign: TextAlign.center,
+            textDirection: TextDirection.rtl,
           ),
           if (item.translation != null && item.translation!.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
@@ -115,6 +117,7 @@ class _ItemCard extends StatelessWidget {
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withAlpha(180),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
           if (item.referenceLabel.isNotEmpty) ...[
@@ -124,11 +127,12 @@ class _ItemCard extends StatelessWidget {
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withAlpha(150),
               ),
+              textAlign: TextAlign.center,
             ),
           ],
           const SizedBox(height: AppSpacing.sm),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _PlaceholderAction(
                 icon: LucideIcons.bookmark,
@@ -145,12 +149,6 @@ class _ItemCard extends StatelessWidget {
               _PlaceholderAction(
                 icon: LucideIcons.share2,
                 label: 'Share',
-                colorScheme: colorScheme,
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              _PlaceholderAction(
-                icon: LucideIcons.volume2,
-                label: 'Listen',
                 colorScheme: colorScheme,
               ),
             ],

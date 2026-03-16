@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/utils/content_icon_mapper.dart';
+import 'package:flutter_app/features/help_now/data/help_now_models.dart';
+import 'package:flutter_app/features/help_now/providers/help_now_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -151,25 +156,20 @@ class HelpTile extends StatelessWidget {
 }
 
 // -----------------------------------------------------------------------------
-// Help section (title + icon + tiles)
+// Help section (title + icon + tiles) – from API category
 // -----------------------------------------------------------------------------
 
-class HelpSection extends StatelessWidget {
-  const HelpSection({
-    required this.title,
-    required this.icon,
-    required this.iconColor,
-    required this.tiles,
+class HelpSectionFromCategory extends StatelessWidget {
+  const HelpSectionFromCategory({
+    required this.category,
     super.key,
   });
 
-  final String title;
-  final IconData icon;
-  final Color iconColor;
-  final List<HelpTileData> tiles;
+  final HelpCategoryModel category;
 
   @override
   Widget build(BuildContext context) {
+    final iconColor = _iconColorForCategory(category.icon);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -182,11 +182,15 @@ class HelpSection extends StatelessWidget {
                 color: iconColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(icon, size: 20, color: iconColor),
+              child: Icon(
+                iconDataFromKey(category.icon),
+                size: 20,
+                color: iconColor,
+              ),
             ),
             const SizedBox(width: NeedHelpTokens.s12),
             Text(
-              title,
+              category.title,
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -195,41 +199,42 @@ class HelpSection extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: NeedHelpTokens.s12),
-        ...tiles.map(
-          (t) => Padding(
+        const SizedBox(height: NeedHelpTokens.s12),
+        ...category.items.map(
+          (item) => Padding(
             padding: const EdgeInsets.only(bottom: NeedHelpTokens.s12),
             child: HelpTile(
-              label: t.label,
-              onTap: () => context.push(t.route),
+              label: item.title,
+              onTap: () => context.push('/help-now/item/${item.slug}'),
             ),
           ),
         ),
       ],
     );
   }
-}
 
-class HelpTileData {
-  const HelpTileData({required this.label, required this.route});
-  final String label;
-  final String route;
+  static Color _iconColorForCategory(String iconKey) {
+    final k = iconKey.trim().toLowerCase();
+    if (k == 'heart' || k == 'support') return NeedHelpTokens.iconGreen;
+    if (k == 'clipboard' || k == 'question') return NeedHelpTokens.textPrimary;
+    return NeedHelpTokens.iconGold;
+  }
 }
 
 // -----------------------------------------------------------------------------
-// Need Help page
+// Need Help page – data from API
 // -----------------------------------------------------------------------------
 
-class NeedHelpPage extends StatefulWidget {
+class NeedHelpPage extends ConsumerStatefulWidget {
   const NeedHelpPage({super.key});
 
   static const String routeName = '/need-help';
 
   @override
-  State<NeedHelpPage> createState() => _NeedHelpPageState();
+  ConsumerState<NeedHelpPage> createState() => _NeedHelpPageState();
 }
 
-class _NeedHelpPageState extends State<NeedHelpPage>
+class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _animController;
   late Animation<double> _animOpacity;
@@ -260,48 +265,11 @@ class _NeedHelpPageState extends State<NeedHelpPage>
     super.dispose();
   }
 
-  static const List<HelpTileData> _prayerTiles = [
-    HelpTileData(
-      label: "I don't know how to pray yet",
-      route: '/help/prayer/how-to-pray',
-    ),
-    HelpTileData(label: 'I missed a prayer', route: '/help/prayer/missed'),
-    HelpTileData(
-      label: 'I made a mistake in prayer',
-      route: '/help/prayer/mistake',
-    ),
-  ];
-
-  static const List<HelpTileData> _emotionalTiles = [
-    HelpTileData(label: 'I feel overwhelmed', route: '/help/emotional/overwhelmed'),
-    HelpTileData(
-      label: 'I have doubts about Islam',
-      route: '/help/emotional/doubts',
-    ),
-    HelpTileData(
-      label: 'I feel guilty about my past',
-      route: '/help/emotional/guilty',
-    ),
-    HelpTileData(
-      label: 'My family is against Islam',
-      route: '/help/emotional/family',
-    ),
-  ];
-
-  static const List<HelpTileData> _practicalTiles = [
-    HelpTileData(label: 'Is this halal?', route: '/help/practical/halal'),
-    HelpTileData(
-      label: 'What do I say in this situation?',
-      route: '/help/practical/what-to-say',
-    ),
-    HelpTileData(
-      label: 'Quick duas I need',
-      route: '/help/practical/quick-duas',
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final categoriesAsync = ref.watch(helpNowCategoriesProvider);
+
     return Scaffold(
       backgroundColor: NeedHelpTokens.background,
       appBar: AppBar(
@@ -323,9 +291,9 @@ class _NeedHelpPageState extends State<NeedHelpPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'How Can We Help?',
-              style: TextStyle(
+            Text(
+              l10n.howCanWeHelp,
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
                 color: NeedHelpTokens.textPrimary,
@@ -333,7 +301,7 @@ class _NeedHelpPageState extends State<NeedHelpPage>
             ),
             const SizedBox(height: 2),
             Text(
-              "You're not alone. We're here for you.",
+              l10n.helpNowSubtitle,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
@@ -356,36 +324,82 @@ class _NeedHelpPageState extends State<NeedHelpPage>
                 ),
               );
             },
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                NeedHelpTokens.s16,
-                0,
-                NeedHelpTokens.s16,
-                NeedHelpTokens.s28,
+            child: categoriesAsync.when(
+              data: (List<HelpCategoryModel> categories) {
+                if (categories.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(NeedHelpTokens.s24),
+                      child: Text(
+                        l10n.helpNowEmpty,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: NeedHelpTokens.textSecondary,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+                return ListView(
+                  padding: const EdgeInsets.fromLTRB(
+                    NeedHelpTokens.s16,
+                    0,
+                    NeedHelpTokens.s16,
+                    NeedHelpTokens.s28,
+                  ),
+                  children: [
+                    const SizedBox(height: NeedHelpTokens.s24),
+                    ...categories.asMap().entries.map((entry) {
+                      final isFirst = entry.key == 0;
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (!isFirst) const SizedBox(height: NeedHelpTokens.s28),
+                          HelpSectionFromCategory(category: entry.value),
+                        ],
+                      );
+                    }),
+                  ],
+                );
+              },
+              loading: () => const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(NeedHelpTokens.s24),
+                  child: CircularProgressIndicator(),
+                ),
               ),
-              children: [
-                const SizedBox(height: NeedHelpTokens.s24),
-                HelpSection(
-                  title: 'Prayer Support',
-                  icon: LucideIcons.landmark,
-                  iconColor: NeedHelpTokens.iconGold,
-                  tiles: _prayerTiles,
+              error: (err, _) => Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(NeedHelpTokens.s24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        LucideIcons.alertCircle,
+                        size: 48,
+                        color: NeedHelpTokens.textSecondary,
+                      ),
+                      const SizedBox(height: NeedHelpTokens.s16),
+                      Text(
+                        l10n.helpNowError,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: NeedHelpTokens.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(height: NeedHelpTokens.s16),
+                      FilledButton.icon(
+                        onPressed: () =>
+                            ref.invalidate(helpNowCategoriesProvider),
+                        icon: const Icon(LucideIcons.refreshCw, size: 18),
+                        label: Text(l10n.actionRetry),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: NeedHelpTokens.s28),
-                HelpSection(
-                  title: 'Emotional Support',
-                  icon: LucideIcons.heart,
-                  iconColor: NeedHelpTokens.iconGreen,
-                  tiles: _emotionalTiles,
-                ),
-                const SizedBox(height: NeedHelpTokens.s28),
-                HelpSection(
-                  title: 'Practical Help',
-                  icon: LucideIcons.clipboardList,
-                  iconColor: NeedHelpTokens.textPrimary,
-                  tiles: _practicalTiles,
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -395,7 +409,7 @@ class _NeedHelpPageState extends State<NeedHelpPage>
 }
 
 // -----------------------------------------------------------------------------
-// Help route → title (for placeholder screens)
+// Legacy placeholder for /help/:category/:topic (kept for backwards compatibility)
 // -----------------------------------------------------------------------------
 
 const Map<String, String> _helpRouteTitles = {
@@ -414,10 +428,6 @@ const Map<String, String> _helpRouteTitles = {
 String helpPlaceholderTitle(String path) {
   return _helpRouteTitles[path] ?? 'Help';
 }
-
-// -----------------------------------------------------------------------------
-// Placeholder screen for help sub-routes
-// -----------------------------------------------------------------------------
 
 class HelpPlaceholderScreen extends StatelessWidget {
   const HelpPlaceholderScreen({

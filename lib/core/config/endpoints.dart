@@ -122,6 +122,24 @@ abstract class HomeEndpoints {
   static const String dailyInspiration = '/daily-inspiration';
 }
 
+/// Ramadan Guide endpoints (locale via Accept-Language).
+abstract class RamadanGuideEndpoints {
+  /// GET - List active Ramadan guide items (localized)
+  static const String list = '/ramadan-guide';
+
+  /// GET - Single item by slug
+  static String item(String slug) => '/ramadan-guide/$slug';
+}
+
+/// Help Now endpoints (locale via Accept-Language).
+abstract class HelpNowEndpoints {
+  /// GET - All categories with nested items (localized)
+  static const String list = '/help-now';
+
+  /// GET - Single help item by slug
+  static String item(String slug) => '/help-now/items/$slug';
+}
+
 /// Journey/Learning endpoints.
 abstract class JourneyEndpoints {
   /// GET - User's learning journey (weeks + lessons + progress)

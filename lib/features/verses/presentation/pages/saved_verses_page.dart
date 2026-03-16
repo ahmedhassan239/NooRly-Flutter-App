@@ -415,21 +415,6 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                   );
                 },
               ),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.volume2,
-                label: AppLocalizations.of(context)!.actionListen,
-                colorScheme: colorScheme,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Listen — coming soon'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
             ],
           ),
         ],

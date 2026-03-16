@@ -35,7 +35,6 @@ class HomeDashboardPage extends ConsumerStatefulWidget {
 
 class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   static bool _debugChecklistPrinted = false;
-  bool _ramadanBannerDismissed = false;
 
   @override
   void initState() {
@@ -105,10 +104,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                         const SizedBox(height: HomeLayout.sectionSpacing),
                         _buildTodayFocusSection(),
                         const SizedBox(height: HomeLayout.sectionSpacing),
-                        if (!_ramadanBannerDismissed) ...[
-                          _buildRamadanSection(),
-                          const SizedBox(height: HomeLayout.sectionSpacing),
-                        ],
+                        _buildRamadanSection(),
+                        const SizedBox(height: HomeLayout.sectionSpacing),
                         _buildNeedHelpSection(),
                         const SizedBox(height: HomeLayout.sectionSpacing),
                         _buildDailyInspirationSection(),
@@ -189,7 +186,7 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
   Widget _buildRamadanSection() {
     if (kDebugMode) debugPrint('[HomeDashboardPage] _buildRamadanSection');
     return RamadanBannerCard(
-      onDismiss: () => setState(() => _ramadanBannerDismissed = true),
+      onDismiss: () {}, // Card always visible; dismiss is no-op
       onCta: () {
         if (kDebugMode) debugPrint('NAVIGATE /ramadan');
         context.push('/ramadan');

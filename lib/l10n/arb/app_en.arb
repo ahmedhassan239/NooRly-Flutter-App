@@ -91,6 +91,9 @@
   "ramadanIsHere": "Ramadan is here",
   "prepareForTheBlessedMonth": "Prepare for the blessed month",
   "startRamadanGuide": "Start Ramadan Guide",
+  "ramadanGuideTitle": "Ramadan Guide",
+  "ramadanGuideEmpty": "No guide content available right now.",
+  "ramadanGuideError": "Something went wrong. Please try again.",
 
   "journeyTitle": "Your Journey",
   "journeyLearningPath": "90-Day Learning Path",
@@ -262,6 +265,12 @@
 
   "needHelpNow": "Need Help Now?",
   "quickSupportWhenYouNeedIt": "Quick support when you need it",
+  "howCanWeHelp": "How Can We Help?",
+  "helpNowSubtitle": "You're not alone. We're here for you.",
+  "helpNowEmpty": "No help topics available right now.",
+  "helpNowError": "Something went wrong. Please try again.",
+  "helpNowItemNotFound": "Help topic not found.",
+  "goBack": "Go back",
   "dailyInspiration": "Daily Inspiration",
   "seeAll": "See All",
   "noDailyInspiration": "No daily inspiration available right now.",

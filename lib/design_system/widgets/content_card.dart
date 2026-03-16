@@ -154,17 +154,6 @@ class _ContentCardState extends State<ContentCard> {
     );
   }
 
-  void _handleListen() {
-    // TODO(ahmed-hassan): Implement text-to-speech for Arabic (Phase 3)
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          'Audio playback coming soon',
-        ),
-      ),
-    );
-  }
-
   String get _typeLabel {
     switch (widget.type) {
       case ContentType.dua:
@@ -289,6 +278,7 @@ class _ContentCardState extends State<ContentCard> {
 
           // Action buttons
           Wrap(
+            alignment: WrapAlignment.center,
             spacing: 8,
             runSpacing: 8,
             children: [
@@ -308,11 +298,6 @@ class _ContentCardState extends State<ContentCard> {
                 icon: LucideIcons.share2,
                 label: 'Share',
                 onPressed: _handleShare,
-              ),
-              _ActionButton(
-                icon: LucideIcons.volume2,
-                label: 'Listen',
-                onPressed: _handleListen,
               ),
             ],
           ),

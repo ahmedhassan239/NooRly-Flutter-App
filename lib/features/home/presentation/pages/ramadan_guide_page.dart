@@ -4,91 +4,31 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_layout.dart';
+import 'package:flutter_app/features/ramadan_guide/data/ramadan_guide_models.dart';
+import 'package:flutter_app/features/ramadan_guide/providers/ramadan_guide_providers.dart';
+import 'package:flutter_app/core/utils/content_icon_mapper.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-/// Icon colors for Ramadan accordion (warm yellow/orange per design).
-class _RamadanIconColors {
-  _RamadanIconColors._();
-  static const Color moonSun = Color(0xFFE8A317);
-  static const Color warning = Color(0xFFF5A623);
-  static const Color prayingHands = Color(0xFFE8B923);
-  static const Color sparkles = Color(0xFFF7E5A3);
-}
-
-/// Ramadan Guide screen: app bar with title + subtitle, 5 accordion cards, dotted background.
-class RamadanGuidePage extends StatefulWidget {
+/// Ramadan Guide screen: app bar, list of accordion cards from API, dotted background.
+class RamadanGuidePage extends ConsumerStatefulWidget {
   const RamadanGuidePage({super.key});
 
   @override
-  State<RamadanGuidePage> createState() => _RamadanGuidePageState();
+  ConsumerState<RamadanGuidePage> createState() => _RamadanGuidePageState();
 }
 
-class _RamadanGuidePageState extends State<RamadanGuidePage> {
+class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
   int? _expandedIndex;
-  static bool _debugChecklistPrinted = false;
-
-  static const String _assetMoon = 'assets/icons/ramadan/icon_crescent_moon.svg';
-  static const String _assetSun = 'assets/icons/ramadan/icon_sun.svg';
-  static const String _assetWarning = 'assets/icons/ramadan/icon_warning.svg';
-  static const String _assetHands = 'assets/icons/ramadan/icon_praying_hands.svg';
-  static const String _assetSparkles = 'assets/icons/ramadan/icon_sparkles.svg';
-
-  static List<_AccordionItem> get _items => [
-    _AccordionItem(
-      title: 'What is Ramadan?',
-      subtitle: 'Understanding the blessed month',
-      svgAsset: _assetMoon,
-      iconColor: _RamadanIconColors.moonSun,
-      body:
-          'Ramadan is the ninth month of the Islamic calendar, observed by Muslims worldwide as a month of fasting, prayer, reflection, and community. It commemorates the first revelation of the Quran to the Prophet Muhammad (peace be upon him). Fasting from dawn until sunset is one of the Five Pillars of Islam.',
-    ),
-    _AccordionItem(
-      title: 'How to Fast',
-      subtitle: 'A step-by-step guide to fasting',
-      svgAsset: _assetSun,
-      iconColor: _RamadanIconColors.moonSun,
-      body:
-          'Intention (niyyah): Make the intention to fast before dawn. Suhoor: Eat a pre-dawn meal before Fajr. Abstain: Do not eat, drink, or engage in marital relations from dawn until sunset. Iftar: Break the fast at sunset, traditionally with dates and water. Maintain good conduct and avoid backbiting and arguments.',
-    ),
-    _AccordionItem(
-      title: 'What Breaks the Fast',
-      subtitle: 'Clear list of what invalidates fasting',
-      svgAsset: _assetWarning,
-      iconColor: _RamadanIconColors.warning,
-      body:
-          'Eating or drinking intentionally breaks the fast. Injections that provide nutrition, smoking, and marital relations during fasting hours also invalidate the fast. Vomiting intentionally breaks the fast; unintentional vomiting does not. Unintentional eating or drinking (e.g., forgetting) does not break the fast according to many scholars.',
-    ),
-    _AccordionItem(
-      title: 'Ramadan Duas',
-      subtitle: 'Essential supplications for Ramadan',
-      svgAsset: _assetHands,
-      iconColor: _RamadanIconColors.prayingHands,
-      body:
-          'Dua for breaking fast: "Allahumma laka sumtu wa bika aamantu wa alayka tawakkaltu wa ala rizqika aftartu." (O Allah, I fasted for You, I believe in You, I put my trust in You, and I break my fast with Your provision.) Seek Laylatul Qadr and increase dhikr and Quran recitation throughout the month.',
-    ),
-    _AccordionItem(
-      title: 'Laylatul Qadr',
-      subtitle: 'The Night of Power',
-      svgAsset: _assetSparkles,
-      iconColor: _RamadanIconColors.sparkles,
-      body:
-          'Laylatul Qadr is the night when the Quran was first revealed. It is better than a thousand months in reward. It is commonly sought in the last ten nights of Ramadan, on the odd nights (21st, 23rd, 25th, 27th, 29th). Spend the night in prayer, supplication, and remembrance of Allah.',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
-    if (kDebugMode) {
-      debugPrint('RamadanGuideScreen build');
-      if (!_debugChecklistPrinted) {
-        _debugChecklistPrinted = true;
-        _printDebugChecklist();
-      }
-    }
     final colorScheme = Theme.of(context).colorScheme;
     final bg = colorScheme.surface;
+    final listAsync = ref.watch(ramadanGuideListProvider);
 
     return Scaffold(
       backgroundColor: bg,
@@ -119,31 +59,45 @@ class _RamadanGuidePageState extends State<RamadanGuidePage> {
                       constraints: const BoxConstraints(
                         maxWidth: HomeLayout.maxContentWidth,
                       ),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.fromLTRB(
-                          HomeLayout.contentPaddingHorizontal,
-                          AppSpacing.md,
-                          HomeLayout.contentPaddingHorizontal,
-                          AppSpacing.xl2,
+                      child: listAsync.when(
+                        data: (List<RamadanGuideItemModel> items) {
+                          if (items.isEmpty) {
+                            return _buildEmpty(context);
+                          }
+                          return SingleChildScrollView(
+                            padding: const EdgeInsets.fromLTRB(
+                              HomeLayout.contentPaddingHorizontal,
+                              AppSpacing.md,
+                              HomeLayout.contentPaddingHorizontal,
+                              AppSpacing.xl2,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                for (int i = 0; i < items.length; i++) ...[
+                                  if (i > 0) const SizedBox(height: AppSpacing.sm),
+                                  _RamadanAccordionCard(
+                                    item: items[i],
+                                    isExpanded: _expandedIndex == i,
+                                    onTap: () {
+                                      setState(() {
+                                        _expandedIndex =
+                                            _expandedIndex == i ? null : i;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ],
+                            ),
+                          );
+                        },
+                        loading: () => const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(AppSpacing.xl),
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            for (int i = 0; i < _items.length; i++) ...[
-                              if (i > 0) const SizedBox(height: AppSpacing.sm),
-                              _RamadanAccordionCard(
-                                item: _items[i],
-                                isExpanded: _expandedIndex == i,
-                                onTap: () {
-                                  setState(() {
-                                    _expandedIndex =
-                                        _expandedIndex == i ? null : i;
-                                  });
-                                },
-                              ),
-                            ],
-                          ],
-                        ),
+                        error: (err, st) => _buildError(context, err),
                       ),
                     ),
                   ),
@@ -157,6 +111,7 @@ class _RamadanGuidePageState extends State<RamadanGuidePage> {
   }
 
   Widget _buildAppBar(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
@@ -189,11 +144,11 @@ class _RamadanGuidePageState extends State<RamadanGuidePage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Ramadan Guide',
+                  l10n.ramadanGuideTitle,
                   style: AppTypography.h2(color: colorScheme.onSurface),
                 ),
                 Text(
-                  'Prepare for the blessed month',
+                  l10n.prepareForTheBlessedMonth,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),
@@ -206,49 +161,59 @@ class _RamadanGuidePageState extends State<RamadanGuidePage> {
     );
   }
 
-  void _printDebugChecklist() {
-    debugPrint('');
-    debugPrint('═══════════════════════════════════════════════════════════');
-    debugPrint('CHECKLIST:');
-    debugPrint('  [ ] Home CTA opens /ramadan');
-    debugPrint('  [ ] Ramadan UI matches screenshot (appbar + 5 accordions + dotted bg)');
-    debugPrint('  [ ] Icons match screenshot (moon/sun/warning/hands/sparkles)');
-    debugPrint('  [ ] No exceptions/overflows on Web');
-    debugPrint('  [ ] Back works');
-    debugPrint('FILES CHANGED:');
-    debugPrint('  - lib/features/home/presentation/pages/ramadan_guide_page.dart');
-    debugPrint('  - lib/app/router.dart');
-    debugPrint('  - lib/features/home/presentation/pages/home_dashboard_page.dart');
-    debugPrint('  - pubspec.yaml');
-    debugPrint('ASSETS ADDED:');
-    debugPrint('  - assets/icons/ramadan/icon_crescent_moon.svg');
-    debugPrint('  - assets/icons/ramadan/icon_sun.svg');
-    debugPrint('  - assets/icons/ramadan/icon_warning.svg');
-    debugPrint('  - assets/icons/ramadan/icon_praying_hands.svg');
-    debugPrint('  - assets/icons/ramadan/icon_sparkles.svg');
-    debugPrint('SEARCH RESULTS:');
-    debugPrint('  Keywords: ramadan, RamadanGuidePage, /ramadan, icons, assets,');
-    debugPrint('            flutter_svg, moon, sun, warning, praying hands, sparkles');
-    debugPrint('  Files opened: router.dart, home_dashboard_page.dart, home_layout.dart,');
-    debugPrint('    pubspec.yaml, ramadan_guide_page.dart');
-    debugPrint('═══════════════════════════════════════════════════════════');
-    debugPrint('');
+  Widget _buildEmpty(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(LucideIcons.bookOpen,
+                size: 48, color: Theme.of(context).colorScheme.outline),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              l10n.ramadanGuideEmpty,
+              textAlign: TextAlign.center,
+              style: AppTypography.body(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-}
 
-class _AccordionItem {
-  const _AccordionItem({
-    required this.title,
-    required this.subtitle,
-    required this.svgAsset,
-    required this.iconColor,
-    required this.body,
-  });
-  final String title;
-  final String subtitle;
-  final String svgAsset;
-  final Color iconColor;
-  final String body;
+  Widget _buildError(BuildContext context, Object err) {
+    final l10n = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(LucideIcons.alertCircle,
+                size: 48, color: Theme.of(context).colorScheme.error),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              l10n.ramadanGuideError,
+              textAlign: TextAlign.center,
+              style: AppTypography.body(
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            FilledButton.icon(
+              onPressed: () => ref.invalidate(ramadanGuideListProvider),
+              icon: const Icon(LucideIcons.refreshCw, size: 18),
+              label: Text(l10n.actionRetry),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _RamadanAccordionCard extends StatelessWidget {
@@ -258,13 +223,15 @@ class _RamadanAccordionCard extends StatelessWidget {
     required this.onTap,
   });
 
-  final _AccordionItem item;
+  final RamadanGuideItemModel item;
   final bool isExpanded;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final svgPath = ramadanSvgAssetFromKey(item.icon);
+    final iconColor = ramadanIconColorFromKey(item.icon);
 
     return Material(
       color: Colors.transparent,
@@ -295,19 +262,25 @@ class _RamadanAccordionCard extends StatelessWidget {
                       height: 40,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: item.iconColor.withValues(alpha: 0.2),
+                        color: iconColor.withValues(alpha: 0.2),
                         borderRadius:
                             BorderRadius.circular(AppRadius.md),
                       ),
-                      child: SvgPicture.asset(
-                        item.svgAsset,
-                        width: 22,
-                        height: 22,
-                        colorFilter: ColorFilter.mode(
-                          item.iconColor,
-                          BlendMode.srcIn,
-                        ),
-                      ),
+                      child: svgPath != null
+                          ? SvgPicture.asset(
+                              svgPath,
+                              width: 22,
+                              height: 22,
+                              colorFilter: ColorFilter.mode(
+                                iconColor,
+                                BlendMode.srcIn,
+                              ),
+                            )
+                          : Icon(
+                              iconDataFromKey(item.icon),
+                              size: 22,
+                              color: iconColor,
+                            ),
                     ),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
@@ -322,7 +295,7 @@ class _RamadanAccordionCard extends StatelessWidget {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            item.subtitle,
+                            item.description,
                             style: AppTypography.bodySm(
                               color: colorScheme.onSurface
                                   .withValues(alpha: 0.7),
@@ -346,7 +319,7 @@ class _RamadanAccordionCard extends StatelessWidget {
                     color: colorScheme.outline.withValues(alpha: 0.12),
                   ),
                   Text(
-                    item.body,
+                    item.content,
                     style: AppTypography.body(
                       color: colorScheme.onSurface,
                     ),

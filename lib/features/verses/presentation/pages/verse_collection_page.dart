@@ -271,21 +271,6 @@ class VerseCollectionPage extends ConsumerWidget {
                   );
                 },
               ),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.volume2,
-                label: AppLocalizations.of(context)!.actionListen,
-                colorScheme: colorScheme,
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.listenComingSoon),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
             ],
           ),
         ],

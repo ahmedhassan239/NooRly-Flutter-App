@@ -174,17 +174,6 @@ class _ContentCard extends StatelessWidget {
                   colorScheme: colorScheme,
                 ),
               ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: _InspirationActionButton(
-                  icon: LucideIcons.volume2,
-                  label: AppLocalizations.of(context)!.actionListen,
-                  onPressed: () {
-                    // TODO(username): Integrate TTS or audio when available
-                  },
-                  colorScheme: colorScheme,
-                ),
-              ),
             ],
           ),
         ],
