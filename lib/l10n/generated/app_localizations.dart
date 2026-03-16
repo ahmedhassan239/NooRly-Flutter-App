@@ -2479,6 +2479,300 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Islam date'**
   String get dashboardOnboardingIslamDate;
+
+  /// No description provided for @notificationSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Settings'**
+  String get notificationSettings;
+
+  /// No description provided for @notificationsPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer Reminders'**
+  String get notificationsPrayer;
+
+  /// No description provided for @notificationsPrayerDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Get reminded at each prayer time'**
+  String get notificationsPrayerDesc;
+
+  /// No description provided for @notificationsPrayerAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All Prayer Reminders'**
+  String get notificationsPrayerAll;
+
+  /// No description provided for @notificationsFajr.
+  ///
+  /// In en, this message translates to:
+  /// **'Fajr'**
+  String get notificationsFajr;
+
+  /// No description provided for @notificationsDhuhr.
+  ///
+  /// In en, this message translates to:
+  /// **'Dhuhr'**
+  String get notificationsDhuhr;
+
+  /// No description provided for @notificationsAsr.
+  ///
+  /// In en, this message translates to:
+  /// **'Asr'**
+  String get notificationsAsr;
+
+  /// No description provided for @notificationsMaghrib.
+  ///
+  /// In en, this message translates to:
+  /// **'Maghrib'**
+  String get notificationsMaghrib;
+
+  /// No description provided for @notificationsIsha.
+  ///
+  /// In en, this message translates to:
+  /// **'Isha'**
+  String get notificationsIsha;
+
+  /// No description provided for @notificationsTimingMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification timing'**
+  String get notificationsTimingMode;
+
+  /// No description provided for @notificationsTimingBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before Adhan'**
+  String get notificationsTimingBefore;
+
+  /// No description provided for @notificationsTimingAt.
+  ///
+  /// In en, this message translates to:
+  /// **'At Adhan'**
+  String get notificationsTimingAt;
+
+  /// No description provided for @notificationsTimingAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After Adhan'**
+  String get notificationsTimingAfter;
+
+  /// No description provided for @notificationsOffsetMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String notificationsOffsetMinutes(int minutes);
+
+  /// No description provided for @notificationsLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson Reminders'**
+  String get notificationsLesson;
+
+  /// No description provided for @notificationsLessonDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily reminders to continue your journey'**
+  String get notificationsLessonDesc;
+
+  /// No description provided for @notificationsLessonMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily lesson reminder'**
+  String get notificationsLessonMorning;
+
+  /// No description provided for @notificationsLessonTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder time'**
+  String get notificationsLessonTime;
+
+  /// No description provided for @notificationsLessonEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening reminder (if not completed)'**
+  String get notificationsLessonEvening;
+
+  /// No description provided for @notificationsStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak reminder'**
+  String get notificationsStreak;
+
+  /// No description provided for @notificationsDhikr.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhkar Reminders'**
+  String get notificationsDhikr;
+
+  /// No description provided for @notificationsDhikrDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning, evening and sleep remembrances'**
+  String get notificationsDhikrDesc;
+
+  /// No description provided for @notificationsMorningAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning Adhkar'**
+  String get notificationsMorningAdhkar;
+
+  /// No description provided for @notificationsEveningAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening Adhkar'**
+  String get notificationsEveningAdhkar;
+
+  /// No description provided for @notificationsSleepAdhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep Adhkar'**
+  String get notificationsSleepAdhkar;
+
+  /// No description provided for @notificationsSleepAdhkarTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep adhkar time'**
+  String get notificationsSleepAdhkarTime;
+
+  /// No description provided for @notificationsRandomDhikr.
+  ///
+  /// In en, this message translates to:
+  /// **'Random Dhikr Reminders'**
+  String get notificationsRandomDhikr;
+
+  /// No description provided for @notificationsRandomDhikrFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency per day'**
+  String get notificationsRandomDhikrFrequency;
+
+  /// No description provided for @notificationsMilestones.
+  ///
+  /// In en, this message translates to:
+  /// **'Milestones & Occasions'**
+  String get notificationsMilestones;
+
+  /// No description provided for @notificationsMilestonesDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Celebrate achievements and Islamic occasions'**
+  String get notificationsMilestonesDesc;
+
+  /// No description provided for @notificationsAchievements.
+  ///
+  /// In en, this message translates to:
+  /// **'Achievement notifications'**
+  String get notificationsAchievements;
+
+  /// No description provided for @notificationsOccasions.
+  ///
+  /// In en, this message translates to:
+  /// **'Special occasions (Friday, Ramadan, Eid)'**
+  String get notificationsOccasions;
+
+  /// No description provided for @notificationsSupportReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Support reminders'**
+  String get notificationsSupportReminders;
+
+  /// No description provided for @notificationsQuietHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Quiet Hours'**
+  String get notificationsQuietHours;
+
+  /// No description provided for @notificationsQuietHoursDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications during this period'**
+  String get notificationsQuietHoursDesc;
+
+  /// No description provided for @notificationsQuietHoursEnable.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable quiet hours'**
+  String get notificationsQuietHoursEnable;
+
+  /// No description provided for @notificationsQuietStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start time'**
+  String get notificationsQuietStart;
+
+  /// No description provided for @notificationsQuietEnd.
+  ///
+  /// In en, this message translates to:
+  /// **'End time'**
+  String get notificationsQuietEnd;
+
+  /// No description provided for @notificationsSoundVibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound & Vibration'**
+  String get notificationsSoundVibration;
+
+  /// No description provided for @notificationsSound.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound'**
+  String get notificationsSound;
+
+  /// No description provided for @notificationsVibration.
+  ///
+  /// In en, this message translates to:
+  /// **'Vibration'**
+  String get notificationsVibration;
+
+  /// No description provided for @notificationsLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Language'**
+  String get notificationsLanguage;
+
+  /// No description provided for @notificationsLangAppLocale.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get notificationsLangAppLocale;
+
+  /// No description provided for @notificationsLangArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic'**
+  String get notificationsLangArabic;
+
+  /// No description provided for @notificationsLangEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get notificationsLangEnglish;
+
+  /// No description provided for @notificationsLangBoth.
+  ///
+  /// In en, this message translates to:
+  /// **'Both'**
+  String get notificationsLangBoth;
+
+  /// No description provided for @notificationsSaveSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification settings saved'**
+  String get notificationsSaveSuccess;
+
+  /// No description provided for @notificationsPermissionRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enable notifications in your device settings to receive reminders'**
+  String get notificationsPermissionRequired;
+
+  /// No description provided for @notificationsEnableButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Enable Notifications'**
+  String get notificationsEnableButton;
 }
 
 class _AppLocalizationsDelegate

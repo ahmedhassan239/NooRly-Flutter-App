@@ -1,116 +1,141 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
-
 /// Prayer Notifications Service
 ///
-/// Handles scheduling and canceling prayer time notifications.
-/// On web, this is a no-op but still allows state management.
+/// Full implementation using flutter_local_notifications + the PrayerReminderScheduler.
+/// On web: all methods are no-ops.
+library;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter_app/core/notifications/notification_service.dart';
+import 'package:flutter_app/core/notifications/schedulers/prayer_reminder_scheduler.dart';
+import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
+import 'package:flutter_app/features/prayer/data/prayer_models.dart';
+
 class PrayerNotificationsService {
   PrayerNotificationsService._();
 
-  static final PrayerNotificationsService _instance = PrayerNotificationsService._();
+  static final PrayerNotificationsService _instance =
+      PrayerNotificationsService._();
   static PrayerNotificationsService get instance => _instance;
 
   bool _initialized = false;
 
-  /// Initialize notification permissions
-  ///
-  /// Returns true if permissions are granted or on web (always true for web)
+  /// Initialize notification permissions.
+  /// Returns true if permissions are granted (or on web, always returns false).
   Future<bool> initialize() async {
-    if (kIsWeb) {
-      _initialized = true;
-      return true;
-    }
+    if (kIsWeb) return false;
 
     try {
-      // TODO: Initialize flutter_local_notifications here when package is added
-      // For now, return true to allow state management
+      await NotificationService.instance.initialize();
       _initialized = true;
       return true;
     } catch (e) {
-      debugPrint('Failed to initialize notifications: $e');
+      debugPrint('[PrayerNotificationsService] Failed to initialize: $e');
       return false;
     }
   }
 
-  /// Request notification permissions
-  ///
-  /// Returns true if permissions are granted
+  /// Request notification permissions from the OS.
   Future<bool> requestPermission() async {
-    if (kIsWeb) {
-      // Web doesn't support local notifications
-      return false;
-    }
-
-    try {
-      // TODO: Request permission using flutter_local_notifications
-      // For now, return false to indicate permission not granted
-      return false;
-    } catch (e) {
-      debugPrint('Failed to request notification permission: $e');
-      return false;
-    }
+    if (kIsWeb) return false;
+    return NotificationService.instance.requestPermission();
   }
 
-  /// Schedule prayer reminders for all prayers
+  /// Schedule prayer reminders for the given list of prayers.
   ///
-  /// This should be called when notifications are enabled.
-  /// It schedules notifications for Fajr, Dhuhr, Asr, Maghrib, and Isha.
-  Future<void> schedulePrayerReminders() async {
-    if (kIsWeb) {
-      // No-op on web
-      return;
-    }
+  /// [prayerList] is the list of today's prayers from todayPrayerListProvider.
+  /// [prefs] is the user's current notification preferences.
+  Future<void> schedulePrayerReminders({
+    required List<PrayerCardData> prayerList,
+    NotificationPreferencesEntity? prefs,
+  }) async {
+    if (kIsWeb) return;
 
     if (!_initialized) {
-      final initialized = await initialize();
-      if (!initialized) {
-        debugPrint('Notifications not initialized, cannot schedule reminders');
+      final ok = await initialize();
+      if (!ok) {
+        debugPrint('[PrayerNotificationsService] Not initialized; cannot schedule');
         return;
       }
     }
 
-    try {
-      // TODO: Implement actual scheduling using flutter_local_notifications
-      // Example structure:
-      // - Get prayer times for today and upcoming days
-      // - Schedule notifications 15 minutes before each prayer
-      // - Use unique IDs for each prayer notification
-      debugPrint('Prayer reminders scheduled');
-    } catch (e) {
-      debugPrint('Failed to schedule prayer reminders: $e');
-    }
-  }
+    final effectivePrefs = prefs ?? const NotificationPreferencesEntity();
 
-  /// Cancel all prayer reminders
-  ///
-  /// This should be called when notifications are muted.
-  Future<void> cancelAllPrayerReminders() async {
-    if (kIsWeb) {
-      // No-op on web
+    if (!effectivePrefs.prayerEnabled) {
+      await cancelAllPrayerReminders();
       return;
     }
 
     try {
-      // TODO: Cancel all scheduled notifications using flutter_local_notifications
-      debugPrint('All prayer reminders canceled');
+      // Convert PrayerCardData to PrayerScheduleInput
+      final inputs = prayerList
+          .where((p) => p.time != null)
+          .map((p) => PrayerScheduleInput(
+                name: _normalizePrayerName(p.name),
+                time: _prayerTime(p),
+              ))
+          .where((i) => i.name.isNotEmpty)
+          .toList();
+
+      await PrayerReminderScheduler.instance.schedule(
+        prayerInputs: inputs,
+        prefs: effectivePrefs,
+      );
+
+      debugPrint('[PrayerNotificationsService] Scheduled ${inputs.length} prayer reminders');
     } catch (e) {
-      debugPrint('Failed to cancel prayer reminders: $e');
+      debugPrint('[PrayerNotificationsService] Failed to schedule prayer reminders: $e');
     }
   }
 
-  /// Check if notifications are enabled at the system level
-  Future<bool> areNotificationsEnabled() async {
-    if (kIsWeb) {
-      return false;
-    }
-
+  /// Cancel all prayer reminders.
+  Future<void> cancelAllPrayerReminders() async {
+    if (kIsWeb) return;
     try {
-      // TODO: Check notification permission status
-      return false;
+      await NotificationService.instance.cancelAll();
+      debugPrint('[PrayerNotificationsService] All prayer reminders cancelled');
     } catch (e) {
-      debugPrint('Failed to check notification status: $e');
-      return false;
+      debugPrint('[PrayerNotificationsService] Failed to cancel reminders: $e');
+    }
+  }
+
+  /// Check if notifications are enabled at the system level.
+  Future<bool> areNotificationsEnabled() async {
+    if (kIsWeb) return false;
+    return NotificationService.instance.areNotificationsEnabled();
+  }
+
+  // -----------------------------------------------------------------------
+  // Helpers
+
+  String _normalizePrayerName(String name) {
+    final lower = name.toLowerCase().trim();
+    if (lower.contains('fajr') || lower.contains('فجر')) return 'fajr';
+    if (lower.contains('dhuhr') || lower.contains('ظهر')) return 'dhuhr';
+    if (lower.contains('asr') || lower.contains('عصر')) return 'asr';
+    if (lower.contains('maghrib') || lower.contains('مغرب')) return 'maghrib';
+    if (lower.contains('isha') || lower.contains('عشاء')) return 'isha';
+    return '';
+  }
+
+  DateTime _prayerTime(PrayerCardData prayer) {
+    // Use timeAsDateTime if available
+    if (prayer.timeAsDateTime != null) return prayer.timeAsDateTime!;
+
+    // Parse from time string e.g. "05:12 AM" or "17:30"
+    final now = DateTime.now();
+    try {
+      final parts = prayer.time.split(RegExp(r'[: ]'));
+      if (parts.length < 2) return now;
+      var hour = int.tryParse(parts[0]) ?? 0;
+      final minute = int.tryParse(parts[1]) ?? 0;
+      if (parts.length >= 3) {
+        final ampm = parts[2].toUpperCase();
+        if (ampm == 'PM' && hour < 12) hour += 12;
+        if (ampm == 'AM' && hour == 12) hour = 0;
+      }
+      return DateTime(now.year, now.month, now.day, hour, minute);
+    } catch (_) {
+      return now;
     }
   }
 }

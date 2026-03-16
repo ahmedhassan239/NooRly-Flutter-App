@@ -68,7 +68,10 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
       final hasPermission = await notificationsService.requestPermission();
       if (hasPermission) {
         await ref.read(notificationMuteProvider.notifier).toggleMute();
-        await notificationsService.schedulePrayerReminders();
+        final prayerList = ref.read(todayPrayerListProvider).valueOrNull ?? [];
+        await notificationsService.schedulePrayerReminders(
+          prayerList: prayerList,
+        );
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

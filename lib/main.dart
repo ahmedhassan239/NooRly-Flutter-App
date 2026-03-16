@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/app/app.dart';
 import 'package:flutter_app/core/cache/cache_manager.dart';
 import 'package:flutter_app/core/config/api_config.dart';
+import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
@@ -53,6 +54,11 @@ void main() async {
 
     // Initialize Hive cache
     await CacheManager.initialize();
+
+    // Initialize local notification service (no-op on web)
+    if (!kIsWeb) {
+      await NotificationService.instance.initialize();
+    }
 
     runApp(
       ProviderScope(

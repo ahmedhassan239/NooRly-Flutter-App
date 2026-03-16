@@ -47,6 +47,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/duas_tab_content.
 import 'package:flutter_app/features/library/presentation/widgets/hadith_tab_view.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/verses_tab_content.dart';
 import 'package:flutter_app/features/not_found/presentation/pages/not_found_page.dart';
+import 'package:flutter_app/features/notifications/presentation/pages/notification_settings_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/about_you_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/current_knowledge_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/welcome_page.dart';
@@ -373,6 +374,11 @@ List<RouteBase> get _appRoutes => [
       path: '/settings',
       name: AppRoutes.settings,
       builder: (context, state) => const SettingsPage(),
+    ),
+    GoRoute(
+      path: '/settings/notifications',
+      name: 'notificationSettings',
+      builder: (context, state) => const NotificationSettingsPage(),
     ),
     GoRoute(
       path: '/edit-profile',

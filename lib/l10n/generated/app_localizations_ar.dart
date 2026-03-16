@@ -1248,4 +1248,155 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get dashboardOnboardingIslamDate => 'تاريخ الإسلام';
+
+  @override
+  String get notificationSettings => 'إعدادات الإشعارات';
+
+  @override
+  String get notificationsPrayer => 'تذكيرات الصلاة';
+
+  @override
+  String get notificationsPrayerDesc => 'تذكير عند دخول وقت كل صلاة';
+
+  @override
+  String get notificationsPrayerAll => 'جميع تذكيرات الصلاة';
+
+  @override
+  String get notificationsFajr => 'الفجر';
+
+  @override
+  String get notificationsDhuhr => 'الظهر';
+
+  @override
+  String get notificationsAsr => 'العصر';
+
+  @override
+  String get notificationsMaghrib => 'المغرب';
+
+  @override
+  String get notificationsIsha => 'العشاء';
+
+  @override
+  String get notificationsTimingMode => 'توقيت الإشعار';
+
+  @override
+  String get notificationsTimingBefore => 'قبل الأذان';
+
+  @override
+  String get notificationsTimingAt => 'عند الأذان';
+
+  @override
+  String get notificationsTimingAfter => 'بعد الأذان';
+
+  @override
+  String notificationsOffsetMinutes(int minutes) {
+    return '$minutes دقيقة';
+  }
+
+  @override
+  String get notificationsLesson => 'تذكيرات الدرس';
+
+  @override
+  String get notificationsLessonDesc => 'تذكيرات يومية لمتابعة رحلتك';
+
+  @override
+  String get notificationsLessonMorning => 'تذكير الدرس اليومي';
+
+  @override
+  String get notificationsLessonTime => 'وقت التذكير';
+
+  @override
+  String get notificationsLessonEvening => 'تذكير مسائي (إن لم تنهِ الدرس)';
+
+  @override
+  String get notificationsStreak => 'تذكير السلسلة';
+
+  @override
+  String get notificationsDhikr => 'تذكيرات الأذكار';
+
+  @override
+  String get notificationsDhikrDesc => 'أذكار الصباح والمساء والنوم';
+
+  @override
+  String get notificationsMorningAdhkar => 'أذكار الصباح';
+
+  @override
+  String get notificationsEveningAdhkar => 'أذكار المساء';
+
+  @override
+  String get notificationsSleepAdhkar => 'أذكار النوم';
+
+  @override
+  String get notificationsSleepAdhkarTime => 'وقت أذكار النوم';
+
+  @override
+  String get notificationsRandomDhikr => 'تذكيرات الذكر العشوائية';
+
+  @override
+  String get notificationsRandomDhikrFrequency => 'عدد المرات يومياً';
+
+  @override
+  String get notificationsMilestones => 'الإنجازات والمناسبات';
+
+  @override
+  String get notificationsMilestonesDesc =>
+      'احتفل بالإنجازات والمناسبات الإسلامية';
+
+  @override
+  String get notificationsAchievements => 'إشعارات الإنجاز';
+
+  @override
+  String get notificationsOccasions => 'المناسبات (الجمعة، رمضان، العيد)';
+
+  @override
+  String get notificationsSupportReminders => 'تذكيرات الدعم';
+
+  @override
+  String get notificationsQuietHours => 'ساعات الهدوء';
+
+  @override
+  String get notificationsQuietHoursDesc => 'لا إشعارات خلال هذه الفترة';
+
+  @override
+  String get notificationsQuietHoursEnable => 'تفعيل ساعات الهدوء';
+
+  @override
+  String get notificationsQuietStart => 'وقت البدء';
+
+  @override
+  String get notificationsQuietEnd => 'وقت الانتهاء';
+
+  @override
+  String get notificationsSoundVibration => 'الصوت والاهتزاز';
+
+  @override
+  String get notificationsSound => 'الصوت';
+
+  @override
+  String get notificationsVibration => 'الاهتزاز';
+
+  @override
+  String get notificationsLanguage => 'لغة الإشعارات';
+
+  @override
+  String get notificationsLangAppLocale => 'لغة التطبيق';
+
+  @override
+  String get notificationsLangArabic => 'العربية';
+
+  @override
+  String get notificationsLangEnglish => 'الإنجليزية';
+
+  @override
+  String get notificationsLangBoth => 'الاثنتان';
+
+  @override
+  String get notificationsSaveSuccess => 'تم حفظ إعدادات الإشعارات';
+
+  @override
+  String get notificationsPermissionRequired =>
+      'يرجى تفعيل الإشعارات من إعدادات الجهاز لتلقي التذكيرات';
+
+  @override
+  String get notificationsEnableButton => 'تفعيل الإشعارات';
 }

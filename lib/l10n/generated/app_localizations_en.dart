@@ -1259,4 +1259,160 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dashboardOnboardingIslamDate => 'Islam date';
+
+  @override
+  String get notificationSettings => 'Notification Settings';
+
+  @override
+  String get notificationsPrayer => 'Prayer Reminders';
+
+  @override
+  String get notificationsPrayerDesc => 'Get reminded at each prayer time';
+
+  @override
+  String get notificationsPrayerAll => 'All Prayer Reminders';
+
+  @override
+  String get notificationsFajr => 'Fajr';
+
+  @override
+  String get notificationsDhuhr => 'Dhuhr';
+
+  @override
+  String get notificationsAsr => 'Asr';
+
+  @override
+  String get notificationsMaghrib => 'Maghrib';
+
+  @override
+  String get notificationsIsha => 'Isha';
+
+  @override
+  String get notificationsTimingMode => 'Notification timing';
+
+  @override
+  String get notificationsTimingBefore => 'Before Adhan';
+
+  @override
+  String get notificationsTimingAt => 'At Adhan';
+
+  @override
+  String get notificationsTimingAfter => 'After Adhan';
+
+  @override
+  String notificationsOffsetMinutes(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String get notificationsLesson => 'Lesson Reminders';
+
+  @override
+  String get notificationsLessonDesc =>
+      'Daily reminders to continue your journey';
+
+  @override
+  String get notificationsLessonMorning => 'Daily lesson reminder';
+
+  @override
+  String get notificationsLessonTime => 'Reminder time';
+
+  @override
+  String get notificationsLessonEvening =>
+      'Evening reminder (if not completed)';
+
+  @override
+  String get notificationsStreak => 'Streak reminder';
+
+  @override
+  String get notificationsDhikr => 'Adhkar Reminders';
+
+  @override
+  String get notificationsDhikrDesc =>
+      'Morning, evening and sleep remembrances';
+
+  @override
+  String get notificationsMorningAdhkar => 'Morning Adhkar';
+
+  @override
+  String get notificationsEveningAdhkar => 'Evening Adhkar';
+
+  @override
+  String get notificationsSleepAdhkar => 'Sleep Adhkar';
+
+  @override
+  String get notificationsSleepAdhkarTime => 'Sleep adhkar time';
+
+  @override
+  String get notificationsRandomDhikr => 'Random Dhikr Reminders';
+
+  @override
+  String get notificationsRandomDhikrFrequency => 'Frequency per day';
+
+  @override
+  String get notificationsMilestones => 'Milestones & Occasions';
+
+  @override
+  String get notificationsMilestonesDesc =>
+      'Celebrate achievements and Islamic occasions';
+
+  @override
+  String get notificationsAchievements => 'Achievement notifications';
+
+  @override
+  String get notificationsOccasions =>
+      'Special occasions (Friday, Ramadan, Eid)';
+
+  @override
+  String get notificationsSupportReminders => 'Support reminders';
+
+  @override
+  String get notificationsQuietHours => 'Quiet Hours';
+
+  @override
+  String get notificationsQuietHoursDesc =>
+      'No notifications during this period';
+
+  @override
+  String get notificationsQuietHoursEnable => 'Enable quiet hours';
+
+  @override
+  String get notificationsQuietStart => 'Start time';
+
+  @override
+  String get notificationsQuietEnd => 'End time';
+
+  @override
+  String get notificationsSoundVibration => 'Sound & Vibration';
+
+  @override
+  String get notificationsSound => 'Sound';
+
+  @override
+  String get notificationsVibration => 'Vibration';
+
+  @override
+  String get notificationsLanguage => 'Notification Language';
+
+  @override
+  String get notificationsLangAppLocale => 'App language';
+
+  @override
+  String get notificationsLangArabic => 'Arabic';
+
+  @override
+  String get notificationsLangEnglish => 'English';
+
+  @override
+  String get notificationsLangBoth => 'Both';
+
+  @override
+  String get notificationsSaveSuccess => 'Notification settings saved';
+
+  @override
+  String get notificationsPermissionRequired =>
+      'Please enable notifications in your device settings to receive reminders';
+
+  @override
+  String get notificationsEnableButton => 'Enable Notifications';
 }

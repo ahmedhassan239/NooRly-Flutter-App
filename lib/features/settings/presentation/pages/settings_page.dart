@@ -100,8 +100,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   ];
 
   Widget _buildNotificationsSection(AppLocalizations l10n) {
-    final notificationsMaster = ref.watch(notificationsEnabledConfigProvider);
-    final prayerDefault = ref.watch(prayerNotificationsDefaultProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -110,36 +108,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: SettingsCard(
             children: [
-              SettingsSwitchTile(
-                icon: LucideIcons.bell,
-                title: l10n.settingsNotifications,
-                subtitle: 'Master switch from app config (notifications_enabled)',
-                value: notificationsMaster,
-                onChanged: (_) {},
-              ),
-              SettingsSwitchTile(
-                icon: LucideIcons.bell,
-                title: l10n.settingsPrayerReminders,
-                subtitle: 'Get notified before each prayer (default from config: ${prayerDefault ? "on" : "off"})',
-                value: notificationsMaster ? _prayerReminders : false,
-                onChanged: (value) {
-                  if (!notificationsMaster) return;
-                  setState(() => _prayerReminders = value);
-                },
-              ),
-              SettingsSwitchTile(
-                icon: LucideIcons.bell,
-                title: l10n.settingsDailyLesson,
-                subtitle: 'Reminder to complete daily lesson',
-                value: _dailyLesson,
-                onChanged: (value) => setState(() => _dailyLesson = value),
-              ),
-              SettingsSwitchTile(
-                icon: LucideIcons.bell,
-                title: l10n.settingsMilestoneAlerts,
-                subtitle: 'Celebrate when you reach milestones',
-                value: _milestoneAlerts,
-                onChanged: (value) => setState(() => _milestoneAlerts = value),
+              SettingsTile(
+                leading: const Icon(LucideIcons.bell),
+                title: l10n.notificationSettings,
+                subtitle: l10n.notificationsPrayerDesc,
+                trailing: const Icon(LucideIcons.chevronRight),
+                onTap: () => context.push('/settings/notifications'),
                 showDivider: false,
               ),
             ],

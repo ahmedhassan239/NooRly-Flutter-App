@@ -1,9 +1,12 @@
 import 'package:app_links/app_links.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/app/router.dart';
 import 'package:flutter_app/app/theme_provider.dart';
 import 'package:flutter_app/core/deep_link/deep_link_handler.dart';
+import 'package:flutter_app/core/notifications/notification_router.dart';
+import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/design_system/app_theme.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
@@ -34,6 +37,14 @@ class _AppState extends ConsumerState<App> {
       ref.read(authProvider.notifier).initialize();
       _handleInitialDeepLink();
       _listenToDeepLinks();
+
+      // Wire NotificationRouter to the GoRouter so notification taps can navigate.
+      if (!kIsWeb) {
+        final router = ref.read(routerProvider);
+        NotificationRouter.instance.init(router);
+        // Flush any notification tap that happened during cold start.
+        NotificationService.instance.flushPendingTap();
+      }
     });
   }
 
