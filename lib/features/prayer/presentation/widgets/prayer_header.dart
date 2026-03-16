@@ -98,12 +98,14 @@ class PrayerHeader extends StatelessWidget {
   }
 }
 
-/// Format DateTime to "HH:mm" (24h) or "h:mm a" for display.
-String formatTimeForDisplay(DateTime dateTime) {
-  return DateFormat('HH:mm').format(dateTime);
+/// Format DateTime to "HH:mm" (24h) for display. Uses [locale] for script (e.g. Arabic digits when 'ar').
+String formatTimeForDisplay(DateTime dateTime, [String? locale]) {
+  final loc = locale ?? 'en';
+  return DateFormat('HH:mm', loc).format(dateTime);
 }
 
-/// Format DateTime to short date e.g. "Tue, Jan 13".
-String formatDateForDisplay(DateTime date) {
-  return DateFormat('EEE, MMM d').format(date);
+/// Format DateTime to short date (e.g. "Tue, Jan 13" or "الأحد، ١٥ مارس" for ar).
+String formatDateForDisplay(DateTime date, [String? locale]) {
+  final loc = locale ?? 'en';
+  return DateFormat('EEE, MMM d', loc).format(date);
 }

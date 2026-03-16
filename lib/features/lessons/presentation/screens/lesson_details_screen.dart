@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_app/features/lessons/presentation/providers/lesson_detai
 import 'package:flutter_app/features/lessons/presentation/state/lesson_details_state.dart';
 import 'package:flutter_app/features/lessons/presentation/widgets/lesson_renderer.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class LessonDetailsScreen extends ConsumerWidget {
   const LessonDetailsScreen({super.key, required this.lessonId});
@@ -52,7 +55,7 @@ class LessonDetailsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 AppButton(
-                  text: 'Retry',
+                  text: AppLocalizations.of(context)!.lessonRetry,
                   onPressed: () => ref.read(lessonDetailsProvider(lessonId).notifier).load(),
                 ),
               ],
@@ -135,6 +138,8 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final l10n = AppLocalizations.of(context)!;
     final lesson = widget.lesson;
     final dayNumber = lesson.dayNumber;
     final weekNumber = lesson.weekNumber;
@@ -142,6 +147,9 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
     final subtitle = lesson.description;
     final readMinutes = lesson.readTime > 0 ? lesson.readTime : 0;
     final categoryLabel = _categoryLabel(lesson.category);
+    final dayChipLabel = toLocaleDigits(l10n.journeyDayLabel(dayNumber), locale);
+    final weekChipLabel = toLocaleDigits(l10n.journeyWeekLabel(weekNumber), locale);
+    final minReadLabel = toLocaleDigits(l10n.journeyDurationMinRead(readMinutes), locale);
     return Column(
       children: [
         Expanded(
@@ -162,11 +170,11 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                     spacing: AppSpacing.sm,
                     runSpacing: AppSpacing.sm,
                     children: [
-                      _Chip(label: 'Day $dayNumber', colorScheme: colorScheme),
-                      _Chip(label: 'Week $weekNumber', colorScheme: colorScheme),
+                      _Chip(label: dayChipLabel, colorScheme: colorScheme),
+                      _Chip(label: weekChipLabel, colorScheme: colorScheme),
                       if (widget.isCompleted)
                         _Chip(
-                          label: 'Completed',
+                          label: l10n.lessonCompleted,
                           colorScheme: colorScheme,
                           isAccent: true,
                         ),
@@ -194,7 +202,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '$readMinutes min read',
+                        minReadLabel,
                         style: AppTypography.caption(
                           color: colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
@@ -229,7 +237,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
 
                   // Personal Reflection
                   Text(
-                    'Personal Reflection',
+                    l10n.lessonPersonalReflection,
                     style: AppTypography.h3(color: colorScheme.onSurface),
                   ),
                   const SizedBox(height: AppSpacing.sm),
@@ -242,7 +250,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                           );
                     },
                     decoration: InputDecoration(
-                      hintText: 'Write your thoughts...',
+                      hintText: l10n.lessonWriteThoughts,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.input),
                       ),
@@ -254,7 +262,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                     children: [
                       if (widget.reflectionSaved)
                         Text(
-                          'Saved',
+                          l10n.lessonSaved,
                           style: AppTypography.caption(color: AppColors.accentGreen),
                         )
                       else
@@ -264,10 +272,10 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                                 .read(lessonDetailsProvider(widget.lessonId).notifier)
                                 .saveReflection(_reflectionController.text);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Reflection saved')),
+                              SnackBar(content: Text(l10n.lessonReflectionSaved)),
                             );
                           },
-                          child: const Text('Save reflection'),
+                          child: Text(l10n.lessonSaveReflection),
                         ),
                     ],
                   ),
@@ -385,12 +393,12 @@ class _BottomBar extends ConsumerWidget {
                           children: [
                             Icon(LucideIcons.check, size: 18, color: AppColors.accentGreen),
                             const SizedBox(width: 8),
-                            const Text('Completed'),
+                            Text(AppLocalizations.of(context)!.lessonCompleted),
                           ],
                         ),
                       )
                     : AppButton(
-                        text: 'Mark as Completed',
+                        text: AppLocalizations.of(context)!.lessonMarkAsCompleted,
                         onPressed: () async {
                           await notifier.completeLesson();
                           ref.invalidate(journeyProvider);
@@ -403,7 +411,9 @@ class _BottomBar extends ConsumerWidget {
                 width: double.infinity,
                 height: 48,
                 child: AppButton(
-                  text: nextLessonId != null ? 'Next Lesson →' : 'No more lessons',
+                  text: nextLessonId != null
+                      ? AppLocalizations.of(context)!.lessonNextLesson
+                      : AppLocalizations.of(context)!.lessonNoMoreLessons,
                   onPressed: nextLessonId != null
                       ? () => context.push('/lessons/$nextLessonId')
                       : null,

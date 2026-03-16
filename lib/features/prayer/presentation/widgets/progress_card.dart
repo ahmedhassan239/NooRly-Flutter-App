@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -20,6 +21,11 @@ class ProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
+    final fraction = toLocaleDigits(progress.fraction, locale);
+    final completedStr = toLocaleDigits(progress.completed.toString(), locale);
+    final missedStr = toLocaleDigits(progress.missed.toString(), locale);
+    final remainingStr = toLocaleDigits(progress.remaining.toString(), locale);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Container(
@@ -48,7 +54,7 @@ class ProgressCard extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  progress.fraction,
+                  fraction,
                   style: AppTypography.bodySm(color: colorScheme.primary)
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
@@ -59,7 +65,7 @@ class ProgressCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: _StatBox(
-                    value: progress.completed.toString(),
+                    value: completedStr,
                     label: AppLocalizations.of(context)!.prayerCompleted,
                     valueColor: colorScheme.primary,
                     colorScheme: colorScheme,
@@ -68,7 +74,7 @@ class ProgressCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatBox(
-                    value: progress.missed.toString(),
+                    value: missedStr,
                     label: AppLocalizations.of(context)!.prayerMissed,
                     valueColor: colorScheme.error,
                     colorScheme: colorScheme,
@@ -77,7 +83,7 @@ class ProgressCard extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: _StatBox(
-                    value: progress.remaining.toString(),
+                    value: remainingStr,
                     label: AppLocalizations.of(context)!.prayerRemaining,
                     valueColor: colorScheme.onSurface,
                     colorScheme: colorScheme,

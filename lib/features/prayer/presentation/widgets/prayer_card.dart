@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -21,11 +22,16 @@ class PrayerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final locale = Localizations.localeOf(context).languageCode;
     final l10n = AppLocalizations.of(context)!;
     final isNext = data.status == PrayerStatus.next;
     final isDone = data.status == PrayerStatus.done;
     final displayName = _localizedPrayerName(l10n, data.name);
     final remainingText = _localizedRemaining(context, data);
+    final timeLabel = toLocaleDigits(data.time, locale);
+    final remainingLabel = remainingText != null && remainingText.isNotEmpty
+        ? toLocaleDigits(remainingText, locale)
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -69,14 +75,14 @@ class PrayerCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
-                data.time,
+                timeLabel,
                 style: AppTypography.body(
                   color: isNext ? colorScheme.primary : colorScheme.onSurface,
                 ).copyWith(fontWeight: FontWeight.w600),
               ),
-              if (remainingText != null && remainingText.isNotEmpty)
+              if (remainingLabel != null && remainingLabel.isNotEmpty)
                 Text(
-                  remainingText,
+                  remainingLabel,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withValues(alpha: 0.7),
                   ),

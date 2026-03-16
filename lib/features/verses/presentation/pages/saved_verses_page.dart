@@ -293,6 +293,11 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
     );
   }
 
+  static bool _isTextDifferent(String? arabic, String secondary) {
+    if (arabic == null || arabic.trim().isEmpty) return secondary.trim().isNotEmpty;
+    return secondary.trim() != arabic.trim();
+  }
+
   Widget _buildVerseCard(
     BuildContext context,
     WidgetRef ref,
@@ -300,6 +305,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
     ColorScheme colorScheme,
   ) {
     final text = verse.text ?? verse.textEn ?? verse.textAr ?? '';
+    final showSecondary = _isTextDifferent(verse.textAr, text);
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
     final refStr = verse.referenceDisplay(isArabic);
 
@@ -324,7 +330,7 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Text(
-                  'Verse',
+                  AppLocalizations.of(context)!.savedTypeVerse,
                   style: AppTypography.caption(
                     color: colorScheme.primary,
                   ).copyWith(fontWeight: FontWeight.w500),
@@ -341,13 +347,14 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
               textDirection: TextDirection.rtl,
             ),
           ],
-          if (verse.textAr != null && verse.textAr!.isNotEmpty)
+          if (verse.textAr != null && verse.textAr!.isNotEmpty && showSecondary)
             const SizedBox(height: AppSpacing.md),
-          Text(
-            '"$text"',
-            style: AppTypography.bodySm(color: colorScheme.onSurface),
-            textAlign: TextAlign.center,
-          ),
+          if (showSecondary)
+            Text(
+              '"$text"',
+              style: AppTypography.bodySm(color: colorScheme.onSurface),
+              textAlign: TextAlign.center,
+            ),
           if (refStr.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
             Center(
@@ -374,9 +381,11 @@ class _SavedVersesPageState extends ConsumerState<SavedVersesPage> {
                 label: 'Copy',
                 colorScheme: colorScheme,
                 onTap: () {
-                  final toCopy = verse.textAr != null
+                  final toCopy = verse.textAr != null && showSecondary
                       ? '${verse.textAr}\n\n$text\n\n— $refStr'
-                      : '$text\n\n— $refStr';
+                      : (verse.textAr ?? text).trim().isNotEmpty
+                          ? '${verse.textAr ?? text}\n\n— $refStr'
+                          : '$text\n\n— $refStr';
                   Clipboard.setData(ClipboardData(text: toCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

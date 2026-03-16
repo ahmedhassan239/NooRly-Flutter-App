@@ -91,8 +91,10 @@ class LessonVerseCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                   ],
-                  // Translation
-                  if (block.translation.isNotEmpty)
+                  // Translation (only if different from Arabic to avoid duplication)
+                  if (block.translation.trim().isNotEmpty &&
+                      (block.arabic == null ||
+                          block.arabic!.trim() != block.translation.trim()))
                     SelectableText(
                       '"${block.translation}"',
                       style: AppTypography.body(

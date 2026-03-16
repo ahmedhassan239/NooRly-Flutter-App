@@ -14,8 +14,8 @@ abstract class LessonsRepository {
   /// Get single lesson by day number
   Future<LessonEntity?> getLessonByDay(int dayNumber);
 
-  /// Get single lesson by ID
-  Future<LessonEntity?> getLessonById(String id);
+  /// Get single lesson by ID. [locale] (e.g. 'ar', 'en') is used for API content language.
+  Future<LessonEntity?> getLessonById(String id, {String? locale});
 
   /// Mark lesson as complete (by day number).
   Future<void> completeLesson(int dayNumber);

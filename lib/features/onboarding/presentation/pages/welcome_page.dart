@@ -58,7 +58,7 @@ class WelcomePage extends ConsumerWidget {
       return _StartupErrorScreen(
         message: auth.errorMessage!,
         onRetry: () => ref.read(authProvider.notifier).initialize(),
-        onGuest: () => context.go('/onboarding/shahada-date'),
+        onGuest: () => context.go('/onboarding/about-you'),
         onLogin: () => context.go('/login'),
       );
     }
@@ -265,7 +265,7 @@ class WelcomePage extends ConsumerWidget {
         const SizedBox(height: 16),
 
         TextButton.icon(
-          onPressed: () => context.go('/onboarding/shahada-date'),
+          onPressed: () => context.go('/onboarding/about-you'),
           icon: Icon(
             LucideIcons.user,
             size: 18,

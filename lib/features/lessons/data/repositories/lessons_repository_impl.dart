@@ -45,14 +45,15 @@ class LessonsRepositoryImpl implements LessonsRepository {
   }
 
   @override
-  Future<LessonEntity?> getLessonById(String id) async {
+  Future<LessonEntity?> getLessonById(String id, {String? locale}) async {
     final client = _apiClient;
     if (client == null) return null;
+    final lang = locale?.isNotEmpty == true ? locale! : 'en';
     try {
       final response = await client.get<Map<String, dynamic>>(
         LessonsEndpoints.detail(id),
         queryParameters: <String, dynamic>{
-          'lang': 'en',
+          'lang': lang,
           'include': 'quranAyahs,hadithItems',
         },
       );

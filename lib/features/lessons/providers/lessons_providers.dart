@@ -1,3 +1,4 @@
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/lessons/data/datasources/lessons_local_datasource.dart';
 import 'package:flutter_app/features/lessons/data/repositories/lessons_repository_impl.dart';
@@ -45,10 +46,11 @@ final lessonByDayProvider = FutureProvider.family<LessonEntity?, int>(
   },
 );
 
-/// Lesson by ID Provider
+/// Lesson by ID Provider (uses app locale for API language).
 final lessonByIdProvider = FutureProvider.family<LessonEntity?, String>(
   (ref, id) async {
     final repository = ref.watch(lessonsRepositoryProvider);
-    return repository.getLessonById(id);
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    return repository.getLessonById(id, locale: locale);
   },
 );

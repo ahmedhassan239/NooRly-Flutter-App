@@ -101,6 +101,15 @@ abstract class OnboardingEndpoints {
   static const String update = '/me/onboarding';
 }
 
+/// Onboarding profile endpoints (persisted profile: display name, journey, goals, preferences).
+abstract class OnboardingProfileEndpoints {
+  /// GET - Get current user's onboarding profile
+  static const String get = '/me/onboarding-profile';
+
+  /// PUT - Create or update onboarding profile
+  static const String update = '/me/onboarding-profile';
+}
+
 /// Home/Dashboard endpoints.
 abstract class HomeEndpoints {
   /// GET - Dashboard data (stats, progress, featured)

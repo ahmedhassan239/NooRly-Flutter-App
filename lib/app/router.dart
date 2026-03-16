@@ -46,10 +46,12 @@ import 'package:flutter_app/features/duas/presentation/widgets/duas_tab_content.
 import 'package:flutter_app/features/library/presentation/widgets/hadith_tab_view.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/verses_tab_content.dart';
 import 'package:flutter_app/features/not_found/presentation/pages/not_found_page.dart';
-import 'package:flutter_app/features/onboarding/presentation/pages/journey_summary_page.dart';
-import 'package:flutter_app/features/onboarding/presentation/pages/learning_goal_page.dart';
-import 'package:flutter_app/features/onboarding/presentation/pages/shahada_date_page.dart';
+import 'package:flutter_app/features/onboarding/presentation/pages/about_you_page.dart';
+import 'package:flutter_app/features/onboarding/presentation/pages/current_knowledge_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/welcome_page.dart';
+import 'package:flutter_app/features/onboarding/presentation/pages/what_brings_you_page.dart';
+import 'package:flutter_app/features/onboarding/presentation/pages/your_preferences_page.dart';
+import 'package:flutter_app/features/onboarding/presentation/pages/your_starting_plan_page.dart';
 import 'package:flutter_app/features/prayer/presentation/pages/prayer_times_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/profile_page.dart';
@@ -64,8 +66,14 @@ import 'package:go_router/go_router.dart';
 // Route Names (for type-safe navigation)
 // ============================================================================
 abstract class AppRoutes {
-  // Onboarding
+  // Onboarding (new flow)
   static const String welcome = 'welcome';
+  static const String onboardingAboutYou = 'onboarding-about-you';
+  static const String onboardingKnowledge = 'onboarding-knowledge';
+  static const String onboardingGoals = 'onboarding-goals';
+  static const String onboardingPreferences = 'onboarding-preferences';
+  static const String onboardingPlan = 'onboarding-plan';
+  // Legacy (kept for redirect compatibility, unused)
   static const String shahadaDate = 'shahada-date';
   static const String learningGoals = 'learning-goals';
   static const String journeySummary = 'journey-summary';
@@ -195,7 +203,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 /// Builds app routes (shared by static router and provider).
 List<RouteBase> get _appRoutes => [
     // ========================================================================
-    // Onboarding Routes
+    // Onboarding Routes (new 6-step flow)
     // ========================================================================
     GoRoute(
       path: '/',
@@ -203,19 +211,29 @@ List<RouteBase> get _appRoutes => [
       builder: (context, state) => const WelcomePage(),
     ),
     GoRoute(
-      path: '/onboarding/shahada-date',
-      name: AppRoutes.shahadaDate,
-      builder: (context, state) => const ShahadaDatePage(),
+      path: '/onboarding/about-you',
+      name: AppRoutes.onboardingAboutYou,
+      builder: (context, state) => const AboutYouPage(),
+    ),
+    GoRoute(
+      path: '/onboarding/knowledge',
+      name: AppRoutes.onboardingKnowledge,
+      builder: (context, state) => const CurrentKnowledgePage(),
     ),
     GoRoute(
       path: '/onboarding/goals',
-      name: AppRoutes.learningGoals,
-      builder: (context, state) => const LearningGoalPage(),
+      name: AppRoutes.onboardingGoals,
+      builder: (context, state) => const WhatBringsYouPage(),
     ),
     GoRoute(
-      path: '/onboarding/summary',
-      name: AppRoutes.journeySummary,
-      builder: (context, state) => const JourneySummaryPage(),
+      path: '/onboarding/preferences',
+      name: AppRoutes.onboardingPreferences,
+      builder: (context, state) => const YourPreferencesPage(),
+    ),
+    GoRoute(
+      path: '/onboarding/plan',
+      name: AppRoutes.onboardingPlan,
+      builder: (context, state) => const YourStartingPlanPage(),
     ),
 
     // ========================================================================
@@ -700,9 +718,7 @@ String? _redirect(Ref ref, GoRouterState state) {
     }
 
     if (_isProtectedRoute(loc)) {
-      if (onboarding?.needsShahadaDate ?? true) return '/onboarding/shahada-date';
-      if (onboarding?.needsGoals ?? true) return '/onboarding/goals';
-      return '/onboarding/summary';
+      return '/onboarding/about-you';
     }
 
     return null;

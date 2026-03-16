@@ -216,6 +216,44 @@ class AppLocalizationsAr extends AppLocalizations {
   String get journeyCompletePreviousFirst => 'أكمل الدروس السابقة أولاً.';
 
   @override
+  String journeyWeekLabel(int week) {
+    return 'الأسبوع $week';
+  }
+
+  @override
+  String get lessonMarkAsCompleted => 'تحديد كمكتمل';
+
+  @override
+  String get lessonCompleted => 'مكتمل';
+
+  @override
+  String get lessonNextLesson => 'الدرس التالي ←';
+
+  @override
+  String get lessonNoMoreLessons => 'لا مزيد من الدروس';
+
+  @override
+  String get lessonPersonalReflection => 'تأمل شخصي';
+
+  @override
+  String get lessonWriteThoughts => 'اكتب أفكارك...';
+
+  @override
+  String get lessonSaveReflection => 'حفظ التأمل';
+
+  @override
+  String get lessonReflectionSaved => 'تم حفظ التأمل';
+
+  @override
+  String get lessonSaved => 'محفوظ';
+
+  @override
+  String get lessonRetry => 'إعادة المحاولة';
+
+  @override
+  String get lessonNotFound => 'الدرس غير موجود';
+
+  @override
   String get prayerNotificationsMuted => 'تم كتم الإشعارات';
 
   @override
@@ -439,8 +477,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String itemCountAdhkar(int count) {
-    return '$count ذكر';
+    return '$count أذكار';
   }
+
+  @override
+  String sayRepetition(int count) {
+    return 'تكرار $count';
+  }
+
+  @override
+  String get adhkarLabel => 'أذكار';
+
+  @override
+  String get translationLabel => 'الترجمة';
+
+  @override
+  String get sourceLabel => 'المصدر';
 
   @override
   String get savedCardDuas => 'الأدعية المحفوظة';
@@ -833,4 +885,340 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get startupPleaseReopen => 'يرجى إغلاق التطبيق وإعادة فتحه.';
+
+  @override
+  String get onboardingCommonContinue => 'متابعة';
+
+  @override
+  String get onboardingCommonSkipForNow => 'تخطي الآن';
+
+  @override
+  String get onboardingCommonSeeMyPlan => 'عرض خطتي ✨';
+
+  @override
+  String get onboardingCommonStartMyJourney => 'ابدأ رحلتي ✨';
+
+  @override
+  String get onboardingAboutYouTitle => 'القليل عنك';
+
+  @override
+  String get onboardingAboutYouSubtitle => 'يساعدنا هذا على تخصيص تجربتك';
+
+  @override
+  String get onboardingAboutYouNameLabel => 'ماذا نسميك؟';
+
+  @override
+  String get onboardingAboutYouNamePlaceholder => 'اسمك (اختياري)';
+
+  @override
+  String get onboardingAboutYouEmbraceIslamLabel => 'متى اعتنقت الإسلام؟';
+
+  @override
+  String get onboardingEmbraceIslamLessThan1Month => 'أقل من شهر';
+
+  @override
+  String get onboardingEmbraceIslam1To6Months => '١–٦ أشهر';
+
+  @override
+  String get onboardingEmbraceIslam6To12Months => '٦–١٢ شهراً';
+
+  @override
+  String get onboardingEmbraceIslam1To2Years => '١–٢ سنة';
+
+  @override
+  String get onboardingEmbraceIslam2PlusYears => 'سنتان فأكثر';
+
+  @override
+  String get onboardingEmbraceIslamBornMuslim => 'مسلم بالولادة';
+
+  @override
+  String get onboardingKnowledgeTitle => 'مستواك الحالي';
+
+  @override
+  String get onboardingKnowledgeSubtitle => 'بدون حكم — لنلاقيك حيث أنت.';
+
+  @override
+  String get onboardingKnowledgeArabicLabel => 'هل تقرأ العربية؟';
+
+  @override
+  String get onboardingArabicYesFluently => 'نعم بطلاقة';
+
+  @override
+  String get onboardingArabicYesSlowly => 'نعم ببطء';
+
+  @override
+  String get onboardingArabicLearningNow => 'أتعلم الآن';
+
+  @override
+  String get onboardingArabicNoWantToLearn => 'لا، لكن أريد التعلم';
+
+  @override
+  String get onboardingArabicNo => 'لا';
+
+  @override
+  String get onboardingKnowledgePrayerLabel => 'هل تصلي الصلوات الخمس؟';
+
+  @override
+  String get onboardingPrayerYesRegularly => 'نعم بانتظام';
+
+  @override
+  String get onboardingPrayerYesNotAll5 => 'نعم لكن ليس الخمس';
+
+  @override
+  String get onboardingPrayerLearningToPray => 'أتعلم الصلاة';
+
+  @override
+  String get onboardingPrayerNotYet => 'ليس بعد';
+
+  @override
+  String get onboardingKnowledgeQuranLabel => 'هل قرأت من القرآن؟';
+
+  @override
+  String get onboardingQuranYesRegularly => 'نعم بانتظام';
+
+  @override
+  String get onboardingQuranYesOccasionally => 'نعم أحياناً';
+
+  @override
+  String get onboardingQuranJustStarted => 'بدأت للتو';
+
+  @override
+  String get onboardingQuranNotYet => 'ليس بعد';
+
+  @override
+  String get onboardingGoalsTitle => 'ما الذي أتى بك؟';
+
+  @override
+  String get onboardingGoalsSubtitle => 'اختر كل ما يناسبك';
+
+  @override
+  String get onboardingGoalsMainLabel => 'أهدافك الرئيسية';
+
+  @override
+  String get onboardingGoalLearnBasics => 'تعلم الأساسيات';
+
+  @override
+  String get onboardingGoalImprovePrayer => 'تحسين صلاتي';
+
+  @override
+  String get onboardingGoalUnderstandQuran => 'فهم القرآن';
+
+  @override
+  String get onboardingGoalBuildHabits => 'بناء عادات جيدة';
+
+  @override
+  String get onboardingGoalConnectCommunity => 'التواصل مع المجتمع';
+
+  @override
+  String get onboardingChallengesLabel => 'ما أكثر ما يشكل تحدياً؟';
+
+  @override
+  String get onboardingChallengeUnderstandingArabic => 'فهم العربية';
+
+  @override
+  String get onboardingChallengeRememberingToPray => 'تذكر الصلاة';
+
+  @override
+  String get onboardingChallengeFindingTime => 'إيجاد وقت للتعلم';
+
+  @override
+  String get onboardingChallengeStayingConsistent => 'المحافظة على الانتظام';
+
+  @override
+  String get onboardingChallengeDealingWithDoubts => 'مواجهة الشكوك';
+
+  @override
+  String get onboardingChallengeLackOfSupport => 'قلة الدعم';
+
+  @override
+  String get onboardingPreferencesTitle => 'تفضيلاتك';
+
+  @override
+  String get onboardingPreferencesSubtitle => 'سنُشكّل نُورلي حسب جدولك';
+
+  @override
+  String get onboardingPreferencesTimeDailyLabel => 'كم وقتاً يومياً؟';
+
+  @override
+  String get onboardingTime5To10 => '٥–١٠ دقائق';
+
+  @override
+  String get onboardingTime5To10Sub => 'جرعة يومية سريعة';
+
+  @override
+  String get onboardingTime15To20 => '١٥–٢٠ دقيقة';
+
+  @override
+  String get onboardingTime15To20Sub => 'تعلم متوازن';
+
+  @override
+  String get onboardingTime30Plus => '٣٠+ دقيقة';
+
+  @override
+  String get onboardingTime30PlusSub => 'انغماس أعمق';
+
+  @override
+  String get onboardingTimeFlexible => 'مرن';
+
+  @override
+  String get onboardingTimeFlexibleSub => 'بدون جدول ثابت';
+
+  @override
+  String get onboardingPreferencesBestTimeLabel => 'أفضل وقت للتعلم؟';
+
+  @override
+  String get onboardingBestTimeMorning => 'الصباح';
+
+  @override
+  String get onboardingBestTimeAfternoon => 'بعد الظهر';
+
+  @override
+  String get onboardingBestTimeEvening => 'المساء';
+
+  @override
+  String get onboardingBestTimeNight => 'الليل';
+
+  @override
+  String get onboardingBestTimeAnytime => 'أي وقت';
+
+  @override
+  String get onboardingPreferencesLearningStyleLabel => 'كيف تتعلم أفضل؟';
+
+  @override
+  String get onboardingStyleReading => 'القراءة';
+
+  @override
+  String get onboardingStyleListening => 'الاستماع';
+
+  @override
+  String get onboardingStyleVideos => 'الفيديو';
+
+  @override
+  String get onboardingStyleInteractive => 'تفاعلي';
+
+  @override
+  String get onboardingStyleMixOfAll => 'مزيج من الكل';
+
+  @override
+  String get onboardingPreferencesRemindersLabel => 'التذكيرات والإشعارات';
+
+  @override
+  String get onboardingReminderAll => 'كل التذكيرات';
+
+  @override
+  String get onboardingReminderAllSub => 'الصلاة + الدروس + التحفيز';
+
+  @override
+  String get onboardingReminderPrayerOnly => 'أوقات الصلاة فقط';
+
+  @override
+  String get onboardingReminderPrayerOnlySub => 'تذكيرات الصلاة فقط';
+
+  @override
+  String get onboardingReminderCustomize => 'دعني أخصّص';
+
+  @override
+  String get onboardingReminderCustomizeSub => 'أختار لاحقاً في الإعدادات';
+
+  @override
+  String get onboardingReminderNoThanks => 'لا شكراً';
+
+  @override
+  String get onboardingReminderNoThanksSub => 'سأدبر أمري';
+
+  @override
+  String get onboardingPlanTitle => 'خطتك الابتدائية';
+
+  @override
+  String get onboardingPlanSubtitle => 'هكذا سنبدأ معاً.';
+
+  @override
+  String get onboardingPlanFaithFoundations => 'أسس الإيمان';
+
+  @override
+  String get onboardingPlanFaithFoundationsSub => 'فهم معتقداتك';
+
+  @override
+  String get onboardingPlanWeeks1To2 => 'الأسبوعان ١–٢';
+
+  @override
+  String get onboardingPlanDailyPrayer => 'الصلاة اليومية';
+
+  @override
+  String get onboardingPlanDailyPrayerSub => 'تعلم الصلاة ومارسها';
+
+  @override
+  String get onboardingPlanWeeks3To5 => 'الأسابيع ٣–٥';
+
+  @override
+  String get onboardingPlanLivingIslam => 'العيش بالإسلام';
+
+  @override
+  String get onboardingPlanLivingIslamSub => 'بناء الشخصية والعادات';
+
+  @override
+  String get onboardingPlanWeeks6To8 => 'الأسابيع ٦–٨';
+
+  @override
+  String get onboardingPlanAddIslamDate => 'أضف تاريخ إسلامك';
+
+  @override
+  String get onboardingPlanAddIslamDateSub => 'اختياري — سنحتفل بمراحلك';
+
+  @override
+  String get dashboardOnboardingTitle => 'رحلتك';
+
+  @override
+  String get dashboardOnboardingSubtitle => 'تفضيلاتك وأهدافك المحفوظة';
+
+  @override
+  String get dashboardOnboardingYourJourney => 'رحلتك';
+
+  @override
+  String get dashboardOnboardingYourPreferences => 'تفضيلاتك';
+
+  @override
+  String get dashboardOnboardingYourGoals => 'أهدافك';
+
+  @override
+  String get dashboardOnboardingYourChallenges => 'تحدياتك';
+
+  @override
+  String get dashboardOnboardingYourLearningProfile => 'ملف تعلمك';
+
+  @override
+  String get dashboardOnboardingCompleteCta => 'أكمل الإعداد';
+
+  @override
+  String get dashboardOnboardingEmpty => 'لا توجد بيانات إعداد بعد.';
+
+  @override
+  String get dashboardOnboardingDisplayName => 'الاسم';
+
+  @override
+  String get dashboardOnboardingEmbraceIslam => 'متى أسلمت';
+
+  @override
+  String get dashboardOnboardingArabicLevel => 'قراءة العربية';
+
+  @override
+  String get dashboardOnboardingPrayerLevel => 'الصلاة';
+
+  @override
+  String get dashboardOnboardingQuranLevel => 'قراءة القرآن';
+
+  @override
+  String get dashboardOnboardingDailyTime => 'الوقت اليومي';
+
+  @override
+  String get dashboardOnboardingBestTime => 'أفضل وقت للتعلم';
+
+  @override
+  String get dashboardOnboardingLearningStyle => 'أسلوب التعلم';
+
+  @override
+  String get dashboardOnboardingReminders => 'التذكيرات';
+
+  @override
+  String get dashboardOnboardingIslamDate => 'تاريخ الإسلام';
 }

@@ -488,6 +488,78 @@ abstract class AppLocalizations {
   /// **'Complete previous lessons first.'**
   String get journeyCompletePreviousFirst;
 
+  /// No description provided for @journeyWeekLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Week {week}'**
+  String journeyWeekLabel(int week);
+
+  /// No description provided for @lessonMarkAsCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Completed'**
+  String get lessonMarkAsCompleted;
+
+  /// No description provided for @lessonCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get lessonCompleted;
+
+  /// No description provided for @lessonNextLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Lesson →'**
+  String get lessonNextLesson;
+
+  /// No description provided for @lessonNoMoreLessons.
+  ///
+  /// In en, this message translates to:
+  /// **'No more lessons'**
+  String get lessonNoMoreLessons;
+
+  /// No description provided for @lessonPersonalReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal Reflection'**
+  String get lessonPersonalReflection;
+
+  /// No description provided for @lessonWriteThoughts.
+  ///
+  /// In en, this message translates to:
+  /// **'Write your thoughts...'**
+  String get lessonWriteThoughts;
+
+  /// No description provided for @lessonSaveReflection.
+  ///
+  /// In en, this message translates to:
+  /// **'Save reflection'**
+  String get lessonSaveReflection;
+
+  /// No description provided for @lessonReflectionSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Reflection saved'**
+  String get lessonReflectionSaved;
+
+  /// No description provided for @lessonSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved'**
+  String get lessonSaved;
+
+  /// No description provided for @lessonRetry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get lessonRetry;
+
+  /// No description provided for @lessonNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson not found'**
+  String get lessonNotFound;
+
   /// No description provided for @prayerNotificationsMuted.
   ///
   /// In en, this message translates to:
@@ -901,6 +973,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} adhkar'**
   String itemCountAdhkar(int count);
+
+  /// No description provided for @sayRepetition.
+  ///
+  /// In en, this message translates to:
+  /// **'Say {count}x'**
+  String sayRepetition(int count);
+
+  /// No description provided for @adhkarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhkar'**
+  String get adhkarLabel;
+
+  /// No description provided for @translationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Translation'**
+  String get translationLabel;
+
+  /// No description provided for @sourceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get sourceLabel;
 
   /// No description provided for @savedCardDuas.
   ///
@@ -1657,6 +1753,678 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Please close and reopen the app.'**
   String get startupPleaseReopen;
+
+  /// No description provided for @onboardingCommonContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get onboardingCommonContinue;
+
+  /// No description provided for @onboardingCommonSkipForNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get onboardingCommonSkipForNow;
+
+  /// No description provided for @onboardingCommonSeeMyPlan.
+  ///
+  /// In en, this message translates to:
+  /// **'See my plan ✨'**
+  String get onboardingCommonSeeMyPlan;
+
+  /// No description provided for @onboardingCommonStartMyJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Start My Journey ✨'**
+  String get onboardingCommonStartMyJourney;
+
+  /// No description provided for @onboardingAboutYouTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'A little about you'**
+  String get onboardingAboutYouTitle;
+
+  /// No description provided for @onboardingAboutYouSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This helps us personalize your experience'**
+  String get onboardingAboutYouSubtitle;
+
+  /// No description provided for @onboardingAboutYouNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What should we call you?'**
+  String get onboardingAboutYouNameLabel;
+
+  /// No description provided for @onboardingAboutYouNamePlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Your name (optional)'**
+  String get onboardingAboutYouNamePlaceholder;
+
+  /// No description provided for @onboardingAboutYouEmbraceIslamLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'When did you embrace Islam?'**
+  String get onboardingAboutYouEmbraceIslamLabel;
+
+  /// No description provided for @onboardingEmbraceIslamLessThan1Month.
+  ///
+  /// In en, this message translates to:
+  /// **'Less than 1 month'**
+  String get onboardingEmbraceIslamLessThan1Month;
+
+  /// No description provided for @onboardingEmbraceIslam1To6Months.
+  ///
+  /// In en, this message translates to:
+  /// **'1–6 months'**
+  String get onboardingEmbraceIslam1To6Months;
+
+  /// No description provided for @onboardingEmbraceIslam6To12Months.
+  ///
+  /// In en, this message translates to:
+  /// **'6–12 months'**
+  String get onboardingEmbraceIslam6To12Months;
+
+  /// No description provided for @onboardingEmbraceIslam1To2Years.
+  ///
+  /// In en, this message translates to:
+  /// **'1–2 years'**
+  String get onboardingEmbraceIslam1To2Years;
+
+  /// No description provided for @onboardingEmbraceIslam2PlusYears.
+  ///
+  /// In en, this message translates to:
+  /// **'2+ years'**
+  String get onboardingEmbraceIslam2PlusYears;
+
+  /// No description provided for @onboardingEmbraceIslamBornMuslim.
+  ///
+  /// In en, this message translates to:
+  /// **'Born Muslim'**
+  String get onboardingEmbraceIslamBornMuslim;
+
+  /// No description provided for @onboardingKnowledgeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your current knowledge'**
+  String get onboardingKnowledgeTitle;
+
+  /// No description provided for @onboardingKnowledgeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No judgment — just so we can meet you where you are.'**
+  String get onboardingKnowledgeSubtitle;
+
+  /// No description provided for @onboardingKnowledgeArabicLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Can you read Arabic?'**
+  String get onboardingKnowledgeArabicLabel;
+
+  /// No description provided for @onboardingArabicYesFluently.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, fluently'**
+  String get onboardingArabicYesFluently;
+
+  /// No description provided for @onboardingArabicYesSlowly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, slowly'**
+  String get onboardingArabicYesSlowly;
+
+  /// No description provided for @onboardingArabicLearningNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning now'**
+  String get onboardingArabicLearningNow;
+
+  /// No description provided for @onboardingArabicNoWantToLearn.
+  ///
+  /// In en, this message translates to:
+  /// **'No, but want to learn'**
+  String get onboardingArabicNoWantToLearn;
+
+  /// No description provided for @onboardingArabicNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get onboardingArabicNo;
+
+  /// No description provided for @onboardingKnowledgePrayerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Do you pray the 5 daily prayers?'**
+  String get onboardingKnowledgePrayerLabel;
+
+  /// No description provided for @onboardingPrayerYesRegularly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, regularly'**
+  String get onboardingPrayerYesRegularly;
+
+  /// No description provided for @onboardingPrayerYesNotAll5.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, but not all 5'**
+  String get onboardingPrayerYesNotAll5;
+
+  /// No description provided for @onboardingPrayerLearningToPray.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning to pray'**
+  String get onboardingPrayerLearningToPray;
+
+  /// No description provided for @onboardingPrayerNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet'**
+  String get onboardingPrayerNotYet;
+
+  /// No description provided for @onboardingKnowledgeQuranLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Have you read any Quran?'**
+  String get onboardingKnowledgeQuranLabel;
+
+  /// No description provided for @onboardingQuranYesRegularly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, regularly'**
+  String get onboardingQuranYesRegularly;
+
+  /// No description provided for @onboardingQuranYesOccasionally.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, occasionally'**
+  String get onboardingQuranYesOccasionally;
+
+  /// No description provided for @onboardingQuranJustStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Just started'**
+  String get onboardingQuranJustStarted;
+
+  /// No description provided for @onboardingQuranNotYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not yet'**
+  String get onboardingQuranNotYet;
+
+  /// No description provided for @onboardingGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What brings you here?'**
+  String get onboardingGoalsTitle;
+
+  /// No description provided for @onboardingGoalsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all that resonate with you'**
+  String get onboardingGoalsSubtitle;
+
+  /// No description provided for @onboardingGoalsMainLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Your main goals'**
+  String get onboardingGoalsMainLabel;
+
+  /// No description provided for @onboardingGoalLearnBasics.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn the basics'**
+  String get onboardingGoalLearnBasics;
+
+  /// No description provided for @onboardingGoalImprovePrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Improve my prayer'**
+  String get onboardingGoalImprovePrayer;
+
+  /// No description provided for @onboardingGoalUnderstandQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand Quran'**
+  String get onboardingGoalUnderstandQuran;
+
+  /// No description provided for @onboardingGoalBuildHabits.
+  ///
+  /// In en, this message translates to:
+  /// **'Build good habits'**
+  String get onboardingGoalBuildHabits;
+
+  /// No description provided for @onboardingGoalConnectCommunity.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect with community'**
+  String get onboardingGoalConnectCommunity;
+
+  /// No description provided for @onboardingChallengesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What challenges you most?'**
+  String get onboardingChallengesLabel;
+
+  /// No description provided for @onboardingChallengeUnderstandingArabic.
+  ///
+  /// In en, this message translates to:
+  /// **'Understanding Arabic'**
+  String get onboardingChallengeUnderstandingArabic;
+
+  /// No description provided for @onboardingChallengeRememberingToPray.
+  ///
+  /// In en, this message translates to:
+  /// **'Remembering to pray'**
+  String get onboardingChallengeRememberingToPray;
+
+  /// No description provided for @onboardingChallengeFindingTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Finding time to learn'**
+  String get onboardingChallengeFindingTime;
+
+  /// No description provided for @onboardingChallengeStayingConsistent.
+  ///
+  /// In en, this message translates to:
+  /// **'Staying consistent'**
+  String get onboardingChallengeStayingConsistent;
+
+  /// No description provided for @onboardingChallengeDealingWithDoubts.
+  ///
+  /// In en, this message translates to:
+  /// **'Dealing with doubts'**
+  String get onboardingChallengeDealingWithDoubts;
+
+  /// No description provided for @onboardingChallengeLackOfSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Lack of support'**
+  String get onboardingChallengeLackOfSupport;
+
+  /// No description provided for @onboardingPreferencesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your preferences'**
+  String get onboardingPreferencesTitle;
+
+  /// No description provided for @onboardingPreferencesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ll shape Noorly around your schedule'**
+  String get onboardingPreferencesSubtitle;
+
+  /// No description provided for @onboardingPreferencesTimeDailyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How much time daily?'**
+  String get onboardingPreferencesTimeDailyLabel;
+
+  /// No description provided for @onboardingTime5To10.
+  ///
+  /// In en, this message translates to:
+  /// **'5–10 min'**
+  String get onboardingTime5To10;
+
+  /// No description provided for @onboardingTime5To10Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick daily dose'**
+  String get onboardingTime5To10Sub;
+
+  /// No description provided for @onboardingTime15To20.
+  ///
+  /// In en, this message translates to:
+  /// **'15–20 min'**
+  String get onboardingTime15To20;
+
+  /// No description provided for @onboardingTime15To20Sub.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced learning'**
+  String get onboardingTime15To20Sub;
+
+  /// No description provided for @onboardingTime30Plus.
+  ///
+  /// In en, this message translates to:
+  /// **'30+ min'**
+  String get onboardingTime30Plus;
+
+  /// No description provided for @onboardingTime30PlusSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Deep immersion'**
+  String get onboardingTime30PlusSub;
+
+  /// No description provided for @onboardingTimeFlexible.
+  ///
+  /// In en, this message translates to:
+  /// **'Flexible'**
+  String get onboardingTimeFlexible;
+
+  /// No description provided for @onboardingTimeFlexibleSub.
+  ///
+  /// In en, this message translates to:
+  /// **'No set schedule'**
+  String get onboardingTimeFlexibleSub;
+
+  /// No description provided for @onboardingPreferencesBestTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best time to learn?'**
+  String get onboardingPreferencesBestTimeLabel;
+
+  /// No description provided for @onboardingBestTimeMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get onboardingBestTimeMorning;
+
+  /// No description provided for @onboardingBestTimeAfternoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Afternoon'**
+  String get onboardingBestTimeAfternoon;
+
+  /// No description provided for @onboardingBestTimeEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get onboardingBestTimeEvening;
+
+  /// No description provided for @onboardingBestTimeNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Night'**
+  String get onboardingBestTimeNight;
+
+  /// No description provided for @onboardingBestTimeAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Anytime'**
+  String get onboardingBestTimeAnytime;
+
+  /// No description provided for @onboardingPreferencesLearningStyleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How do you learn best?'**
+  String get onboardingPreferencesLearningStyleLabel;
+
+  /// No description provided for @onboardingStyleReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading'**
+  String get onboardingStyleReading;
+
+  /// No description provided for @onboardingStyleListening.
+  ///
+  /// In en, this message translates to:
+  /// **'Listening'**
+  String get onboardingStyleListening;
+
+  /// No description provided for @onboardingStyleVideos.
+  ///
+  /// In en, this message translates to:
+  /// **'Videos'**
+  String get onboardingStyleVideos;
+
+  /// No description provided for @onboardingStyleInteractive.
+  ///
+  /// In en, this message translates to:
+  /// **'Interactive'**
+  String get onboardingStyleInteractive;
+
+  /// No description provided for @onboardingStyleMixOfAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Mix of all'**
+  String get onboardingStyleMixOfAll;
+
+  /// No description provided for @onboardingPreferencesRemindersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders & notifications'**
+  String get onboardingPreferencesRemindersLabel;
+
+  /// No description provided for @onboardingReminderAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All reminders'**
+  String get onboardingReminderAll;
+
+  /// No description provided for @onboardingReminderAllSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayers + lessons + motivation'**
+  String get onboardingReminderAllSub;
+
+  /// No description provided for @onboardingReminderPrayerOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer times only'**
+  String get onboardingReminderPrayerOnly;
+
+  /// No description provided for @onboardingReminderPrayerOnlySub.
+  ///
+  /// In en, this message translates to:
+  /// **'Just salah reminders'**
+  String get onboardingReminderPrayerOnlySub;
+
+  /// No description provided for @onboardingReminderCustomize.
+  ///
+  /// In en, this message translates to:
+  /// **'Let me customize'**
+  String get onboardingReminderCustomize;
+
+  /// No description provided for @onboardingReminderCustomizeSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose in settings later'**
+  String get onboardingReminderCustomizeSub;
+
+  /// No description provided for @onboardingReminderNoThanks.
+  ///
+  /// In en, this message translates to:
+  /// **'No thanks'**
+  String get onboardingReminderNoThanks;
+
+  /// No description provided for @onboardingReminderNoThanksSub.
+  ///
+  /// In en, this message translates to:
+  /// **'I\'ll manage on my own'**
+  String get onboardingReminderNoThanksSub;
+
+  /// No description provided for @onboardingPlanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Starting Plan'**
+  String get onboardingPlanTitle;
+
+  /// No description provided for @onboardingPlanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s how we\'ll begin, together.'**
+  String get onboardingPlanSubtitle;
+
+  /// No description provided for @onboardingPlanFaithFoundations.
+  ///
+  /// In en, this message translates to:
+  /// **'Faith Foundations'**
+  String get onboardingPlanFaithFoundations;
+
+  /// No description provided for @onboardingPlanFaithFoundationsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Understand your beliefs'**
+  String get onboardingPlanFaithFoundationsSub;
+
+  /// No description provided for @onboardingPlanWeeks1To2.
+  ///
+  /// In en, this message translates to:
+  /// **'Weeks 1–2'**
+  String get onboardingPlanWeeks1To2;
+
+  /// No description provided for @onboardingPlanDailyPrayer.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Prayer'**
+  String get onboardingPlanDailyPrayer;
+
+  /// No description provided for @onboardingPlanDailyPrayerSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Learn and practice salah'**
+  String get onboardingPlanDailyPrayerSub;
+
+  /// No description provided for @onboardingPlanWeeks3To5.
+  ///
+  /// In en, this message translates to:
+  /// **'Weeks 3–5'**
+  String get onboardingPlanWeeks3To5;
+
+  /// No description provided for @onboardingPlanLivingIslam.
+  ///
+  /// In en, this message translates to:
+  /// **'Living Islam'**
+  String get onboardingPlanLivingIslam;
+
+  /// No description provided for @onboardingPlanLivingIslamSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Build character and habits'**
+  String get onboardingPlanLivingIslamSub;
+
+  /// No description provided for @onboardingPlanWeeks6To8.
+  ///
+  /// In en, this message translates to:
+  /// **'Weeks 6–8'**
+  String get onboardingPlanWeeks6To8;
+
+  /// No description provided for @onboardingPlanAddIslamDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Add your Islam date'**
+  String get onboardingPlanAddIslamDate;
+
+  /// No description provided for @onboardingPlanAddIslamDateSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional — we\'ll celebrate your milestones'**
+  String get onboardingPlanAddIslamDateSub;
+
+  /// No description provided for @dashboardOnboardingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Journey'**
+  String get dashboardOnboardingTitle;
+
+  /// No description provided for @dashboardOnboardingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your saved preferences and goals'**
+  String get dashboardOnboardingSubtitle;
+
+  /// No description provided for @dashboardOnboardingYourJourney.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Journey'**
+  String get dashboardOnboardingYourJourney;
+
+  /// No description provided for @dashboardOnboardingYourPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Preferences'**
+  String get dashboardOnboardingYourPreferences;
+
+  /// No description provided for @dashboardOnboardingYourGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Goals'**
+  String get dashboardOnboardingYourGoals;
+
+  /// No description provided for @dashboardOnboardingYourChallenges.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Challenges'**
+  String get dashboardOnboardingYourChallenges;
+
+  /// No description provided for @dashboardOnboardingYourLearningProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Learning Profile'**
+  String get dashboardOnboardingYourLearningProfile;
+
+  /// No description provided for @dashboardOnboardingCompleteCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your onboarding'**
+  String get dashboardOnboardingCompleteCta;
+
+  /// No description provided for @dashboardOnboardingEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No onboarding data yet.'**
+  String get dashboardOnboardingEmpty;
+
+  /// No description provided for @dashboardOnboardingDisplayName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get dashboardOnboardingDisplayName;
+
+  /// No description provided for @dashboardOnboardingEmbraceIslam.
+  ///
+  /// In en, this message translates to:
+  /// **'When you embraced Islam'**
+  String get dashboardOnboardingEmbraceIslam;
+
+  /// No description provided for @dashboardOnboardingArabicLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic reading'**
+  String get dashboardOnboardingArabicLevel;
+
+  /// No description provided for @dashboardOnboardingPrayerLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Prayer'**
+  String get dashboardOnboardingPrayerLevel;
+
+  /// No description provided for @dashboardOnboardingQuranLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran reading'**
+  String get dashboardOnboardingQuranLevel;
+
+  /// No description provided for @dashboardOnboardingDailyTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily time'**
+  String get dashboardOnboardingDailyTime;
+
+  /// No description provided for @dashboardOnboardingBestTime.
+  ///
+  /// In en, this message translates to:
+  /// **'Best time to learn'**
+  String get dashboardOnboardingBestTime;
+
+  /// No description provided for @dashboardOnboardingLearningStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Learning style'**
+  String get dashboardOnboardingLearningStyle;
+
+  /// No description provided for @dashboardOnboardingReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get dashboardOnboardingReminders;
+
+  /// No description provided for @dashboardOnboardingIslamDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Islam date'**
+  String get dashboardOnboardingIslamDate;
 }
 
 class _AppLocalizationsDelegate

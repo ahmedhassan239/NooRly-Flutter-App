@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -7,9 +9,18 @@ import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
 import 'package:flutter_app/features/duas/providers/saved_duas_provider.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+
+/// True when [translation] is not effectively the same as [arabic] (avoids duplicate text).
+bool _isTranslationDifferent(String arabic, String translation) {
+  final a = arabic.trim();
+  final t = translation.trim();
+  if (a.isEmpty || t.isEmpty) return t.isNotEmpty;
+  return a != t;
+}
 
 class CategoryDuasPage extends ConsumerWidget {
   const CategoryDuasPage({required this.categoryId, super.key});
@@ -54,7 +65,7 @@ class CategoryDuasPage extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
               children: [
-                _buildHeader(context, category, duas.length, colorScheme),
+                _buildHeader(context, ref, category, duas.length, colorScheme),
                 Expanded(
                   child: duas.isEmpty
                       ? _buildEmptyState(context, colorScheme)
@@ -79,10 +90,16 @@ class CategoryDuasPage extends ConsumerWidget {
 
   Widget _buildHeader(
     BuildContext context,
+    WidgetRef ref,
     DuaCategory category,
     int duaCount,
     ColorScheme colorScheme,
   ) {
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final countLabel = toLocaleDigits(
+      AppLocalizations.of(context)!.duasCountLabel(duaCount),
+      locale,
+    );
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -112,7 +129,7 @@ class CategoryDuasPage extends ConsumerWidget {
                 style: AppTypography.h2(color: colorScheme.onSurface),
               ),
               Text(
-                '$duaCount duas',
+                countLabel,
                 style: AppTypography.caption(color: colorScheme.onSurface.withAlpha(150)),
               ),
             ],
@@ -163,7 +180,7 @@ class CategoryDuasPage extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Dua label
+          // Dua label (localized: "Dua" / "دعاء")
           Center(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -172,7 +189,7 @@ class CategoryDuasPage extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Text(
-                'Dua',
+                AppLocalizations.of(context)!.savedTypeDua,
                 style: AppTypography.caption(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -195,13 +212,15 @@ class CategoryDuasPage extends ConsumerWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: AppSpacing.sm),
-          // Translation
-          Text(
-            '"${dua.translation}"',
-            style: AppTypography.bodySm(color: colorScheme.onSurface),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: AppSpacing.sm),
+          // Translation (only if different from Arabic to avoid duplicate text)
+          if (_isTranslationDifferent(dua.arabic, dua.translation)) ...[
+            Text(
+              '"${dua.translation}"',
+              style: AppTypography.bodySm(color: colorScheme.onSurface),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+          ],
           // Source
           Text(
             '- ${dua.source}',

@@ -151,13 +151,20 @@ class HadithCollectionPage extends ConsumerWidget {
     );
   }
 
+  static bool _isTextDifferent(String? arabic, String secondary) {
+    if (arabic == null || arabic.trim().isEmpty) return secondary.trim().isNotEmpty;
+    return secondary.trim() != arabic.trim();
+  }
+
   Widget _buildHadithCard(
     BuildContext context,
     WidgetRef ref,
     LibraryHadithItem hadith,
     ColorScheme colorScheme,
   ) {
+    final textAr = hadith.textAr?.trim() ?? '';
     final text = hadith.text ?? hadith.textEn ?? hadith.textAr ?? '';
+    final showSecondary = _isTextDifferent(hadith.textAr, text);
     final source = hadith.collectionName != null
         ? '${hadith.collectionName}${hadith.hadithNumber != null ? ', ${hadith.hadithNumber}' : ''}'
         : '';
@@ -173,19 +180,19 @@ class HadithCollectionPage extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (hadith.textAr != null && hadith.textAr!.isNotEmpty)
+          if (textAr.isNotEmpty)
             Text(
               hadith.textAr!,
               style: AppTypography.arabicH2(color: colorScheme.onSurface),
               textAlign: TextAlign.right,
               textDirection: TextDirection.rtl,
             ),
-          if (hadith.textAr != null && hadith.textAr!.isNotEmpty)
-            const SizedBox(height: AppSpacing.md),
-          Text(
-            '"$text"',
-            style: AppTypography.bodySm(color: colorScheme.onSurface),
-          ),
+          if (textAr.isNotEmpty && showSecondary) const SizedBox(height: AppSpacing.md),
+          if (showSecondary)
+            Text(
+              '"$text"',
+              style: AppTypography.bodySm(color: colorScheme.onSurface),
+            ),
           if (source.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -205,9 +212,11 @@ class HadithCollectionPage extends ConsumerWidget {
                 label: AppLocalizations.of(context)!.actionCopy,
                 colorScheme: colorScheme,
                 onTap: () {
-                  final toCopy = hadith.textAr != null
+                  final toCopy = hadith.textAr != null && showSecondary
                       ? '${hadith.textAr}\n\n$text\n\n— $source'
-                      : '$text\n\n— $source';
+                      : (hadith.textAr ?? text).isNotEmpty
+                          ? '${hadith.textAr ?? text}\n\n— $source'
+                          : '$text\n\n— $source';
                   Clipboard.setData(ClipboardData(text: toCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

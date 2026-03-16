@@ -80,6 +80,11 @@ class HadithCollectionDetailsScreen extends ConsumerWidget {
   }
 }
 
+bool _hadithTextDifferent(String? a, String b) {
+  if (a == null || a.trim().isEmpty) return b.trim().isNotEmpty;
+  return a.trim() != b.trim();
+}
+
 class _HadithItemCard extends StatelessWidget {
   const _HadithItemCard({
     required this.item,
@@ -91,6 +96,15 @@ class _HadithItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final text = item.text.trim();
+    final textAr = item.textAr?.trim() ?? '';
+    final textEn = item.textEn?.trim() ?? '';
+    final showText = text.isNotEmpty;
+    final showTextAr = textAr.isNotEmpty && _hadithTextDifferent(item.text, textAr);
+    final showTextEn = textEn.isNotEmpty &&
+        _hadithTextDifferent(item.text, textEn) &&
+        _hadithTextDifferent(item.textAr, textEn);
+
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -104,15 +118,15 @@ class _HadithItemCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (item.text.isNotEmpty)
+          if (showText)
             Text(
               item.text,
               style: AppTypography.body(
                 color: colorScheme.onSurface,
               ),
             ),
-          if (item.textAr != null && item.textAr!.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
+          if (showTextAr) ...[
+            if (showText) const SizedBox(height: AppSpacing.sm),
             Text(
               item.textAr!,
               style: AppTypography.body(
@@ -120,8 +134,8 @@ class _HadithItemCard extends StatelessWidget {
               ),
             ),
           ],
-          if (item.textEn != null && item.textEn!.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
+          if (showTextEn) ...[
+            if (showText || showTextAr) const SizedBox(height: AppSpacing.sm),
             Text(
               item.textEn!,
               style: AppTypography.bodySm(

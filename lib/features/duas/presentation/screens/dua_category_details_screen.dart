@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/content/domain/entities/content_entity.dart';
 import 'package:flutter_app/core/content/providers/content_providers.dart' as content_providers;
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -9,9 +11,18 @@ import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+
+/// True when [translation] is not the same as [arabic], to avoid showing duplicate text.
+bool _isTranslationDifferent(String arabic, String translation) {
+  final a = arabic.trim();
+  final t = translation.trim();
+  if (a.isEmpty || t.isEmpty) return t.isNotEmpty;
+  return a != t;
+}
 
 /// Dua Category Details screen — API-backed list of duas in a category.
 /// Route: /duas/category/:categoryId
@@ -120,8 +131,11 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     AsyncValue<List<ContentEntity>> duasAsync,
     ColorScheme colorScheme,
   ) {
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final l10n = AppLocalizations.of(context)!;
     final title = categoryAsync.valueOrNull?.title ?? 'Category';
     final count = duasAsync.valueOrNull?.length ?? categoryAsync.valueOrNull?.count ?? 0;
+    final countLabel = toLocaleDigits(l10n.duasCountLabel(count), locale);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -153,7 +167,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
                   style: AppTypography.h2(color: colorScheme.onSurface),
                 ),
                 Text(
-                  '$count duas',
+                  countLabel,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withAlpha(150),
                   ),
@@ -217,7 +231,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Text(
-                'Dua',
+                AppLocalizations.of(context)!.savedTypeDua,
                 style: AppTypography.caption(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -239,13 +253,14 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
           if ((e.transliteration ?? '').isNotEmpty) const SizedBox(height: AppSpacing.sm),
-          if ((e.translation ?? '').isNotEmpty)
+          if ((e.translation ?? '').isNotEmpty && _isTranslationDifferent(e.arabicText, e.translation!))
             Text(
               '"${e.translation}"',
               style: AppTypography.bodySm(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),
-          if ((e.translation ?? '').isNotEmpty) const SizedBox(height: AppSpacing.sm),
+          if ((e.translation ?? '').isNotEmpty && _isTranslationDifferent(e.arabicText, e.translation!))
+            const SizedBox(height: AppSpacing.sm),
           if ((e.source ?? '').isNotEmpty)
             Text(
               '- ${e.source}',

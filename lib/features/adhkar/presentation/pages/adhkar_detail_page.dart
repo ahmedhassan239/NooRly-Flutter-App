@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/adhkar/presentation/adhkar_mock_data.dart';
 import 'package:flutter_app/features/adhkar/presentation/widgets/save_adhkar_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -54,7 +57,7 @@ class AdhkarDetailPage extends ConsumerWidget {
             constraints: const BoxConstraints(maxWidth: 600),
             child: Column(
               children: [
-                _buildHeader(context, colorScheme),
+                _buildHeader(context, ref, colorScheme),
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(AppSpacing.lg),
@@ -70,7 +73,8 @@ class AdhkarDetailPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, ColorScheme colorScheme) {
+  Widget _buildHeader(BuildContext context, WidgetRef ref, ColorScheme colorScheme) {
+    final label = AppLocalizations.of(context)!.libraryAdhkar;
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -93,7 +97,7 @@ class AdhkarDetailPage extends ConsumerWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Dhikr',
+            label,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -107,10 +111,15 @@ class AdhkarDetailPage extends ConsumerWidget {
     AdhkarData adhkar,
     ColorScheme colorScheme,
   ) {
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final l10n = AppLocalizations.of(context)!;
+    final repetitionLabel = toLocaleDigits(l10n.sayRepetition(adhkar.repetition), locale);
+    final isArabic = locale == 'ar';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Dhikr badge and repetition
+        // Badge (أذكار / Adhkar) and repetition (تكرار N / Say Nx)
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -121,7 +130,7 @@ class AdhkarDetailPage extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Text(
-                'Dhikr',
+                l10n.libraryAdhkar,
                 style: AppTypography.caption(color: AppColors.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -134,7 +143,7 @@ class AdhkarDetailPage extends ConsumerWidget {
                 border: Border.all(color: colorScheme.primary.withAlpha(50)),
               ),
               child: Text(
-                'Say ${adhkar.repetition}x',
+                repetitionLabel,
                 style: AppTypography.bodySm(color: colorScheme.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -142,40 +151,44 @@ class AdhkarDetailPage extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        // Arabic text
-        Text(
-          adhkar.arabic,
-          style: AppTypography.arabicH1(color: colorScheme.onSurface),
-          textAlign: TextAlign.right,
-          textDirection: TextDirection.rtl,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Transliteration
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colorScheme.primary.withAlpha(25),
-            borderRadius: BorderRadius.circular(AppRadius.md),
+        // Arabic: show only when app is in Arabic (or when we want both — here we separate by locale)
+        if (isArabic) ...[
+          Text(
+            adhkar.arabic,
+            style: AppTypography.arabicH1(color: colorScheme.onSurface),
+            textAlign: TextAlign.right,
+            textDirection: TextDirection.rtl,
           ),
-          child: Text(
-            adhkar.transliteration,
-            style: AppTypography.body(color: colorScheme.primary)
-                .copyWith(fontStyle: FontStyle.italic),
+          const SizedBox(height: AppSpacing.lg),
+          if (adhkar.transliteration.isNotEmpty)
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              decoration: BoxDecoration(
+                color: colorScheme.primary.withAlpha(25),
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              child: Text(
+                adhkar.transliteration,
+                style: AppTypography.body(color: colorScheme.primary)
+                    .copyWith(fontStyle: FontStyle.italic),
+              ),
+            ),
+          if (adhkar.transliteration.isNotEmpty) const SizedBox(height: AppSpacing.lg),
+        ],
+        // English: show only when app is in English
+        if (!isArabic) ...[
+          Text(
+            l10n.translationLabel,
+            style: AppTypography.h3(color: colorScheme.onSurface),
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Translation
-        Text(
-          'Translation',
-          style: AppTypography.h3(color: colorScheme.onSurface),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          adhkar.translation,
-          style: AppTypography.body(color: colorScheme.onSurface),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Source
+          const SizedBox(height: AppSpacing.sm),
+          Text(
+            adhkar.translation,
+            style: AppTypography.body(color: colorScheme.onSurface),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+        ],
+        // Source (always show, localized label)
         Container(
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
@@ -192,14 +205,13 @@ class AdhkarDetailPage extends ConsumerWidget {
               ),
               const SizedBox(width: AppSpacing.sm),
               Text(
-                'Source: ${adhkar.source}',
+                '${l10n.sourceLabel}: ${adhkar.source}',
                 style: AppTypography.bodySm(color: colorScheme.onSurface),
               ),
             ],
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
-        // Action buttons
         _buildActionButtons(context, ref, adhkar, colorScheme),
       ],
     );

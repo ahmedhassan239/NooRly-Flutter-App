@@ -11,11 +11,11 @@ import 'package:flutter_app/features/prayer/presentation/widgets/prayer_header.d
 import 'package:flutter_app/features/prayer/presentation/widgets/progress_card.dart';
 import 'package:flutter_app/features/prayer/providers/notification_mute_provider.dart';
 import 'package:flutter_app/features/prayer/providers/location_notifier.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/features/prayer/providers/prayer_providers.dart';
 import 'package:flutter_app/features/prayer/services/prayer_notifications_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class PrayerTimesPage extends ConsumerStatefulWidget {
@@ -146,9 +146,11 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
     String? address,
     AsyncValue<LocationResult?> locationAsync,
   ) {
-    final locationLabel = address ?? AppLocalizations.of(context)!.prayerGettingLocation;
-    final dateLabel = formatDateForDisplay(now);
-    final timeLabel = DateFormat('HH:mm').format(now);
+    final locale = Localizations.localeOf(context).languageCode;
+    final rawLocation = address ?? AppLocalizations.of(context)!.prayerGettingLocation;
+    final locationLabel = toLocaleDigits(rawLocation, locale);
+    final dateLabel = formatDateForDisplay(now, locale);
+    final timeLabel = formatTimeForDisplay(now, locale);
     final isMuted = ref.watch(notificationMuteProvider);
 
     return PrayerHeader(

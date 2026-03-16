@@ -51,7 +51,7 @@ class _EmailRegisterPageState extends State<EmailRegisterPage> {
         );
         // Navigate to the next logical step - for now let's go to shahada date or login
         // The user prompted: "navigate to the next logical route (leave as TODO if app has a defined next step)"
-        context.go('/onboarding/shahada-date');
+        context.go('/onboarding/about-you');
       }
     }
   }

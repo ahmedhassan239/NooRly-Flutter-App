@@ -289,6 +289,11 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
     );
   }
 
+  static bool _isTextDifferent(String? arabic, String secondary) {
+    if (arabic == null || arabic.trim().isEmpty) return secondary.trim().isNotEmpty;
+    return secondary.trim() != arabic.trim();
+  }
+
   Widget _buildHadithCard(
     BuildContext context,
     WidgetRef ref,
@@ -297,6 +302,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
   ) {
     final text =
         hadith.text ?? hadith.textEn ?? hadith.textAr ?? '';
+    final showSecondary = _isTextDifferent(hadith.textAr, text);
     final source = hadith.collectionName != null
         ? '${hadith.collectionName}${hadith.hadithNumber != null ? ', ${hadith.hadithNumber}' : ''}'
         : (hadith.collection ?? '');
@@ -320,12 +326,13 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
               textAlign: TextAlign.right,
               textDirection: TextDirection.rtl,
             ),
-          if (hadith.textAr != null && hadith.textAr!.isNotEmpty)
+          if (hadith.textAr != null && hadith.textAr!.isNotEmpty && showSecondary)
             const SizedBox(height: AppSpacing.md),
-          Text(
-            '"$text"',
-            style: AppTypography.bodySm(color: colorScheme.onSurface),
-          ),
+          if (showSecondary)
+            Text(
+              '"$text"',
+              style: AppTypography.bodySm(color: colorScheme.onSurface),
+            ),
           if (source.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
@@ -346,9 +353,11 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                 label: 'Copy',
                 colorScheme: colorScheme,
                 onTap: () {
-                  final toCopy = hadith.textAr != null
+                  final toCopy = hadith.textAr != null && showSecondary
                       ? '${hadith.textAr}\n\n$text\n\n— $source'
-                      : '$text\n\n— $source';
+                      : (hadith.textAr ?? text).trim().isNotEmpty
+                          ? '${hadith.textAr ?? text}\n\n— $source'
+                          : '$text\n\n— $source';
                   Clipboard.setData(ClipboardData(text: toCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

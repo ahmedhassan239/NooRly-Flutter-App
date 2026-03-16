@@ -76,76 +76,6 @@ class RegisterPage extends ConsumerWidget {
 
                   const SizedBox(height: AppSpacing.xl2),
 
-                  // Social Login Buttons
-                  Column(
-                    children: [
-                      // Apple
-                      _SocialButton(
-                        onPressed: () => _handleSocialLogin(ref, 'Apple'),
-                        backgroundColor: Colors.black, // Always black
-                        foregroundColor: Colors.white, // Always white
-                        assetPath: 'assets/icons/brands/apple.svg',
-                        label: 'Continue with Apple',
-                        tintIcon: true, // Tint white
-                      ).animate().fadeIn(delay: 300.ms).moveY(begin: 20, end: 0),
-
-                      const SizedBox(height: AppSpacing.md),
-
-                      // Google
-                      _SocialButton(
-                        onPressed: () => _handleSocialLogin(ref, 'Google'),
-                        backgroundColor: colorScheme.surface,
-                        foregroundColor: colorScheme.onSurface,
-                        assetPath: 'assets/icons/brands/google_g.svg',
-                        label: 'Continue with Google',
-                        hasBorder: true,
-                        tintIcon: false, // Keep original colors
-                      ).animate().fadeIn(delay: 350.ms).moveY(begin: 20, end: 0),
-
-                      const SizedBox(height: AppSpacing.md),
-
-                      // Facebook
-                      _SocialButton(
-                        onPressed: () => _handleSocialLogin(ref, 'Facebook'),
-                        backgroundColor: colorScheme.surface,
-                        foregroundColor: colorScheme.onSurface,
-                        assetPath: 'assets/icons/brands/facebook_f.svg',
-                        label: 'Continue with Facebook',
-                        hasBorder: true,
-                        tintIcon: false, // Keep original colors
-                      ).animate().fadeIn(delay: 400.ms).moveY(begin: 20, end: 0),
-                    ],
-                  ),
-
-                  const SizedBox(height: AppSpacing.xl),
-
-                  // Divider with "or"
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          color: colorScheme.outline.withValues(alpha: 0.3),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-                        child: Text(
-                          'or',
-                          style: AppTypography.caption(
-                            color: colorScheme.onSurface.withValues(alpha: 0.5),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          color: colorScheme.outline.withValues(alpha: 0.3),
-                        ),
-                      ),
-                    ],
-                  ).animate().fadeIn(delay: 450.ms),
-
-                  const SizedBox(height: AppSpacing.xl),
-
                   // Email Button
                   _SocialButton(
                     onPressed: () => _handleEmailLogin(context),
@@ -184,17 +114,13 @@ class RegisterPage extends ConsumerWidget {
     );
   }
 
-  void _handleSocialLogin(WidgetRef ref, String provider) {
-    ref.read(authProvider.notifier).socialLogin(provider: provider);
-  }
-
   void _handleEmailLogin(BuildContext context) {
     context.go('/auth/register/email'); // keep nested route for register flow
   }
 
   void _handleGuestContinue(BuildContext context, WidgetRef ref) {
     ref.read(authProvider.notifier).enterGuestMode();
-    context.go('/onboarding/shahada-date');
+    context.go('/onboarding/about-you');
   }
 }
 

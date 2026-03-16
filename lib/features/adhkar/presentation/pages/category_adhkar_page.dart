@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/content/domain/entities/content_entity.dart'
     show DhikrEntity;
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -20,6 +22,13 @@ import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+
+bool _isTranslationDifferent(String arabic, String translation) {
+  final a = arabic.trim();
+  final t = translation.trim();
+  if (a.isEmpty || t.isEmpty) return t.isNotEmpty;
+  return a != t;
+}
 
 class CategoryAdhkarPage extends ConsumerWidget {
   const CategoryAdhkarPage({required this.categoryId, super.key});
@@ -50,6 +59,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                       children: [
                         _buildHeader(
                           context,
+                          ref,
                           category,
                           adhkarList.length,
                           colorScheme,
@@ -83,6 +93,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                     children: [
                       _buildHeader(
                         context,
+                        ref,
                         category,
                         0,
                         colorScheme,
@@ -96,6 +107,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                     children: [
                       _buildHeader(
                         context,
+                        ref,
                         category,
                         0,
                         colorScheme,
@@ -173,10 +185,16 @@ class CategoryAdhkarPage extends ConsumerWidget {
 
   Widget _buildHeader(
     BuildContext context,
+    WidgetRef ref,
     CategoryDto category,
     int adhkarCount,
     ColorScheme colorScheme,
   ) {
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final countLabel = toLocaleDigits(
+      AppLocalizations.of(context)!.itemCountAdhkar(adhkarCount),
+      locale,
+    );
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
@@ -209,7 +227,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                   style: AppTypography.h2(color: colorScheme.onSurface),
                 ),
                 Text(
-                  '$adhkarCount adhkar',
+                  countLabel,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withAlpha(150),
                   ),
@@ -254,6 +272,8 @@ class CategoryAdhkarPage extends ConsumerWidget {
     DhikrEntity dhikr,
     ColorScheme colorScheme,
   ) {
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    final l10n = AppLocalizations.of(context)!;
     final overrides = ref.watch(adhkarSaveOverrideProvider);
     final pending = ref.watch(adhkarSavePendingProvider);
     final isSaved = overrides[dhikr.id] ?? dhikr.isSaved;
@@ -263,6 +283,10 @@ class CategoryAdhkarPage extends ConsumerWidget {
     final transliteration = dhikr.transliteration ?? '';
     final source = dhikr.source ?? '';
     final repetition = dhikr.repetitionCount;
+    final repetitionLabel = toLocaleDigits(l10n.sayRepetition(repetition), locale);
+    final showTranslation = translation.isNotEmpty &&
+        locale != 'ar' &&
+        _isTranslationDifferent(arabic, translation);
 
     return InkWell(
       onTap: () => context.push('/adhkar/${dhikr.id}'),
@@ -277,7 +301,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Repeat count badge aligned top right
+            // Repeat count badge (localized: "Say 1x" / "كرر ١ مرة")
             Align(
               alignment: Alignment.centerRight,
               child: Container(
@@ -293,7 +317,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                   ),
                 ),
                 child: Text(
-                  'Say ${repetition}x',
+                  repetitionLabel,
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withAlpha(150),
                   ).copyWith(fontWeight: FontWeight.w500),
@@ -318,14 +342,14 @@ class CategoryAdhkarPage extends ConsumerWidget {
                 textDirection: TextDirection.ltr,
               ),
             if (transliteration.isNotEmpty) const SizedBox(height: AppSpacing.sm),
-            if (translation.isNotEmpty)
+            if (showTranslation)
               Text(
                 '"$translation"',
                 style: AppTypography.bodySm(color: colorScheme.onSurface),
                 textAlign: TextAlign.center,
                 textDirection: TextDirection.ltr,
               ),
-            if (translation.isNotEmpty) const SizedBox(height: AppSpacing.sm),
+            if (showTranslation) const SizedBox(height: AppSpacing.sm),
             if (source.isNotEmpty)
               Text(
                 '— $source',

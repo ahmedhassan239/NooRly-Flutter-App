@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/dotted_card_background.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// Section 2: YOUR JOURNEY card. Dynamic: current lesson from backend or empty/error state.
-class JourneyCard extends StatelessWidget {
+class JourneyCard extends ConsumerWidget {
   const JourneyCard({
     this.lesson,
     super.key,
@@ -29,7 +32,7 @@ class JourneyCard extends StatelessWidget {
   final VoidCallback? onSignIn;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
 
     if (isGuest) return _buildGuestCard(context, colorScheme);
@@ -38,7 +41,8 @@ class JourneyCard extends StatelessWidget {
       return _buildErrorCard(context, colorScheme);
     }
     if (isEmpty || lesson == null) return _buildEmptyCard(context, colorScheme);
-    return _buildLessonCard(context, colorScheme, lesson!);
+    final locale = ref.watch(localeControllerProvider).languageCode;
+    return _buildLessonCard(context, colorScheme, lesson!, locale);
   }
 
   Widget _buildGuestCard(BuildContext context, ColorScheme colorScheme) {
@@ -171,14 +175,18 @@ class JourneyCard extends StatelessWidget {
     BuildContext context,
     ColorScheme colorScheme,
     LessonEntity l,
+    String locale,
   ) {
     final loc = AppLocalizations.of(context)!;
-    final durationStr = l.duration != null
+    final rawDurationStr = l.duration != null
         ? loc.journeyDurationMinRead(l.duration!)
         : '';
-    final weekDayStr = l.weekNumber != null
+    final rawWeekDayStr = l.weekNumber != null
         ? loc.journeyWeekDayLabel(l.weekNumber!, l.dayNumber)
         : loc.journeyDayLabel(l.dayNumber);
+    final durationStr = toLocaleDigits(rawDurationStr, locale);
+    final weekDayStr = toLocaleDigits(rawWeekDayStr, locale);
+    final title = _localizedLessonTitle(l, locale);
 
     return DottedCard(
       padding: const EdgeInsets.all(20),
@@ -188,7 +196,7 @@ class JourneyCard extends StatelessWidget {
         children: [
           _labelChip(context, colorScheme),
           const SizedBox(height: 8),
-          Text(l.title, style: AppTypography.h2(color: colorScheme.onSurface)),
+          Text(title, style: AppTypography.h2(color: colorScheme.onSurface)),
           const SizedBox(height: 4),
           Text(
             weekDayStr,
@@ -229,6 +237,20 @@ class JourneyCard extends StatelessWidget {
       ),
     );
   }
+
+  /// Title with locale: entity titleAr when Arabic, else fallback map for known titles.
+  static String _localizedLessonTitle(LessonEntity l, String locale) {
+    if (locale == 'ar') {
+      if (l.titleAr != null && l.titleAr!.trim().isNotEmpty) return l.titleAr!;
+      final ar = _knownTitleAr[l.title.trim()];
+      if (ar != null) return ar;
+    }
+    return l.title;
+  }
+
+  static const Map<String, String> _knownTitleAr = {
+    'Welcome to Islam': 'مرحباً بالإسلام',
+  };
 
   Widget _labelChip(BuildContext context, ColorScheme colorScheme) {
     final l10n = AppLocalizations.of(context)!;

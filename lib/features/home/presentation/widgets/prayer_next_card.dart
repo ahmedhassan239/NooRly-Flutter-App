@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -46,8 +47,11 @@ class PrayerNextCard extends StatelessWidget {
       debugPrint('[Home] Remaining: ${p.remaining}');
     }
 
+    final locale = Localizations.localeOf(context).languageCode;
     final displayName = _localizedPrayerName(l10n, p.name);
     final displayRemaining = _formatRemainingLocalized(context, p);
+    final timeLabel = toLocaleDigits(p.time, locale);
+    final subtitleLabel = toLocaleDigits(displayRemaining, locale);
 
     return DottedCard(
       onTap: () => context.go('/prayer-times'),
@@ -55,8 +59,8 @@ class PrayerNextCard extends StatelessWidget {
       child: _buildRow(
         context,
         title: displayName,
-        subtitle: displayRemaining,
-        time: p.time,
+        subtitle: subtitleLabel,
+        time: timeLabel,
         colorScheme: colorScheme,
       ),
     );

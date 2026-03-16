@@ -216,6 +216,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journeyCompletePreviousFirst => 'Complete previous lessons first.';
 
   @override
+  String journeyWeekLabel(int week) {
+    return 'Week $week';
+  }
+
+  @override
+  String get lessonMarkAsCompleted => 'Mark as Completed';
+
+  @override
+  String get lessonCompleted => 'Completed';
+
+  @override
+  String get lessonNextLesson => 'Next Lesson →';
+
+  @override
+  String get lessonNoMoreLessons => 'No more lessons';
+
+  @override
+  String get lessonPersonalReflection => 'Personal Reflection';
+
+  @override
+  String get lessonWriteThoughts => 'Write your thoughts...';
+
+  @override
+  String get lessonSaveReflection => 'Save reflection';
+
+  @override
+  String get lessonReflectionSaved => 'Reflection saved';
+
+  @override
+  String get lessonSaved => 'Saved';
+
+  @override
+  String get lessonRetry => 'Retry';
+
+  @override
+  String get lessonNotFound => 'Lesson not found';
+
+  @override
   String get prayerNotificationsMuted => 'Notifications muted';
 
   @override
@@ -442,6 +480,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String itemCountAdhkar(int count) {
     return '$count adhkar';
   }
+
+  @override
+  String sayRepetition(int count) {
+    return 'Say ${count}x';
+  }
+
+  @override
+  String get adhkarLabel => 'Adhkar';
+
+  @override
+  String get translationLabel => 'Translation';
+
+  @override
+  String get sourceLabel => 'Source';
 
   @override
   String get savedCardDuas => 'Saved Duas';
@@ -837,4 +889,347 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get startupPleaseReopen => 'Please close and reopen the app.';
+
+  @override
+  String get onboardingCommonContinue => 'Continue';
+
+  @override
+  String get onboardingCommonSkipForNow => 'Skip for now';
+
+  @override
+  String get onboardingCommonSeeMyPlan => 'See my plan ✨';
+
+  @override
+  String get onboardingCommonStartMyJourney => 'Start My Journey ✨';
+
+  @override
+  String get onboardingAboutYouTitle => 'A little about you';
+
+  @override
+  String get onboardingAboutYouSubtitle =>
+      'This helps us personalize your experience';
+
+  @override
+  String get onboardingAboutYouNameLabel => 'What should we call you?';
+
+  @override
+  String get onboardingAboutYouNamePlaceholder => 'Your name (optional)';
+
+  @override
+  String get onboardingAboutYouEmbraceIslamLabel =>
+      'When did you embrace Islam?';
+
+  @override
+  String get onboardingEmbraceIslamLessThan1Month => 'Less than 1 month';
+
+  @override
+  String get onboardingEmbraceIslam1To6Months => '1–6 months';
+
+  @override
+  String get onboardingEmbraceIslam6To12Months => '6–12 months';
+
+  @override
+  String get onboardingEmbraceIslam1To2Years => '1–2 years';
+
+  @override
+  String get onboardingEmbraceIslam2PlusYears => '2+ years';
+
+  @override
+  String get onboardingEmbraceIslamBornMuslim => 'Born Muslim';
+
+  @override
+  String get onboardingKnowledgeTitle => 'Your current knowledge';
+
+  @override
+  String get onboardingKnowledgeSubtitle =>
+      'No judgment — just so we can meet you where you are.';
+
+  @override
+  String get onboardingKnowledgeArabicLabel => 'Can you read Arabic?';
+
+  @override
+  String get onboardingArabicYesFluently => 'Yes, fluently';
+
+  @override
+  String get onboardingArabicYesSlowly => 'Yes, slowly';
+
+  @override
+  String get onboardingArabicLearningNow => 'Learning now';
+
+  @override
+  String get onboardingArabicNoWantToLearn => 'No, but want to learn';
+
+  @override
+  String get onboardingArabicNo => 'No';
+
+  @override
+  String get onboardingKnowledgePrayerLabel =>
+      'Do you pray the 5 daily prayers?';
+
+  @override
+  String get onboardingPrayerYesRegularly => 'Yes, regularly';
+
+  @override
+  String get onboardingPrayerYesNotAll5 => 'Yes, but not all 5';
+
+  @override
+  String get onboardingPrayerLearningToPray => 'Learning to pray';
+
+  @override
+  String get onboardingPrayerNotYet => 'Not yet';
+
+  @override
+  String get onboardingKnowledgeQuranLabel => 'Have you read any Quran?';
+
+  @override
+  String get onboardingQuranYesRegularly => 'Yes, regularly';
+
+  @override
+  String get onboardingQuranYesOccasionally => 'Yes, occasionally';
+
+  @override
+  String get onboardingQuranJustStarted => 'Just started';
+
+  @override
+  String get onboardingQuranNotYet => 'Not yet';
+
+  @override
+  String get onboardingGoalsTitle => 'What brings you here?';
+
+  @override
+  String get onboardingGoalsSubtitle => 'Select all that resonate with you';
+
+  @override
+  String get onboardingGoalsMainLabel => 'Your main goals';
+
+  @override
+  String get onboardingGoalLearnBasics => 'Learn the basics';
+
+  @override
+  String get onboardingGoalImprovePrayer => 'Improve my prayer';
+
+  @override
+  String get onboardingGoalUnderstandQuran => 'Understand Quran';
+
+  @override
+  String get onboardingGoalBuildHabits => 'Build good habits';
+
+  @override
+  String get onboardingGoalConnectCommunity => 'Connect with community';
+
+  @override
+  String get onboardingChallengesLabel => 'What challenges you most?';
+
+  @override
+  String get onboardingChallengeUnderstandingArabic => 'Understanding Arabic';
+
+  @override
+  String get onboardingChallengeRememberingToPray => 'Remembering to pray';
+
+  @override
+  String get onboardingChallengeFindingTime => 'Finding time to learn';
+
+  @override
+  String get onboardingChallengeStayingConsistent => 'Staying consistent';
+
+  @override
+  String get onboardingChallengeDealingWithDoubts => 'Dealing with doubts';
+
+  @override
+  String get onboardingChallengeLackOfSupport => 'Lack of support';
+
+  @override
+  String get onboardingPreferencesTitle => 'Your preferences';
+
+  @override
+  String get onboardingPreferencesSubtitle =>
+      'We\'ll shape Noorly around your schedule';
+
+  @override
+  String get onboardingPreferencesTimeDailyLabel => 'How much time daily?';
+
+  @override
+  String get onboardingTime5To10 => '5–10 min';
+
+  @override
+  String get onboardingTime5To10Sub => 'Quick daily dose';
+
+  @override
+  String get onboardingTime15To20 => '15–20 min';
+
+  @override
+  String get onboardingTime15To20Sub => 'Balanced learning';
+
+  @override
+  String get onboardingTime30Plus => '30+ min';
+
+  @override
+  String get onboardingTime30PlusSub => 'Deep immersion';
+
+  @override
+  String get onboardingTimeFlexible => 'Flexible';
+
+  @override
+  String get onboardingTimeFlexibleSub => 'No set schedule';
+
+  @override
+  String get onboardingPreferencesBestTimeLabel => 'Best time to learn?';
+
+  @override
+  String get onboardingBestTimeMorning => 'Morning';
+
+  @override
+  String get onboardingBestTimeAfternoon => 'Afternoon';
+
+  @override
+  String get onboardingBestTimeEvening => 'Evening';
+
+  @override
+  String get onboardingBestTimeNight => 'Night';
+
+  @override
+  String get onboardingBestTimeAnytime => 'Anytime';
+
+  @override
+  String get onboardingPreferencesLearningStyleLabel =>
+      'How do you learn best?';
+
+  @override
+  String get onboardingStyleReading => 'Reading';
+
+  @override
+  String get onboardingStyleListening => 'Listening';
+
+  @override
+  String get onboardingStyleVideos => 'Videos';
+
+  @override
+  String get onboardingStyleInteractive => 'Interactive';
+
+  @override
+  String get onboardingStyleMixOfAll => 'Mix of all';
+
+  @override
+  String get onboardingPreferencesRemindersLabel => 'Reminders & notifications';
+
+  @override
+  String get onboardingReminderAll => 'All reminders';
+
+  @override
+  String get onboardingReminderAllSub => 'Prayers + lessons + motivation';
+
+  @override
+  String get onboardingReminderPrayerOnly => 'Prayer times only';
+
+  @override
+  String get onboardingReminderPrayerOnlySub => 'Just salah reminders';
+
+  @override
+  String get onboardingReminderCustomize => 'Let me customize';
+
+  @override
+  String get onboardingReminderCustomizeSub => 'Choose in settings later';
+
+  @override
+  String get onboardingReminderNoThanks => 'No thanks';
+
+  @override
+  String get onboardingReminderNoThanksSub => 'I\'ll manage on my own';
+
+  @override
+  String get onboardingPlanTitle => 'Your Starting Plan';
+
+  @override
+  String get onboardingPlanSubtitle => 'Here\'s how we\'ll begin, together.';
+
+  @override
+  String get onboardingPlanFaithFoundations => 'Faith Foundations';
+
+  @override
+  String get onboardingPlanFaithFoundationsSub => 'Understand your beliefs';
+
+  @override
+  String get onboardingPlanWeeks1To2 => 'Weeks 1–2';
+
+  @override
+  String get onboardingPlanDailyPrayer => 'Daily Prayer';
+
+  @override
+  String get onboardingPlanDailyPrayerSub => 'Learn and practice salah';
+
+  @override
+  String get onboardingPlanWeeks3To5 => 'Weeks 3–5';
+
+  @override
+  String get onboardingPlanLivingIslam => 'Living Islam';
+
+  @override
+  String get onboardingPlanLivingIslamSub => 'Build character and habits';
+
+  @override
+  String get onboardingPlanWeeks6To8 => 'Weeks 6–8';
+
+  @override
+  String get onboardingPlanAddIslamDate => 'Add your Islam date';
+
+  @override
+  String get onboardingPlanAddIslamDateSub =>
+      'Optional — we\'ll celebrate your milestones';
+
+  @override
+  String get dashboardOnboardingTitle => 'Your Journey';
+
+  @override
+  String get dashboardOnboardingSubtitle => 'Your saved preferences and goals';
+
+  @override
+  String get dashboardOnboardingYourJourney => 'Your Journey';
+
+  @override
+  String get dashboardOnboardingYourPreferences => 'Your Preferences';
+
+  @override
+  String get dashboardOnboardingYourGoals => 'Your Goals';
+
+  @override
+  String get dashboardOnboardingYourChallenges => 'Your Challenges';
+
+  @override
+  String get dashboardOnboardingYourLearningProfile => 'Your Learning Profile';
+
+  @override
+  String get dashboardOnboardingCompleteCta => 'Complete your onboarding';
+
+  @override
+  String get dashboardOnboardingEmpty => 'No onboarding data yet.';
+
+  @override
+  String get dashboardOnboardingDisplayName => 'Name';
+
+  @override
+  String get dashboardOnboardingEmbraceIslam => 'When you embraced Islam';
+
+  @override
+  String get dashboardOnboardingArabicLevel => 'Arabic reading';
+
+  @override
+  String get dashboardOnboardingPrayerLevel => 'Prayer';
+
+  @override
+  String get dashboardOnboardingQuranLevel => 'Quran reading';
+
+  @override
+  String get dashboardOnboardingDailyTime => 'Daily time';
+
+  @override
+  String get dashboardOnboardingBestTime => 'Best time to learn';
+
+  @override
+  String get dashboardOnboardingLearningStyle => 'Learning style';
+
+  @override
+  String get dashboardOnboardingReminders => 'Reminders';
+
+  @override
+  String get dashboardOnboardingIslamDate => 'Islam date';
 }
