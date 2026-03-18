@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 
 import 'local_notification_scheduler.dart';
+import 'notification_locale_resolver.dart';
 import 'notification_payload_parser.dart';
 import 'notification_router.dart';
 import 'schedulers/prayer_reminder_scheduler.dart';
@@ -129,18 +130,23 @@ class NotificationService {
 
   /// Reschedule all local notifications based on updated preferences.
   ///
-  /// Cancels all existing notifications first to avoid duplicates.
-  /// Pass prayer times separately so the prayer scheduler can use them.
+  /// Notification language is resolved from [prefs.languageMode] and [appLocale].
+  /// Pass [appLocale] (e.g. current [Locale.languageCode]) so "App language" / "Both" use it.
+  /// Defaults to `en` when omitted.
   Future<void> rescheduleAll(
     NotificationPreferencesEntity prefs, {
     List<PrayerScheduleInput>? prayerInputs,
     LessonScheduleInput? lessonInput,
+    String? appLocale,
   }) async {
     if (kIsWeb) return;
     if (!_initialized) await initialize();
 
+    final localeCode =
+        resolveNotificationLocale(prefs.languageMode, appLocale ?? 'en');
     if (kDebugMode) {
       debugPrint('[NotificationService] ── rescheduleAll() called ──');
+      debugPrint('[NotificationService] notification locale: $localeCode (appLocale=${appLocale ?? "null"})');
     }
 
     // Cancel everything first
@@ -156,6 +162,7 @@ class NotificationService {
         prayerInputs: prayerInputs,
         prefs: prefs,
         scheduleMode: scheduleMode,
+        localeCode: localeCode,
       );
     } else if (kDebugMode) {
       if (!prefs.prayerEnabled) {
@@ -167,7 +174,11 @@ class NotificationService {
 
     // ── Adhkar reminders ──────────────────────────────────────────────────
     if (kDebugMode) debugPrint('[NotificationService] scheduling adhkar reminders');
-    await DhikrReminderScheduler.instance.schedule(prefs: prefs, scheduleMode: scheduleMode);
+    await DhikrReminderScheduler.instance.schedule(
+      prefs: prefs,
+      scheduleMode: scheduleMode,
+      localeCode: localeCode,
+    );
 
     // ── Lesson reminders ──────────────────────────────────────────────────
     if (lessonInput != null) {
@@ -176,10 +187,15 @@ class NotificationService {
         input: lessonInput,
         prefs: prefs,
         scheduleMode: scheduleMode,
+        localeCode: localeCode,
       );
     } else if (prefs.lessonEnabled) {
       if (kDebugMode) debugPrint('[NotificationService] scheduling lesson morning-only (no lesson input)');
-      await LessonReminderScheduler.instance.scheduleMorningOnly(prefs: prefs, scheduleMode: scheduleMode);
+      await LessonReminderScheduler.instance.scheduleMorningOnly(
+        prefs: prefs,
+        scheduleMode: scheduleMode,
+        localeCode: localeCode,
+      );
     } else if (kDebugMode) {
       debugPrint('[NotificationService] SKIP lesson reminders — lessonEnabled=false');
     }
@@ -187,7 +203,11 @@ class NotificationService {
     // ── Occasion reminders ────────────────────────────────────────────────
     if (prefs.specialOccasionsEnabled) {
       if (kDebugMode) debugPrint('[NotificationService] scheduling occasion reminders (Friday Jumu\'ah)');
-      await OccasionScheduler.instance.schedule(prefs: prefs, scheduleMode: scheduleMode);
+      await OccasionScheduler.instance.schedule(
+        prefs: prefs,
+        scheduleMode: scheduleMode,
+        localeCode: localeCode,
+      );
     } else if (kDebugMode) {
       debugPrint('[NotificationService] SKIP occasion reminders — specialOccasionsEnabled=false');
     }
@@ -200,32 +220,57 @@ class NotificationService {
   /// Reschedule only non-prayer notifications (adhkar, lesson, occasions).
   ///
   /// Use this on app startup when prayer times are not yet available.
-  Future<void> rescheduleNonPrayer(NotificationPreferencesEntity prefs) async {
+  /// Pass [appLocale] so notification language follows app language when mode is appLocale/both.
+  Future<void> rescheduleNonPrayer(
+    NotificationPreferencesEntity prefs, {
+    String? appLocale,
+  }) async {
     if (kIsWeb) return;
     if (!_initialized) await initialize();
 
-    if (kDebugMode) debugPrint('[NotificationService] rescheduling non-prayer notifications');
+    final localeCode =
+        resolveNotificationLocale(prefs.languageMode, appLocale ?? 'en');
+    if (kDebugMode) {
+      debugPrint('[NotificationService] rescheduling non-prayer notifications (locale=$localeCode)');
+    }
 
     // Resolve once — reused for all schedulers in this session.
     final scheduleMode = await LocalNotificationScheduler.instance.resolveScheduleMode();
 
-    await DhikrReminderScheduler.instance.schedule(prefs: prefs, scheduleMode: scheduleMode);
+    await DhikrReminderScheduler.instance.schedule(
+      prefs: prefs,
+      scheduleMode: scheduleMode,
+      localeCode: localeCode,
+    );
 
     if (prefs.lessonEnabled) {
-      await LessonReminderScheduler.instance.scheduleMorningOnly(prefs: prefs, scheduleMode: scheduleMode);
+      await LessonReminderScheduler.instance.scheduleMorningOnly(
+        prefs: prefs,
+        scheduleMode: scheduleMode,
+        localeCode: localeCode,
+      );
     }
 
     if (prefs.specialOccasionsEnabled) {
-      await OccasionScheduler.instance.schedule(prefs: prefs, scheduleMode: scheduleMode);
+      await OccasionScheduler.instance.schedule(
+        prefs: prefs,
+        scheduleMode: scheduleMode,
+        localeCode: localeCode,
+      );
     }
   }
 
   /// Schedule a test notification that fires in [delaySeconds] seconds.
-  Future<void> scheduleTestNotification({int delaySeconds = 10}) async {
+  /// [localeCode] `ar` or `en` for the notification text; defaults to `en`.
+  Future<void> scheduleTestNotification({
+    int delaySeconds = 10,
+    String localeCode = 'en',
+  }) async {
     if (kIsWeb) return;
     if (!_initialized) await initialize();
     await LocalNotificationScheduler.instance.showTestNotification(
       delaySeconds: delaySeconds,
+      localeCode: localeCode,
     );
   }
 

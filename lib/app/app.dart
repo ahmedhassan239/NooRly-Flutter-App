@@ -57,9 +57,13 @@ class _AppState extends ConsumerState<App> {
     try {
       final repo = ref.read(notificationPreferencesRepositoryProvider);
       final prefs = await repo.getLocalPreferences();
-      await NotificationService.instance.rescheduleNonPrayer(prefs);
+      final appLocale = ref.read(localeControllerProvider).languageCode;
+      await NotificationService.instance.rescheduleNonPrayer(
+        prefs,
+        appLocale: appLocale,
+      );
       if (kDebugMode) {
-        debugPrint('[App] Startup: non-prayer notifications rescheduled');
+        debugPrint('[App] Startup: non-prayer notifications rescheduled (locale=$appLocale)');
       }
     } catch (e) {
       if (kDebugMode) debugPrint('[App] Startup reschedule error: $e');
@@ -92,9 +96,17 @@ class _AppState extends ConsumerState<App> {
     final themeMode = ref.watch(themeModeProvider);
     final locale = ref.watch(localeControllerProvider);
 
-    // Keep ApiClient locale in sync whenever the user switches language.
-    ref.listen<Locale>(localeControllerProvider, (_, next) {
+    // Keep ApiClient locale in sync and reschedule notifications when language changes.
+    ref.listen<Locale>(localeControllerProvider, (prev, next) {
       ref.read(apiClientProvider).setLocale(next);
+      if (!kIsWeb &&
+          prev != null &&
+          next.languageCode != prev.languageCode) {
+        if (kDebugMode) {
+          debugPrint('[App] Locale changed ${prev.languageCode} → ${next.languageCode}, rescheduling non-prayer notifications');
+        }
+        _rescheduleNonPrayerNotifications();
+      }
     });
 
     return OverlaySupport.global(

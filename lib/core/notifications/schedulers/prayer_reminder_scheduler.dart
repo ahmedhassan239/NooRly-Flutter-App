@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import '../local_notification_scheduler.dart';
+import '../notification_content_localizer.dart';
 import '../notification_id_registry.dart';
 import '../notification_payload_parser.dart';
 
@@ -34,38 +35,6 @@ class PrayerReminderScheduler {
     'isha':    NotificationIds.isha,
   };
 
-  static const _prayerTitlesEn = {
-    'fajr':    '🌅 It\'s Time for Fajr Prayer',
-    'dhuhr':   '☀️ It\'s Time for Dhuhr Prayer',
-    'asr':     '🌤️ It\'s Time for Asr Prayer',
-    'maghrib': '🌆 It\'s Time for Maghrib Prayer',
-    'isha':    '🌙 It\'s Time for Isha Prayer',
-  };
-
-  static const _prayerBodiesEn = {
-    'fajr':    '"Prayer is better than sleep"',
-    'dhuhr':   'Don\'t forget your Dhuhr prayer today',
-    'asr':     'Asr time has entered, make wudu and pray',
-    'maghrib': 'Maghrib Adhan is now',
-    'isha':    'Pray Isha before sleep',
-  };
-
-  static const _prayerTitlesAr = {
-    'fajr':    '🌅 حان وقت صلاة الفجر',
-    'dhuhr':   '☀️ حان وقت صلاة الظهر',
-    'asr':     '🌤️ حان وقت صلاة العصر',
-    'maghrib': '🌆 حان وقت صلاة المغرب',
-    'isha':    '🌙 حان وقت صلاة العشاء',
-  };
-
-  static const _prayerBodiesAr = {
-    'fajr':    '"الصلاة خير من النوم"',
-    'dhuhr':   'لا تنسَ صلاة الظهر اليوم',
-    'asr':     'وقت العصر دخل، توضأ وصلِّ',
-    'maghrib': 'أذان المغرب الآن',
-    'isha':    'صلِّ العشاء قبل النوم',
-  };
-
   /// Check if a specific prayer is enabled in prefs.
   bool _isPrayerEnabled(String name, NotificationPreferencesEntity prefs) =>
       switch (name) {
@@ -81,6 +50,7 @@ class PrayerReminderScheduler {
     required List<PrayerScheduleInput> prayerInputs,
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     if (kIsWeb) return;
 
@@ -118,13 +88,11 @@ class PrayerReminderScheduler {
         scheduledTime = scheduledTime.add(const Duration(days: 1));
       }
 
-      final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
-      final title = isArabic
-          ? (_prayerTitlesAr[prayer.name] ?? '')
-          : (_prayerTitlesEn[prayer.name] ?? '');
-      final body = isArabic
-          ? (_prayerBodiesAr[prayer.name] ?? '')
-          : (_prayerBodiesEn[prayer.name] ?? '');
+      final localizer = NotificationContentLocalizer(
+        localeCode == 'ar' ? 'ar' : 'en',
+      );
+      final title = localizer.prayerTitle(prayer.name);
+      final body = localizer.prayerBody(prayer.name);
 
       final payload = NotificationPayload.encode(
         type: 'prayer',

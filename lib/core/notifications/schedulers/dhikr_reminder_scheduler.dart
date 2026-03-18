@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import '../local_notification_scheduler.dart';
+import '../notification_content_localizer.dart';
 import '../notification_id_registry.dart';
 import '../notification_payload_parser.dart';
 
@@ -20,33 +21,12 @@ class DhikrReminderScheduler {
   DhikrReminderScheduler._();
   static final DhikrReminderScheduler instance = DhikrReminderScheduler._();
 
-  static const _randomDhikrTitlesEn = [
-    '💚 Spiritual Reminder',
-    '💚 Remember Allah',
-    '💚 A Moment of Reflection',
-  ];
-  static const _randomDhikrBodiesEn = [
-    'Glory is to Allah and praise is to Him\nSubhan Allahi wa bihamdihi',
-    'There is no power except with Allah\nLa hawla wala quwwata illa billah',
-    'Allah is the Greatest\nAllahu Akbar',
-  ];
-
-  static const _randomDhikrTitlesAr = [
-    '💚 تذكير روحي',
-    '💚 اذكر الله',
-    '💚 لحظة تأمل',
-  ];
-  static const _randomDhikrBodiesAr = [
-    'سُبْحَانَ اللهِ وَبِحَمْدِهِ\nSubhan Allahi wa bihamdihi',
-    'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللهِ\nLa hawla wala quwwata illa billah',
-    'اللهُ أَكْبَر\nAllahu Akbar',
-  ];
-
   Future<void> schedule({
     required NotificationPreferencesEntity prefs,
     DateTime? fajrTime,
     DateTime? asrTime,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     if (kIsWeb) return;
 
@@ -58,7 +38,7 @@ class DhikrReminderScheduler {
           ? fajrTime.add(const Duration(minutes: 30)).hour
           : 6;
       if (kDebugMode) debugPrint('[DhikrScheduler] ✓ morning adhkar → hour=$morningHour (${fajrTime != null ? "fajr+30min" : "default 6 AM"})');
-      await _scheduleMorningAdhkar(prefs: prefs, hour: morningHour, scheduleMode: scheduleMode);
+      await _scheduleMorningAdhkar(prefs: prefs, hour: morningHour, scheduleMode: scheduleMode, localeCode: localeCode);
     } else {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.morningAdhkar);
       if (kDebugMode) debugPrint('[DhikrScheduler] SKIP morning adhkar — disabled');
@@ -70,7 +50,7 @@ class DhikrReminderScheduler {
           ? asrTime.add(const Duration(minutes: 30)).hour
           : 16;
       if (kDebugMode) debugPrint('[DhikrScheduler] ✓ evening adhkar → hour=$eveningHour (${asrTime != null ? "asr+30min" : "default 4 PM"})');
-      await _scheduleEveningAdhkar(prefs: prefs, hour: eveningHour, scheduleMode: scheduleMode);
+      await _scheduleEveningAdhkar(prefs: prefs, hour: eveningHour, scheduleMode: scheduleMode, localeCode: localeCode);
     } else {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.eveningAdhkar);
       if (kDebugMode) debugPrint('[DhikrScheduler] SKIP evening adhkar — disabled');
@@ -80,7 +60,7 @@ class DhikrReminderScheduler {
     if (prefs.sleepAdhkarEnabled) {
       final t = prefs.effectiveSleepAdhkarTime;
       if (kDebugMode) debugPrint('[DhikrScheduler] ✓ sleep adhkar → ${t.hour}:${t.minute.toString().padLeft(2, "0")}');
-      await _scheduleSleepAdhkar(prefs: prefs, scheduleMode: scheduleMode);
+      await _scheduleSleepAdhkar(prefs: prefs, scheduleMode: scheduleMode, localeCode: localeCode);
     } else {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.sleepAdhkar);
       if (kDebugMode) debugPrint('[DhikrScheduler] SKIP sleep adhkar — disabled');
@@ -90,7 +70,7 @@ class DhikrReminderScheduler {
     final dhikrSlotIds = List.generate(10, (i) => NotificationIds.randomDhikrSlot(i));
     if (prefs.randomDhikrEnabled) {
       if (kDebugMode) debugPrint('[DhikrScheduler] ✓ random dhikr → frequency=${prefs.randomDhikrFrequency}');
-      await _scheduleRandomDhikr(prefs: prefs, scheduleMode: scheduleMode);
+      await _scheduleRandomDhikr(prefs: prefs, scheduleMode: scheduleMode, localeCode: localeCode);
     } else {
       await LocalNotificationScheduler.instance.cancelIds(dhikrSlotIds);
       if (kDebugMode) debugPrint('[DhikrScheduler] SKIP random dhikr — disabled');
@@ -103,14 +83,13 @@ class DhikrReminderScheduler {
     required NotificationPreferencesEntity prefs,
     required int hour,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.morningAdhkar,
-      title: isArabic ? '☀️ أذكار الصباح' : '☀️ Morning Adhkar',
-      body: isArabic
-          ? 'لا تنسَ أذكار الصباح اليوم\nاضغط للقراءة الآن'
-          : "Don't forget your morning remembrances\nTap to read now",
+      title: localizer.morningAdhkarTitle,
+      body: localizer.morningAdhkarBody,
       hour: hour,
       minute: 0,
       channelId: LocalNotificationScheduler.channelReminders,
@@ -127,14 +106,13 @@ class DhikrReminderScheduler {
     required NotificationPreferencesEntity prefs,
     required int hour,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.eveningAdhkar,
-      title: isArabic ? '🌙 أذكار المساء' : '🌙 Evening Adhkar',
-      body: isArabic
-          ? 'حان وقت أذكار المساء\nاضغط للقراءة الآن'
-          : "It's time for evening remembrances\nTap to read now",
+      title: localizer.eveningAdhkarTitle,
+      body: localizer.eveningAdhkarBody,
       hour: hour,
       minute: 0,
       channelId: LocalNotificationScheduler.channelReminders,
@@ -150,15 +128,14 @@ class DhikrReminderScheduler {
   Future<void> _scheduleSleepAdhkar({
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     final t = prefs.effectiveSleepAdhkarTime;
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.sleepAdhkar,
-      title: isArabic ? '😴 أذكار النوم' : '😴 Sleep Adhkar',
-      body: isArabic
-          ? 'لا تنم قبل قراءة أذكار النوم\nاضغط للقراءة الآن'
-          : "Don't sleep before reading sleep remembrances\nTap to read now",
+      title: localizer.sleepAdhkarTitle,
+      body: localizer.sleepAdhkarBody,
       hour: t.hour,
       minute: t.minute,
       channelId: LocalNotificationScheduler.channelLow,
@@ -174,10 +151,11 @@ class DhikrReminderScheduler {
   Future<void> _scheduleRandomDhikr({
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
-    final count    = prefs.randomDhikrFrequency.clamp(1, 10);
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
-    final rng      = Random();
+    final count   = prefs.randomDhikrFrequency.clamp(1, 10);
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
+    final rng     = Random();
 
     // Allowed window: 8 AM – 9 PM (quiet hours excluded)
     const windowStart = 8;
@@ -190,9 +168,9 @@ class DhikrReminderScheduler {
     for (var i = 0; i < selectedHours.length; i++) {
       final hour   = selectedHours[i];
       final minute = rng.nextInt(60);
-      final idx    = rng.nextInt(_randomDhikrTitlesEn.length);
-      final title  = isArabic ? _randomDhikrTitlesAr[idx] : _randomDhikrTitlesEn[idx];
-      final body   = isArabic ? _randomDhikrBodiesAr[idx] : _randomDhikrBodiesEn[idx];
+      final idx    = rng.nextInt(3); // localizer has 3 random dhikr variants
+      final title  = localizer.randomDhikrTitle(idx);
+      final body   = localizer.randomDhikrBody(idx);
 
       await LocalNotificationScheduler.instance.scheduleDailyAt(
         id: NotificationIds.randomDhikrSlot(i),

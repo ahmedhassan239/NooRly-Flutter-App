@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import '../local_notification_scheduler.dart';
+import '../notification_content_localizer.dart';
 import '../notification_id_registry.dart';
 import '../notification_payload_parser.dart';
 
@@ -38,6 +39,7 @@ class LessonReminderScheduler {
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     if (kIsWeb) return;
 
@@ -53,11 +55,11 @@ class LessonReminderScheduler {
       return;
     }
 
-    await _scheduleMorning(input: input, prefs: prefs, scheduleMode: scheduleMode);
+    await _scheduleMorning(input: input, prefs: prefs, scheduleMode: scheduleMode, localeCode: localeCode);
 
     if (!input.isCompleted && prefs.lessonEveningReminderEnabled) {
       if (kDebugMode) debugPrint('[LessonScheduler] ✓ evening reminder → 18:00 (lesson not completed)');
-      await _scheduleEvening(input: input, prefs: prefs, scheduleMode: scheduleMode);
+      await _scheduleEvening(input: input, prefs: prefs, scheduleMode: scheduleMode, localeCode: localeCode);
     } else {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.lessonEvening);
       if (kDebugMode) {
@@ -74,12 +76,13 @@ class LessonReminderScheduler {
   Future<void> scheduleMorningOnly({
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     if (kIsWeb) return;
     if (!prefs.lessonEnabled) return;
 
     final effectiveTime = prefs.effectiveLessonTime;
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
 
     if (kDebugMode) {
       debugPrint('[LessonScheduler] ── scheduleMorningOnly() called ──');
@@ -88,8 +91,8 @@ class LessonReminderScheduler {
 
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.lessonMorning,
-      title: isArabic ? '📖 درس اليوم جاهز!' : '📖 Today\'s Lesson is Ready!',
-      body: isArabic ? 'افتح التطبيق لتبدأ درس اليوم' : 'Open the app to start today\'s lesson',
+      title: localizer.lessonMorningTitle,
+      body: localizer.lessonMorningBody,
       hour: effectiveTime.hour,
       minute: effectiveTime.minute,
       channelId: LocalNotificationScheduler.channelReminders,
@@ -106,14 +109,18 @@ class LessonReminderScheduler {
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
     final effectiveTime = prefs.effectiveLessonTime;
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
 
-    final title = isArabic ? '📖 درس اليوم جاهز!' : '📖 Today\'s Lesson is Ready!';
-    final body  = isArabic
-        ? 'اليوم ${input.dayNumber}: ${input.lessonTitleAr}\n⏱️ ${input.durationMinutes} دقائق فقط'
-        : 'Day ${input.dayNumber}: ${input.lessonTitleEn}\n⏱️ Just ${input.durationMinutes} minutes';
+    final title = localizer.lessonMorningTitle;
+    final body  = localizer.lessonMorningBodyWithDay(
+      input.dayNumber,
+      input.durationMinutes,
+      input.lessonTitleEn,
+      input.lessonTitleAr,
+    );
 
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.lessonMorning,
@@ -140,15 +147,16 @@ class LessonReminderScheduler {
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
     AndroidScheduleMode? scheduleMode,
+    String localeCode = 'en',
   }) async {
-    final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+    final localizer = NotificationContentLocalizer(localeCode == 'ar' ? 'ar' : 'en');
 
-    final title = isArabic
-        ? '⏰ لم تنهِ درس اليوم بعد'
-        : '⏰ You Haven\'t Completed Today\'s Lesson Yet';
-    final body  = isArabic
-        ? 'لا يزال لديك وقت!\nاليوم ${input.dayNumber}: ${input.lessonTitleAr}'
-        : 'You still have time!\nDay ${input.dayNumber}: ${input.lessonTitleEn}';
+    final title = localizer.lessonEveningTitle;
+    final body  = localizer.lessonEveningBody(
+      input.dayNumber,
+      input.lessonTitleEn,
+      input.lessonTitleAr,
+    );
 
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.lessonEvening,

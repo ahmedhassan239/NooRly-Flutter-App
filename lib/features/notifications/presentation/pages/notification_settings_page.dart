@@ -6,6 +6,8 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/notifications/notification_locale_resolver.dart';
 import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/notifications/schedulers/prayer_reminder_scheduler.dart';
 import 'package:flutter_app/design_system/colors.dart';
@@ -125,9 +127,11 @@ class _NotificationSettingsPageState
           debugPrint('══════════════════════════════════════════════');
         }
 
+        final appLocale = ref.read(localeControllerProvider).languageCode;
         await NotificationService.instance.rescheduleAll(
           prefs,
           prayerInputs: prayerInputs.isNotEmpty ? prayerInputs : null,
+          appLocale: appLocale,
         );
 
         if (kDebugMode) {
@@ -205,8 +209,21 @@ class _NotificationSettingsPageState
     // ← mounted is confirmed true here (checked above)
     setState(() => _testInProgress = true);
 
+    final prefs = _prefs;
+    final appLocale = ref.read(localeControllerProvider).languageCode;
+    final localeCode = resolveNotificationLocale(
+      prefs?.languageMode ?? NotificationLanguageMode.appLocale,
+      appLocale,
+    );
+    if (kDebugMode) {
+      debugPrint('[NotificationSettings] test notification locale: $localeCode (appLocale=$appLocale)');
+    }
+
     try {
-      await NotificationService.instance.scheduleTestNotification(delaySeconds: 10);
+      await NotificationService.instance.scheduleTestNotification(
+        delaySeconds: 10,
+        localeCode: localeCode,
+      );
       if (!mounted) return; // ← guard after every await
       await _loadDebugInfo();
       if (!mounted) return;

@@ -20,6 +20,7 @@ import 'package:flutter_app/features/home/providers/home_providers.dart';
 import 'package:flutter_app/core/errors/api_exception.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/notifications/schedulers/prayer_reminder_scheduler.dart';
 import 'package:flutter_app/features/notifications/providers/notification_preferences_providers.dart';
@@ -71,9 +72,11 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
 
       if (inputs.isEmpty) return;
 
+      final appLocale = ref.read(localeControllerProvider).languageCode;
       await NotificationService.instance.rescheduleAll(
         prefs,
         prayerInputs: inputs,
+        appLocale: appLocale,
       );
 
       if (kDebugMode) {

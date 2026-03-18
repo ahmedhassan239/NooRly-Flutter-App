@@ -12,6 +12,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+import 'notification_content_localizer.dart';
 import 'notification_payload_parser.dart';
 
 // Re-export Day for use in OccasionScheduler without importing flutter_local_notifications directly
@@ -446,7 +447,11 @@ class LocalNotificationScheduler {
   }
 
   /// Show a test notification in [delaySeconds] seconds (default 10).
-  Future<void> showTestNotification({int delaySeconds = 10}) async {
+  /// [localeCode] `ar` or `en` for title/body; defaults to `en`.
+  Future<void> showTestNotification({
+    int delaySeconds = 10,
+    String localeCode = 'en',
+  }) async {
     if (kIsWeb) return;
     if (!_initialized) {
       throw StateError(
@@ -464,8 +469,12 @@ class LocalNotificationScheduler {
     }
     final scheduledAt = DateTime.now().add(Duration(seconds: delaySeconds));
 
+    final localizer = NotificationContentLocalizer(
+      localeCode == 'ar' ? 'ar' : 'en',
+    );
     if (kDebugMode) {
       debugPrint('[LocalNotificationScheduler] ── test notification request ──');
+      debugPrint('[LocalNotificationScheduler] localeCode           : $localeCode');
       debugPrint('[LocalNotificationScheduler] initialized           : $_initialized');
       debugPrint('[LocalNotificationScheduler] notifications enabled : $notificationsEnabled');
       debugPrint('[LocalNotificationScheduler] exact alarm granted  : $exactAlarmGranted');
@@ -475,8 +484,8 @@ class LocalNotificationScheduler {
 
     await scheduleAt(
       id: testNotificationId,
-      title: '✅ NooRly Notifications Work!',
-      body: 'If you see this, local notifications are working correctly.',
+      title: localizer.testNotificationTitle,
+      body: localizer.testNotificationBody,
       scheduledAt: scheduledAt,
       channelId: channelReminders,
       payload: 'test',

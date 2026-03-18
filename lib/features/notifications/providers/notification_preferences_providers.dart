@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/notifications/data/notification_preferences_repository_impl.dart';
@@ -54,11 +55,11 @@ class NotificationPreferencesNotifier
 
   Future<void> _reschedule(NotificationPreferencesEntity prefs) async {
     if (kIsWeb) return;
-    // Reschedule non-prayer notifications immediately.
-    // Prayer notifications need live prayer times; those are passed from
-    // notification_settings_page when the user explicitly saves, or from
-    // the prayer page when it triggers a full reschedule.
-    await NotificationService.instance.rescheduleNonPrayer(prefs);
+    final appLocale = _ref.read(localeControllerProvider).languageCode;
+    await NotificationService.instance.rescheduleNonPrayer(
+      prefs,
+      appLocale: appLocale,
+    );
   }
 }
 
