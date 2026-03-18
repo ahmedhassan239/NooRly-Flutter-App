@@ -8,6 +8,7 @@ import 'package:flutter_app/core/deep_link/deep_link_handler.dart';
 import 'package:flutter_app/core/notifications/notification_router.dart';
 import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
+import 'package:flutter_app/features/notifications/providers/notification_preferences_providers.dart';
 import 'package:flutter_app/design_system/app_theme.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
@@ -44,8 +45,25 @@ class _AppState extends ConsumerState<App> {
         NotificationRouter.instance.init(router);
         // Flush any notification tap that happened during cold start.
         NotificationService.instance.flushPendingTap();
+
+        // Reschedule non-prayer notifications (adhkar, lesson, Friday) using
+        // cached preferences so they work immediately on every app launch.
+        _rescheduleNonPrayerNotifications();
       }
     });
+  }
+
+  Future<void> _rescheduleNonPrayerNotifications() async {
+    try {
+      final repo = ref.read(notificationPreferencesRepositoryProvider);
+      final prefs = await repo.getLocalPreferences();
+      await NotificationService.instance.rescheduleNonPrayer(prefs);
+      if (kDebugMode) {
+        debugPrint('[App] Startup: non-prayer notifications rescheduled');
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('[App] Startup reschedule error: $e');
+    }
   }
 
   Future<void> _handleInitialDeepLink() async {

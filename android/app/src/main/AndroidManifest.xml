@@ -1,4 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Internet access (required for all API calls).
+         Flutter's framework already adds this via manifest merge, but declaring it
+         explicitly here makes it visible, prevents accidental stripping, and is
+         the recommended practice for any app that uses the network. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Allows the app to check network state before attempting requests. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- Location for Prayer Times (geolocator). Request at runtime on Android 6+. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

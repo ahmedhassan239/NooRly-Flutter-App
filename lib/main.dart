@@ -31,9 +31,7 @@ void main() async {
         ApiConfig.setEnvironment(AppEnvironment.prod);
         break;
       default:
-        if (kDebugMode) {
-          print('[App] Unknown ENV=$envDefine, using prod');
-        }
+        print('[App] Unknown ENV=$envDefine, using prod');
         ApiConfig.setEnvironment(AppEnvironment.prod);
     }
   } else if (kDebugMode) {
@@ -41,23 +39,29 @@ void main() async {
   } else {
     ApiConfig.setEnvironment(AppEnvironment.prod);
   }
-  if (kDebugMode) {
-    print('[App] Starting Noor Journey...');
-    print('[App] Platform: ${kIsWeb ? 'Web' : 'Native'}');
-    print('[App] Environment: ${ApiConfig.environment.name}');
-    print('[App] API Base URL: ${ApiConfig.baseUrl}');
-  }
+
+  // Always print startup context so release APK failures are diagnosable
+  // via `adb logcat | grep flutter`.
+  print('[App] ── NooRly starting ─────────────────────────');
+  print('[App] build      : ${kDebugMode ? "debug" : kProfileMode ? "profile" : "release"}');
+  print('[App] environment: ${ApiConfig.environment.name}');
+  print('[App] apiBaseUrl : ${ApiConfig.baseUrl}');
 
   try {
-    // Initialize SharedPreferences
     final sharedPreferences = await SharedPreferences.getInstance();
-
-    // Initialize Hive cache
     await CacheManager.initialize();
 
-    // Initialize local notification service (no-op on web)
+    // Initialize local notifications.
+    // Wrapped in its own try-catch — a plugin failure must NEVER block launch.
     if (!kIsWeb) {
-      await NotificationService.instance.initialize();
+      try {
+        print('[App] initializing notifications…');
+        await NotificationService.instance.initialize();
+        print('[App] notifications initialized: ${NotificationService.instance.isInitialized}');
+      } catch (e, st) {
+        print('[App] ⚠️  notification init failed (non-fatal): $e');
+        print(st);
+      }
     }
 
     runApp(
@@ -69,10 +73,8 @@ void main() async {
       ),
     );
   } catch (e, st) {
-    if (kDebugMode) {
-      print('[App] Startup failed: $e');
-      print(st);
-    }
+    print('[App] Startup failed: $e');
+    if (kDebugMode) print(st);
     runApp(_StartupErrorApp(message: _safeStartupMessage(e)));
   }
 }

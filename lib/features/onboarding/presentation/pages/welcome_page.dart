@@ -300,8 +300,22 @@ class _StartupErrorScreen extends StatelessWidget {
   final VoidCallback onGuest;
   final VoidCallback onLogin;
 
+  /// Whether the message describes a genuine network / connectivity problem.
+  bool get _isConnectionError {
+    final m = message.toLowerCase();
+    return m.contains('connection') ||
+        m.contains('network') ||
+        m.contains('internet') ||
+        m.contains('timed out') ||
+        m.contains('timeout');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isConn = _isConnectionError;
+    final heading = isConn ? 'Connection problem' : 'Something went wrong';
+    final icon    = isConn ? LucideIcons.wifiOff  : LucideIcons.alertCircle;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -321,13 +335,13 @@ class _StartupErrorScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    LucideIcons.wifiOff,
+                    icon,
                     size: 48,
                     color: Colors.white.withValues(alpha: 0.8),
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Connection problem',
+                    heading,
                     style: AppTypography.h1(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),

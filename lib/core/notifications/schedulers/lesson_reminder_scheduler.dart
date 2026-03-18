@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import '../local_notification_scheduler.dart';
 import '../notification_id_registry.dart';
@@ -36,30 +37,54 @@ class LessonReminderScheduler {
   Future<void> schedule({
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
   }) async {
     if (kIsWeb) return;
+
+    if (kDebugMode) {
+      debugPrint('[LessonScheduler] ── schedule() called ──');
+      debugPrint('[LessonScheduler] day=${input.dayNumber}  completed=${input.isCompleted}  lessonEnabled=${prefs.lessonEnabled}');
+    }
 
     if (!prefs.lessonEnabled) {
       await LocalNotificationScheduler.instance
           .cancelIds([NotificationIds.lessonMorning, NotificationIds.lessonEvening]);
+      if (kDebugMode) debugPrint('[LessonScheduler] SKIP all — lessonEnabled=false');
       return;
     }
 
-    await _scheduleMorning(input: input, prefs: prefs);
+    await _scheduleMorning(input: input, prefs: prefs, scheduleMode: scheduleMode);
 
     if (!input.isCompleted && prefs.lessonEveningReminderEnabled) {
-      await _scheduleEvening(input: input, prefs: prefs);
+      if (kDebugMode) debugPrint('[LessonScheduler] ✓ evening reminder → 18:00 (lesson not completed)');
+      await _scheduleEvening(input: input, prefs: prefs, scheduleMode: scheduleMode);
     } else {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.lessonEvening);
+      if (kDebugMode) {
+        final reason = input.isCompleted
+            ? 'lesson already completed'
+            : 'lessonEveningReminderEnabled=false';
+        debugPrint('[LessonScheduler] SKIP evening reminder — $reason');
+      }
     }
+
+    if (kDebugMode) debugPrint('[LessonScheduler] ── schedule() done ──');
   }
 
-  Future<void> scheduleMorningOnly({required NotificationPreferencesEntity prefs}) async {
+  Future<void> scheduleMorningOnly({
+    required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
+  }) async {
     if (kIsWeb) return;
     if (!prefs.lessonEnabled) return;
 
     final effectiveTime = prefs.effectiveLessonTime;
     final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
+
+    if (kDebugMode) {
+      debugPrint('[LessonScheduler] ── scheduleMorningOnly() called ──');
+      debugPrint('[LessonScheduler] ✓ morning lesson (generic) → ${effectiveTime.hour}:${effectiveTime.minute.toString().padLeft(2, "0")}');
+    }
 
     await LocalNotificationScheduler.instance.scheduleDailyAt(
       id: NotificationIds.lessonMorning,
@@ -73,12 +98,14 @@ class LessonReminderScheduler {
         subType: 'lesson_morning',
         route: '/home',
       ),
+      scheduleMode: scheduleMode,
     );
   }
 
   Future<void> _scheduleMorning({
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
   }) async {
     final effectiveTime = prefs.effectiveLessonTime;
     final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
@@ -101,16 +128,18 @@ class LessonReminderScheduler {
         route: '/home',
         extra: {'lesson_id': input.lessonId ?? ''},
       ),
+      scheduleMode: scheduleMode,
     );
 
     if (kDebugMode) {
-      debugPrint('[LessonScheduler] Morning lesson at ${effectiveTime.hour}:${effectiveTime.minute}');
+      debugPrint('[LessonScheduler] ✓ morning lesson (day=${input.dayNumber}) → ${effectiveTime.hour}:${effectiveTime.minute.toString().padLeft(2, "0")}');
     }
   }
 
   Future<void> _scheduleEvening({
     required LessonScheduleInput input,
     required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
   }) async {
     final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
 
@@ -134,6 +163,7 @@ class LessonReminderScheduler {
         route: '/home',
         extra: {'lesson_id': input.lessonId ?? ''},
       ),
+      scheduleMode: scheduleMode,
     );
   }
 }

@@ -5,6 +5,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import '../local_notification_scheduler.dart';
 import '../notification_id_registry.dart';
@@ -79,17 +80,31 @@ class PrayerReminderScheduler {
   Future<void> schedule({
     required List<PrayerScheduleInput> prayerInputs,
     required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
   }) async {
     if (kIsWeb) return;
 
     final scheduler = LocalNotificationScheduler.instance;
     final now       = DateTime.now();
+    int scheduled   = 0;
+    int skipped     = 0;
+
+    if (kDebugMode) {
+      final offsetMinutes = _computeOffset(prefs);
+      debugPrint('[PrayerScheduler] ── schedule() called ──');
+      debugPrint('[PrayerScheduler] timingMode=${prefs.prayerTimingMode.name}  offset=${offsetMinutes}min');
+    }
 
     for (final prayer in prayerInputs) {
       final id = _prayerIds[prayer.name];
-      if (id == null) continue;
+      if (id == null) {
+        if (kDebugMode) debugPrint('[PrayerScheduler] SKIP ${prayer.name} — unknown prayer name, id=null');
+        continue;
+      }
       if (!_isPrayerEnabled(prayer.name, prefs)) {
         await scheduler.cancel(id);
+        skipped++;
+        if (kDebugMode) debugPrint('[PrayerScheduler] SKIP ${prayer.name} — disabled in prefs');
         continue;
       }
 
@@ -98,7 +113,8 @@ class PrayerReminderScheduler {
       var scheduledTime = prayer.time.add(Duration(minutes: offsetMinutes));
 
       // Skip prayers that have already passed today
-      if (scheduledTime.isBefore(now)) {
+      final pushedToTomorrow = scheduledTime.isBefore(now);
+      if (pushedToTomorrow) {
         scheduledTime = scheduledTime.add(const Duration(days: 1));
       }
 
@@ -123,11 +139,18 @@ class PrayerReminderScheduler {
         scheduledAt: scheduledTime,
         channelId: LocalNotificationScheduler.channelPrayers,
         payload: payload,
+        scheduleMode: scheduleMode,
       );
 
+      scheduled++;
       if (kDebugMode) {
-        debugPrint('[PrayerScheduler] ${prayer.name} → $scheduledTime');
+        final suffix = pushedToTomorrow ? ' (pushed to tomorrow — already passed)' : '';
+        debugPrint('[PrayerScheduler] ✓ ${prayer.name} (id=$id) → $scheduledTime$suffix');
       }
+    }
+
+    if (kDebugMode) {
+      debugPrint('[PrayerScheduler] done — scheduled=$scheduled  skipped=$skipped');
     }
   }
 

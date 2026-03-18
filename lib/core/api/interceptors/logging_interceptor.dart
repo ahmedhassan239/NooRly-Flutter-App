@@ -1,6 +1,9 @@
-/// Logging interceptor for debugging (dev only).
-/// Logs: method, full url, query params, status, response preview (truncated).
-/// Does NOT log request/response headers (Authorization is never printed).
+/// Logging interceptor.
+///
+/// Request/response SUCCESS logs: debug builds only (kDebugMode).
+/// ERROR logs: ALL builds — always visible in `adb logcat | grep flutter`
+///   so release APK failures can be diagnosed without a debug build.
+///   Authorization header is never printed; response body is truncated.
 library;
 
 import 'dart:convert';
@@ -8,15 +11,19 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
-/// Interceptor that logs requests and responses in debug mode (kDebugMode).
+/// Interceptor that logs requests, responses, and errors.
+///
+/// [verboseSuccess] — also log successful request/response pairs (debug only).
 class LoggingInterceptor extends Interceptor {
-  LoggingInterceptor({this.enabled = true});
+  LoggingInterceptor({this.verboseSuccess = kDebugMode});
 
-  final bool enabled;
+  /// When true, requests and successful responses are also logged.
+  /// Errors are ALWAYS logged regardless of this flag.
+  final bool verboseSuccess;
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    if (enabled && kDebugMode) {
+    if (verboseSuccess) {
       _logRequest(options);
     }
     handler.next(options);
@@ -24,7 +31,7 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    if (enabled && kDebugMode) {
+    if (verboseSuccess) {
       _logResponse(response);
     }
     handler.next(response);
@@ -32,9 +39,8 @@ class LoggingInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    if (enabled && kDebugMode) {
-      _logError(err);
-    }
+    // Always log errors — this is the primary diagnostic tool for release APKs.
+    _logError(err);
     handler.next(err);
   }
 
@@ -92,21 +98,42 @@ class LoggingInterceptor extends Interceptor {
 
   void _logError(DioException err) {
     final requestId = err.requestOptions.extra['request_id'] as String? ?? 'no-id';
+    final req  = err.requestOptions;
+    final res  = err.response;
+
+    // Sanitised request headers — hide Authorization token.
+    final safeHeaders = <String, dynamic>{
+      for (final e in req.headers.entries)
+        e.key: e.key.toLowerCase() == 'authorization' ? '***REDACTED***' : e.value,
+    };
+
     final buffer = StringBuffer()
       ..writeln('╔══════════════════════════════════════════════════════════')
-      ..writeln('║ [API] ERROR  id=$requestId')
+      ..writeln('║ [API] ❌ ERROR  id=$requestId')
       ..writeln('╠══════════════════════════════════════════════════════════')
-      ..writeln('║ ${err.requestOptions.method} ${err.requestOptions.uri}')
-      ..writeln('║ status=${err.response?.statusCode}  type=${err.type}')
-      ..writeln('║ message: ${err.message}');
+      ..writeln('║  method      : ${req.method}')
+      ..writeln('║  fullUrl     : ${req.uri}')
+      ..writeln('║  baseUrl     : ${req.baseUrl}')
+      ..writeln('║  path        : ${req.path}')
+      ..writeln('║  dioType     : ${err.type}')
+      ..writeln('║  statusCode  : ${res?.statusCode ?? "—"}')
+      ..writeln('║  message     : ${err.message ?? "—"}')
+      ..writeln('║  errorObject : ${err.error?.runtimeType ?? "—"} — ${err.error}');
 
-    if (err.response?.data != null) {
-      buffer.writeln('║ errorPayload: ${_formatBody(err.response?.data, 500)}');
+    if (safeHeaders.isNotEmpty) {
+      buffer.writeln('║  reqHeaders  : $safeHeaders');
+    }
+
+    if (res?.data != null) {
+      buffer.writeln('║  respBody    : ${_formatBody(res!.data, 800)}');
     }
 
     buffer.writeln('╚══════════════════════════════════════════════════════════');
 
-    if (kDebugMode) debugPrint(buffer.toString());
+    // Always print — NOT gated by kDebugMode.
+    // Visible via:  adb logcat | grep flutter
+    // ignore: avoid_print
+    print(buffer.toString());
   }
 
   String _formatHeaders(Map<String, dynamic> headers) {

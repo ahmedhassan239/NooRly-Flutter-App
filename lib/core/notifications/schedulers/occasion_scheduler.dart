@@ -15,16 +15,22 @@ class OccasionScheduler {
   OccasionScheduler._();
   static final OccasionScheduler instance = OccasionScheduler._();
 
-  Future<void> schedule({required NotificationPreferencesEntity prefs}) async {
+  Future<void> schedule({
+    required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
+  }) async {
     if (kIsWeb) return;
     if (!prefs.specialOccasionsEnabled) {
       await LocalNotificationScheduler.instance.cancel(NotificationIds.fridayReminder);
       return;
     }
-    await _scheduleFriday(prefs: prefs);
+    await _scheduleFriday(prefs: prefs, scheduleMode: scheduleMode);
   }
 
-  Future<void> _scheduleFriday({required NotificationPreferencesEntity prefs}) async {
+  Future<void> _scheduleFriday({
+    required NotificationPreferencesEntity prefs,
+    AndroidScheduleMode? scheduleMode,
+  }) async {
     final isArabic = prefs.languageMode == NotificationLanguageMode.arabic;
 
     await LocalNotificationScheduler.instance.scheduleWeeklyAt(
@@ -42,6 +48,7 @@ class OccasionScheduler {
         subType: 'friday',
         route: '/home',
       ),
+      scheduleMode: scheduleMode,
     );
 
     if (kDebugMode) {

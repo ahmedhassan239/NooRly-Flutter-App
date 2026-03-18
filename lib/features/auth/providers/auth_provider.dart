@@ -104,18 +104,41 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       state = AuthState.authenticated(user, onboarding: onboarding);
     } on UnauthorizedException {
+      // Token is definitely invalid → clear and show welcome screen.
       await _tokenStorage.clearAll();
       state = const AuthState.unauthenticated();
+
+    } on ServerException catch (e) {
+      // Backend returned 5xx while verifying the stored token.
+      // Common backend bug: /me returns 500 instead of 401 for invalid tokens.
+      // Do NOT show "Connection problem" — the network is fine. Let the user
+      // log in again. We do NOT clear the token so a temporary server outage
+      // can recover on the next launch.
+      _logSafe('[Auth] Initialize: 5xx from /me (status ${e.statusCode}) → unauthenticated');
+      state = const AuthState.unauthenticated();
+
+    } on NetworkException catch (e) {
+      // Genuine connectivity failure (DNS, socket, no internet).
+      // "Connection problem" heading is accurate here.
+      _logSafe('[Auth] Initialize: network error — ${e.message}');
+      state = AuthState.error('Connection failed. Check your network and try again.');
+
     } on TimeoutException {
-      _logSafe('[Auth] Initialize timeout');
-      state = AuthState.error(
-        'Connection timed out. Check your network and try again.',
-      );
+      // Request timed out — still a connectivity / server-speed issue.
+      _logSafe('[Auth] Initialize: timeout');
+      state = AuthState.error('Connection timed out. Check your network and try again.');
+
+    } on ApiException catch (e) {
+      // Any OTHER API error (403, 404, 422, etc.) during auth init is unexpected.
+      // Go unauthenticated rather than showing a misleading "Connection problem".
+      // The user can log in again; the error is logged above by LoggingInterceptor.
+      _logSafe('[Auth] Initialize: unexpected API error ${e.runtimeType} (${e.statusCode}) → unauthenticated');
+      state = const AuthState.unauthenticated();
+
     } catch (e, st) {
-      _logSafe('[Auth] Initialize error: ${e.runtimeType}');
-      if (kDebugMode) {
-        print('[Auth] Initialize stack: $st');
-      }
+      // Non-ApiException (e.g. JSON parse error, null deref) — truly unexpected.
+      _logSafe('[Auth] Initialize: unexpected error ${e.runtimeType}');
+      if (kDebugMode) print('[Auth] Initialize stack: $st');
       final message = _safeErrorMessage(e);
       state = AuthState.error(message);
     }
@@ -128,8 +151,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// Map exception to user-facing message (no tokens or internal details).
+  /// Map exception to a user-facing message (no tokens or internal details).
+  ///
+  /// Checks by exception type first (precise), then falls back to string
+  /// heuristics for exceptions we don't control (e.g. platform errors).
   String _safeErrorMessage(Object e) {
+    // Type-based matching — most accurate
+    if (e is NetworkException)  return 'Connection failed. Check your network and try again.';
+    if (e is TimeoutException)  return 'Connection timed out. Please try again.';
+    if (e is ServerException)   return 'Server error. Please try again later.';
+    if (e is ApiException)      return e.message; // use server-provided message
+
+    // String heuristics for platform / dart:io exceptions
     final s = e.toString().toLowerCase();
     if (s.contains('socket') || s.contains('connection') || s.contains('network')) {
       return 'Connection failed. Check your network and try again.';

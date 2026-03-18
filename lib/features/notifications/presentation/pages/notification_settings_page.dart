@@ -7,6 +7,7 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/notifications/notification_service.dart';
+import 'package:flutter_app/core/notifications/schedulers/prayer_reminder_scheduler.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_app/design_system/widgets/settings_section_header.dart';
 import 'package:flutter_app/design_system/widgets/settings_tile.dart';
 import 'package:flutter_app/features/notifications/domain/notification_preferences_entity.dart';
 import 'package:flutter_app/features/notifications/providers/notification_preferences_providers.dart';
+import 'package:flutter_app/features/prayer/providers/prayer_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -35,11 +37,41 @@ class _NotificationSettingsPageState
   NotificationPreferencesEntity? _prefs;
   bool _loading = true;
   bool _saving = false;
+  bool _testFired = false;
+  bool _testInProgress = false;
+  bool _reinitInProgress = false;
+  Map<String, dynamic>? _debugInfo;
+  // null = not checked yet, true = granted, false = denied
+  bool? _canExactAlarm;
+  // Cached future for permission banner — recreated only when needed, not on every build.
+  late Future<bool> _notificationsEnabledFuture;
 
   @override
   void initState() {
     super.initState();
+    _notificationsEnabledFuture = NotificationService.instance.areNotificationsEnabled();
     _loadPrefs();
+    _checkExactAlarmPermission();
+  }
+
+  Future<void> _checkExactAlarmPermission() async {
+    try {
+      final can = await NotificationService.instance.canScheduleExactAlarms();
+      if (mounted) setState(() => _canExactAlarm = can);
+    } catch (e) {
+      // Treat as "permission assumed granted" to avoid blocking the UI on error
+      if (mounted) setState(() => _canExactAlarm = true);
+      if (kDebugMode) debugPrint('[NotificationSettings] canScheduleExactAlarms error: $e');
+    }
+  }
+
+  void _refreshPermissionBanner() {
+    if (mounted) {
+      setState(() {
+        _notificationsEnabledFuture =
+            NotificationService.instance.areNotificationsEnabled();
+      });
+    }
   }
 
   Future<void> _loadPrefs() async {
@@ -65,7 +97,50 @@ class _NotificationSettingsPageState
       await notifier.update(prefs);
 
       if (!kIsWeb) {
-        await NotificationService.instance.rescheduleAll(prefs);
+        // Build prayer inputs from the live prayer times provider
+        final prayerAsync = ref.read(todayPrayerListProvider);
+        final prayerList = prayerAsync.valueOrNull ?? [];
+        final prayerInputs = prayerList
+            .where((p) => p.timeAsDateTime != null)
+            .map((p) => PrayerScheduleInput(
+                  name: _normalizePrayerName(p.name),
+                  time: p.timeAsDateTime!,
+                ))
+            .where((i) => i.name.isNotEmpty)
+            .toList();
+
+        if (kDebugMode) {
+          debugPrint('');
+          debugPrint('══════════════════════════════════════════════');
+          debugPrint('[NotificationSettings] ── SAVING PREFERENCES ──');
+          debugPrint('[NotificationSettings] prayerEnabled       : ${prefs.prayerEnabled}');
+          debugPrint('[NotificationSettings] prayer inputs found : ${prayerInputs.length}');
+          debugPrint('[NotificationSettings] lessonEnabled       : ${prefs.lessonEnabled}');
+          debugPrint('[NotificationSettings] morningAdhkar       : ${prefs.morningAdhkarEnabled}');
+          debugPrint('[NotificationSettings] eveningAdhkar       : ${prefs.eveningAdhkarEnabled}');
+          debugPrint('[NotificationSettings] sleepAdhkar         : ${prefs.sleepAdhkarEnabled}');
+          debugPrint('[NotificationSettings] randomDhikr         : ${prefs.randomDhikrEnabled} (×${prefs.randomDhikrFrequency})');
+          debugPrint('[NotificationSettings] specialOccasions    : ${prefs.specialOccasionsEnabled}');
+          debugPrint('[NotificationSettings] calling rescheduleAll()...');
+          debugPrint('══════════════════════════════════════════════');
+        }
+
+        await NotificationService.instance.rescheduleAll(
+          prefs,
+          prayerInputs: prayerInputs.isNotEmpty ? prayerInputs : null,
+        );
+
+        if (kDebugMode) {
+          final status = await NotificationService.instance.debugStatus();
+          final totalPending = status['pending_count'] as int;
+          debugPrint('');
+          debugPrint('══════════════════════════════════════════════');
+          debugPrint('[NotificationSettings] ── POST-SAVE RESULT ──');
+          debugPrint('[NotificationSettings] rescheduleAll() completed');
+          debugPrint('[NotificationSettings] total pending scheduled: $totalPending');
+          debugPrint('══════════════════════════════════════════════');
+          debugPrint('');
+        }
       }
 
       if (mounted) {
@@ -75,6 +150,7 @@ class _NotificationSettingsPageState
         );
       }
     } catch (e) {
+      if (kDebugMode) debugPrint('[NotificationSettings] Save error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to save settings')),
@@ -82,6 +158,155 @@ class _NotificationSettingsPageState
       }
     } finally {
       if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  String _normalizePrayerName(String name) {
+    final lower = name.toLowerCase().trim();
+    if (lower.contains('fajr') || lower.contains('فجر')) return 'fajr';
+    if (lower.contains('dhuhr') || lower.contains('ظهر') || lower.contains('zuhr')) return 'dhuhr';
+    if (lower.contains('asr') || lower.contains('عصر')) return 'asr';
+    if (lower.contains('maghrib') || lower.contains('مغرب')) return 'maghrib';
+    if (lower.contains('isha') || lower.contains('عشاء')) return 'isha';
+    return '';
+  }
+
+  Future<void> _fireTestNotification() async {
+    // Re-check exact alarm permission before firing.
+    // Each await must be followed by a mounted check — the widget can be
+    // disposed during any async gap (e.g. a router refresh navigating away).
+    bool canExact = true;
+    try {
+      canExact = await NotificationService.instance.canScheduleExactAlarms();
+    } catch (e) {
+      if (kDebugMode) debugPrint('[NotificationSettings] canScheduleExactAlarms error: $e');
+    }
+
+    if (!mounted) return; // ← guard after every await
+    setState(() => _canExactAlarm = canExact);
+
+    if (!canExact) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            '⚠️ Exact alarm permission not granted — notification may not fire on time.\n'
+            'Tap "Fix" to open Alarms & Reminders settings.',
+          ),
+          duration: const Duration(seconds: 6),
+          action: SnackBarAction(
+            label: 'Fix',
+            onPressed: () => NotificationService.instance.requestExactAlarmsPermission(),
+          ),
+        ),
+      );
+      return;
+    }
+
+    // ← mounted is confirmed true here (checked above)
+    setState(() => _testInProgress = true);
+
+    try {
+      await NotificationService.instance.scheduleTestNotification(delaySeconds: 10);
+      if (!mounted) return; // ← guard after every await
+      await _loadDebugInfo();
+      if (!mounted) return;
+      setState(() {
+        _testInProgress = false;
+        _testFired = true;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('✅ Test notification scheduled! Lock screen or go home — it fires in 10 s.'),
+          duration: Duration(seconds: 5),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _testInProgress = false;
+        _testFired = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('❌ Failed to schedule: $e')),
+      );
+    }
+  }
+
+  Future<void> _reinitialize() async {
+    if (!mounted) return;
+    setState(() => _reinitInProgress = true);
+    try {
+      final ok = await NotificationService.instance.reinitialize();
+      if (!mounted) return;
+      await _loadDebugInfo();
+      if (!mounted) return;
+      final err = NotificationService.instance.lastInitError;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(ok
+              ? '✅ Notifications initialized!'
+              : '❌ Init failed: ${err ?? "unknown error"}'),
+          duration: const Duration(seconds: 8),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _reinitInProgress = false);
+    }
+  }
+
+  Future<void> _loadDebugInfo() async {
+    final info = await NotificationService.instance.debugStatus();
+    if (mounted) setState(() => _debugInfo = info);
+
+    // Always-on: print to logcat even in release builds.
+    print('');
+    print('══════════════════════════════════════════════');
+    print('[PendingNotifications] === NOTIFICATION DEBUG STATUS ===');
+    print('[PendingNotifications] initialized          : ${info['initialized']}');
+    print('[PendingNotifications] scheduler_initialized: ${info['scheduler_initialized']}');
+    print('[PendingNotifications] last_init_error      : ${info['last_init_error'] ?? "none"}');
+    print('[PendingNotifications] OS enabled           : ${info['notifications_enabled']}');
+    print('[PendingNotifications] exact alarm granted  : ${info['can_schedule_exact_alarms']}');
+    print('[PendingNotifications] pending count        : ${info['pending_count']}');
+    final pendingErr = info['pending_error'] as String?;
+    if (pendingErr != null) {
+      print('[PendingNotifications] ⚠️  pending_error   : $pendingErr');
+    }
+    print('[PendingNotifications] ── Scheduled list ──────────────');
+    final pending = info['pending'] as List<dynamic>;
+    if (pending.isEmpty && pendingErr == null) {
+      print('[PendingNotifications]   ⚠️  No pending notifications found!');
+    } else if (pending.isEmpty && pendingErr != null) {
+      print('[PendingNotifications]   (list unavailable: $pendingErr)');
+    } else {
+      for (final n in pending) {
+        final m = n as Map<String, dynamic>;
+        print('[PendingNotifications]   • id=${m['id']}  title="${m['title']}"');
+        print('[PendingNotifications]     body="${m['body']}"');
+        print('[PendingNotifications]     payload=${m['payload']}');
+      }
+    }
+
+    if (kDebugMode) {
+      // Keep existing debug-mode formatted output for IDE console.
+      debugPrint('══════════════════════════════════════════════');
+      debugPrint('[PendingNotifications] === NOTIFICATION DEBUG STATUS ===');
+      debugPrint('[PendingNotifications] initialized          : ${info['initialized']}');
+      debugPrint('[PendingNotifications] last_init_error      : ${info['last_init_error'] ?? "none"}');
+      debugPrint('[PendingNotifications] OS enabled           : ${info['notifications_enabled']}');
+      debugPrint('[PendingNotifications] exact alarm granted  : ${info['can_schedule_exact_alarms']}');
+      debugPrint('[PendingNotifications] pending count        : ${info['pending_count']}');
+      final pending2 = info['pending'] as List<dynamic>;
+      if (pending2.isEmpty) {
+        debugPrint('[PendingNotifications]   ⚠️  No pending notifications found!');
+      } else {
+        for (final n in pending2) {
+          final m = n as Map<String, dynamic>;
+          debugPrint('[PendingNotifications]   • id=${m['id']}  title="${m['title']}"');
+        }
+      }
+      debugPrint('══════════════════════════════════════════════');
+      debugPrint('');
     }
   }
 
@@ -146,6 +371,8 @@ class _NotificationSettingsPageState
                         _buildQuietHoursSection(l10n),
                         const SizedBox(height: AppSpacing.lg),
                         _buildSoundSection(l10n),
+                        const SizedBox(height: AppSpacing.lg),
+                        _buildTestAndDebugSection(colorScheme),
                         const SizedBox(height: AppSpacing.xl),
                       ],
                     ),
@@ -158,8 +385,10 @@ class _NotificationSettingsPageState
 
   Widget _buildPermissionBanner(
       AppLocalizations l10n, ColorScheme colorScheme) {
+    // Uses _notificationsEnabledFuture cached in initState / _refreshPermissionBanner()
+    // so it does NOT create a new Future on every widget rebuild.
     return FutureBuilder<bool>(
-      future: NotificationService.instance.areNotificationsEnabled(),
+      future: _notificationsEnabledFuture,
       builder: (ctx, snap) {
         if (snap.data == true) return const SizedBox.shrink();
         return Container(
@@ -185,7 +414,7 @@ class _NotificationSettingsPageState
               FilledButton.tonal(
                 onPressed: () async {
                   await NotificationService.instance.requestPermission();
-                  if (mounted) setState(() {});
+                  _refreshPermissionBanner();
                 },
                 child: Text(l10n.notificationsEnableButton),
               ),
@@ -604,6 +833,222 @@ class _NotificationSettingsPageState
             _buildLanguageTile(
                 l10n, prefs, NotificationLanguageMode.both,
                 l10n.notificationsLangBoth, isLast: true),
+          ],
+        ),
+      ],
+    );
+  }
+
+  // =========================================================================
+  // Test & Debug section
+  // =========================================================================
+
+  Widget _buildTestAndDebugSection(ColorScheme colorScheme) {
+    final exactAlarmDenied = _canExactAlarm == false;
+    final notInitialized   = !NotificationService.instance.isInitialized;
+    final initError        = NotificationService.instance.lastInitError;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SettingsSectionHeader(title: 'Test & Debug'),
+
+        // ── Init failure banner ───────────────────────────────────────────
+        if (notInitialized)
+          Container(
+            margin: const EdgeInsets.only(bottom: AppSpacing.md),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(LucideIcons.alertOctagon,
+                        color: colorScheme.onErrorContainer, size: 20),
+                    const SizedBox(width: AppSpacing.sm),
+                    Expanded(
+                      child: Text(
+                        'Notification plugin NOT initialized.',
+                        style: AppTypography.bodySm(
+                            color: colorScheme.onErrorContainer)
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    FilledButton.tonal(
+                      onPressed: _reinitInProgress ? null : _reinitialize,
+                      child: _reinitInProgress
+                          ? const SizedBox(
+                              width: 14, height: 14,
+                              child: CircularProgressIndicator(strokeWidth: 2))
+                          : const Text('Retry'),
+                    ),
+                  ],
+                ),
+                if (initError != null) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Text(
+                    'Error: $initError',
+                    style: AppTypography.bodySm(
+                        color: colorScheme.onErrorContainer),
+                  ),
+                ],
+              ],
+            ),
+          ),
+
+        // ── Exact alarm permission warning ────────────────────────────────
+        if (exactAlarmDenied)
+          Container(
+            margin: const EdgeInsets.only(bottom: AppSpacing.md),
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: colorScheme.errorContainer,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(LucideIcons.alertTriangle,
+                    color: colorScheme.onErrorContainer, size: 20),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Text(
+                    'Exact alarm permission required.\n'
+                    'Without it notifications will not fire on time (or at all on some devices).',
+                    style: AppTypography.bodySm(color: colorScheme.onErrorContainer),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                FilledButton.tonal(
+                  onPressed: () async {
+                    await NotificationService.instance.requestExactAlarmsPermission();
+                    await _checkExactAlarmPermission();
+                  },
+                  child: const Text('Fix'),
+                ),
+              ],
+            ),
+          ),
+
+        SettingsCard(
+          children: [
+            // ── Reinitialize action (always visible in debug section) ──
+            SettingsTile(
+              leading: Icon(
+                LucideIcons.refreshCcw,
+                color: notInitialized ? colorScheme.error : colorScheme.primary,
+              ),
+              title: 'Initialize Notifications',
+              subtitle: notInitialized
+                  ? (initError != null
+                      ? 'Failed: $initError'
+                      : 'Not yet initialized — tap to retry')
+                  : '✅ Plugin initialized and ready',
+              trailing: FilledButton.tonal(
+                onPressed: _reinitInProgress ? null : _reinitialize,
+                child: _reinitInProgress
+                    ? const SizedBox(
+                        width: 14, height: 14,
+                        child: CircularProgressIndicator(strokeWidth: 2))
+                    : Text(notInitialized ? 'Init Now' : 'Re-Init'),
+              ),
+              showDivider: true,
+            ),
+
+            // Test notification button
+            SettingsTile(
+              leading: Icon(
+                LucideIcons.bellRing,
+                color: _testFired
+                    ? colorScheme.primary
+                    : (notInitialized || exactAlarmDenied)
+                        ? colorScheme.error
+                        : null,
+              ),
+              title: 'Test Notification (10 s)',
+              subtitle: notInitialized
+                  ? '⚠️ Plugin not initialized — use "Init Now" above first'
+                  : exactAlarmDenied
+                      ? '⚠️ Exact alarm permission missing — grant it first'
+                      : 'Schedules a test notification in 10 seconds',
+              trailing: FilledButton.tonal(
+                onPressed: (_testFired || _testInProgress || notInitialized)
+                    ? null
+                    : _fireTestNotification,
+                child: Text(_testInProgress ? '...' : _testFired ? 'Sent!' : 'Send'),
+              ),
+              showDivider: true,
+            ),
+
+            // Debug info tile
+            SettingsTile(
+              leading: const Icon(LucideIcons.info),
+              title: 'Print Pending Notifications',
+              subtitle: _debugInfo == null
+                  ? 'Tap ↻ to load & print to console'
+                  : 'Initialized: ${_debugInfo!['initialized']} · '
+                      'OS enabled: ${_debugInfo!['notifications_enabled']} · '
+                      'Pending: ${_debugInfo!['pending_count']}'
+                      '${_debugInfo!['pending_error'] != null ? ' · ⚠️ Error' : ''}',
+              trailing: IconButton(
+                icon: const Icon(LucideIcons.refreshCw),
+                onPressed: _loadDebugInfo,
+                tooltip: 'Refresh & print to console',
+              ),
+              showDivider: _debugInfo != null,
+            ),
+
+            if (_debugInfo != null) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                    AppSpacing.md, 0, AppSpacing.md, AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Initialized: ${_debugInfo!['initialized']}  ·  '
+                      'Exact alarm: ${_debugInfo!['can_schedule_exact_alarms']}',
+                      style: AppTypography.bodySm(color: colorScheme.onSurface),
+                    ),
+                    if (_debugInfo!['last_init_error'] != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        '⚠️ Init error: ${_debugInfo!['last_init_error']}',
+                        style: AppTypography.bodySm(color: colorScheme.error),
+                      ),
+                    ],
+                    if (_debugInfo!['pending_error'] != null) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        '⚠️ Pending error: ${_debugInfo!['pending_error']}',
+                        style: AppTypography.bodySm(color: colorScheme.error),
+                      ),
+                    ],
+                    const SizedBox(height: 4),
+                    ...(_debugInfo!['pending'] as List<dynamic>).map((n) {
+                      final m = n as Map<String, dynamic>;
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(
+                          '• [${m['id']}] ${m['title']}',
+                          style: AppTypography.bodySm(
+                              color: colorScheme.onSurfaceVariant),
+                        ),
+                      );
+                    }),
+                    if ((_debugInfo!['pending'] as List).isEmpty)
+                      Text(
+                        '⚠️ No pending notifications scheduled!',
+                        style: AppTypography.bodySm(color: colorScheme.error),
+                      ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ],

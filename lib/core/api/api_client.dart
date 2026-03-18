@@ -77,15 +77,17 @@ class ApiClient {
     _localeInterceptor = LocaleInterceptor();
 
     // Order matters:
-    // 1. Logging (first to log raw request)
-    // 2. Locale (add language headers)
-    // 3. Auth (add token)
-    // 4. Retry (retry on transient errors)
-    // 5. Error (convert errors last)
+    // 1. Logging (first to log raw request / always logs errors)
+    // 2. RequestId (tag every request for correlation)
+    // 3. Locale (add language headers)
+    // 4. Auth (add token)
+    // 5. Retry (retry on transient errors)
+    // 6. Error (convert errors last)
 
-    if (kDebugMode) {
-      _dio.interceptors.add(LoggingInterceptor());
-    }
+    // LoggingInterceptor is added in ALL build modes.
+    // In release it logs errors only (verboseSuccess: false).
+    // In debug it also logs requests and successful responses.
+    _dio.interceptors.add(LoggingInterceptor(verboseSuccess: kDebugMode));
 
     _dio.interceptors.addAll([
       RequestIdInterceptor(_networkLogService),

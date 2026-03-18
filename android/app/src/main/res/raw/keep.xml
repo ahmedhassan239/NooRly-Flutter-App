@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Prevent the Android resource shrinker from removing drawable resources that
+  are referenced only via string names at runtime (e.g. through the
+  flutter_local_notifications method channel).
+
+  The shrinker cannot see method-channel strings at compile time, so without
+  this file it incorrectly marks ic_notification as "unused" and drops it from
+  the compiled APK — causing PlatformException(invalid_icon, …) at runtime.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_notification" />
