@@ -26,10 +26,10 @@ class AppPatternBackground extends StatelessWidget {
     0, 0, 0, 1, 0,
   ]);
 
-  /// Tile opacity for the repeating pattern — keep low so cards/text stay dominant.
-  /// Tuned slightly above the previous 0.065 / 0.085 for a bit more presence without noise.
-  static const double _patternOpacityLight = 0.082;
-  static const double _patternOpacityDark = 0.105;
+  /// Tile opacity for the repeating pattern — keep below ~0.15 so cards/text stay dominant.
+  /// Bumped for clearer texture while staying a background (not foreground noise).
+  static const double _patternOpacityLight = 0.11;
+  static const double _patternOpacityDark = 0.14;
 
   @override
   Widget build(BuildContext context) {

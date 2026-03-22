@@ -44,39 +44,21 @@ class DottedBackgroundPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-/// Scaffold for Home: light dotted background + centered scrollable column.
+/// Body wrapper for Home: does **not** paint a screen-sized background.
+///
+/// The global Islamic pattern is applied in `MaterialApp.builder` via `AppPatternBackground`;
+/// `ThemeData.scaffoldBackgroundColor` is transparent so it shows through. Home previously
+/// stacked a dotted painter plus a semi-opaque surface layer here, which hid that pattern.
 class HomeScaffold extends StatelessWidget {
   const HomeScaffold({
     required this.child,
     super.key,
-    this.backgroundColor,
   });
 
   final Widget child;
-  final Color? backgroundColor;
 
   @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final bg = backgroundColor ?? colorScheme.surface;
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: CustomPaint(
-            painter: DottedBackgroundPainter(
-              dotColor: colorScheme.outline.withValues(alpha: 0.08),
-              spacing: 24,
-              dotRadius: 1.2,
-            ),
-          ),
-        ),
-        Positioned.fill(
-          child: Container(color: bg.withValues(alpha: 0.6)),
-        ),
-        child,
-      ],
-    );
-  }
+  Widget build(BuildContext context) => child;
 }
 
 /// Centered content column with max width and consistent padding.
