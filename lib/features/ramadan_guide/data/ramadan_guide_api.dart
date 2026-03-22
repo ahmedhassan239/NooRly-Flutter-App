@@ -28,7 +28,10 @@ Future<List<RamadanGuideItemModel>> fetchRamadanGuideList(Ref ref) async {
 }
 
 /// Fetches a single Ramadan guide item by slug.
-Future<RamadanGuideItemModel?> fetchRamadanGuideItem(Ref ref, String slug) async {
+Future<RamadanGuideItemModel?> fetchRamadanGuideItem(
+  Ref ref,
+  String slug,
+) async {
   final client = ref.read(apiClientProvider);
   final response = await client.get<Map<String, dynamic>>(
     RamadanGuideEndpoints.item(slug),

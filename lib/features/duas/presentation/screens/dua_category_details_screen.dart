@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/content/domain/entities/content_entity.dart';
 import 'package:flutter_app/core/content/providers/content_providers.dart' as content_providers;
 import 'package:flutter_app/core/utils/locale_digits.dart';
@@ -15,14 +17,6 @@ import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-
-/// True when [translation] is not the same as [arabic], to avoid showing duplicate text.
-bool _isTranslationDifferent(String arabic, String translation) {
-  final a = arabic.trim();
-  final t = translation.trim();
-  if (a.isEmpty || t.isEmpty) return t.isNotEmpty;
-  return a != t;
-}
 
 /// Dua Category Details screen — API-backed list of duas in a category.
 /// Route: /duas/category/:categoryId
@@ -43,7 +37,6 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     final duasAsync = ref.watch(content_providers.duasByCategoryProvider(categoryId));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -212,6 +205,21 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     ColorScheme colorScheme,
   ) {
     final isSaved = e.isSaved;
+    final l10n = AppLocalizations.of(context)!;
+    final lc = ref.watch(localeControllerProvider).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: e.arabicText,
+      translation: e.translation ?? '',
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final sourceLine = formatLooseReligiousSourceLine(
+      l10n,
+      lc,
+      e.source ?? '',
+      sourceAr: e.sourceAr,
+    );
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -220,58 +228,47 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
         borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: colorScheme.outline.withAlpha(128)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withAlpha(25),
-                borderRadius: BorderRadius.circular(AppRadius.sm),
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.savedTypeDua,
-                style: AppTypography.caption(color: colorScheme.primary)
-                    .copyWith(fontWeight: FontWeight.w600),
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withAlpha(25),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+                child: Text(
+                  l10n.dua,
+                  style: AppTypography.caption(color: colorScheme.primary)
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          Text(
-            e.arabicText,
-            style: AppTypography.arabicH2(color: colorScheme.onSurface),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-          ),
-          const SizedBox(height: AppSpacing.md),
-          if ((e.transliteration ?? '').isNotEmpty)
+            const SizedBox(height: AppSpacing.md),
             Text(
-              e.transliteration!,
-              style: AppTypography.bodySm(color: colorScheme.primary)
-                  .copyWith(fontStyle: FontStyle.italic),
+              primary,
+              style: useArabic
+                  ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                  : AppTypography.bodySm(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
             ),
-          if ((e.transliteration ?? '').isNotEmpty) const SizedBox(height: AppSpacing.sm),
-          if ((e.translation ?? '').isNotEmpty && _isTranslationDifferent(e.arabicText, e.translation!))
-            Text(
-              '"${e.translation}"',
-              style: AppTypography.bodySm(color: colorScheme.onSurface),
-              textAlign: TextAlign.center,
-            ),
-          if ((e.translation ?? '').isNotEmpty && _isTranslationDifferent(e.arabicText, e.translation!))
-            const SizedBox(height: AppSpacing.sm),
-          if ((e.source ?? '').isNotEmpty)
-            Text(
-              '- ${e.source}',
-              style: AppTypography.caption(
-                color: colorScheme.onSurface.withAlpha(150),
+            if (sourceLine.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                '— $sourceLine',
+                style: AppTypography.caption(
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
-            ),
-          const SizedBox(height: AppSpacing.md),
-          _buildActionButtons(context, ref, e, isSaved, colorScheme),
-        ],
+            ],
+            const SizedBox(height: AppSpacing.md),
+            _buildActionButtons(context, ref, e, isSaved, colorScheme, l10n, sourceLine),
+          ],
+        ),
       ),
     );
   }
@@ -282,14 +279,17 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     ContentEntity e,
     bool isSaved,
     ColorScheme colorScheme,
+    AppLocalizations l10n,
+    String sourceLine,
   ) {
+    final lc = ref.read(localeControllerProvider).languageCode;
     return Row(
       children: [
         Expanded(
           child: _buildActionButton(
             context: context,
             icon: isSaved ? LucideIcons.heartOff : LucideIcons.heart,
-            label: 'Save',
+            label: isSaved ? l10n.actionSaved : l10n.save,
             colorScheme: colorScheme,
             isActive: isSaved,
             onTap: () async {
@@ -305,9 +305,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(
-                      isSaved
-                          ? 'Removed from favorites'
-                          : 'Saved to favorites ❤️',
+                      isSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
                     ),
                     duration: const Duration(seconds: 2),
                   ),
@@ -321,16 +319,20 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.copy,
-            label: 'Copy',
+            label: l10n.copy,
             colorScheme: colorScheme,
             onTap: () {
-              final textToCopy =
-                  '${e.arabicText}\n\n${e.transliteration ?? ""}\n\n"${e.translation ?? ""}"\n\n- ${e.source ?? ""}';
+              final textToCopy = LocalizedReligiousContent.composePlainText(
+                languageCode: lc,
+                arabic: e.arabicText,
+                translation: e.translation ?? '',
+                source: sourceLine,
+              );
               Clipboard.setData(ClipboardData(text: textToCopy));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Copied to clipboard! ✓'),
-                  duration: Duration(seconds: 2),
+                SnackBar(
+                  content: Text(l10n.copiedToClipboard),
+                  duration: const Duration(seconds: 2),
                 ),
               );
             },
@@ -341,7 +343,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.share2,
-            label: 'Share',
+            label: l10n.share,
             colorScheme: colorScheme,
             onTap: () {
               final duaData = DuaData(
@@ -350,6 +352,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
                 transliteration: e.transliteration ?? '',
                 translation: e.translation ?? '',
                 source: e.source ?? '',
+                sourceAr: e.sourceAr,
               );
               ShareDuaDialog.show(context, duaData);
             },

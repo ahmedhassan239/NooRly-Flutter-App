@@ -29,7 +29,6 @@ class HadithCollectionDetailsScreen extends ConsumerWidget {
         ref.watch(hadithCollectionDetailsProvider(collectionId));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: detailsAsync.when(
           data: (d) => Text(

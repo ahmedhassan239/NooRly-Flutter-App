@@ -2,15 +2,14 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 
-// Emerald palette (calm, sacred feel for Quran verses)
-const _bg     = Color(0xFFECFDF5); // emerald-50
+// Emerald palette (calm, sacred feel for Quran verses) — light mode
+const _bgLight = Color(0xFFECFDF5); // emerald-50
 const _border = Color(0xFF059669); // emerald-600
-const _label  = Color(0xFF065F46); // emerald-800
+const _labelLight = Color(0xFF065F46); // emerald-800
 
 class LessonVerseCard extends StatelessWidget {
   const LessonVerseCard({required this.block, super.key});
@@ -18,9 +17,20 @@ class LessonVerseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? AppColors.accentGreen.withAlpha(20) : _bg;
-    final labelColor = isDark ? AppColors.accentGreen : _label;
+
+    final bg = isDark
+        ? Color.alphaBlend(
+            _border.withValues(alpha: 0.14),
+            colorScheme.surfaceContainerHighest,
+          )
+        : _bgLight;
+    final borderColor = _border.withValues(alpha: isDark ? 0.42 : 0.6);
+    final labelColor = isDark ? const Color(0xFF6EE7B7) : _labelLight;
+    final arabicColor = isDark ? const Color(0xFF34D399) : _border;
+    final secondaryText = colorScheme.onSurface.withValues(alpha: 0.74);
+    final bodyText = colorScheme.onSurface;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -28,10 +38,10 @@ class LessonVerseCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: _border.withAlpha(60)),
+          border: Border.all(color: borderColor),
           boxShadow: [
             BoxShadow(
-              color: _border.withAlpha(18),
+              color: _border.withValues(alpha: isDark ? 0.12 : 0.07),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -44,7 +54,7 @@ class LessonVerseCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: _border.withAlpha(isDark ? 40 : 25),
+                color: _border.withValues(alpha: isDark ? 0.18 : 0.1),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
               ),
               child: Row(
@@ -73,11 +83,7 @@ class LessonVerseCard extends StatelessWidget {
                       block.arabic!,
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.right,
-                      style: AppTypography.arabicH2(
-                        color: isDark
-                            ? AppColors.accentGreen
-                            : _border,
-                      ),
+                      style: AppTypography.arabicH2(color: arabicColor),
                     ),
                     const SizedBox(height: 12),
                   ],
@@ -86,7 +92,7 @@ class LessonVerseCard extends StatelessWidget {
                     SelectableText(
                       block.transliteration!,
                       style: AppTypography.bodySm(
-                        color: _label.withAlpha(isDark ? 180 : 160),
+                        color: isDark ? secondaryText : _labelLight.withValues(alpha: 0.75),
                       ).copyWith(fontStyle: FontStyle.italic),
                     ),
                     const SizedBox(height: 8),
@@ -97,11 +103,10 @@ class LessonVerseCard extends StatelessWidget {
                           block.arabic!.trim() != block.translation.trim()))
                     SelectableText(
                       '"${block.translation}"',
-                      style: AppTypography.body(
-                        color: isDark
-                            ? Colors.white.withAlpha(230)
-                            : AppColors.foreground,
-                      ).copyWith(height: 1.65, fontStyle: FontStyle.italic),
+                      style: AppTypography.body(color: bodyText).copyWith(
+                        height: 1.65,
+                        fontStyle: FontStyle.italic,
+                      ),
                     ),
                   const SizedBox(height: 12),
                   // Reference

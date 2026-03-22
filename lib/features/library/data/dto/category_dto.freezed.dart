@@ -25,6 +25,10 @@ mixin _$CategoryDto {
   @JsonKey(name: 'items_count')
   int get itemsCount => throw _privateConstructorUsedError;
   String? get icon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_key')
+  String? get iconKey => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_url')
+  String? get iconUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +46,9 @@ abstract class $CategoryDtoCopyWith<$Res> {
       {int id,
       String? title,
       @JsonKey(name: 'items_count') int itemsCount,
-      String? icon});
+      String? icon,
+      @JsonKey(name: 'icon_key') String? iconKey,
+      @JsonKey(name: 'icon_url') String? iconUrl});
 }
 
 /// @nodoc
@@ -62,6 +68,8 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
     Object? title = freezed,
     Object? itemsCount = null,
     Object? icon = freezed,
+    Object? iconKey = freezed,
+    Object? iconUrl = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -80,6 +88,14 @@ class _$CategoryDtoCopyWithImpl<$Res, $Val extends CategoryDto>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String?,
+      iconKey: freezed == iconKey
+          ? _value.iconKey
+          : iconKey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: freezed == iconUrl
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -96,7 +112,9 @@ abstract class _$$CategoryDtoImplCopyWith<$Res>
       {int id,
       String? title,
       @JsonKey(name: 'items_count') int itemsCount,
-      String? icon});
+      String? icon,
+      @JsonKey(name: 'icon_key') String? iconKey,
+      @JsonKey(name: 'icon_url') String? iconUrl});
 }
 
 /// @nodoc
@@ -114,6 +132,8 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
     Object? title = freezed,
     Object? itemsCount = null,
     Object? icon = freezed,
+    Object? iconKey = freezed,
+    Object? iconUrl = freezed,
   }) {
     return _then(_$CategoryDtoImpl(
       id: null == id
@@ -132,6 +152,14 @@ class __$$CategoryDtoImplCopyWithImpl<$Res>
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
               as String?,
+      iconKey: freezed == iconKey
+          ? _value.iconKey
+          : iconKey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: freezed == iconUrl
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -143,7 +171,9 @@ class _$CategoryDtoImpl implements _CategoryDto {
       {required this.id,
       this.title,
       @JsonKey(name: 'items_count') this.itemsCount = 0,
-      this.icon});
+      this.icon,
+      @JsonKey(name: 'icon_key') this.iconKey,
+      @JsonKey(name: 'icon_url') this.iconUrl});
 
   factory _$CategoryDtoImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryDtoImplFromJson(json);
@@ -157,10 +187,16 @@ class _$CategoryDtoImpl implements _CategoryDto {
   final int itemsCount;
   @override
   final String? icon;
+  @override
+  @JsonKey(name: 'icon_key')
+  final String? iconKey;
+  @override
+  @JsonKey(name: 'icon_url')
+  final String? iconUrl;
 
   @override
   String toString() {
-    return 'CategoryDto(id: $id, title: $title, itemsCount: $itemsCount, icon: $icon)';
+    return 'CategoryDto(id: $id, title: $title, itemsCount: $itemsCount, icon: $icon, iconKey: $iconKey, iconUrl: $iconUrl)';
   }
 
   @override
@@ -172,12 +208,15 @@ class _$CategoryDtoImpl implements _CategoryDto {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.itemsCount, itemsCount) ||
                 other.itemsCount == itemsCount) &&
-            (identical(other.icon, icon) || other.icon == icon));
+            (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.iconKey, iconKey) || other.iconKey == iconKey) &&
+            (identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, itemsCount, icon);
+  int get hashCode =>
+      Object.hash(runtimeType, id, title, itemsCount, icon, iconKey, iconUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -198,7 +237,9 @@ abstract class _CategoryDto implements CategoryDto {
       {required final int id,
       final String? title,
       @JsonKey(name: 'items_count') final int itemsCount,
-      final String? icon}) = _$CategoryDtoImpl;
+      final String? icon,
+      @JsonKey(name: 'icon_key') final String? iconKey,
+      @JsonKey(name: 'icon_url') final String? iconUrl}) = _$CategoryDtoImpl;
 
   factory _CategoryDto.fromJson(Map<String, dynamic> json) =
       _$CategoryDtoImpl.fromJson;
@@ -212,6 +253,12 @@ abstract class _CategoryDto implements CategoryDto {
   int get itemsCount;
   @override
   String? get icon;
+  @override
+  @JsonKey(name: 'icon_key')
+  String? get iconKey;
+  @override
+  @JsonKey(name: 'icon_url')
+  String? get iconUrl;
   @override
   @JsonKey(ignore: true)
   _$$CategoryDtoImplCopyWith<_$CategoryDtoImpl> get copyWith =>

@@ -46,7 +46,6 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
     ));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(widget.scopeLabel ?? 'Collections'),
         leading: IconButton(
@@ -98,6 +97,11 @@ class _CollectionsScreenState extends ConsumerState<CollectionsScreen> {
                               icon: widget.scopeKey == 'hadith'
                               ? iconForHadithCollection(c.icon)
                               : iconForVerseCollection(c.icon),
+                              iconUrl:
+                                  (c.iconUrl != null &&
+                                          c.iconUrl!.trim().isNotEmpty)
+                                      ? c.iconUrl
+                                      : null,
                               onTap: () => context.push(
                                 '/library/${widget.scopeKey}/collection/${c.id}',
                               ),

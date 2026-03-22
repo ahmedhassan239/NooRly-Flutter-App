@@ -22,7 +22,6 @@ class ReflectionsListPage extends ConsumerWidget {
 
     if (!auth.isAuthenticated) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           title: Text(l10n.reflectionsTitle),
           leading: IconButton(
@@ -46,7 +45,6 @@ class ReflectionsListPage extends ConsumerWidget {
     final asyncReflections = ref.watch(reflectionsListProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(l10n.reflectionsTitle),
         leading: IconButton(

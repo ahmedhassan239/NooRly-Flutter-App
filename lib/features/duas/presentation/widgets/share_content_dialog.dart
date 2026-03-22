@@ -4,15 +4,15 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
-import 'package:flutter_app/features/duas/presentation/widgets/dua_share_formatter.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/dua_image_card.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/dua_text_preview.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_tab_switch.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -122,7 +122,8 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
   }
 
   Widget _buildHeader(BuildContext context, ColorScheme colorScheme) {
-    final title = widget.content.title ?? 'Share';
+    final l10n = AppLocalizations.of(context)!;
+    final title = widget.content.title ?? l10n.share;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -130,11 +131,13 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
       ),
       child: Row(
         children: [
-          Text(
-            title,
-            style: AppTypography.h2(color: colorScheme.onSurface),
+          Expanded(
+            child: Text(
+              title,
+              style: AppTypography.h2(color: colorScheme.onSurface),
+              textAlign: TextAlign.start,
+            ),
           ),
-          const Spacer(),
           IconButton(
             icon: Icon(
               LucideIcons.x,
@@ -143,7 +146,7 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
             onPressed: () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            tooltip: 'Close',
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
           ),
         ],
       ),
@@ -152,16 +155,25 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
 
   Widget _buildPreviewContent(BuildContext context, ColorScheme colorScheme) {
     if (_selectedMode == ShareMode.text) {
-      return _buildTextPreview(colorScheme);
+      return _buildTextPreview(context, colorScheme);
     } else {
       return RepaintBoundary(
         key: _imageCardKey,
-        child: _buildImageCard(colorScheme),
+        child: _buildImageCard(context, colorScheme),
       );
     }
   }
 
-  Widget _buildTextPreview(ColorScheme colorScheme) {
+  Widget _buildTextPreview(BuildContext context, ColorScheme colorScheme) {
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: widget.content.arabic,
+      translation: widget.content.translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -173,57 +185,47 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
           width: 1,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Arabic Text
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              widget.content.arabic,
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              primary,
               textAlign: TextAlign.center,
-              style: AppTypography.arabicH1(color: colorScheme.onSurface),
+              style: useArabic
+                  ? AppTypography.arabicH1(color: colorScheme.onSurface)
+                  : AppTypography.body(
+                      color: colorScheme.onSurface.withValues(alpha: 0.9),
+                    ).copyWith(height: 1.6),
             ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          // Transliteration
-          Text(
-            widget.content.transliteration,
-            textAlign: TextAlign.center,
-            style: AppTypography.bodySm(color: colorScheme.primary)
-                .copyWith(fontStyle: FontStyle.italic),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          // Translation
-          Text(
-            '"${widget.content.translation}"',
-            textAlign: TextAlign.center,
-            style: AppTypography.body(
-              color: colorScheme.onSurface.withValues(alpha: 0.9),
-            ).copyWith(height: 1.6),
-          ),
-          const SizedBox(height: AppSpacing.md),
-          // Footer
-          Text(
-            '— ${widget.content.source}',
-            textAlign: TextAlign.center,
-            style: AppTypography.bodySm(
-              color: colorScheme.onSurface.withValues(alpha: 0.7),
-            ).copyWith(fontStyle: FontStyle.italic),
-          ),
-        ],
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              '— ${widget.content.source}',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodySm(
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ).copyWith(fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildImageCard(ColorScheme colorScheme) {
+  Widget _buildImageCard(BuildContext context, ColorScheme colorScheme) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: widget.content.arabic,
+      translation: widget.content.translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+
     final cardBackground = isDark ? const Color(0xFF1E1E1E) : Colors.white;
-    final arabicColor = isDark ? Colors.white : const Color(0xFF1F2937);
-    final transliterationColor =
-        isDark ? const Color(0xFF60A5FA) : const Color(0xFF3B82F6);
-    final translationColor =
-        isDark ? const Color(0xFFE5E7EB) : const Color(0xFF374151);
+    final bodyColor = isDark ? Colors.white : const Color(0xFF1F2937);
     final footerColor = isDark ? const Color(0xFF9CA3AF) : const Color(0xFF6B7280);
 
     return Container(
@@ -234,49 +236,34 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
         color: cardBackground,
         borderRadius: BorderRadius.circular(AppRadius.card),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // Arabic Text
-          Directionality(
-            textDirection: TextDirection.rtl,
-            child: Text(
-              widget.content.arabic,
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              primary,
               textAlign: TextAlign.center,
-              style: AppTypography.arabicH1(color: arabicColor),
+              style: useArabic
+                  ? AppTypography.arabicH1(color: bodyColor)
+                  : AppTypography.body(color: bodyColor).copyWith(height: 1.7, fontSize: 22),
             ),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          // Transliteration
-          Text(
-            widget.content.transliteration,
-            textAlign: TextAlign.center,
-            style: AppTypography.body(color: transliterationColor)
-                .copyWith(fontStyle: FontStyle.italic),
-          ),
-          const SizedBox(height: AppSpacing.xl),
-          // Translation
-          Text(
-            '"${widget.content.translation}"',
-            textAlign: TextAlign.center,
-            style: AppTypography.body(color: translationColor)
-                .copyWith(height: 1.7),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          // Footer
-          Text(
-            '— ${widget.content.source}',
-            textAlign: TextAlign.center,
-            style: AppTypography.bodySm(color: footerColor)
-                .copyWith(fontStyle: FontStyle.italic),
-          ),
-        ],
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              '— ${widget.content.source}',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodySm(color: footerColor)
+                  .copyWith(fontStyle: FontStyle.italic),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildFooter(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
@@ -295,7 +282,7 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
               ),
-              child: const Text('Copy'),
+              child: Text(l10n.copy),
             ),
           ),
           const SizedBox(width: AppSpacing.md),
@@ -320,7 +307,7 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
                       color: colorScheme.onPrimary,
                     ),
               label: Text(
-                _isGeneratingImage ? 'Generating...' : 'Share',
+                _isGeneratingImage ? l10n.shareGeneratingImage : l10n.share,
                 style: AppTypography.body(color: colorScheme.onPrimary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -348,20 +335,19 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
   }
 
   Future<void> _copyText() async {
-    final duaData = DuaData(
-      id: widget.content.id,
+    final lc = Localizations.localeOf(context).languageCode;
+    final text = LocalizedReligiousContent.composePlainText(
+      languageCode: lc,
       arabic: widget.content.arabic,
-      transliteration: widget.content.transliteration,
       translation: widget.content.translation,
       source: widget.content.source,
     );
-    final text = DuaShareFormatter.formatText(duaData);
     await Clipboard.setData(ClipboardData(text: text));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Copied to clipboard!'),
-          duration: Duration(seconds: 2),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.copiedToClipboard),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -407,17 +393,16 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
   }
 
   Future<void> _shareText() async {
-    final duaData = DuaData(
-      id: widget.content.id,
+    final lc = Localizations.localeOf(context).languageCode;
+    final text = LocalizedReligiousContent.composePlainText(
+      languageCode: lc,
       arabic: widget.content.arabic,
-      transliteration: widget.content.transliteration,
       translation: widget.content.translation,
       source: widget.content.source,
     );
-    final text = DuaShareFormatter.formatText(duaData);
     await Share.share(
       text,
-      subject: widget.content.title ?? 'Daily Content',
+      subject: widget.content.title ?? AppLocalizations.of(context)!.share,
     );
   }
 

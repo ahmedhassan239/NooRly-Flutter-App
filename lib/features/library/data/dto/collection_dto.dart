@@ -13,6 +13,8 @@ class CollectionDto with _$CollectionDto {
     required String title,
     @JsonKey(name: 'items_count') @Default(0) int itemsCount,
     String? icon,
+    @JsonKey(name: 'icon_key') String? iconKey,
+    @JsonKey(name: 'icon_url') String? iconUrl,
   }) = _CollectionDto;
 
   factory CollectionDto.fromJson(Map<String, dynamic> json) =>

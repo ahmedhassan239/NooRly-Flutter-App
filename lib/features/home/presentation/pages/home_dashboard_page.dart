@@ -6,6 +6,7 @@ import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/core/config/api_config.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/presentation/widgets/daily_inspiration_card.dart';
@@ -147,7 +148,6 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
         }
       },
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
         body: HomeScaffold(
           child: SafeArea(
             child: Column(
@@ -195,6 +195,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
         ? l10n.homeFriendFallback
         : header.displayName;
     final initial = name.isNotEmpty ? name[0].toUpperCase() : 'F';
+    final avatarUrl = ref.watch(currentUserProvider)?.avatarUrl?.trim();
+    final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -203,10 +205,28 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
           CircleAvatar(
             radius: 24,
             backgroundColor: colorScheme.primaryContainer,
-            child: Text(
-              initial,
-              style: AppTypography.h3(color: colorScheme.onPrimaryContainer),
-            ),
+            child: hasAvatar
+                ? ClipOval(
+                    child: Padding(
+                      padding: const EdgeInsets.all(6),
+                      child: Image.network(
+                        ApiConfig.resolvePublicUrl(avatarUrl) ?? avatarUrl,
+                        fit: BoxFit.contain,
+                        alignment: Alignment.center,
+                        filterQuality: FilterQuality.high,
+                        errorBuilder: (_, __, ___) => Text(
+                          initial,
+                          style: AppTypography.h3(
+                            color: colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                : Text(
+                    initial,
+                    style: AppTypography.h3(color: colorScheme.onPrimaryContainer),
+                  ),
           ),
           const SizedBox(width: 12),
           Expanded(

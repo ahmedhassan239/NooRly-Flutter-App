@@ -34,7 +34,6 @@ class SavedItemsPage extends ConsumerWidget {
 
     if (!auth.isAuthenticated) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           title: Text(l10n.savedTitle),
           leading: IconButton(
@@ -54,7 +53,6 @@ class SavedItemsPage extends ConsumerWidget {
     return DefaultTabController(
       length: _tabTypes.length,
       child: Scaffold(
-        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           title: Text(l10n.savedTitle),
           leading: IconButton(

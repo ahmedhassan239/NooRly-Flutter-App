@@ -243,6 +243,14 @@
   "adhkarLabel": "أذكار",
   "translationLabel": "الترجمة",
   "sourceLabel": "المصدر",
+  "libraryContentHadithRef": "{book} — رقم {number}",
+  "@libraryContentHadithRef": {
+    "placeholders": {
+      "book": { "type": "String" },
+      "number": { "type": "String" }
+    }
+  },
+  "librarySourceQuran": "القرآن الكريم",
 
   "savedCardDuas": "الأدعية المحفوظة",
   "savedCardHadith": "الأحاديث المحفوظة",
@@ -586,5 +594,17 @@
   "notificationsLangBoth": "الاثنتان",
   "notificationsSaveSuccess": "تم حفظ إعدادات الإشعارات",
   "notificationsPermissionRequired": "يرجى تفعيل الإشعارات من إعدادات الجهاز لتلقي التذكيرات",
-  "notificationsEnableButton": "تفعيل الإشعارات"
+  "notificationsEnableButton": "تفعيل الإشعارات",
+
+  "save": "حفظ",
+  "copy": "نسخ",
+  "share": "مشاركة",
+  "dua": "دعاء",
+  "verse": "آية",
+  "duas": "أدعية",
+  "adhkar": "أذكار",
+  "hadith": "حديث",
+  "verses": "آيات",
+  "contentCopiedShort": "تم النسخ",
+  "shareGeneratingImage": "جارٍ الإنشاء…"
 }

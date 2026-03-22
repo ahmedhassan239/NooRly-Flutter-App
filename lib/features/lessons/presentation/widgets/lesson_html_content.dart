@@ -69,6 +69,23 @@ class LessonHtmlContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    // Light callouts use pastel fills; dark mode uses tinted surfaces so
+    // [textColor] (typically onSurface) stays readable.
+    final infoBg =
+        isDark ? const Color(0xFF0F766E).withValues(alpha: 0.22) : _calloutInfoBg;
+    final warnBg =
+        isDark ? const Color(0xFFB45309).withValues(alpha: 0.22) : _calloutWarnBg;
+    final okBg =
+        isDark ? const Color(0xFF16A34A).withValues(alpha: 0.22) : _calloutOkBg;
+
+    final infoHeading =
+        isDark ? const Color(0xFF6EE7B7) : _calloutInfoBorder;
+    final warnHeading =
+        isDark ? const Color(0xFFFCD34D) : _calloutWarnBorder;
+    final okHeading =
+        isDark ? const Color(0xFF86EFAC) : _calloutOkBorder;
 
     return Html(
       data: _preprocessHtml(html),
@@ -147,7 +164,7 @@ class LessonHtmlContent extends StatelessWidget {
 
         // Info / verse (emerald teal — matches backend #0F766E)
         'div.callout-info': Style(
-          backgroundColor: _calloutInfoBg,
+          backgroundColor: infoBg,
           border: const Border(
             left: BorderSide(width: 4, color: _calloutInfoBorder),
           ),
@@ -155,7 +172,7 @@ class LessonHtmlContent extends StatelessWidget {
 
         // Warning (amber)
         'div.callout-warning': Style(
-          backgroundColor: _calloutWarnBg,
+          backgroundColor: warnBg,
           border: const Border(
             left: BorderSide(width: 4, color: _calloutWarnBorder),
           ),
@@ -163,7 +180,7 @@ class LessonHtmlContent extends StatelessWidget {
 
         // Success (green)
         'div.callout-success': Style(
-          backgroundColor: _calloutOkBg,
+          backgroundColor: okBg,
           border: const Border(
             left: BorderSide(width: 4, color: _calloutOkBorder),
           ),
@@ -177,17 +194,41 @@ class LessonHtmlContent extends StatelessWidget {
           color: textColor,
         ),
 
-        // Headings inside callouts keep the teal color from inline styles.
-        'div.callout h2': Style(
+        // Variant-specific headings (readable on both light pastels and dark tints).
+        'div.callout-info h2': Style(
           fontSize: FontSize(18),
           fontWeight: FontWeight.w700,
-          color: _calloutInfoBorder,
+          color: infoHeading,
           margin: Margins.only(bottom: 8),
         ),
-        'div.callout h3': Style(
+        'div.callout-info h3': Style(
           fontSize: FontSize(16),
           fontWeight: FontWeight.w700,
-          color: _calloutInfoBorder,
+          color: infoHeading,
+          margin: Margins.only(bottom: 6),
+        ),
+        'div.callout-warning h2': Style(
+          fontSize: FontSize(18),
+          fontWeight: FontWeight.w700,
+          color: warnHeading,
+          margin: Margins.only(bottom: 8),
+        ),
+        'div.callout-warning h3': Style(
+          fontSize: FontSize(16),
+          fontWeight: FontWeight.w700,
+          color: warnHeading,
+          margin: Margins.only(bottom: 6),
+        ),
+        'div.callout-success h2': Style(
+          fontSize: FontSize(18),
+          fontWeight: FontWeight.w700,
+          color: okHeading,
+          margin: Margins.only(bottom: 8),
+        ),
+        'div.callout-success h3': Style(
+          fontSize: FontSize(16),
+          fontWeight: FontWeight.w700,
+          color: okHeading,
           margin: Margins.only(bottom: 6),
         ),
         'div.callout strong': Style(

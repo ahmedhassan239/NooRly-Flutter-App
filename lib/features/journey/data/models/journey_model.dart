@@ -81,6 +81,7 @@ class WeekModel extends WeekEntity {
     super.description,
     super.descriptionAr,
     super.icon,
+    super.iconUrl,
     super.lessons,
     super.isUnlocked,
     super.isCompleted,
@@ -149,7 +150,8 @@ class WeekModel extends WeekEntity {
       titleAr: json['title_ar'] as String?,
       description: json['description'] as String?,
       descriptionAr: json['description_ar'] as String?,
-      icon: json['icon'] as String?,
+      icon: json['icon_key'] as String? ?? json['icon'] as String?,
+      iconUrl: json['icon_url'] as String?,
       lessons: (json['lessons'] as List<dynamic>?)
               ?.map((e) => LessonSummaryModel.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -171,6 +173,7 @@ class WeekModel extends WeekEntity {
       'description': description,
       'description_ar': descriptionAr,
       'icon': icon,
+      'icon_url': iconUrl,
       'lessons': lessons.map((e) => (e as LessonSummaryModel).toJson()).toList(),
       'is_unlocked': isUnlocked,
       'is_completed': isCompleted,

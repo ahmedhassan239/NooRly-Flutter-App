@@ -12,6 +12,8 @@ class ContentScopeDto with _$ContentScopeDto {
     required String key,
     required String label,
     String? icon,
+    @JsonKey(name: 'icon_key') String? iconKey,
+    @JsonKey(name: 'icon_url') String? iconUrl,
     String? color,
     @JsonKey(name: 'display_order') @Default(0) int displayOrder,
   }) = _ContentScopeDto;

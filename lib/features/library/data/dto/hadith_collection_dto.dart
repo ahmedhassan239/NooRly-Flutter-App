@@ -13,6 +13,8 @@ class HadithCollectionDto with _$HadithCollectionDto {
     required String title,
     @JsonKey(name: 'items_count') @Default(0) int itemsCount,
     String? icon,
+    @JsonKey(name: 'icon_key') String? iconKey,
+    @JsonKey(name: 'icon_url') String? iconUrl,
   }) = _HadithCollectionDto;
 
   factory HadithCollectionDto.fromJson(Map<String, dynamic> json) =>

@@ -17,7 +17,7 @@ import 'package:flutter_app/features/library/presentation/widgets/hadith_tab_vie
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/verses_tab_content.dart';
 import 'package:flutter_app/features/library/utils/library_utils.dart'
-    show resolveContentScopeEmoji;
+    show libraryTabLeading, resolveContentScopeEmoji;
 
 class LibraryScreen extends ConsumerStatefulWidget {
   const LibraryScreen({super.key, this.initialTabKey});
@@ -47,7 +47,6 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
     }
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -142,6 +141,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
       child: Row(
         children: tabs.map((t) {
           final emoji = resolveContentScopeEmoji(t.icon, t.key);
+          final iconUrl = t.iconUrl?.trim();
           final isActive = t.key == currentKey;
           return Expanded(
             child: Padding(
@@ -171,10 +171,7 @@ class _LibraryScreenState extends ConsumerState<LibraryScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        emoji,
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                      libraryTabLeading(emoji: emoji, iconUrl: iconUrl),
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(

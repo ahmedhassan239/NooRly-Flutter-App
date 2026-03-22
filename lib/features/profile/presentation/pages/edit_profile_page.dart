@@ -47,7 +47,6 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final isDarkMode = ref.watch(isDarkModeProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

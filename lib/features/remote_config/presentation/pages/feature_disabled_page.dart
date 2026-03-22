@@ -18,7 +18,6 @@ class FeatureDisabledPage extends StatelessWidget {
     final name = featureName ?? 'This feature';
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(AppSpacing.xl),

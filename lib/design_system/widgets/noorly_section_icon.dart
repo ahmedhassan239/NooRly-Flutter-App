@@ -8,6 +8,8 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/config/api_config.dart';
+import 'package:flutter_app/core/widgets/backend_remote_icon.dart';
 
 /// Icon container size — matches Journey Week card.
 const double noorlySectionIconSize = 40;
@@ -19,19 +21,28 @@ const double noorlySectionIconGlyphSize = 20;
 const double noorlySectionIconGap = 12;
 
 /// Reusable section icon widget.
-/// [icon] must be an emoji string (e.g. '🕌', '📖', '💚').
-/// Container style is fixed; only the emoji glyph changes per item.
+/// Prefer [iconUrl] from the API when set (SVG/PNG via [BackendRemoteIcon]);
+/// otherwise [icon] is an emoji string (e.g. '🕌', '📖', '💚').
 class NoorlySectionIcon extends StatelessWidget {
   const NoorlySectionIcon({
     required this.icon,
     super.key,
+    this.iconUrl,
   });
 
+  /// Emoji fallback when [iconUrl] is null/empty.
   final String icon;
+
+  /// Backend `icon_url` (absolute or site-relative).
+  final String? iconUrl;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final url = iconUrl?.trim();
+    final resolved = url != null && url.isNotEmpty
+        ? (ApiConfig.resolvePublicUrl(url) ?? url)
+        : null;
 
     return Container(
       width: noorlySectionIconSize,
@@ -41,10 +52,19 @@ class NoorlySectionIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(noorlySectionIconRadius),
       ),
       child: Center(
-        child: Text(
-          icon,
-          style: const TextStyle(fontSize: noorlySectionIconGlyphSize),
-        ),
+        child: resolved != null
+            ? BackendRemoteIcon(
+                url: resolved,
+                size: noorlySectionIconGlyphSize + 4,
+                fallback: Text(
+                  icon,
+                  style: const TextStyle(fontSize: noorlySectionIconGlyphSize),
+                ),
+              )
+            : Text(
+                icon,
+                style: const TextStyle(fontSize: noorlySectionIconGlyphSize),
+              ),
       ),
     );
   }

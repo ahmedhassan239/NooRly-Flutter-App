@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/content/domain/entities/content_entity.dart'
     show DhikrEntity;
 import 'package:flutter_app/core/utils/locale_digits.dart';
@@ -23,13 +25,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-bool _isTranslationDifferent(String arabic, String translation) {
-  final a = arabic.trim();
-  final t = translation.trim();
-  if (a.isEmpty || t.isEmpty) return t.isNotEmpty;
-  return a != t;
-}
-
 class CategoryAdhkarPage extends ConsumerWidget {
   const CategoryAdhkarPage({required this.categoryId, super.key});
 
@@ -42,7 +37,6 @@ class CategoryAdhkarPage extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -216,7 +210,16 @@ class CategoryAdhkarPage extends ConsumerWidget {
             color: colorScheme.onSurface,
           ),
           const SizedBox(width: noorlySectionIconGap),
-          NoorlySectionIcon(icon: iconForCategory(category.icon, fallbackKey: kCategoryIconFallbackTasbih)),
+          NoorlySectionIcon(
+            icon: iconForCategory(
+              category.icon,
+              fallbackKey: kCategoryIconFallbackTasbih,
+            ),
+            iconUrl: (category.iconUrl != null &&
+                    category.iconUrl!.trim().isNotEmpty)
+                ? category.iconUrl
+                : null,
+          ),
           const SizedBox(width: noorlySectionIconGap),
           Expanded(
             child: Column(
@@ -281,12 +284,21 @@ class CategoryAdhkarPage extends ConsumerWidget {
     final arabic = dhikr.arabicText;
     final translation = dhikr.translation ?? '';
     final transliteration = dhikr.transliteration ?? '';
-    final source = dhikr.source ?? '';
+    final source = formatLooseReligiousSourceLine(
+      l10n,
+      locale,
+      dhikr.source ?? '',
+      sourceAr: dhikr.sourceAr,
+    );
     final repetition = dhikr.repetitionCount;
     final repetitionLabel = toLocaleDigits(l10n.sayRepetition(repetition), locale);
-    final showTranslation = translation.isNotEmpty &&
-        locale != 'ar' &&
-        _isTranslationDifferent(arabic, translation);
+    final dir = LocalizedReligiousContent.textDirectionFor(locale);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: locale,
+      arabic: arabic,
+      translation: translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(locale);
 
     return InkWell(
       onTap: () => context.push('/adhkar/${dhikr.id}'),
@@ -298,83 +310,67 @@ class CategoryAdhkarPage extends ConsumerWidget {
           borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(color: colorScheme.outline.withAlpha(128)),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Repeat count badge (localized: "Say 1x" / "كرر ١ مرة")
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 4,
-                ),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                  border: Border.all(
-                    color: colorScheme.outline.withAlpha(100),
+        child: Directionality(
+          textDirection: dir,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
+                    border: Border.all(
+                      color: colorScheme.outline.withAlpha(100),
+                    ),
+                  ),
+                  child: Text(
+                    repetitionLabel,
+                    style: AppTypography.caption(
+                      color: colorScheme.onSurface.withAlpha(150),
+                    ).copyWith(fontWeight: FontWeight.w500),
                   ),
                 ),
-                child: Text(
-                  repetitionLabel,
+              ),
+              const SizedBox(height: AppSpacing.lg),
+              if (primary.isNotEmpty)
+                Text(
+                  primary,
+                  style: useArabic
+                      ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                      : AppTypography.bodySm(color: colorScheme.onSurface),
+                  textAlign: TextAlign.center,
+                ),
+              if (source.isNotEmpty) ...[
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  '— $source',
                   style: AppTypography.caption(
                     color: colorScheme.onSurface.withAlpha(150),
-                  ).copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+              ],
+              const SizedBox(height: AppSpacing.lg),
+              _buildActionButtons(
+                context,
+                ref,
+                categoryId,
+                dhikr,
+                isSaved,
+                isSavePending,
+                colorScheme,
+                arabic: arabic,
+                transliteration: transliteration,
+                translation: translation,
+                source: source,
               ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            if (arabic.isNotEmpty)
-              Text(
-                arabic,
-                style: AppTypography.arabicH2(color: colorScheme.onSurface),
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.rtl,
-              ),
-            if (arabic.isNotEmpty) const SizedBox(height: AppSpacing.lg),
-            if (transliteration.isNotEmpty)
-              Text(
-                transliteration,
-                style: AppTypography.bodySm(color: colorScheme.primary)
-                    .copyWith(fontStyle: FontStyle.italic),
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.ltr,
-              ),
-            if (transliteration.isNotEmpty) const SizedBox(height: AppSpacing.sm),
-            if (showTranslation)
-              Text(
-                '"$translation"',
-                style: AppTypography.bodySm(color: colorScheme.onSurface),
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.ltr,
-              ),
-            if (showTranslation) const SizedBox(height: AppSpacing.sm),
-            if (source.isNotEmpty)
-              Text(
-                '— $source',
-                style: AppTypography.caption(
-                  color: colorScheme.onSurface.withAlpha(150),
-                ),
-                textAlign: TextAlign.center,
-                textDirection: TextDirection.ltr,
-              ),
-            if (source.isNotEmpty) const SizedBox(height: AppSpacing.sm),
-            const SizedBox(height: AppSpacing.lg),
-            _buildActionButtons(
-              context,
-              ref,
-              categoryId,
-              dhikr,
-              isSaved,
-              isSavePending,
-              colorScheme,
-              arabic: arabic,
-              transliteration: transliteration,
-              translation: translation,
-              source: source,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -410,11 +406,17 @@ class CategoryAdhkarPage extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.copy,
-            label: AppLocalizations.of(context)!.actionCopy,
+            label: AppLocalizations.of(context)!.copy,
             colorScheme: colorScheme,
             onTap: () {
-              final textToCopy =
-                  '$arabic\n\n$transliteration\n\n"$translation"\n\n— $source';
+              final lc =
+                  ref.read(localeControllerProvider).languageCode;
+              final textToCopy = LocalizedReligiousContent.composePlainText(
+                languageCode: lc,
+                arabic: arabic,
+                translation: translation,
+                source: source,
+              );
               Clipboard.setData(ClipboardData(text: textToCopy));
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -430,9 +432,10 @@ class CategoryAdhkarPage extends ConsumerWidget {
           child: _buildActionButton(
             context: context,
             icon: LucideIcons.share2,
-            label: AppLocalizations.of(context)!.actionShare,
+            label: AppLocalizations.of(context)!.share,
             colorScheme: colorScheme,
             onTap: () {
+              final l10n = AppLocalizations.of(context)!;
               ShareContentDialog.show(
                 context,
                 ShareableContent(
@@ -441,7 +444,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
                   transliteration: transliteration,
                   translation: translation,
                   source: source,
-                  title: AppLocalizations.of(context)!.libraryAdhkar,
+                  title: '${l10n.share} ${l10n.adhkar}',
                 ),
               );
             },
@@ -505,7 +508,7 @@ class CategoryAdhkarPage extends ConsumerWidget {
     return _buildActionButton(
       context: context,
       icon: LucideIcons.heart,
-      label: isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.actionSave,
+      label: isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.save,
       colorScheme: colorScheme,
       isActive: isSaved,
       isEnabled: !isSavePending,

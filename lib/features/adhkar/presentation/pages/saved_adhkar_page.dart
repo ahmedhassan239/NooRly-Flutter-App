@@ -23,7 +23,6 @@ class SavedAdhkarPage extends ConsumerWidget {
 
     if (!isAuthenticated) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: SafeArea(
           child: Center(
             child: ConstrainedBox(
@@ -43,7 +42,6 @@ class SavedAdhkarPage extends ConsumerWidget {
     final listAsync = ref.watch(savedAdhkarListProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

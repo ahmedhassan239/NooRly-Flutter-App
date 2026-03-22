@@ -17,7 +17,6 @@ class VersesHubPage extends ConsumerWidget {
     final categoriesAsync = ref.watch(libraryVersesCategoriesProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

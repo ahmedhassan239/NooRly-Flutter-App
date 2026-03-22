@@ -31,7 +31,6 @@ class CollectionDetailsScreen extends ConsumerWidget {
     ));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: detailsAsync.when(
           data: (d) => Text(d?.title ?? 'Collection'),

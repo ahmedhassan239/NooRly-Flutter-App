@@ -38,6 +38,7 @@ class LibraryHadithCollectionItem {
     this.displayOrder,
     this.itemsCount,
     this.icon,
+    this.iconUrl,
   });
   final int id;
   final String title;
@@ -45,6 +46,7 @@ class LibraryHadithCollectionItem {
   final int? displayOrder;
   final int? itemsCount;
   final String? icon;
+  final String? iconUrl;
 
   static LibraryHadithCollectionItem fromJson(Map<String, dynamic> json) {
     return LibraryHadithCollectionItem(
@@ -54,6 +56,7 @@ class LibraryHadithCollectionItem {
       displayOrder: (json['display_order'] as num?)?.toInt(),
       itemsCount: (json['items_count'] as num?)?.toInt(),
       icon: json['icon'] as String?,
+      iconUrl: json['icon_url'] as String? ?? json['iconUrl'] as String?,
     );
   }
 }
@@ -63,6 +66,7 @@ class LibraryHadithItem {
     required this.id,
     this.collection,
     this.collectionName,
+    this.collectionNameAr,
     this.hadithNumber,
     this.chapterNumber,
     this.textAr,
@@ -72,6 +76,7 @@ class LibraryHadithItem {
   final int id;
   final String? collection;
   final String? collectionName;
+  final String? collectionNameAr;
   final dynamic hadithNumber;
   final dynamic chapterNumber;
   final String? textAr;
@@ -83,6 +88,7 @@ class LibraryHadithItem {
       id: (json['id'] as num).toInt(),
       collection: json['collection'] as String?,
       collectionName: json['collection_name'] as String?,
+      collectionNameAr: json['collection_name_ar'] as String?,
       hadithNumber: json['hadith_number'],
       chapterNumber: json['chapter_number'],
       textAr: json['text_ar'] as String?,

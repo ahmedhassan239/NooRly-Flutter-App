@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/verses/presentation/verses_mock_data.dart';
 import 'package:flutter_app/features/verses/providers/saved_verses_provider.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -24,7 +27,6 @@ class VerseDetailPage extends ConsumerWidget {
 
     if (verse == null) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +51,6 @@ class VerseDetailPage extends ConsumerWidget {
     final isSaved = ref.watch(isVerseSavedProvider(verseId));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -95,7 +96,7 @@ class VerseDetailPage extends ConsumerWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Verse',
+            AppLocalizations.of(context)!.verse,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -110,84 +111,82 @@ class VerseDetailPage extends ConsumerWidget {
     bool isSaved,
     ColorScheme colorScheme,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Verse label
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.accentGreen.withAlpha(25),
-            borderRadius: BorderRadius.circular(AppRadius.sm),
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: verse.arabic,
+      translation: verse.translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final sourceLine = formatLibraryVerseReference(
+      languageCode: lc,
+      apiReference: verse.source,
+      surahNumber: null,
+      ayahNumber: null,
+      surahNameEn: null,
+      surahNameAr: null,
+    );
+
+    return Directionality(
+      textDirection: dir,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.accentGreen.withAlpha(25),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+            child: Text(
+              l10n.verse,
+              style: AppTypography.caption(color: AppColors.accentGreen)
+                  .copyWith(fontWeight: FontWeight.w600),
+            ),
           ),
-          child: Text(
-            'Verse',
-            style: AppTypography.caption(color: AppColors.accentGreen)
-                .copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Arabic text
-        Text(
-          verse.arabic,
-          style: AppTypography.arabicH1(color: colorScheme.onSurface),
-          textAlign: TextAlign.center,
-          textDirection: TextDirection.rtl,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Transliteration
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colorScheme.primary.withAlpha(25),
-            borderRadius: BorderRadius.circular(AppRadius.md),
-          ),
-          child: Text(
-            verse.transliteration,
-            style: AppTypography.body(color: colorScheme.primary)
-                .copyWith(fontStyle: FontStyle.italic),
+          const SizedBox(height: AppSpacing.lg),
+          Text(
+            primary,
+            style: useArabic
+                ? AppTypography.arabicH1(color: colorScheme.onSurface)
+                : AppTypography.body(color: colorScheme.onSurface)
+                    .copyWith(fontSize: 20, height: 1.5),
             textAlign: TextAlign.center,
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Translation
-        Text(
-          'Translation',
-          style: AppTypography.h3(color: colorScheme.onSurface),
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          verse.translation,
-          style: AppTypography.body(color: colorScheme.onSurface),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Source
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: colorScheme.outline.withAlpha(128)),
+          const SizedBox(height: AppSpacing.lg),
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(color: colorScheme.outline.withAlpha(128)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  LucideIcons.bookOpen,
+                  size: 18,
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Flexible(
+                  child: Text(
+                    '${l10n.sourceLabel}: $sourceLine',
+                    style: AppTypography.bodySm(color: colorScheme.onSurface),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            children: [
-              Icon(
-                LucideIcons.bookOpen,
-                size: 18,
-                color: colorScheme.onSurface.withAlpha(150),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                'Source: ${verse.source}',
-                style: AppTypography.bodySm(color: colorScheme.onSurface),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        // Action buttons
-        _buildActionButtons(context, ref, verse, isSaved, colorScheme),
-      ],
+          const SizedBox(height: AppSpacing.xl),
+          _buildActionButtons(context, ref, verse, isSaved, colorScheme, sourceLine),
+        ],
+      ),
     );
   }
 
@@ -197,7 +196,10 @@ class VerseDetailPage extends ConsumerWidget {
     VerseData verse,
     bool isSaved,
     ColorScheme colorScheme,
+    String sourceLine,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
     return Column(
       children: [
         Row(
@@ -206,7 +208,7 @@ class VerseDetailPage extends ConsumerWidget {
               child: _buildActionButton(
                 context: context,
                 icon: isSaved ? LucideIcons.heartOff : LucideIcons.heart,
-                label: 'Save',
+                label: isSaved ? l10n.actionSaved : l10n.save,
                 colorScheme: colorScheme,
                 isActive: isSaved,
                 onTap: () {
@@ -214,7 +216,7 @@ class VerseDetailPage extends ConsumerWidget {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(
-                        isSaved ? 'Removed from favorites' : 'Saved to favorites ❤️',
+                        isSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
                       ),
                       duration: const Duration(seconds: 2),
                     ),
@@ -227,14 +229,19 @@ class VerseDetailPage extends ConsumerWidget {
               child: _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
-                label: 'Copy',
+                label: l10n.copy,
                 colorScheme: colorScheme,
                 onTap: () {
-                  final textToCopy = '${verse.arabic}\n\n${verse.transliteration}\n\n"${verse.translation}"\n\n— ${verse.source}';
+                  final textToCopy = LocalizedReligiousContent.composePlainText(
+                    languageCode: lc,
+                    arabic: verse.arabic,
+                    translation: verse.translation,
+                    source: sourceLine,
+                  );
                   Clipboard.setData(ClipboardData(text: textToCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('Copied to clipboard! ✓'),
+                      content: Text(l10n.copiedToClipboard),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -250,7 +257,7 @@ class VerseDetailPage extends ConsumerWidget {
               child: _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: l10n.share,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -260,8 +267,8 @@ class VerseDetailPage extends ConsumerWidget {
                       arabic: verse.arabic,
                       transliteration: verse.transliteration,
                       translation: verse.translation,
-                      source: verse.source,
-                      title: 'Share Verse',
+                      source: sourceLine,
+                      title: '${l10n.share} ${l10n.verse}',
                     ),
                   );
                 },

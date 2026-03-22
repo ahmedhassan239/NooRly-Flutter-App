@@ -9,6 +9,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/design_system/widgets/app_brand_logo.dart';
 import 'package:flutter_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 
@@ -32,16 +33,10 @@ class WelcomePage extends ConsumerWidget {
 
     if (auth.status == AuthStatus.initial || auth.status == AuthStatus.loading) {
       // Match native / web splash: warm off-white + centered logo (no generic spinner).
+      // Square box + [BoxFit.contain] matches web/native splash (no circular crop).
       return Scaffold(
-        backgroundColor: const Color(0xFFF5F7FA),
         body: Center(
-          child: Image.asset(
-            _kBrandingLogoAsset,
-            width: 168,
-            fit: BoxFit.contain,
-            filterQuality: FilterQuality.high,
-            semanticLabel: 'NooRly',
-          ),
+          child: AppBrandLogo(size: 168),
         ),
       );
     }

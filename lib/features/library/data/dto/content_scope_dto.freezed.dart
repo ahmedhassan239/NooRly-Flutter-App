@@ -23,6 +23,10 @@ mixin _$ContentScopeDto {
   String get key => throw _privateConstructorUsedError;
   String get label => throw _privateConstructorUsedError;
   String? get icon => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_key')
+  String? get iconKey => throw _privateConstructorUsedError;
+  @JsonKey(name: 'icon_url')
+  String? get iconUrl => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   @JsonKey(name: 'display_order')
   int get displayOrder => throw _privateConstructorUsedError;
@@ -43,6 +47,8 @@ abstract class $ContentScopeDtoCopyWith<$Res> {
       {String key,
       String label,
       String? icon,
+      @JsonKey(name: 'icon_key') String? iconKey,
+      @JsonKey(name: 'icon_url') String? iconUrl,
       String? color,
       @JsonKey(name: 'display_order') int displayOrder});
 }
@@ -63,6 +69,8 @@ class _$ContentScopeDtoCopyWithImpl<$Res, $Val extends ContentScopeDto>
     Object? key = null,
     Object? label = null,
     Object? icon = freezed,
+    Object? iconKey = freezed,
+    Object? iconUrl = freezed,
     Object? color = freezed,
     Object? displayOrder = null,
   }) {
@@ -78,6 +86,14 @@ class _$ContentScopeDtoCopyWithImpl<$Res, $Val extends ContentScopeDto>
       icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconKey: freezed == iconKey
+          ? _value.iconKey
+          : iconKey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: freezed == iconUrl
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       color: freezed == color
           ? _value.color
@@ -103,6 +119,8 @@ abstract class _$$ContentScopeDtoImplCopyWith<$Res>
       {String key,
       String label,
       String? icon,
+      @JsonKey(name: 'icon_key') String? iconKey,
+      @JsonKey(name: 'icon_url') String? iconUrl,
       String? color,
       @JsonKey(name: 'display_order') int displayOrder});
 }
@@ -121,6 +139,8 @@ class __$$ContentScopeDtoImplCopyWithImpl<$Res>
     Object? key = null,
     Object? label = null,
     Object? icon = freezed,
+    Object? iconKey = freezed,
+    Object? iconUrl = freezed,
     Object? color = freezed,
     Object? displayOrder = null,
   }) {
@@ -136,6 +156,14 @@ class __$$ContentScopeDtoImplCopyWithImpl<$Res>
       icon: freezed == icon
           ? _value.icon
           : icon // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconKey: freezed == iconKey
+          ? _value.iconKey
+          : iconKey // ignore: cast_nullable_to_non_nullable
+              as String?,
+      iconUrl: freezed == iconUrl
+          ? _value.iconUrl
+          : iconUrl // ignore: cast_nullable_to_non_nullable
               as String?,
       color: freezed == color
           ? _value.color
@@ -156,6 +184,8 @@ class _$ContentScopeDtoImpl implements _ContentScopeDto {
       {required this.key,
       required this.label,
       this.icon,
+      @JsonKey(name: 'icon_key') this.iconKey,
+      @JsonKey(name: 'icon_url') this.iconUrl,
       this.color,
       @JsonKey(name: 'display_order') this.displayOrder = 0});
 
@@ -169,6 +199,12 @@ class _$ContentScopeDtoImpl implements _ContentScopeDto {
   @override
   final String? icon;
   @override
+  @JsonKey(name: 'icon_key')
+  final String? iconKey;
+  @override
+  @JsonKey(name: 'icon_url')
+  final String? iconUrl;
+  @override
   final String? color;
   @override
   @JsonKey(name: 'display_order')
@@ -176,7 +212,7 @@ class _$ContentScopeDtoImpl implements _ContentScopeDto {
 
   @override
   String toString() {
-    return 'ContentScopeDto(key: $key, label: $label, icon: $icon, color: $color, displayOrder: $displayOrder)';
+    return 'ContentScopeDto(key: $key, label: $label, icon: $icon, iconKey: $iconKey, iconUrl: $iconUrl, color: $color, displayOrder: $displayOrder)';
   }
 
   @override
@@ -187,6 +223,8 @@ class _$ContentScopeDtoImpl implements _ContentScopeDto {
             (identical(other.key, key) || other.key == key) &&
             (identical(other.label, label) || other.label == label) &&
             (identical(other.icon, icon) || other.icon == icon) &&
+            (identical(other.iconKey, iconKey) || other.iconKey == iconKey) &&
+            (identical(other.iconUrl, iconUrl) || other.iconUrl == iconUrl) &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.displayOrder, displayOrder) ||
                 other.displayOrder == displayOrder));
@@ -194,8 +232,8 @@ class _$ContentScopeDtoImpl implements _ContentScopeDto {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, key, label, icon, color, displayOrder);
+  int get hashCode => Object.hash(
+      runtimeType, key, label, icon, iconKey, iconUrl, color, displayOrder);
 
   @JsonKey(ignore: true)
   @override
@@ -217,6 +255,8 @@ abstract class _ContentScopeDto implements ContentScopeDto {
           {required final String key,
           required final String label,
           final String? icon,
+          @JsonKey(name: 'icon_key') final String? iconKey,
+          @JsonKey(name: 'icon_url') final String? iconUrl,
           final String? color,
           @JsonKey(name: 'display_order') final int displayOrder}) =
       _$ContentScopeDtoImpl;
@@ -230,6 +270,12 @@ abstract class _ContentScopeDto implements ContentScopeDto {
   String get label;
   @override
   String? get icon;
+  @override
+  @JsonKey(name: 'icon_key')
+  String? get iconKey;
+  @override
+  @JsonKey(name: 'icon_url')
+  String? get iconUrl;
   @override
   String? get color;
   @override

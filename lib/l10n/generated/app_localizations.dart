@@ -1064,6 +1064,18 @@ abstract class AppLocalizations {
   /// **'Source'**
   String get sourceLabel;
 
+  /// No description provided for @libraryContentHadithRef.
+  ///
+  /// In en, this message translates to:
+  /// **'{book} — No. {number}'**
+  String libraryContentHadithRef(String book, String number);
+
+  /// No description provided for @librarySourceQuran.
+  ///
+  /// In en, this message translates to:
+  /// **'Quran'**
+  String get librarySourceQuran;
+
   /// No description provided for @savedCardDuas.
   ///
   /// In en, this message translates to:
@@ -2875,6 +2887,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enable Notifications'**
   String get notificationsEnableButton;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @copy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get copy;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @dua.
+  ///
+  /// In en, this message translates to:
+  /// **'Dua'**
+  String get dua;
+
+  /// No description provided for @verse.
+  ///
+  /// In en, this message translates to:
+  /// **'Verse'**
+  String get verse;
+
+  /// No description provided for @duas.
+  ///
+  /// In en, this message translates to:
+  /// **'Duas'**
+  String get duas;
+
+  /// No description provided for @adhkar.
+  ///
+  /// In en, this message translates to:
+  /// **'Adhkar'**
+  String get adhkar;
+
+  /// No description provided for @hadith.
+  ///
+  /// In en, this message translates to:
+  /// **'Hadith'**
+  String get hadith;
+
+  /// No description provided for @verses.
+  ///
+  /// In en, this message translates to:
+  /// **'Verses'**
+  String get verses;
+
+  /// No description provided for @contentCopiedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied'**
+  String get contentCopiedShort;
+
+  /// No description provided for @shareGeneratingImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Generating…'**
+  String get shareGeneratingImage;
 }
 
 class _AppLocalizationsDelegate

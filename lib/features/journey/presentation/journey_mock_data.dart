@@ -278,7 +278,10 @@ List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks, String localeCode) 
     final String iconDisplay;
     final String? iconUrl;
     final resolved = resolveWeekIconEmoji(w.icon);
-    if (w.icon != null &&
+    if (w.iconUrl != null && w.iconUrl!.trim().isNotEmpty) {
+      iconDisplay = '';
+      iconUrl = w.iconUrl!.trim();
+    } else if (w.icon != null &&
         (w.icon!.startsWith('http://') || w.icon!.startsWith('https://'))) {
       iconDisplay = '';
       iconUrl = w.icon;

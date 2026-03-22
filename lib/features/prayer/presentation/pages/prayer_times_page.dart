@@ -102,7 +102,6 @@ class _PrayerTimesPageState extends ConsumerState<PrayerTimesPage> {
     final locationAsync = ref.watch(locationNotifierProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

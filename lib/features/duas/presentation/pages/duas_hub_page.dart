@@ -7,6 +7,9 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
     show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
+import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show contentScopeIconUrlForKey;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,9 +37,13 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final categoriesAsync = ref.watch(duaCategoriesFromApiProvider);
+    final savedDuasTabIconUrl = ref.watch(libraryTabsProvider).when(
+          data: (tabs) => contentScopeIconUrlForKey(tabs, 'duas'),
+          loading: () => null,
+          error: (_, __) => null,
+        );
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -54,7 +61,12 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
                         const SizedBox(height: AppSpacing.lg),
                         _buildSearchBar(colorScheme),
                         const SizedBox(height: AppSpacing.lg),
-                        _buildCategoriesSection(context, categoriesAsync, colorScheme),
+                        _buildCategoriesSection(
+                          context,
+                          categoriesAsync,
+                          colorScheme,
+                          savedDuasTabIconUrl,
+                        ),
                       ],
                     ),
                   ),
@@ -133,6 +145,7 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
     BuildContext context,
     AsyncValue<List<DuaCategoryEntity>> categoriesAsync,
     ColorScheme colorScheme,
+    String? savedDuasTabIconUrl,
   ) {
     return categoriesAsync.when(
       data: (categories) {
@@ -143,7 +156,12 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
                 .where((c) =>
                     c.title.toLowerCase().contains(_searchQuery.toLowerCase()))
                 .toList();
-        return _buildCategoriesList(context, filtered, colorScheme);
+        return _buildCategoriesList(
+          context,
+          filtered,
+          colorScheme,
+          savedDuasTabIconUrl: savedDuasTabIconUrl,
+        );
       },
       loading: () => const Center(
         child: Padding(
@@ -186,8 +204,9 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
   Widget _buildCategoriesList(
     BuildContext context,
     List<DuaCategoryEntity> categories,
-    ColorScheme colorScheme,
-  ) {
+    ColorScheme colorScheme, {
+    String? savedDuasTabIconUrl,
+  }) {
     if (categories.isEmpty) {
       return Center(
         child: Padding(
@@ -228,6 +247,7 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
             ),
             colorScheme,
             isSaved: true,
+            leadingIconUrlOverride: savedDuasTabIconUrl,
           ),
         ),
         ...categories.map((category) {
@@ -250,6 +270,7 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
     DuaCategoryEntity category,
     ColorScheme colorScheme, {
     bool isSaved = false,
+    String? leadingIconUrlOverride,
   }) {
     return InkWell(
       onTap: () {
@@ -269,7 +290,13 @@ class _DuasHubPageState extends ConsumerState<DuasHubPage> {
         ),
         child: Row(
           children: [
-            NoorlySectionIcon(icon: iconForCategory(category.iconKey, fallbackKey: kCategoryIconFallbackPrayer)),
+            NoorlySectionIcon(
+              icon: iconForCategory(
+                category.iconKey,
+                fallbackKey: kCategoryIconFallbackPrayer,
+              ),
+              iconUrl: leadingIconUrlOverride ?? category.iconUrl,
+            ),
             const SizedBox(width: noorlySectionIconGap),
             Expanded(
               child: Column(

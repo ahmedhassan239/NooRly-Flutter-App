@@ -12,6 +12,7 @@ class DuaModel {
     required this.transliteration,
     required this.translation,
     required this.source,
+    this.sourceAr,
     required this.tags,
   });
 
@@ -24,6 +25,7 @@ class DuaModel {
       transliteration: json['transliteration'] as String,
       translation: json['translation'] as String,
       source: json['source'] as String,
+      sourceAr: json['source_ar'] as String?,
       tags: (json['tags'] as List<dynamic>).cast<String>(),
     );
   }
@@ -35,6 +37,7 @@ class DuaModel {
   final String transliteration;
   final String translation;
   final String source;
+  final String? sourceAr;
   final List<String> tags;
 
   Map<String, dynamic> toJson() {
@@ -46,6 +49,7 @@ class DuaModel {
       'transliteration': transliteration,
       'translation': translation,
       'source': source,
+      'source_ar': sourceAr,
       'tags': tags,
     };
   }
@@ -60,6 +64,7 @@ class DuaModel {
       transliteration: transliteration,
       translation: translation,
       source: source,
+      sourceAr: sourceAr,
       tags: tags,
     );
   }
@@ -72,6 +77,7 @@ class DuaCategoryModel {
     required this.title,
     this.description,
     required this.iconKey,
+    this.iconUrl,
     this.iconColor,
     required this.count,
     this.slug,
@@ -85,6 +91,7 @@ class DuaCategoryModel {
       description: json['description'] as String?,
       slug: json['slug'] as String?,
       iconKey: json['icon_key'] as String? ?? json['icon'] as String? ?? '',
+      iconUrl: json['icon_url'] as String? ?? json['iconUrl'] as String?,
       iconColor: json['icon_color'] as String?,
       count: (json['duas_count'] as int?) ?? 0,
     );
@@ -99,6 +106,7 @@ class DuaCategoryModel {
       description: json['description'] as String?,
       slug: json['slug'] as String?,
       iconKey: json['icon_key'] as String? ?? json['icon'] as String? ?? '',
+      iconUrl: json['icon_url'] as String? ?? json['iconUrl'] as String?,
       iconColor: json['icon_color'] as String?,
       count: (json['count'] as int?) ?? (json['duas_count'] as int?) ?? 0,
     );
@@ -108,6 +116,7 @@ class DuaCategoryModel {
   final String title;
   final String? description;
   final String iconKey;
+  final String? iconUrl;
   final String? iconColor;
   final int count;
   final String? slug;
@@ -118,6 +127,7 @@ class DuaCategoryModel {
       'title': title,
       'description': description,
       'icon_key': iconKey,
+      if (iconUrl != null) 'icon_url': iconUrl,
       'icon_color': iconColor,
       'count': count,
       'slug': slug,
@@ -130,6 +140,7 @@ class DuaCategoryModel {
       title: title,
       description: description,
       iconKey: iconKey,
+      iconUrl: iconUrl,
       iconColor: iconColor,
       count: count,
       slug: slug,

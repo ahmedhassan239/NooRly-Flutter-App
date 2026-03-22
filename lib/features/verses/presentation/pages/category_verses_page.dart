@@ -30,7 +30,6 @@ class CategoryVersesPage extends ConsumerWidget {
         match.isEmpty ? 'Category' : match.first.name;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -146,6 +145,10 @@ class CategoryVersesPage extends ConsumerWidget {
         title: collection.title,
         subtitle: subtitle,
         icon: iconForVerseCollection(collection.icon),
+        iconUrl: (collection.iconUrl != null &&
+                collection.iconUrl!.trim().isNotEmpty)
+            ? collection.iconUrl
+            : null,
         onTap: () => context.push('/verses/collection/${collection.id}'),
       ),
     );

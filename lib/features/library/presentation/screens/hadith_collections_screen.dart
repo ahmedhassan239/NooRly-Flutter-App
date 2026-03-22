@@ -26,7 +26,6 @@ class HadithCollectionsScreen extends ConsumerWidget {
     final collectionsAsync = ref.watch(hadithCollectionsAllProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: const Text('Collections'),
         leading: IconButton(
@@ -56,6 +55,10 @@ class HadithCollectionsScreen extends ConsumerWidget {
                         title: c.title,
                         subtitle: subtitle,
                         icon: iconForHadithCollection(c.icon),
+                        iconUrl: (c.iconUrl != null &&
+                                c.iconUrl!.trim().isNotEmpty)
+                            ? c.iconUrl
+                            : null,
                         onTap: () => context.push(
                           '/library/hadith/collection/${c.id}',
                         ),

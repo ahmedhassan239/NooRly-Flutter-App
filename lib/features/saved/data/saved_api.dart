@@ -4,6 +4,7 @@
 library;
 
 import 'package:dio/dio.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_app/core/config/endpoints.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
@@ -64,6 +65,7 @@ class SavedHadithItem {
     required this.id,
     this.collection,
     this.collectionName,
+    this.collectionNameAr,
     this.hadithNumber,
     this.chapterNumber,
     this.textAr,
@@ -74,6 +76,7 @@ class SavedHadithItem {
   final int id;
   final String? collection;
   final String? collectionName;
+  final String? collectionNameAr;
   final dynamic hadithNumber;
   final dynamic chapterNumber;
   final String? textAr;
@@ -90,6 +93,7 @@ class SavedHadithItem {
       id: contentId,
       collection: json['collection'] as String?,
       collectionName: json['collection_name'] as String?,
+      collectionNameAr: json['collection_name_ar'] as String?,
       hadithNumber: json['hadith_number'],
       chapterNumber: json['chapter_number'],
       textAr: json['text_ar'] as String?,
@@ -143,15 +147,15 @@ class SavedVerseItem {
   final String? text;
   final bool isSaved;
 
-  String referenceDisplay(bool isArabic) {
-    final an = ayahNumber;
-    if (an == null) return reference ?? '';
-    final en = surahNameEn ?? '';
-    final ar = surahNameAr ?? '';
-    if (isArabic) {
-      return 'سورة $ar ($en) $an';
-    }
-    return '$en ($ar) $an';
+  String referenceDisplay(String languageCode) {
+    return formatLibraryVerseReference(
+      languageCode: languageCode,
+      apiReference: reference,
+      surahNumber: surahNumber,
+      ayahNumber: ayahNumber,
+      surahNameEn: surahNameEn,
+      surahNameAr: surahNameAr,
+    );
   }
 
   static SavedVerseItem fromJson(Map<String, dynamic> json) {
@@ -303,6 +307,7 @@ class SavedDuaItem {
     this.textAr,
     this.transliteration,
     this.source,
+    this.sourceAr,
     this.categoryId,
     this.categoryName,
     this.isSaved = true,
@@ -314,6 +319,7 @@ class SavedDuaItem {
   final String? textAr;
   final String? transliteration;
   final String? source;
+  final String? sourceAr;
   final int? categoryId;
   final String? categoryName;
   final bool isSaved;
@@ -337,6 +343,7 @@ class SavedDuaItem {
       textAr: textAr,
       transliteration: json['transliteration'] as String?,
       source: json['source'] as String?,
+      sourceAr: json['source_ar'] as String?,
       categoryId: (json['category_id'] as num?)?.toInt(),
       categoryName: json['category_name'] as String?,
       isSaved: json['is_saved'] as bool? ?? true,

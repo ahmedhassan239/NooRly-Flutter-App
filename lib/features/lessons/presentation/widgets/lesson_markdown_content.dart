@@ -38,6 +38,11 @@ class LessonMarkdownContent extends StatelessWidget {
   }
 
   MarkdownStyleSheet _buildStyleSheet(ColorScheme colorScheme) {
+    final isDark = colorScheme.brightness == Brightness.dark;
+    final blockquoteFill = isDark
+        ? colorScheme.surfaceContainerHighest
+        : AppColors.primaryLightBlue.withAlpha(20);
+    final blockquoteTextAlpha = isDark ? 0.92 : 0.72;
     final base = TextStyle(
       color: textColor,
       fontSize: 16,
@@ -75,16 +80,16 @@ class LessonMarkdownContent extends StatelessWidget {
       listBulletPadding: const EdgeInsets.only(right: 8),
       // Blockquote is handled by the custom builder below
       blockquote: base.copyWith(
-        color: colorScheme.onSurface.withAlpha(180),
+        color: colorScheme.onSurface.withValues(alpha: blockquoteTextAlpha),
         fontStyle: FontStyle.italic,
       ),
       blockquoteDecoration: BoxDecoration(
-        color: AppColors.primaryLightBlue.withAlpha(20),
+        color: blockquoteFill,
         borderRadius: BorderRadius.circular(4),
         border: Border(
           left: BorderSide(
             width: 4,
-            color: colorScheme.primary.withAlpha(180),
+            color: colorScheme.primary.withValues(alpha: isDark ? 0.75 : 0.7),
           ),
         ),
       ),
@@ -117,23 +122,27 @@ class _BlockquoteBuilder extends MarkdownElementBuilder {
     TextStyle? parentStyle,
   ) {
     final text = element.textContent.trim();
+    final isDark = colorScheme.brightness == Brightness.dark;
+    final fill = isDark
+        ? colorScheme.surfaceContainerHighest
+        : AppColors.primaryLightBlue.withAlpha(20);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.primaryLightBlue.withAlpha(20),
+        color: fill,
         borderRadius: BorderRadius.circular(4),
         border: Border(
           left: BorderSide(
             width: 4,
-            color: colorScheme.primary.withAlpha(180),
+            color: colorScheme.primary.withValues(alpha: isDark ? 0.75 : 0.7),
           ),
         ),
       ),
       child: Text(
         text,
         style: TextStyle(
-          color: colorScheme.onSurface.withAlpha(180),
+          color: colorScheme.onSurface.withValues(alpha: isDark ? 0.92 : 0.72),
           fontSize: 16,
           fontStyle: FontStyle.italic,
           height: 1.6,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -28,7 +29,6 @@ class VerseCollectionPage extends ConsumerWidget {
         ref.watch(libraryVerseCollectionDetailProvider(_id));
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -102,7 +102,13 @@ class VerseCollectionPage extends ConsumerWidget {
             color: colorScheme.onSurface,
           ),
           const SizedBox(width: noorlySectionIconGap),
-          NoorlySectionIcon(icon: iconForVerseCollection(collection.icon)),
+          NoorlySectionIcon(
+            icon: iconForVerseCollection(collection.icon),
+            iconUrl: (collection.iconUrl != null &&
+                    collection.iconUrl!.trim().isNotEmpty)
+                ? collection.iconUrl
+                : null,
+          ),
           const SizedBox(width: noorlySectionIconGap),
           Expanded(
             child: Text(
@@ -151,21 +157,24 @@ class VerseCollectionPage extends ConsumerWidget {
     );
   }
 
-  static bool _isTextDifferent(String? arabic, String secondary) {
-    if (arabic == null || arabic.trim().isEmpty) return secondary.trim().isNotEmpty;
-    return secondary.trim() != arabic.trim();
-  }
-
   Widget _buildVerseCard(
     BuildContext context,
     WidgetRef ref,
     LibraryVerseItem verse,
     ColorScheme colorScheme,
   ) {
+    final lc = Localizations.localeOf(context).languageCode;
     final text = verse.text ?? verse.textEn ?? verse.textAr ?? '';
-    final showSecondary = _isTextDifferent(verse.textAr, text);
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-    final refStr = verse.referenceDisplay(isArabic);
+    final textAr = verse.textAr ?? '';
+    final primary = LocalizedReligiousContent.libraryPrimaryBody(
+      languageCode: lc,
+      textAr: verse.textAr,
+      translationOrEn: text,
+    );
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final l10n = AppLocalizations.of(context)!;
+    final refStr = verse.referenceDisplay(lc);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -175,105 +184,99 @@ class VerseCollectionPage extends ConsumerWidget {
         border:
             Border.all(color: colorScheme.outline.withAlpha(128)),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(
                   color: colorScheme.primary.withAlpha(25),
                   borderRadius: BorderRadius.circular(AppRadius.sm),
                 ),
                 child: Text(
-                  AppLocalizations.of(context)!.savedTypeVerse,
+                  l10n.verse,
                   style: AppTypography.caption(
                     color: colorScheme.primary,
                   ).copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
-            ],
-          ),
-          if (verse.textAr != null && verse.textAr!.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.md),
-            Text(
-              verse.textAr!,
-              style: AppTypography.arabicH2(color: colorScheme.onSurface),
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
             ),
-          ],
-          if (verse.textAr != null && verse.textAr!.isNotEmpty && showSecondary)
             const SizedBox(height: AppSpacing.md),
-          if (showSecondary)
-            Text(
-              '"$text"',
-              style: AppTypography.bodySm(color: colorScheme.onSurface),
-              textAlign: TextAlign.center,
-            ),
-          if (refStr.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Center(
-              child: Text(
+            if (primary.isNotEmpty)
+              Text(
+                primary,
+                style: useArabic
+                    ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                    : AppTypography.bodySm(color: colorScheme.onSurface),
+                textAlign: TextAlign.center,
+              ),
+            if (refStr.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(
                 '— $refStr',
                 style: AppTypography.caption(
-                    color: colorScheme.onSurface.withAlpha(150)),
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
               ),
-            ),
-          ],
-          const SizedBox(height: AppSpacing.md),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SaveVerseButton(verseId: verse.id, compact: true),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.copy,
-                label: AppLocalizations.of(context)!.actionCopy,
-                colorScheme: colorScheme,
-                onTap: () {
-                  final toCopy = verse.textAr != null && showSecondary
-                      ? '${verse.textAr}\n\n$text\n\n— $refStr'
-                      : (verse.textAr ?? text).trim().isNotEmpty
-                          ? '${verse.textAr ?? text}\n\n— $refStr'
-                          : '$text\n\n— $refStr';
-                  Clipboard.setData(ClipboardData(text: toCopy));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(AppLocalizations.of(context)!.copiedToClipboard),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.share2,
-                label: AppLocalizations.of(context)!.actionShare,
-                colorScheme: colorScheme,
-                onTap: () {
-                  ShareContentDialog.show(
-                    context,
-                    ShareableContent(
-                      id: verse.id.toString(),
-                      arabic: verse.textAr ?? '',
-                      transliteration: '',
+            ],
+            const SizedBox(height: AppSpacing.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SaveVerseButton(verseId: verse.id, compact: true),
+                const SizedBox(width: AppSpacing.sm),
+                _buildActionButton(
+                  context: context,
+                  icon: LucideIcons.copy,
+                  label: l10n.copy,
+                  colorScheme: colorScheme,
+                  onTap: () {
+                    final toCopy = LocalizedReligiousContent.composePlainText(
+                      languageCode: lc,
+                      arabic: textAr,
                       translation: text,
                       source: refStr,
-                      title: AppLocalizations.of(context)!.libraryVerses,
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+                    );
+                    Clipboard.setData(ClipboardData(text: toCopy));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.copiedToClipboard),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _buildActionButton(
+                  context: context,
+                  icon: LucideIcons.share2,
+                  label: l10n.share,
+                  colorScheme: colorScheme,
+                  onTap: () {
+                    ShareContentDialog.show(
+                      context,
+                      ShareableContent(
+                        id: verse.id.toString(),
+                        arabic: textAr,
+                        transliteration: '',
+                        translation: text,
+                        source: refStr,
+                        title: '${l10n.share} ${l10n.verse}',
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

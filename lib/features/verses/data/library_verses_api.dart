@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_app/core/config/endpoints.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,6 +36,7 @@ class LibraryVerseCollectionItem {
     this.displayOrder,
     this.itemsCount,
     this.icon,
+    this.iconUrl,
   });
   final int id;
   final String title;
@@ -42,6 +44,7 @@ class LibraryVerseCollectionItem {
   final int? displayOrder;
   final int? itemsCount;
   final String? icon;
+  final String? iconUrl;
 
   static LibraryVerseCollectionItem fromJson(Map<String, dynamic> json) {
     return LibraryVerseCollectionItem(
@@ -51,6 +54,7 @@ class LibraryVerseCollectionItem {
       displayOrder: (json['display_order'] as num?)?.toInt(),
       itemsCount: (json['items_count'] as num?)?.toInt(),
       icon: json['icon'] as String?,
+      iconUrl: json['icon_url'] as String? ?? json['iconUrl'] as String?,
     );
   }
 }
@@ -79,16 +83,16 @@ class LibraryVerseItem {
   final String? textEn;
   final String? text;
 
-  /// Formatted reference: "An-Nisa (النساء) 83" (en) or "سورة النساء (An-Nisa) 83" (ar). Ayah number only.
-  String referenceDisplay(bool isArabic) {
-    final an = ayahNumber;
-    if (an == null) return reference ?? '';
-    final en = surahNameEn ?? '';
-    final ar = surahNameAr ?? '';
-    if (isArabic) {
-      return 'سورة $ar ($en) $an';
-    }
-    return '$en ($ar) $an';
+  /// Locale-aware reference (Arabic: no English surah names; uses API AR or Quran titles).
+  String referenceDisplay(String languageCode) {
+    return formatLibraryVerseReference(
+      languageCode: languageCode,
+      apiReference: reference,
+      surahNumber: surahNumber,
+      ayahNumber: ayahNumber,
+      surahNameEn: surahNameEn,
+      surahNameAr: surahNameAr,
+    );
   }
 
   static LibraryVerseItem fromJson(Map<String, dynamic> json) {

@@ -88,4 +88,27 @@ class ApiConfig {
 
   /// Whether to enable request/response logging.
   static bool get enableLogging => _environment == AppEnvironment.dev;
+
+  /// Scheme + host (+ port) of the API server, without path (e.g. `https://admin.noorly.net`).
+  /// Used to turn relative `icon_url` paths from the API into absolute URLs for `Image.network` / SVG.
+  static String get apiOrigin {
+    final u = Uri.parse(baseUrl);
+    return '${u.scheme}://${u.authority}';
+  }
+
+  /// If [url] is already absolute (`http`/`https`), returns it unchanged.
+  /// If it is a site-relative path (`/assets/...`), resolves it against [apiOrigin].
+  static String? resolvePublicUrl(String? url) {
+    if (url == null) return null;
+    final trimmed = url.trim();
+    if (trimmed.isEmpty) return null;
+    if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('//')) {
+      return 'https:$trimmed';
+    }
+    final path = trimmed.startsWith('/') ? trimmed : '/$trimmed';
+    return '$apiOrigin$path';
+  }
 }

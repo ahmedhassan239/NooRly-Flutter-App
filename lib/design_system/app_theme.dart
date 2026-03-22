@@ -35,8 +35,8 @@ class AppTheme {
       // Color Scheme
       colorScheme: colorScheme,
 
-      // Scaffold
-      scaffoldBackgroundColor: AppColors.background,
+      // Scaffold (transparent so [AppPatternBackground] shows through)
+      scaffoldBackgroundColor: Colors.transparent,
 
       // Typography - Bundled fonts
       fontFamily: AppTypography.defaultFontFamily,
@@ -299,7 +299,7 @@ class AppTheme {
       // Color Scheme
       colorScheme: colorScheme,
 
-      scaffoldBackgroundColor: AppColors.darkBackground,
+      scaffoldBackgroundColor: Colors.transparent,
 
       // Typography - Bundled fonts
       fontFamily: AppTypography.defaultFontFamily,

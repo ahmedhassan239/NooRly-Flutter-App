@@ -61,7 +61,6 @@ class _EmailRegisterPageState extends State<EmailRegisterPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

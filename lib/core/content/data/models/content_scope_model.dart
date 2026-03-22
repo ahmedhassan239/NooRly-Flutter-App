@@ -8,6 +8,7 @@ class ContentScopeModel {
     required this.key,
     required this.label,
     this.iconKey,
+    this.iconUrl,
     this.iconColor,
   });
 
@@ -18,6 +19,7 @@ class ContentScopeModel {
       iconKey: json['icon'] as String? ??
           json['icon_key'] as String? ??
           json['iconKey'] as String?,
+      iconUrl: json['icon_url'] as String? ?? json['iconUrl'] as String?,
       iconColor: json['color'] as String? ??
           json['icon_color'] as String? ??
           json['iconColor'] as String?,
@@ -27,12 +29,14 @@ class ContentScopeModel {
   final String key;
   final String label;
   final String? iconKey;
+  final String? iconUrl;
   final String? iconColor;
 
   ContentScopeEntity toEntity() => ContentScopeEntity(
         key: key,
         label: label,
         iconKey: iconKey,
+        iconUrl: iconUrl,
         iconColor: iconColor,
       );
 }

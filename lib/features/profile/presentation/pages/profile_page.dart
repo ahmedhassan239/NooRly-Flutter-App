@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/app/theme_provider.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
+import 'package:flutter_app/core/config/api_config.dart';
 import 'package:flutter_app/design_system/app_icons.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -30,7 +31,6 @@ class ProfilePage extends ConsumerWidget {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -50,6 +50,7 @@ class ProfilePage extends ConsumerWidget {
                           colorScheme,
                           user?.displayName,
                           user?.email,
+                          user?.avatarUrl,
                           journeySummaryAsync,
                         ),
                         const SizedBox(height: AppSpacing.lg),
@@ -118,6 +119,7 @@ class ProfilePage extends ConsumerWidget {
     ColorScheme colorScheme,
     String? name,
     String? email,
+    String? avatarUrl,
     AsyncValue<JourneySummaryEntity> summaryAsync,
   ) {
     final dayIndex = summaryAsync.valueOrNull?.dayIndex ?? 1;
@@ -127,6 +129,9 @@ class ProfilePage extends ConsumerWidget {
         : (email != null && email.isNotEmpty)
             ? email.substring(0, 1).toUpperCase()
             : '?';
+    final resolvedAvatar = avatarUrl?.trim();
+    final showNetworkAvatar =
+        resolvedAvatar != null && resolvedAvatar.isNotEmpty;
     return Center(
       child: Column(
         children: [
@@ -139,12 +144,34 @@ class ProfilePage extends ConsumerWidget {
                   color: colorScheme.primary,
                   shape: BoxShape.circle,
                 ),
-                child: Center(
-                  child: Text(
-                    initial,
-                    style: AppTypography.displayLg(color: colorScheme.onPrimary),
-                  ),
-                ),
+                clipBehavior: Clip.antiAlias,
+                child: showNetworkAvatar
+                    ? Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Image.network(
+                          ApiConfig.resolvePublicUrl(resolvedAvatar) ??
+                              resolvedAvatar,
+                          fit: BoxFit.contain,
+                          alignment: Alignment.center,
+                          filterQuality: FilterQuality.high,
+                          errorBuilder: (_, __, ___) => Center(
+                            child: Text(
+                              initial,
+                              style: AppTypography.displayLg(
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: Text(
+                          initial,
+                          style: AppTypography.displayLg(
+                            color: colorScheme.onPrimary,
+                          ),
+                        ),
+                      ),
               ),
               Positioned(
                 bottom: 0,

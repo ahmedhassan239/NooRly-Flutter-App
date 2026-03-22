@@ -79,7 +79,6 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

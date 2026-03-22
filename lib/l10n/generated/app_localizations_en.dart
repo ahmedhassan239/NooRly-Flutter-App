@@ -534,6 +534,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sourceLabel => 'Source';
 
   @override
+  String libraryContentHadithRef(String book, String number) {
+    return '$book — No. $number';
+  }
+
+  @override
+  String get librarySourceQuran => 'Quran';
+
+  @override
   String get savedCardDuas => 'Saved Duas';
 
   @override
@@ -1472,4 +1480,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationsEnableButton => 'Enable Notifications';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get copy => 'Copy';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get dua => 'Dua';
+
+  @override
+  String get verse => 'Verse';
+
+  @override
+  String get duas => 'Duas';
+
+  @override
+  String get adhkar => 'Adhkar';
+
+  @override
+  String get hadith => 'Hadith';
+
+  @override
+  String get verses => 'Verses';
+
+  @override
+  String get contentCopiedShort => 'Copied';
+
+  @override
+  String get shareGeneratingImage => 'Generating…';
 }

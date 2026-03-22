@@ -11,8 +11,11 @@ import 'package:flutter_app/features/saved/presentation/providers/saved_provider
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
     show noorlySectionIconGap;
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
-    show noorlyEmojiBookmark;
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show
+        contentScopeIconUrlForKey,
+        resolveContentScopeEmoji,
+        savedCardEmojiForLibraryScope;
 import 'package:flutter_app/features/library/presentation/widgets/app_search_field.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
@@ -46,6 +49,18 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
       loading: () => 0,
       error: (_, __) => 0,
     );
+    final savedCardEmoji = ref
+        .watch(libraryTabsProvider)
+        .when(
+          data: (tabs) => savedCardEmojiForLibraryScope('hadith', tabs),
+          loading: () => resolveContentScopeEmoji(null, 'hadith'),
+          error: (_, __) => resolveContentScopeEmoji(null, 'hadith'),
+        );
+    final savedCardIconUrl = ref.watch(libraryTabsProvider).when(
+          data: (tabs) => contentScopeIconUrlForKey(tabs, 'hadith'),
+          loading: () => null,
+          error: (_, __) => null,
+        );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
@@ -61,7 +76,8 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
           RoundedListCard(
             title: l10n.savedCardHadith,
             subtitle: l10n.savedCountLabel(savedCount),
-            icon: noorlyEmojiBookmark,
+            icon: savedCardEmoji,
+            iconUrl: savedCardIconUrl,
             onTap: () => context.push('/hadith/saved'),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -72,9 +88,8 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
                 final filtered = q.isEmpty
                     ? list
                     : list
-                        .where((c) =>
-                            c.title.toLowerCase().contains(q))
-                        .toList();
+                          .where((c) => c.title.toLowerCase().contains(q))
+                          .toList();
                 if (filtered.isEmpty) {
                   return LibraryEmptyView(
                     message: l10n.libraryNoCollectionsYet,
@@ -91,8 +106,10 @@ class _HadithTabViewState extends ConsumerState<HadithTabView> {
                       title: c.title,
                       subtitle: subtitle,
                       icon: iconForHadithCollection(c.icon),
-                      onTap: () =>
-                          context.push('/hadith/collection/${c.id}'),
+                      iconUrl: (c.iconUrl != null && c.iconUrl!.trim().isNotEmpty)
+                          ? c.iconUrl
+                          : null,
+                      onTap: () => context.push('/hadith/collection/${c.id}'),
                     );
                   },
                 );

@@ -20,6 +20,7 @@ class RoundedListCard extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.icon,
+    this.iconUrl,
   });
 
   final String title;
@@ -28,6 +29,9 @@ class RoundedListCard extends StatelessWidget {
 
   /// Emoji string for the icon. Falls back to 🔖 when null.
   final String? icon;
+
+  /// When set, [NoorlySectionIcon] loads this URL (API `icon_url`).
+  final String? iconUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,7 @@ class RoundedListCard extends StatelessWidget {
           ),
           child: Row(
             children: [
-              NoorlySectionIcon(icon: effectiveIcon),
+              NoorlySectionIcon(icon: effectiveIcon, iconUrl: iconUrl),
               const SizedBox(width: noorlySectionIconGap),
               Expanded(
                 child: Column(

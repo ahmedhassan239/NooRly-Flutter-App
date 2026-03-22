@@ -8,12 +8,14 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 // -----------------------------------------------------------------------------
-// Design tokens (Need Help screen – match spec exactly)
+// Design tokens (Need Help screen – light mode spec) + theme resolution
 // -----------------------------------------------------------------------------
 
 abstract final class NeedHelpTokens {
   NeedHelpTokens._();
 
+  /// Light-mode-only spec (Figma). Do not use directly for surfaces/text in
+  /// widgets — use [NeedHelpThemeColors.of] so dark mode follows [ColorScheme].
   static const Color background = Color(0xFFF7F8FB);
   static const Color card = Color(0xFFFFFFFF);
   static const Color border = Color(0xFFE9ECF2);
@@ -35,6 +37,52 @@ abstract final class NeedHelpTokens {
   static const double dotOpacity = 0.06;
 }
 
+/// Resolves Need Help surfaces and typography from [ThemeData.colorScheme] in
+/// dark mode, while preserving the original light design tokens in light mode.
+@immutable
+class NeedHelpThemeColors {
+  const NeedHelpThemeColors({
+    required this.appBarBackground,
+    required this.cardBackground,
+    required this.border,
+    required this.textPrimary,
+    required this.textSecondary,
+    required this.dotPatternBase,
+  });
+
+  final Color appBarBackground;
+  final Color cardBackground;
+  final Color border;
+  final Color textPrimary;
+  final Color textSecondary;
+
+  /// Base color for dotted background (low alpha applied by painter).
+  final Color dotPatternBase;
+
+  factory NeedHelpThemeColors.of(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (!isDark) {
+      return const NeedHelpThemeColors(
+        appBarBackground: NeedHelpTokens.background,
+        cardBackground: NeedHelpTokens.card,
+        border: NeedHelpTokens.border,
+        textPrimary: NeedHelpTokens.textPrimary,
+        textSecondary: NeedHelpTokens.textSecondary,
+        dotPatternBase: NeedHelpTokens.textPrimary,
+      );
+    }
+    return NeedHelpThemeColors(
+      appBarBackground: scheme.surface,
+      cardBackground: scheme.surfaceContainerHighest,
+      border: scheme.outline.withValues(alpha: 0.4),
+      textPrimary: scheme.onSurface,
+      textSecondary: scheme.onSurface.withValues(alpha: 0.72),
+      dotPatternBase: scheme.onSurface,
+    );
+  }
+}
+
 // -----------------------------------------------------------------------------
 // Dotted background (safe for bounded layout)
 // -----------------------------------------------------------------------------
@@ -52,8 +100,11 @@ class _NeedHelpDotsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (size.width <= 0 || size.height <= 0 ||
-        !size.width.isFinite || !size.height.isFinite) return;
+    if (size.width <= 0 ||
+        size.height <= 0 ||
+        !size.width.isFinite ||
+        !size.height.isFinite)
+      return;
     final paint = Paint()..color = color;
     for (double x = 0; x < size.width; x += spacing) {
       for (double y = 0; y < size.height; y += spacing) {
@@ -73,16 +124,19 @@ class NeedHelpDottedBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = NeedHelpThemeColors.of(context);
     return Stack(
       children: [
         Positioned.fill(
           child: LayoutBuilder(
             builder: (context, constraints) {
-              if (constraints.maxWidth.isFinite && constraints.maxHeight.isFinite) {
+              if (constraints.maxWidth.isFinite &&
+                  constraints.maxHeight.isFinite) {
                 return CustomPaint(
                   painter: _NeedHelpDotsPainter(
-                    color: NeedHelpTokens.textPrimary
-                        .withValues(alpha: NeedHelpTokens.dotOpacity),
+                    color: colors.dotPatternBase.withValues(
+                      alpha: NeedHelpTokens.dotOpacity,
+                    ),
                     spacing: NeedHelpTokens.dotSpacing,
                     radius: NeedHelpTokens.dotRadius,
                   ),
@@ -104,19 +158,16 @@ class NeedHelpDottedBackground extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 class HelpTile extends StatelessWidget {
-  const HelpTile({
-    required this.label,
-    required this.onTap,
-    super.key,
-  });
+  const HelpTile({required this.label, required this.onTap, super.key});
 
   final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
+    final colors = NeedHelpThemeColors.of(context);
     return Material(
-      color: NeedHelpTokens.card,
+      color: colors.cardBackground,
       borderRadius: BorderRadius.circular(NeedHelpTokens.cardRadius),
       child: InkWell(
         onTap: onTap,
@@ -126,17 +177,17 @@ class HelpTile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: NeedHelpTokens.s16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(NeedHelpTokens.cardRadius),
-            border: Border.all(color: NeedHelpTokens.border, width: 1),
+            border: Border.all(color: colors.border, width: 1),
           ),
           child: Row(
             children: [
               Expanded(
                 child: Text(
                   label,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: NeedHelpTokens.textPrimary,
+                    color: colors.textPrimary,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -145,7 +196,7 @@ class HelpTile extends StatelessWidget {
               Icon(
                 LucideIcons.chevronRight,
                 size: 20,
-                color: NeedHelpTokens.textSecondary.withValues(alpha: 0.8),
+                color: colors.textSecondary.withValues(alpha: 0.8),
               ),
             ],
           ),
@@ -160,16 +211,14 @@ class HelpTile extends StatelessWidget {
 // -----------------------------------------------------------------------------
 
 class HelpSectionFromCategory extends StatelessWidget {
-  const HelpSectionFromCategory({
-    required this.category,
-    super.key,
-  });
+  const HelpSectionFromCategory({required this.category, super.key});
 
   final HelpCategoryModel category;
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = _iconColorForCategory(category.icon);
+    final colors = NeedHelpThemeColors.of(context);
+    final iconColor = _iconColorForCategory(category.icon, colors.textPrimary);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -191,10 +240,10 @@ class HelpSectionFromCategory extends StatelessWidget {
             const SizedBox(width: NeedHelpTokens.s12),
             Text(
               category.title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: NeedHelpTokens.textPrimary,
+                color: colors.textPrimary,
               ),
             ),
           ],
@@ -213,10 +262,10 @@ class HelpSectionFromCategory extends StatelessWidget {
     );
   }
 
-  static Color _iconColorForCategory(String iconKey) {
+  static Color _iconColorForCategory(String iconKey, Color neutralOnSurface) {
     final k = iconKey.trim().toLowerCase();
     if (k == 'heart' || k == 'support') return NeedHelpTokens.iconGreen;
-    if (k == 'clipboard' || k == 'question') return NeedHelpTokens.textPrimary;
+    if (k == 'clipboard' || k == 'question') return neutralOnSurface;
     return NeedHelpTokens.iconGold;
   }
 }
@@ -247,15 +296,14 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
       duration: const Duration(milliseconds: 220),
       vsync: this,
     );
-    _animOpacity = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
-    );
+    _animOpacity = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
     _animSlide = Tween<Offset>(
       begin: const Offset(0, 0.03),
       end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _animController, curve: Curves.easeOut),
-    );
+    ).animate(CurvedAnimation(parent: _animController, curve: Curves.easeOut));
     _animController.forward();
   }
 
@@ -269,13 +317,15 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final categoriesAsync = ref.watch(helpNowCategoriesProvider);
+    final colors = NeedHelpThemeColors.of(context);
 
     return Scaffold(
-      backgroundColor: NeedHelpTokens.background,
       appBar: AppBar(
-        backgroundColor: NeedHelpTokens.background,
+        backgroundColor: colors.appBarBackground,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
         scrolledUnderElevation: 0,
+        foregroundColor: colors.textPrimary,
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () {
@@ -285,7 +335,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
               context.go('/home');
             }
           },
-          color: NeedHelpTokens.textPrimary,
+          color: colors.textPrimary,
         ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,10 +343,10 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
           children: [
             Text(
               l10n.howCanWeHelp,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: NeedHelpTokens.textPrimary,
+                color: colors.textPrimary,
               ),
             ),
             const SizedBox(height: 2),
@@ -305,7 +355,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: NeedHelpTokens.textSecondary,
+                color: colors.textSecondary,
               ),
             ),
           ],
@@ -318,10 +368,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
             builder: (context, child) {
               return Opacity(
                 opacity: _animOpacity.value,
-                child: SlideTransition(
-                  position: _animSlide,
-                  child: child,
-                ),
+                child: SlideTransition(position: _animSlide, child: child),
               );
             },
             child: categoriesAsync.when(
@@ -335,7 +382,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
-                          color: NeedHelpTokens.textSecondary,
+                          color: colors.textSecondary,
                         ),
                       ),
                     ),
@@ -355,7 +402,8 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (!isFirst) const SizedBox(height: NeedHelpTokens.s28),
+                          if (!isFirst)
+                            const SizedBox(height: NeedHelpTokens.s28),
                           HelpSectionFromCategory(category: entry.value),
                         ],
                       );
@@ -363,10 +411,12 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
                   ],
                 );
               },
-              loading: () => const Center(
+              loading: () => Center(
                 child: Padding(
-                  padding: EdgeInsets.all(NeedHelpTokens.s24),
-                  child: CircularProgressIndicator(),
+                  padding: const EdgeInsets.all(NeedHelpTokens.s24),
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ),
               error: (err, _) => Center(
@@ -378,7 +428,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
                       Icon(
                         LucideIcons.alertCircle,
                         size: 48,
-                        color: NeedHelpTokens.textSecondary,
+                        color: colors.textSecondary,
                       ),
                       const SizedBox(height: NeedHelpTokens.s16),
                       Text(
@@ -386,7 +436,7 @@ class _NeedHelpPageState extends ConsumerState<NeedHelpPage>
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
-                          color: NeedHelpTokens.textSecondary,
+                          color: colors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: NeedHelpTokens.s16),
@@ -430,31 +480,30 @@ String helpPlaceholderTitle(String path) {
 }
 
 class HelpPlaceholderScreen extends StatelessWidget {
-  const HelpPlaceholderScreen({
-    required this.title,
-    super.key,
-  });
+  const HelpPlaceholderScreen({required this.title, super.key});
 
   final String title;
 
   @override
   Widget build(BuildContext context) {
+    final colors = NeedHelpThemeColors.of(context);
     return Scaffold(
-      backgroundColor: NeedHelpTokens.background,
       appBar: AppBar(
-        backgroundColor: NeedHelpTokens.background,
+        backgroundColor: colors.appBarBackground,
+        surfaceTintColor: Colors.transparent,
         elevation: 0,
+        foregroundColor: colors.textPrimary,
         leading: IconButton(
           icon: const Icon(LucideIcons.arrowLeft),
           onPressed: () => context.pop(),
-          color: NeedHelpTokens.textPrimary,
+          color: colors.textPrimary,
         ),
         title: Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,
-            color: NeedHelpTokens.textPrimary,
+            color: colors.textPrimary,
           ),
         ),
       ),
@@ -463,10 +512,7 @@ class HelpPlaceholderScreen extends StatelessWidget {
           padding: const EdgeInsets.all(NeedHelpTokens.s24),
           child: Text(
             'Content coming soon.',
-            style: TextStyle(
-              fontSize: 16,
-              color: NeedHelpTokens.textSecondary,
-            ),
+            style: TextStyle(fontSize: 16, color: colors.textSecondary),
             textAlign: TextAlign.center,
           ),
         ),

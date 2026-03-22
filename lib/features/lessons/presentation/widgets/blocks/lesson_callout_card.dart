@@ -13,11 +13,10 @@ class LessonCalloutCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final (bg, border, icon) = _palette(block.variant, isDark);
-    final textColor = isDark
-        ? Colors.white.withAlpha(220)
-        : const Color(0xFF1F2937);
+    final textColor = colorScheme.onSurface;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),

@@ -82,7 +82,6 @@ class _EmailOtpScreenState extends ConsumerState<EmailOtpScreen> with SingleTick
     });
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

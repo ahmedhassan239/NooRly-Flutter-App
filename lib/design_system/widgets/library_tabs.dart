@@ -4,7 +4,7 @@ import 'package:flutter_app/core/content/providers/content_scope_providers.dart'
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/library/utils/library_utils.dart'
-    show resolveContentScopeEmoji;
+    show libraryTabLeading, resolveContentScopeEmoji;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,7 +63,12 @@ class LibraryTabs extends ConsumerWidget {
   _TabItem _scopeToTab(ContentScopeEntity scope, ColorScheme colorScheme) {
     final path = '/${scope.key}';
     final emoji = resolveContentScopeEmoji(scope.iconKey, scope.key);
-    return _TabItem(emoji: emoji, label: scope.label, path: path);
+    return _TabItem(
+      emoji: emoji,
+      iconUrl: scope.iconUrl,
+      label: scope.label,
+      path: path,
+    );
   }
 }
 
@@ -110,10 +115,7 @@ class _TabButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              tab.emoji,
-              style: const TextStyle(fontSize: 14),
-            ),
+            libraryTabLeading(emoji: tab.emoji, iconUrl: tab.iconUrl),
             const SizedBox(width: 6),
             Text(
               tab.label,
@@ -129,11 +131,13 @@ class _TabButton extends StatelessWidget {
 class _TabItem {
   const _TabItem({
     required this.emoji,
+    this.iconUrl,
     required this.label,
     required this.path,
   });
 
   final String emoji;
+  final String? iconUrl;
   final String label;
   final String path;
 }

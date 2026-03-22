@@ -57,6 +57,8 @@ class FlockBadgeIcon extends StatelessWidget {
             padding: EdgeInsets.all(size * 0.18), // ~12px for 64px size
             child: SvgPicture.asset(
               'assets/brand/flock_logo.svg',
+              fit: BoxFit.contain,
+              alignment: Alignment.center,
               colorFilter: ColorFilter.mode(
                 colorScheme.primary,
                 BlendMode.srcIn,
@@ -119,6 +121,8 @@ class FlockBadgeIcon extends StatelessWidget {
             padding: EdgeInsets.all(size * 0.18),
             child: SvgPicture.asset(
               'assets/brand/flock_logo.svg',
+              fit: BoxFit.contain,
+              alignment: Alignment.center,
               colorFilter: ColorFilter.mode(
                 colorScheme.primary,
                 BlendMode.srcIn,

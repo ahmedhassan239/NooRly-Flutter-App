@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -52,7 +54,6 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
 
     if (!isAuthenticated) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: SafeArea(
           child: Center(
             child: ConstrainedBox(
@@ -72,7 +73,6 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
     final listAsync = ref.watch(savedHadithListProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -289,23 +289,31 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
     );
   }
 
-  static bool _isTextDifferent(String? arabic, String secondary) {
-    if (arabic == null || arabic.trim().isEmpty) return secondary.trim().isNotEmpty;
-    return secondary.trim() != arabic.trim();
-  }
-
   Widget _buildHadithCard(
     BuildContext context,
     WidgetRef ref,
     SavedHadithItem hadith,
     ColorScheme colorScheme,
   ) {
+    final lc = Localizations.localeOf(context).languageCode;
     final text =
         hadith.text ?? hadith.textEn ?? hadith.textAr ?? '';
-    final showSecondary = _isTextDifferent(hadith.textAr, text);
-    final source = hadith.collectionName != null
-        ? '${hadith.collectionName}${hadith.hadithNumber != null ? ', ${hadith.hadithNumber}' : ''}'
-        : (hadith.collection ?? '');
+    final textAr = hadith.textAr ?? '';
+    final primary = LocalizedReligiousContent.libraryPrimaryBody(
+      languageCode: lc,
+      textAr: hadith.textAr,
+      translationOrEn: text,
+    );
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final l10n = AppLocalizations.of(context)!;
+    final source = formatLibraryHadithReference(
+      l10n: l10n,
+      languageCode: lc,
+      collectionName: hadith.collectionName ?? hadith.collection,
+      collectionNameAr: hadith.collectionNameAr,
+      hadithNumber: hadith.hadithNumber,
+    );
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -316,80 +324,96 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
           color: colorScheme.outline.withAlpha(128),
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (hadith.textAr != null && hadith.textAr!.isNotEmpty)
-            Text(
-              hadith.textAr!,
-              style: AppTypography.arabicH2(color: colorScheme.onSurface),
-              textAlign: TextAlign.right,
-              textDirection: TextDirection.rtl,
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: colorScheme.primary.withAlpha(25),
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                ),
+                child: Text(
+                  l10n.hadith,
+                  style: AppTypography.caption(color: colorScheme.primary)
+                      .copyWith(fontWeight: FontWeight.w600),
+                ),
+              ),
             ),
-          if (hadith.textAr != null && hadith.textAr!.isNotEmpty && showSecondary)
             const SizedBox(height: AppSpacing.md),
-          if (showSecondary)
-            Text(
-              '"$text"',
-              style: AppTypography.bodySm(color: colorScheme.onSurface),
-            ),
-          if (source.isNotEmpty) ...[
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              '— $source',
-              style: AppTypography.caption(
-                color: colorScheme.onSurface.withAlpha(150),
+            if (primary.isNotEmpty)
+              Text(
+                primary,
+                style: useArabic
+                    ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                    : AppTypography.bodySm(color: colorScheme.onSurface),
+                textAlign: TextAlign.center,
               ),
-            ),
-          ],
-          const SizedBox(height: AppSpacing.md),
-          Row(
-            children: [
-              SaveHadithButton(hadithId: hadith.id, compact: true),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.copy,
-                label: 'Copy',
-                colorScheme: colorScheme,
-                onTap: () {
-                  final toCopy = hadith.textAr != null && showSecondary
-                      ? '${hadith.textAr}\n\n$text\n\n— $source'
-                      : (hadith.textAr ?? text).trim().isNotEmpty
-                          ? '${hadith.textAr ?? text}\n\n— $source'
-                          : '$text\n\n— $source';
-                  Clipboard.setData(ClipboardData(text: toCopy));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Copied to clipboard!'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              _buildActionButton(
-                context: context,
-                icon: LucideIcons.share2,
-                label: AppLocalizations.of(context)!.actionShare,
-                colorScheme: colorScheme,
-                onTap: () {
-                  ShareContentDialog.show(
-                    context,
-                    ShareableContent(
-                      id: hadith.id.toString(),
-                      arabic: hadith.textAr ?? '',
-                      transliteration: '',
-                      translation: text,
-                      source: source,
-                      title: AppLocalizations.of(context)!.libraryHadith,
-                    ),
-                  );
-                },
+            if (source.isNotEmpty) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                '— $source',
+                style: AppTypography.caption(
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
+                textAlign: TextAlign.center,
               ),
             ],
-          ),
-        ],
+            const SizedBox(height: AppSpacing.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SaveHadithButton(hadithId: hadith.id, compact: true),
+                const SizedBox(width: AppSpacing.sm),
+                _buildActionButton(
+                  context: context,
+                  icon: LucideIcons.copy,
+                  label: l10n.copy,
+                  colorScheme: colorScheme,
+                  onTap: () {
+                    final toCopy = LocalizedReligiousContent.composePlainText(
+                      languageCode: lc,
+                      arabic: textAr,
+                      translation: text,
+                      source: source,
+                    );
+                    Clipboard.setData(ClipboardData(text: toCopy));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(l10n.copiedToClipboard),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                _buildActionButton(
+                  context: context,
+                  icon: LucideIcons.share2,
+                  label: l10n.share,
+                  colorScheme: colorScheme,
+                  onTap: () {
+                    ShareContentDialog.show(
+                      context,
+                      ShareableContent(
+                        id: hadith.id.toString(),
+                        arabic: textAr,
+                        transliteration: '',
+                        translation: text,
+                        source: source,
+                        title: '${l10n.share} ${l10n.hadith}',
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

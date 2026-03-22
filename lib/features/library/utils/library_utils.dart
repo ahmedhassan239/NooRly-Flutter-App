@@ -3,8 +3,11 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'package:flutter_app/core/config/api_config.dart';
+import 'package:flutter_app/core/widgets/backend_remote_icon.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
+import 'package:flutter_app/features/library/data/dto/content_scope_dto.dart';
 
 /// Parses "#RRGGBB" (or "#AARRGGBB") to [Color]. Returns [fallback] if invalid.
 Color parseHexColor(String? hex, [Color? fallback]) {
@@ -47,4 +50,55 @@ String resolveContentScopeIconKey(String? apiIcon, String scopeKey) {
 String resolveContentScopeEmoji(String? apiIcon, String scopeKey) {
   final iconKey = resolveContentScopeIconKey(apiIcon, scopeKey);
   return emojiFromKey(iconKey);
+}
+
+/// Emoji for the Library "Saved" row/card for [scopeKey].
+///
+/// Matches the selected tab in [LibraryShellScreen] by using the same resolution
+/// as [resolveContentScopeEmoji] for the matching [ContentScopeDto] from the API.
+/// When [tabs] is null/empty or the scope is missing, uses [resolveContentScopeEmoji](null, scopeKey).
+String savedCardEmojiForLibraryScope(
+  String scopeKey,
+  List<ContentScopeDto>? tabs,
+) {
+  if (tabs != null) {
+    for (final t in tabs) {
+      if (t.key.toLowerCase() == scopeKey.toLowerCase()) {
+        return resolveContentScopeEmoji(t.icon, t.key);
+      }
+    }
+  }
+  return resolveContentScopeEmoji(null, scopeKey);
+}
+
+/// Backend `icon_url` for a library tab scope when the API sends it.
+String? contentScopeIconUrlForKey(
+  List<ContentScopeDto>? tabs,
+  String scopeKey,
+) {
+  if (tabs == null) return null;
+  for (final t in tabs) {
+    if (t.key.toLowerCase() == scopeKey.toLowerCase()) {
+      final u = t.iconUrl?.trim();
+      if (u != null && u.isNotEmpty) return u;
+    }
+  }
+  return null;
+}
+
+/// Small leading glyph for library tab rows: remote icon when [iconUrl] is set.
+Widget libraryTabLeading({
+  required String emoji,
+  String? iconUrl,
+}) {
+  final u = iconUrl?.trim();
+  if (u != null && u.isNotEmpty) {
+    final resolved = ApiConfig.resolvePublicUrl(u) ?? u;
+    return BackendRemoteIcon(
+      url: resolved,
+      size: 16,
+      fallback: Text(emoji, style: const TextStyle(fontSize: 14)),
+    );
+  }
+  return Text(emoji, style: const TextStyle(fontSize: 14));
 }

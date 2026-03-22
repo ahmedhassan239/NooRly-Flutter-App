@@ -30,7 +30,6 @@ class RegisterPage extends ConsumerWidget {
     });
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,10 +97,11 @@ class _ContentCardState extends State<ContentCard> {
         _saved = !_saved;
       });
 
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            _saved ? 'Saved successfully' : 'Removed from saved',
+            _saved ? l10n.savedToFavorites : l10n.removedFromSaved,
           ),
           duration: const Duration(seconds: 2),
         ),
@@ -107,12 +110,13 @@ class _ContentCardState extends State<ContentCard> {
   }
 
   Future<void> _handleCopy() async {
-    final text = [
-      widget.arabic,
-      if (widget.transliteration != null) widget.transliteration!,
-      widget.translation,
-      '— ${widget.source}',
-    ].join('\n\n');
+    final lc = Localizations.localeOf(context).languageCode;
+    final text = LocalizedReligiousContent.composePlainText(
+      languageCode: lc,
+      arabic: widget.arabic,
+      translation: widget.translation,
+      source: widget.source,
+    );
 
     await Clipboard.setData(ClipboardData(text: text));
 
@@ -123,9 +127,7 @@ class _ContentCardState extends State<ContentCard> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Copied to clipboard',
-          ),
+          content: Text(AppLocalizations.of(context)!.copiedToClipboard),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -141,6 +143,7 @@ class _ContentCardState extends State<ContentCard> {
   }
 
   void _handleShare() {
+    final l10n = AppLocalizations.of(context)!;
     ShareContentDialog.show(
       context,
       ShareableContent(
@@ -149,21 +152,21 @@ class _ContentCardState extends State<ContentCard> {
         transliteration: widget.transliteration ?? '',
         translation: widget.translation,
         source: widget.source,
-        title: 'Share $_typeLabel',
+        title: '${l10n.share} ${_typeLabel(l10n)}',
       ),
     );
   }
 
-  String get _typeLabel {
+  String _typeLabel(AppLocalizations l10n) {
     switch (widget.type) {
       case ContentType.dua:
-        return 'Dua';
+        return l10n.dua;
       case ContentType.hadith:
-        return 'Hadith';
+        return l10n.hadith;
       case ContentType.verse:
-        return 'Verse';
+        return l10n.verse;
       case ContentType.adhkar:
-        return 'Dhikr';
+        return l10n.adhkar;
     }
   }
 
@@ -182,6 +185,16 @@ class _ContentCardState extends State<ContentCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: widget.arabic,
+      translation: widget.translation,
+    );
+    final useArabicStyle = LocalizedReligiousContent.useArabicTypography(lc);
+
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
@@ -204,104 +217,86 @@ class _ContentCardState extends State<ContentCard> {
         ),
         borderRadius: BorderRadius.circular(AppRadius.lg),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Header with type badge and repetitions
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
+      child: Directionality(
+        textDirection: dir,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _typeColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
+                  ),
+                  child: Text(
+                    _typeLabel(l10n),
+                    style: AppTypography.caption(color: _typeColor)
+                        .copyWith(fontWeight: FontWeight.w500),
+                  ),
                 ),
-                decoration: BoxDecoration(
-                  color: _typeColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                ),
-                child: Text(
-                  _typeLabel,
-                  style: AppTypography.caption(color: _typeColor)
-                      .copyWith(fontWeight: FontWeight.w500),
-                ),
-              ),
-              if (widget.repetitions != null)
-                Text(
-                  'Say ${widget.repetitions}x',
-                  style: AppTypography.caption(color: AppColors.mutedForeground),
-                ),
-            ],
-          ),
+                if (widget.repetitions != null)
+                  Text(
+                    l10n.sayRepetition(widget.repetitions!),
+                    style:
+                        AppTypography.caption(color: AppColors.mutedForeground),
+                  ),
+              ],
+            ),
 
-          const SizedBox(height: AppSpacing.md),
-
-          // Arabic text
-          Text(
-            widget.arabic,
-            style: AppTypography.arabicH2(color: AppColors.foreground),
-            textAlign: TextAlign.center,
-            textDirection: TextDirection.rtl,
-          ),
-
-          if (widget.transliteration != null) ...[
             const SizedBox(height: AppSpacing.md),
+
             Text(
-              widget.transliteration!,
-              style: AppTypography.bodySm(color: AppColors.primary)
-                  .copyWith(fontWeight: FontWeight.w500, fontStyle: FontStyle.italic),
+              primary,
+              style: useArabicStyle
+                  ? AppTypography.arabicH2(color: AppColors.foreground)
+                  : AppTypography.bodySm(color: AppColors.foreground),
               textAlign: TextAlign.center,
             ),
-          ],
 
-          const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.sm),
 
-          // Translation
-          Text(
-            '"${widget.translation}"',
-            style: AppTypography.bodySm(color: AppColors.mutedForeground),
-            textAlign: TextAlign.center,
-          ),
-
-          const SizedBox(height: AppSpacing.sm),
-
-          // Source
-          Text(
-            '— ${widget.source}',
-            style: AppTypography.caption(
-              color: AppColors.mutedForeground.withValues(alpha: 0.7),
+            Text(
+              '— ${widget.source}',
+              style: AppTypography.caption(
+                color: AppColors.mutedForeground.withValues(alpha: 0.7),
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
 
-          const SizedBox(height: AppSpacing.lg),
+            const SizedBox(height: AppSpacing.lg),
 
-          // Action buttons
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              _ActionButton(
-                icon: _saved ? LucideIcons.heart : LucideIcons.heart,
-                label: _saved ? 'Saved' : 'Save',
-                onPressed: _handleSave,
-                filled: _saved,
-                color: _saved ? AppColors.accentGreen : null,
-              ),
-              _ActionButton(
-                icon: _copied ? LucideIcons.check : LucideIcons.copy,
-                label: _copied ? 'Copied' : 'Copy',
-                onPressed: _handleCopy,
-              ),
-              _ActionButton(
-                icon: LucideIcons.share2,
-                label: 'Share',
-                onPressed: _handleShare,
-              ),
-            ],
-          ),
-        ],
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                _ActionButton(
+                  icon: _saved ? LucideIcons.heart : LucideIcons.heart,
+                  label: _saved ? l10n.actionSaved : l10n.save,
+                  onPressed: _handleSave,
+                  filled: _saved,
+                  color: _saved ? AppColors.accentGreen : null,
+                ),
+                _ActionButton(
+                  icon: _copied ? LucideIcons.check : LucideIcons.copy,
+                  label: _copied ? l10n.contentCopiedShort : l10n.copy,
+                  onPressed: _handleCopy,
+                ),
+                _ActionButton(
+                  icon: LucideIcons.share2,
+                  label: l10n.share,
+                  onPressed: _handleShare,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

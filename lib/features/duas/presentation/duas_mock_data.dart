@@ -97,6 +97,8 @@ class DuaData {
   final String transliteration;
   final String translation;
   final String source;
+  /// Arabic attribution when [source] is English-only (optional).
+  final String? sourceAr;
 
   const DuaData({
     required this.id,
@@ -104,6 +106,7 @@ class DuaData {
     required this.transliteration,
     required this.translation,
     required this.source,
+    this.sourceAr,
   });
 }
 
@@ -155,6 +158,7 @@ extension DuasMockDataExtension on DuasMockData {
       transliteration: 'Allahumma qini adhabaka yawma tab\'athu ibadaka',
       translation: 'O Allah, protect me from Your punishment on the day You resurrect Your servants',
       source: 'Surah Al-Baqarah 2:255',
+      sourceAr: 'سُورَةُ البَقَرَةِ — ٢٥٥',
     ),
     DuaData(
       id: 'sleep-3',

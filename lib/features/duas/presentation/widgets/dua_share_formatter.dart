@@ -1,4 +1,7 @@
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 /// Dua Share Formatter
 ///
@@ -6,31 +9,24 @@ import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
 class DuaShareFormatter {
   DuaShareFormatter._();
 
-  /// Format Dua as shareable text
-  ///
-  /// Returns formatted text with:
-  /// - Arabic text
-  /// - Transliteration
-  /// - English translation
-  /// - Source
-  static String formatText(DuaData dua) {
-    final buffer = StringBuffer();
-
-    // Arabic
-    buffer.writeln(dua.arabic);
-    buffer.writeln();
-
-    // Transliteration
-    buffer.writeln(dua.transliteration);
-    buffer.writeln();
-
-    // Translation
-    buffer.writeln('"${dua.translation}"');
-    buffer.writeln();
-
-    // Source
-    buffer.writeln('— ${dua.source}');
-
-    return buffer.toString();
+  /// Single-language text for the current app locale ([languageCode] e.g. from
+  /// `Localizations.localeOf(context).languageCode`).
+  static String formatText(
+    DuaData dua,
+    String languageCode,
+    AppLocalizations l10n,
+  ) {
+    final sourceLine = formatLooseReligiousSourceLine(
+      l10n,
+      languageCode,
+      dua.source,
+      sourceAr: dua.sourceAr,
+    );
+    return LocalizedReligiousContent.composePlainText(
+      languageCode: languageCode,
+      arabic: dua.arabic,
+      translation: dua.translation,
+      source: sourceLine,
+    );
   }
 }

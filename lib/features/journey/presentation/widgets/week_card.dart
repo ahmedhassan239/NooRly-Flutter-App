@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/config/api_config.dart';
+import 'package:flutter_app/core/widgets/backend_remote_icon.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -261,38 +263,19 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
 
   /// Builds the appropriate icon widget for the week (from backend iconKey/iconUrl or fallback).
   Widget _buildWeekIcon(WeekData week, ColorScheme colorScheme, bool isCurrentWeek) {
-    if (week.iconUrl != null && week.iconUrl!.isNotEmpty) {
+    if (week.iconUrl != null && week.iconUrl!.trim().isNotEmpty) {
+      final url =
+          ApiConfig.resolvePublicUrl(week.iconUrl!.trim()) ?? week.iconUrl!.trim();
       return ClipRRect(
         borderRadius: BorderRadius.circular(8),
-        child: Image.network(
-          week.iconUrl!,
-          width: 24,
-          height: 24,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Icon(
+        child: BackendRemoteIcon(
+          url: url,
+          size: 24,
+          fallback: Icon(
             LucideIcons.bookOpen,
             size: 20,
             color: colorScheme.onSurface.withValues(alpha: 0.7),
           ),
-          loadingBuilder: (_, child, progress) {
-            if (progress == null) return child;
-            return SizedBox(
-              width: 24,
-              height: 24,
-              child: Center(
-                child: SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    value: progress.expectedTotalBytes != null
-                        ? progress.cumulativeBytesLoaded / (progress.expectedTotalBytes!).toDouble()
-                        : null,
-                  ),
-                ),
-              ),
-            );
-          },
         ),
       );
     }
@@ -301,6 +284,8 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
         padding: const EdgeInsets.all(8),
         child: SvgPicture.asset(
           'assets/brand/flock_logo.svg',
+          fit: BoxFit.contain,
+          alignment: Alignment.center,
           colorFilter: ColorFilter.mode(
             isCurrentWeek ? colorScheme.primary : colorScheme.onSurface.withValues(alpha: 0.7),
             BlendMode.srcIn,

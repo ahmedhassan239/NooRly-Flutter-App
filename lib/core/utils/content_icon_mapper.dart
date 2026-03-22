@@ -13,25 +13,82 @@ const String _ramadanWarning = 'assets/icons/ramadan/icon_warning.svg';
 const String _ramadanHands = 'assets/icons/ramadan/icon_praying_hands.svg';
 const String _ramadanSparkles = 'assets/icons/ramadan/icon_sparkles.svg';
 
-/// Returns Ramadan guide SVG asset path for icon key, or null (then use [iconDataFromKey]).
+/// Returns bundled Ramadan SVG path for legacy keys only.
+/// Unknown keys return null so callers can use API [icon_url] or [ramadanGuideLucideFromKey].
 String? ramadanSvgAssetFromKey(String? key) {
   if (key == null || key.isEmpty) return _ramadanMoon;
   final k = key.trim().toLowerCase().replaceAll('-', '_');
   switch (k) {
     case 'moon':
+    case 'star':
+    case 'ramadhan_night_icon':
       return _ramadanMoon;
     case 'sun':
+    case 'ramadhan_day_icon':
       return _ramadanSun;
     case 'warning':
+    case 'halal_icon':
+    case 'firecrackers_icon':
       return _ramadanWarning;
     case 'hands':
     case 'praying_hands':
+    case 'pray_icon':
       return _ramadanHands;
     case 'sparkle':
     case 'sparkles':
+    case 'eid_icon':
+    case 'islmaic_festival_icon':
+    case 'celebration':
       return _ramadanSparkles;
     default:
-      return _ramadanMoon;
+      return null;
+  }
+}
+
+/// Lucide fallback for Ramadan guide rows when [icon_url] / bundled SVG are unavailable.
+IconData ramadanGuideLucideFromKey(String? key) {
+  if (key == null || key.isEmpty) return LucideIcons.moon;
+  final k = key.trim().toLowerCase().replaceAll('-', '_');
+  switch (k) {
+    case 'moon':
+    case 'star':
+    case 'ramadhan_night_icon':
+      return LucideIcons.moon;
+    case 'sun':
+    case 'ramadhan_day_icon':
+      return LucideIcons.sun;
+    case 'warning':
+    case 'halal_icon':
+    case 'firecrackers_icon':
+      return LucideIcons.alertTriangle;
+    case 'hands':
+    case 'pray_icon':
+    case 'praying_hands':
+      return LucideIcons.hand;
+    case 'sparkle':
+    case 'sparkles':
+    case 'eid_icon':
+    case 'islmaic_festival_icon':
+    case 'celebration':
+      return LucideIcons.sparkles;
+    case 'mosque':
+    case 'mosque_icon':
+    case 'mosque_icons':
+      return LucideIcons.landmark;
+    case 'food':
+    case 'meal_bowl_icon':
+      return LucideIcons.utensils;
+    case 'strength':
+    case 'muslim_man_icon':
+      return LucideIcons.user;
+    case 'money':
+    case 'zakat_icon':
+      return LucideIcons.coins;
+    case 'refresh':
+    case 'app_islamic_icon':
+      return LucideIcons.bookOpen;
+    default:
+      return LucideIcons.moonStar;
   }
 }
 
@@ -89,15 +146,25 @@ IconData iconDataFromKey(String? key) {
 /// Color for Ramadan accordion icon badges (warm palette).
 Color ramadanIconColorFromKey(String? key) {
   if (key == null || key.isEmpty) return const Color(0xFFE8A317);
-  final k = key.trim().toLowerCase();
+  final k = key.trim().toLowerCase().replaceAll('_', '-');
   switch (k) {
     case 'warning':
+    case 'halal-icon':
+    case 'firecrackers-icon':
       return const Color(0xFFF5A623);
     case 'hands':
+    case 'pray-icon':
       return const Color(0xFFE8B923);
     case 'sparkles':
     case 'sparkle':
+    case 'eid-icon':
+    case 'islmaic-festival-icon':
       return const Color(0xFFF7E5A3);
+    case 'zakat-icon':
+      return const Color(0xFF059669);
+    case 'mosque-icon':
+    case 'mosque-icons':
+      return const Color(0xFF1E40AF);
     default:
       return const Color(0xFFE8A317);
   }

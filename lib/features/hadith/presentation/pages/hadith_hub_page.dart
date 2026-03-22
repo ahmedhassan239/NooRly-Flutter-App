@@ -5,7 +5,10 @@ import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
     show noorlyEmojiBookmark;
 import 'package:flutter_app/features/hadith/data/library_hadith_api.dart';
+import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show contentScopeIconUrlForKey;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
@@ -40,9 +43,13 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
       loading: () => 0,
       error: (_, __) => 0,
     );
+    final savedHadithTabIconUrl = ref.watch(libraryTabsProvider).when(
+          data: (tabs) => contentScopeIconUrlForKey(tabs, 'hadith'),
+          loading: () => null,
+          error: (_, __) => null,
+        );
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -79,6 +86,7 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
                           title: AppLocalizations.of(context)!.savedCardHadith,
                           subtitle: AppLocalizations.of(context)!.savedCountLabel(savedCount),
                           icon: noorlyEmojiBookmark,
+                          iconUrl: savedHadithTabIconUrl,
                           onTap: () => context.push('/hadith/saved'),
                         ),
                         const SizedBox(height: AppSpacing.lg),
@@ -166,6 +174,9 @@ class _HadithHubPageState extends ConsumerState<HadithHubPage> {
             title: c.title,
             subtitle: subtitle,
             icon: iconForHadithCollection(c.icon),
+            iconUrl: (c.iconUrl != null && c.iconUrl!.trim().isNotEmpty)
+                ? c.iconUrl
+                : null,
             onTap: () => context.push('/hadith/collection/${c.id}'),
           ),
         );

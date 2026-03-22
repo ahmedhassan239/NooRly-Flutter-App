@@ -7,11 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:flutter_app/design_system/spacing.dart';
-import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart'
-    show noorlyEmojiBookmark;
+import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/features/library/presentation/widgets/app_search_field.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/presentation/widgets/rounded_list_card.dart';
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show
+        contentScopeIconUrlForKey,
+        resolveContentScopeEmoji,
+        savedCardEmojiForLibraryScope;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/features/verses/data/library_verses_api.dart';
@@ -44,6 +48,18 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
       loading: () => 0,
       error: (_, __) => 0,
     );
+    final savedCardEmoji = ref
+        .watch(libraryTabsProvider)
+        .when(
+          data: (tabs) => savedCardEmojiForLibraryScope('verses', tabs),
+          loading: () => resolveContentScopeEmoji(null, 'verses'),
+          error: (_, __) => resolveContentScopeEmoji(null, 'verses'),
+        );
+    final savedCardIconUrl = ref.watch(libraryTabsProvider).when(
+          data: (tabs) => contentScopeIconUrlForKey(tabs, 'verses'),
+          loading: () => null,
+          error: (_, __) => null,
+        );
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
@@ -59,7 +75,8 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
           RoundedListCard(
             title: l10n.savedCardVerses,
             subtitle: l10n.savedCountLabel(savedCount),
-            icon: noorlyEmojiBookmark,
+            icon: savedCardEmoji,
+            iconUrl: savedCardIconUrl,
             onTap: () => context.push('/verses/saved'),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -70,9 +87,8 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
                 final filtered = q.isEmpty
                     ? list
                     : list
-                        .where((c) =>
-                            c.title.toLowerCase().contains(q))
-                        .toList();
+                          .where((c) => c.title.toLowerCase().contains(q))
+                          .toList();
                 if (filtered.isEmpty) {
                   return LibraryEmptyView(
                     message: l10n.libraryNoCollectionsYet,
@@ -90,8 +106,11 @@ class _VersesTabContentState extends ConsumerState<VersesTabContent> {
                       title: c.title,
                       subtitle: subtitle,
                       icon: iconForVerseCollection(c.icon),
-                      onTap: () =>
-                          context.push('/verses/collection/${c.id}'),
+                      iconUrl: (c.iconUrl != null &&
+                              c.iconUrl!.trim().isNotEmpty)
+                          ? c.iconUrl
+                          : null,
+                      onTap: () => context.push('/verses/collection/${c.id}'),
                     );
                   },
                 );

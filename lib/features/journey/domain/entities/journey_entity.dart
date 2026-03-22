@@ -72,6 +72,7 @@ class WeekEntity {
     this.description,
     this.descriptionAr,
     this.icon,
+    this.iconUrl,
     this.lessons = const [],
     this.isUnlocked = false,
     this.isCompleted = false,
@@ -98,8 +99,11 @@ class WeekEntity {
   /// Week description (Arabic).
   final String? descriptionAr;
 
-  /// Icon: backend key (e.g. "crescent", "mosque") or URL string.
+  /// Icon: backend key (e.g. file slug from assets/icons).
   final String? icon;
+
+  /// Absolute or relative icon asset URL from API (`icon_url`).
+  final String? iconUrl;
 
   /// Lessons in this week.
   final List<LessonSummaryEntity> lessons;

@@ -74,7 +74,6 @@ class _RegisterEmailPageState extends ConsumerState<RegisterEmailPage> {
     });
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),

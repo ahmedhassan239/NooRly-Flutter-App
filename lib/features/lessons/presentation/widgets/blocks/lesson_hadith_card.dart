@@ -2,15 +2,14 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 
-// Warm gold palette (knowledge, wisdom feel for Hadith)
-const _bg     = Color(0xFFFFFBEB); // amber-50
+// Warm gold palette (knowledge, wisdom feel for Hadith) — light mode
+const _bgLight = Color(0xFFFFFBEB); // amber-50
 const _border = Color(0xFFD97706); // amber-600
-const _label  = Color(0xFF92400E); // amber-800
+const _labelLight = Color(0xFF92400E); // amber-800
 
 class LessonHadithCard extends StatelessWidget {
   const LessonHadithCard({required this.block, super.key});
@@ -18,9 +17,19 @@ class LessonHadithCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = isDark ? AppColors.accentGold.withAlpha(18) : _bg;
-    final labelColor = isDark ? AppColors.accentGold : _label;
+
+    final bg = isDark
+        ? Color.alphaBlend(
+            _border.withValues(alpha: 0.12),
+            colorScheme.surfaceContainerHighest,
+          )
+        : _bgLight;
+    final borderColor = _border.withValues(alpha: isDark ? 0.42 : 0.6);
+    final labelColor = isDark ? const Color(0xFFFBBF24) : _labelLight;
+    final arabicColor = isDark ? const Color(0xFFFCD34D) : _border;
+    final bodyText = colorScheme.onSurface;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -28,10 +37,10 @@ class LessonHadithCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: _border.withAlpha(60)),
+          border: Border.all(color: borderColor),
           boxShadow: [
             BoxShadow(
-              color: _border.withAlpha(18),
+              color: _border.withValues(alpha: isDark ? 0.12 : 0.07),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -44,7 +53,7 @@ class LessonHadithCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
-                color: _border.withAlpha(isDark ? 40 : 22),
+                color: _border.withValues(alpha: isDark ? 0.16 : 0.09),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.card)),
               ),
               child: Row(
@@ -63,7 +72,7 @@ class LessonHadithCard extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: _border.withAlpha(30),
+                        color: _border.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -87,22 +96,19 @@ class LessonHadithCard extends StatelessWidget {
                       block.arabic!,
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.right,
-                      style: AppTypography.arabicH3(
-                        color: isDark ? AppColors.accentGold : _border,
-                      ),
+                      style: AppTypography.arabicH3(color: arabicColor),
                     ),
                     const SizedBox(height: 12),
-                    Divider(color: _border.withAlpha(40), height: 1),
+                    Divider(color: _border.withValues(alpha: 0.35), height: 1),
                     const SizedBox(height: 12),
                   ],
                   // English text
                   SelectableText(
                     '"${block.text}"',
-                    style: AppTypography.body(
-                      color: isDark
-                          ? Colors.white.withAlpha(230)
-                          : AppColors.foreground,
-                    ).copyWith(height: 1.65, fontStyle: FontStyle.italic),
+                    style: AppTypography.body(color: bodyText).copyWith(
+                      height: 1.65,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
                   const SizedBox(height: 12),
                   // Narrator

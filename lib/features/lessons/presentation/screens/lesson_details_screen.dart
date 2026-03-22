@@ -5,7 +5,6 @@ import 'package:lucide_icons/lucide_icons.dart';
 
 import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -28,7 +27,6 @@ class LessonDetailsScreen extends ConsumerWidget {
     final state = ref.watch(lessonDetailsProvider(lessonId));
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: _buildAppBar(context),
       body: switch (state) {
         LessonDetailsLoading() => const Center(child: CircularProgressIndicator()),
@@ -249,21 +247,37 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                             _reflectionController.text,
                           );
                     },
+                    cursorColor: colorScheme.primary,
                     decoration: InputDecoration(
                       hintText: l10n.lessonWriteThoughts,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(AppRadius.input),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.input),
+                        borderSide: BorderSide(
+                          color: colorScheme.outline.withValues(alpha: 0.5),
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.input),
+                        borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                      ),
+                      filled: true,
+                      fillColor: colorScheme.surfaceContainerHighest,
+                      hintStyle: AppTypography.body(
+                        color: colorScheme.onSurface.withValues(alpha: 0.45),
+                      ),
                       contentPadding: const EdgeInsets.all(AppSpacing.md),
                     ),
-                    style: AppTypography.body(),
+                    style: AppTypography.body(color: colorScheme.onSurface),
                   ),
                   Row(
                     children: [
                       if (widget.reflectionSaved)
                         Text(
                           l10n.lessonSaved,
-                          style: AppTypography.caption(color: AppColors.accentGreen),
+                          style: AppTypography.caption(color: colorScheme.primary),
                         )
                       else
                         TextButton(
@@ -323,21 +337,24 @@ class _Chip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final accentColor = colorScheme.primary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isAccent
-            ? AppColors.accentGreen.withValues(alpha: 0.15)
+            ? accentColor.withValues(alpha: 0.18)
             : colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(AppRadius.sm),
         border: Border.all(
-          color: isAccent ? AppColors.accentGreen : colorScheme.outline.withValues(alpha: 0.3),
+          color: isAccent
+              ? accentColor.withValues(alpha: 0.55)
+              : colorScheme.outline.withValues(alpha: 0.3),
         ),
       ),
       child: Text(
         label,
         style: AppTypography.caption(
-          color: isAccent ? AppColors.accentGreen : colorScheme.onSurface,
+          color: isAccent ? accentColor : colorScheme.onSurface,
         ).copyWith(fontWeight: FontWeight.w500),
       ),
     );
@@ -360,68 +377,108 @@ class _BottomBar extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final notifier = ref.read(lessonDetailsProvider(lessonId).notifier);
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        AppSpacing.lg,
-        AppSpacing.md,
-        AppSpacing.lg,
-        MediaQuery.paddingOf(context).bottom + AppSpacing.md,
-      ),
-      decoration: BoxDecoration(
-        color: colorScheme.surface,
-        border: Border(top: BorderSide(color: colorScheme.outline.withValues(alpha: 0.3))),
-      ),
-      child: SafeArea(
-        top: false,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 600),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: isCompleted
-                    ? OutlinedButton(
-                        onPressed: null,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: AppColors.accentGreen,
-                          side: BorderSide(color: AppColors.accentGreen),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(LucideIcons.check, size: 18, color: AppColors.accentGreen),
-                            const SizedBox(width: 8),
-                            Text(AppLocalizations.of(context)!.lessonCompleted),
-                          ],
-                        ),
-                      )
-                    : AppButton(
-                        text: AppLocalizations.of(context)!.lessonMarkAsCompleted,
-                        onPressed: () async {
-                          await notifier.completeLesson();
-                          ref.invalidate(journeyProvider);
-                        },
-                        icon: Icon(LucideIcons.check, size: 18, color: colorScheme.onPrimary),
-                      ),
-              ),
-              const SizedBox(height: AppSpacing.sm),
-              SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: AppButton(
-                  text: nextLessonId != null
-                      ? AppLocalizations.of(context)!.lessonNextLesson
-                      : AppLocalizations.of(context)!.lessonNoMoreLessons,
-                  onPressed: nextLessonId != null
-                      ? () => context.push('/lessons/$nextLessonId')
-                      : null,
-                ),
-              ),
-            ],
+    return Material(
+      color: colorScheme.surface,
+      elevation: 0,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: colorScheme.outline.withValues(alpha: 0.28)),
           ),
         ),
+        child: SafeArea(
+          top: false,
+          minimum: EdgeInsets.zero,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.md,
+              AppSpacing.lg,
+              AppSpacing.md,
+            ),
+            child: Align(
+              alignment: Alignment.center,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 600),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: isCompleted
+                          ? _LessonCompletedBanner(colorScheme: colorScheme)
+                          : AppButton(
+                              text: AppLocalizations.of(context)!.lessonMarkAsCompleted,
+                              fullWidth: true,
+                              onPressed: () async {
+                                await notifier.completeLesson();
+                                ref.invalidate(journeyProvider);
+                              },
+                              icon: Icon(
+                                LucideIcons.check,
+                                size: 18,
+                                color: colorScheme.onPrimary,
+                              ),
+                            ),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: AppButton(
+                        fullWidth: true,
+                        variant: AppButtonVariant.secondary,
+                        text: nextLessonId != null
+                            ? AppLocalizations.of(context)!.lessonNextLesson
+                            : AppLocalizations.of(context)!.lessonNoMoreLessons,
+                        onPressed: nextLessonId != null
+                            ? () => context.push('/lessons/$nextLessonId')
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Non-interactive, theme-aware “completed” row — avoids disabled [OutlinedButton]
+/// styling that was unreadable in dark mode.
+class _LessonCompletedBanner extends StatelessWidget {
+  const _LessonCompletedBanner({required this.colorScheme});
+
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadius.button),
+        border: Border.all(
+          color: colorScheme.primary.withValues(alpha: 0.45),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(LucideIcons.check, size: 20, color: colorScheme.primary),
+          const SizedBox(width: 10),
+          Text(
+            l10n.lessonCompleted,
+            style: AppTypography.body(color: colorScheme.onSurface).copyWith(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -35,7 +35,6 @@ class _CategoryHadithPageState extends ConsumerState<CategoryHadithPage> {
     final collectionsAsync = ref.watch(libraryHadithCollectionsAllProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -172,6 +171,10 @@ class _CategoryHadithPageState extends ConsumerState<CategoryHadithPage> {
         title: collection.title,
         subtitle: subtitle,
         icon: iconForHadithCollection(collection.icon),
+        iconUrl: (collection.iconUrl != null &&
+                collection.iconUrl!.trim().isNotEmpty)
+            ? collection.iconUrl
+            : null,
         onTap: () => context.push('/hadith/collection/${collection.id}'),
       ),
     );

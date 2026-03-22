@@ -7,6 +7,9 @@ import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
     show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
+import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
+import 'package:flutter_app/features/library/utils/library_utils.dart'
+    show contentScopeIconUrlForKey, resolveContentScopeEmoji, savedCardEmojiForLibraryScope;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,6 +37,18 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final categoriesAsync = ref.watch(duaCategoriesFromApiProvider);
+    final savedRowEmoji = ref
+        .watch(libraryTabsProvider)
+        .when(
+          data: (tabs) => savedCardEmojiForLibraryScope('duas', tabs),
+          loading: () => resolveContentScopeEmoji(null, 'duas'),
+          error: (_, __) => resolveContentScopeEmoji(null, 'duas'),
+        );
+    final savedRowIconUrl = ref.watch(libraryTabsProvider).when(
+          data: (tabs) => contentScopeIconUrlForKey(tabs, 'duas'),
+          loading: () => null,
+          error: (_, __) => null,
+        );
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.lg),
@@ -42,7 +57,13 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         children: [
           _buildSearchBar(colorScheme),
           const SizedBox(height: AppSpacing.lg),
-          _buildCategoriesSection(context, categoriesAsync, colorScheme),
+          _buildCategoriesSection(
+            context,
+            categoriesAsync,
+            colorScheme,
+            savedRowEmoji: savedRowEmoji,
+            savedRowIconUrl: savedRowIconUrl,
+          ),
         ],
       ),
     );
@@ -61,8 +82,9 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         style: AppTypography.body(color: colorScheme.onSurface),
         decoration: InputDecoration(
           hintText: AppLocalizations.of(context)!.duasSearchHint,
-          hintStyle:
-              AppTypography.body(color: colorScheme.onSurface.withAlpha(100)),
+          hintStyle: AppTypography.body(
+            color: colorScheme.onSurface.withAlpha(100),
+          ),
           prefixIcon: Icon(
             LucideIcons.search,
             size: 20,
@@ -96,18 +118,29 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
   Widget _buildCategoriesSection(
     BuildContext context,
     AsyncValue<List<DuaCategoryEntity>> categoriesAsync,
-    ColorScheme colorScheme,
-  ) {
+    ColorScheme colorScheme, {
+    required String savedRowEmoji,
+    String? savedRowIconUrl,
+  }) {
     return categoriesAsync.when(
       data: (categories) {
         final fromApi = categories.where((c) => c.id != 'saved').toList();
         final filtered = _searchQuery.isEmpty
             ? fromApi
             : fromApi
-                .where((c) =>
-                    c.title.toLowerCase().contains(_searchQuery.toLowerCase()))
-                .toList();
-        return _buildCategoriesList(context, filtered, colorScheme);
+                  .where(
+                    (c) => c.title.toLowerCase().contains(
+                      _searchQuery.toLowerCase(),
+                    ),
+                  )
+                  .toList();
+        return _buildCategoriesList(
+          context,
+          filtered,
+          colorScheme,
+          savedRowEmoji: savedRowEmoji,
+          savedRowIconUrl: savedRowIconUrl,
+        );
       },
       loading: () => const Center(
         child: Padding(
@@ -146,8 +179,10 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
   Widget _buildCategoriesList(
     BuildContext context,
     List<DuaCategoryEntity> categories,
-    ColorScheme colorScheme,
-  ) {
+    ColorScheme colorScheme, {
+    required String savedRowEmoji,
+    String? savedRowIconUrl,
+  }) {
     if (categories.isEmpty) {
       return Center(
         child: Padding(
@@ -165,7 +200,8 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
                     ? AppLocalizations.of(context)!.duasNoCategoriesYet
                     : AppLocalizations.of(context)!.duasNoDuasFound,
                 style: AppTypography.body(
-                    color: colorScheme.onSurface.withAlpha(150)),
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
               ),
             ],
           ),
@@ -178,7 +214,7 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-          child:         _buildCategoryCard(
+          child: _buildCategoryCard(
             context,
             DuaCategoryEntity(
               id: 'saved',
@@ -188,6 +224,8 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
             ),
             colorScheme,
             isSaved: true,
+            listLeadingEmoji: savedRowEmoji,
+            listLeadingIconUrl: savedRowIconUrl,
           ),
         ),
         ...categories.map((category) {
@@ -210,6 +248,8 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
     DuaCategoryEntity category,
     ColorScheme colorScheme, {
     bool isSaved = false,
+    String? listLeadingEmoji,
+    String? listLeadingIconUrl,
   }) {
     return InkWell(
       onTap: () {
@@ -229,7 +269,15 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
         ),
         child: Row(
           children: [
-            NoorlySectionIcon(icon: iconForCategory(category.iconKey, fallbackKey: kCategoryIconFallbackPrayer)),
+            NoorlySectionIcon(
+              icon:
+                  listLeadingEmoji ??
+                  iconForCategory(
+                    category.iconKey,
+                    fallbackKey: kCategoryIconFallbackPrayer,
+                  ),
+              iconUrl: isSaved ? listLeadingIconUrl : category.iconUrl,
+            ),
             const SizedBox(width: noorlySectionIconGap),
             Expanded(
               child: Column(
@@ -237,16 +285,21 @@ class _DuasTabContentState extends ConsumerState<DuasTabContent> {
                 children: [
                   Text(
                     category.title,
-                    style: AppTypography.bodySm(color: colorScheme.onSurface)
-                        .copyWith(fontWeight: FontWeight.w500),
+                    style: AppTypography.bodySm(
+                      color: colorScheme.onSurface,
+                    ).copyWith(fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     category.count > 0
-                        ? AppLocalizations.of(context)!.duasCountLabel(category.count)
+                        ? AppLocalizations.of(
+                            context,
+                          )!.duasCountLabel(category.count)
                         : (isSaved
-                            ? AppLocalizations.of(context)!.duasYourSavedDuas
-                            : AppLocalizations.of(context)!.duasCountLabel(0)),
+                              ? AppLocalizations.of(context)!.duasYourSavedDuas
+                              : AppLocalizations.of(
+                                  context,
+                                )!.duasCountLabel(0)),
                     style: AppTypography.caption(
                       color: colorScheme.onSurface.withAlpha(150),
                     ),

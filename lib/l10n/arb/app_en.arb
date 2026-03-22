@@ -243,6 +243,14 @@
   "adhkarLabel": "Adhkar",
   "translationLabel": "Translation",
   "sourceLabel": "Source",
+  "libraryContentHadithRef": "{book} — No. {number}",
+  "@libraryContentHadithRef": {
+    "placeholders": {
+      "book": { "type": "String" },
+      "number": { "type": "String" }
+    }
+  },
+  "librarySourceQuran": "Quran",
 
   "savedCardDuas": "Saved Duas",
   "savedCardHadith": "Saved Hadith",
@@ -586,5 +594,17 @@
   "notificationsLangBoth": "Both",
   "notificationsSaveSuccess": "Notification settings saved",
   "notificationsPermissionRequired": "Please enable notifications in your device settings to receive reminders",
-  "notificationsEnableButton": "Enable Notifications"
+  "notificationsEnableButton": "Enable Notifications",
+
+  "save": "Save",
+  "copy": "Copy",
+  "share": "Share",
+  "dua": "Dua",
+  "verse": "Verse",
+  "duas": "Duas",
+  "adhkar": "Adhkar",
+  "hadith": "Hadith",
+  "verses": "Verses",
+  "contentCopiedShort": "Copied",
+  "shareGeneratingImage": "Generating…"
 }

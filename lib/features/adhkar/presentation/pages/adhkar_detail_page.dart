@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -27,7 +29,6 @@ class AdhkarDetailPage extends ConsumerWidget {
 
     if (adhkar == null) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -50,7 +51,6 @@ class AdhkarDetailPage extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -114,12 +114,25 @@ class AdhkarDetailPage extends ConsumerWidget {
     final locale = ref.watch(localeControllerProvider).languageCode;
     final l10n = AppLocalizations.of(context)!;
     final repetitionLabel = toLocaleDigits(l10n.sayRepetition(adhkar.repetition), locale);
-    final isArabic = locale == 'ar';
+    final dir = LocalizedReligiousContent.textDirectionFor(locale);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: locale,
+      arabic: adhkar.arabic,
+      translation: adhkar.translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(locale);
+    final sourceLine = formatLooseReligiousSourceLine(
+      l10n,
+      locale,
+      adhkar.source,
+      sourceAr: adhkar.sourceAr,
+    );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Badge (أذكار / Adhkar) and repetition (تكرار N / Say Nx)
+    return Directionality(
+      textDirection: dir,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -130,7 +143,7 @@ class AdhkarDetailPage extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Text(
-                l10n.libraryAdhkar,
+                l10n.adhkar,
                 style: AppTypography.caption(color: AppColors.primary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -151,44 +164,15 @@ class AdhkarDetailPage extends ConsumerWidget {
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        // Arabic: show only when app is in Arabic (or when we want both — here we separate by locale)
-        if (isArabic) ...[
-          Text(
-            adhkar.arabic,
-            style: AppTypography.arabicH1(color: colorScheme.onSurface),
-            textAlign: TextAlign.right,
-            textDirection: TextDirection.rtl,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          if (adhkar.transliteration.isNotEmpty)
-            Container(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              decoration: BoxDecoration(
-                color: colorScheme.primary.withAlpha(25),
-                borderRadius: BorderRadius.circular(AppRadius.md),
-              ),
-              child: Text(
-                adhkar.transliteration,
-                style: AppTypography.body(color: colorScheme.primary)
-                    .copyWith(fontStyle: FontStyle.italic),
-              ),
-            ),
-          if (adhkar.transliteration.isNotEmpty) const SizedBox(height: AppSpacing.lg),
-        ],
-        // English: show only when app is in English
-        if (!isArabic) ...[
-          Text(
-            l10n.translationLabel,
-            style: AppTypography.h3(color: colorScheme.onSurface),
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            adhkar.translation,
-            style: AppTypography.body(color: colorScheme.onSurface),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-        ],
-        // Source (always show, localized label)
+        Text(
+          primary,
+          style: useArabic
+              ? AppTypography.arabicH1(color: colorScheme.onSurface)
+              : AppTypography.body(color: colorScheme.onSurface)
+                  .copyWith(fontSize: 20, height: 1.5),
+          textAlign: TextAlign.center,
+        ),
+        const SizedBox(height: AppSpacing.lg),
         Container(
           padding: const EdgeInsets.all(AppSpacing.md),
           decoration: BoxDecoration(
@@ -197,6 +181,8 @@ class AdhkarDetailPage extends ConsumerWidget {
             border: Border.all(color: colorScheme.outline.withAlpha(128)),
           ),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 LucideIcons.bookOpen,
@@ -204,16 +190,20 @@ class AdhkarDetailPage extends ConsumerWidget {
                 color: colorScheme.onSurface.withAlpha(150),
               ),
               const SizedBox(width: AppSpacing.sm),
-              Text(
-                '${l10n.sourceLabel}: ${adhkar.source}',
-                style: AppTypography.bodySm(color: colorScheme.onSurface),
+              Flexible(
+                child: Text(
+                  '${l10n.sourceLabel}: $sourceLine',
+                  style: AppTypography.bodySm(color: colorScheme.onSurface),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
-        _buildActionButtons(context, ref, adhkar, colorScheme),
+        _buildActionButtons(context, ref, adhkar, colorScheme, sourceLine),
       ],
+    ),
     );
   }
 
@@ -222,7 +212,10 @@ class AdhkarDetailPage extends ConsumerWidget {
     WidgetRef ref,
     AdhkarData adhkar,
     ColorScheme colorScheme,
+    String sourceLine,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final lc = ref.read(localeControllerProvider).languageCode;
     return Column(
       children: [
         Row(
@@ -235,15 +228,20 @@ class AdhkarDetailPage extends ConsumerWidget {
               child: _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
-                label: 'Copy',
+                label: l10n.copy,
                 colorScheme: colorScheme,
                 onTap: () {
-                  final textToCopy = '${adhkar.arabic}\n\n${adhkar.transliteration}\n\n"${adhkar.translation}"\n\n— ${adhkar.source}';
+                  final textToCopy = LocalizedReligiousContent.composePlainText(
+                    languageCode: lc,
+                    arabic: adhkar.arabic,
+                    translation: adhkar.translation,
+                    source: sourceLine,
+                  );
                   Clipboard.setData(ClipboardData(text: textToCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Copied to clipboard!'),
-                      duration: Duration(seconds: 2),
+                    SnackBar(
+                      content: Text(l10n.copiedToClipboard),
+                      duration: const Duration(seconds: 2),
                     ),
                   );
                 },
@@ -258,7 +256,7 @@ class AdhkarDetailPage extends ConsumerWidget {
               child: _buildActionButton(
                 context: context,
                 icon: LucideIcons.share2,
-                label: 'Share',
+                label: l10n.share,
                 colorScheme: colorScheme,
                 onTap: () {
                   ShareContentDialog.show(
@@ -268,8 +266,8 @@ class AdhkarDetailPage extends ConsumerWidget {
                       arabic: adhkar.arabic,
                       transliteration: adhkar.transliteration,
                       translation: adhkar.translation,
-                      source: adhkar.source,
-                      title: 'Share Adhkar',
+                      source: sourceLine,
+                      title: '${l10n.share} ${l10n.adhkar}',
                     ),
                   );
                 },

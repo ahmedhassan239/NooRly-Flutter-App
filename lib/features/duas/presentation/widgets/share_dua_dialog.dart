@@ -12,6 +12,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/dua_share_formatt
 import 'package:flutter_app/features/duas/presentation/widgets/dua_image_card.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/dua_text_preview.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_tab_switch.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -100,6 +101,7 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
   }
 
   Widget _buildHeader(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
@@ -107,11 +109,12 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
       ),
       child: Row(
         children: [
-          Text(
-            'Share Dua',
-            style: AppTypography.h2(color: colorScheme.onSurface),
+          Expanded(
+            child: Text(
+              '${l10n.share} ${l10n.dua}',
+              style: AppTypography.h2(color: colorScheme.onSurface),
+            ),
           ),
-          const Spacer(),
           IconButton(
             icon: Icon(
               LucideIcons.x,
@@ -120,7 +123,7 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
             onPressed: () => Navigator.of(context).pop(),
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(),
-            tooltip: 'Close',
+            tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
           ),
         ],
       ),
@@ -157,7 +160,7 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
               ),
-              child: const Text('Copy'),
+              child: Text(AppLocalizations.of(context)!.copy),
             ),
           ),
           const SizedBox(width: AppSpacing.md),
@@ -182,7 +185,9 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
                       color: colorScheme.onPrimary,
                     ),
               label: Text(
-                _isGeneratingImage ? 'Generating...' : 'Share',
+                _isGeneratingImage
+                    ? AppLocalizations.of(context)!.shareGeneratingImage
+                    : AppLocalizations.of(context)!.share,
                 style: AppTypography.body(color: colorScheme.onPrimary)
                     .copyWith(fontWeight: FontWeight.w600),
               ),
@@ -210,12 +215,17 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
   }
 
   Future<void> _copyText() async {
-    final text = DuaShareFormatter.formatText(widget.dua);
+    final lc = Localizations.localeOf(context).languageCode;
+    final text = DuaShareFormatter.formatText(
+      widget.dua,
+      lc,
+      AppLocalizations.of(context)!,
+    );
     await Clipboard.setData(ClipboardData(text: text));
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Copied to clipboard!'),
+          content: Text(AppLocalizations.of(context)!.copiedToClipboard),
           duration: const Duration(seconds: 2),
         ),
       );
@@ -269,10 +279,16 @@ class _ShareDuaDialogState extends State<ShareDuaDialog> {
   }
 
   Future<void> _shareText() async {
-    final text = DuaShareFormatter.formatText(widget.dua);
+    final lc = Localizations.localeOf(context).languageCode;
+    final text = DuaShareFormatter.formatText(
+      widget.dua,
+      lc,
+      AppLocalizations.of(context)!,
+    );
+    final l10n = AppLocalizations.of(context)!;
     await Share.share(
       text,
-      subject: 'Daily Dua',
+      subject: '${l10n.share} ${l10n.dua}',
     );
   }
 

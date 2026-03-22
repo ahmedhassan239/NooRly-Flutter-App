@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -23,7 +25,6 @@ class SavedDuasPage extends ConsumerWidget {
 
     if (!auth.isAuthenticated) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: SafeArea(
           child: Center(
             child: ConstrainedBox(
@@ -43,7 +44,6 @@ class SavedDuasPage extends ConsumerWidget {
     final listAsync = ref.watch(savedDuaListProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -263,7 +263,13 @@ class SavedDuasPage extends ConsumerWidget {
             ? (dua.text!.trim().length > 35 ? '${dua.text!.trim().substring(0, 35)}…' : dua.text!.trim())
             : l10n.savedTypeDua);
     final arabic = dua.textAr ?? '';
-    final source = dua.source ?? '';
+    final lc = Localizations.localeOf(context).languageCode;
+    final source = formatLooseReligiousSourceLine(
+      l10n,
+      lc,
+      dua.source ?? '',
+      sourceAr: dua.sourceAr,
+    );
 
     return InkWell(
       onTap: () => context.push('/duas/${dua.id}'),
@@ -305,6 +311,7 @@ class SavedDuasPage extends ConsumerWidget {
                       style: AppTypography.caption(
                         color: colorScheme.onSurface.withAlpha(120),
                       ),
+                      textDirection: LocalizedReligiousContent.textDirectionFor(lc),
                     ),
                   ],
                 ],

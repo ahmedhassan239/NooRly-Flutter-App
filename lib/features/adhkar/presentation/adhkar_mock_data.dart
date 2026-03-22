@@ -69,6 +69,8 @@ class AdhkarData {
   final String transliteration;
   final String translation;
   final String source;
+  /// Arabic attribution when different from [source] (optional).
+  final String? sourceAr;
   final int repetition; // Number of times to say (e.g., 1, 3)
 
   const AdhkarData({
@@ -77,6 +79,7 @@ class AdhkarData {
     required this.transliteration,
     required this.translation,
     required this.source,
+    this.sourceAr,
     required this.repetition,
   });
 }

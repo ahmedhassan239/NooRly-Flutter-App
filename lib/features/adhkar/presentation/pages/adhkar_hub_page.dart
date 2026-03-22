@@ -41,7 +41,6 @@ class _AdhkarHubPageState extends State<AdhkarHubPage> {
             .toList();
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

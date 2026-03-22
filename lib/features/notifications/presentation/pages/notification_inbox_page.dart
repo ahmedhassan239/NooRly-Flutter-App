@@ -31,7 +31,6 @@ class NotificationInboxPage extends ConsumerWidget {
     final asyncItems = ref.watch(notificationInboxProvider);
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: Text(l10n.notificationInboxTitle),
         leading: IconButton(

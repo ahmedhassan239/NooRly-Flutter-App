@@ -19,6 +19,7 @@ class LessonStepCard extends StatelessWidget {
     final bg = isDark
         ? colorScheme.surfaceContainerHighest
         : const Color(0xFFF8FAFC);
+    final bodyColor = colorScheme.onSurface.withValues(alpha: 0.88);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -26,7 +27,9 @@ class LessonStepCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: bg,
           borderRadius: BorderRadius.circular(AppRadius.card),
-          border: Border.all(color: colorScheme.outline.withAlpha(60)),
+          border: Border.all(
+            color: colorScheme.outline.withValues(alpha: isDark ? 0.35 : 0.24),
+          ),
         ),
         padding: const EdgeInsets.all(16),
         child: Row(
@@ -73,9 +76,7 @@ class LessonStepCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     InlineText(
                       block.body,
-                      style: AppTypography.body(
-                        color: colorScheme.onSurface.withAlpha(200),
-                      ).copyWith(height: 1.6),
+                      style: AppTypography.body(color: bodyColor).copyWith(height: 1.6),
                     ),
                   ],
                 ],

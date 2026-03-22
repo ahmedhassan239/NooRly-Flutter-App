@@ -9,13 +9,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Ramadan guide list. Refetches when locale changes (Accept-Language sent by API client).
 final ramadanGuideListProvider =
     FutureProvider.autoDispose<List<RamadanGuideItemModel>>((ref) async {
-  ref.watch(localeControllerProvider);
-  return fetchRamadanGuideList(ref);
-});
+      ref.watch(localeControllerProvider);
+      return fetchRamadanGuideList(ref);
+    });
 
 /// Single Ramadan guide item by slug.
-final ramadanGuideItemProvider =
-    FutureProvider.autoDispose.family<RamadanGuideItemModel?, String>((ref, slug) async {
-  ref.watch(localeControllerProvider);
-  return fetchRamadanGuideItem(ref, slug);
-});
+final ramadanGuideItemProvider = FutureProvider.autoDispose
+    .family<RamadanGuideItemModel?, String>((ref, slug) async {
+      ref.watch(localeControllerProvider);
+      return fetchRamadanGuideItem(ref, slug);
+    });

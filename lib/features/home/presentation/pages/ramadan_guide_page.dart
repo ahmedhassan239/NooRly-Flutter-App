@@ -5,10 +5,10 @@ import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_layout.dart';
 import 'package:flutter_app/features/ramadan_guide/data/ramadan_guide_models.dart';
+import 'package:flutter_app/features/ramadan_guide/presentation/widgets/ramadan_guide_item_icon.dart';
 import 'package:flutter_app/features/ramadan_guide/providers/ramadan_guide_providers.dart';
 import 'package:flutter_app/core/utils/content_icon_mapper.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -31,7 +31,6 @@ class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
     final listAsync = ref.watch(ramadanGuideListProvider);
 
     return Scaffold(
-      backgroundColor: bg,
       body: Stack(
         children: [
           Positioned.fill(
@@ -43,11 +42,7 @@ class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
               ),
             ),
           ),
-          Positioned.fill(
-            child: Container(
-              color: bg.withValues(alpha: 0.6),
-            ),
-          ),
+          Positioned.fill(child: Container(color: bg.withValues(alpha: 0.6))),
           SafeArea(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -75,14 +70,16 @@ class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
                                 for (int i = 0; i < items.length; i++) ...[
-                                  if (i > 0) const SizedBox(height: AppSpacing.sm),
+                                  if (i > 0)
+                                    const SizedBox(height: AppSpacing.sm),
                                   _RamadanAccordionCard(
                                     item: items[i],
                                     isExpanded: _expandedIndex == i,
                                     onTap: () {
                                       setState(() {
-                                        _expandedIndex =
-                                            _expandedIndex == i ? null : i;
+                                        _expandedIndex = _expandedIndex == i
+                                            ? null
+                                            : i;
                                       });
                                     },
                                   ),
@@ -169,14 +166,19 @@ class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(LucideIcons.bookOpen,
-                size: 48, color: Theme.of(context).colorScheme.outline),
+            Icon(
+              LucideIcons.bookOpen,
+              size: 48,
+              color: Theme.of(context).colorScheme.outline,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(
               l10n.ramadanGuideEmpty,
               textAlign: TextAlign.center,
               style: AppTypography.body(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
           ],
@@ -193,14 +195,19 @@ class _RamadanGuidePageState extends ConsumerState<RamadanGuidePage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(LucideIcons.alertCircle,
-                size: 48, color: Theme.of(context).colorScheme.error),
+            Icon(
+              LucideIcons.alertCircle,
+              size: 48,
+              color: Theme.of(context).colorScheme.error,
+            ),
             const SizedBox(height: AppSpacing.md),
             Text(
               l10n.ramadanGuideError,
               textAlign: TextAlign.center,
               style: AppTypography.body(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.7),
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -230,8 +237,7 @@ class _RamadanAccordionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final svgPath = ramadanSvgAssetFromKey(item.icon);
-    final iconColor = ramadanIconColorFromKey(item.icon);
+    final iconColor = ramadanIconColorFromKey(item.iconKey);
 
     return Material(
       color: Colors.transparent,
@@ -258,29 +264,22 @@ class _RamadanAccordionCard extends StatelessWidget {
                 Row(
                   children: [
                     Container(
-                      width: 40,
-                      height: 40,
+                      width: 56,
+                      height: 56,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: iconColor.withValues(alpha: 0.2),
-                        borderRadius:
-                            BorderRadius.circular(AppRadius.md),
+                        color: iconColor.withValues(alpha: 0.26),
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                          color: iconColor.withValues(alpha: 0.35),
+                          width: 1,
+                        ),
                       ),
-                      child: svgPath != null
-                          ? SvgPicture.asset(
-                              svgPath,
-                              width: 22,
-                              height: 22,
-                              colorFilter: ColorFilter.mode(
-                                iconColor,
-                                BlendMode.srcIn,
-                              ),
-                            )
-                          : Icon(
-                              iconDataFromKey(item.icon),
-                              size: 22,
-                              color: iconColor,
-                            ),
+                      child: RamadanGuideItemIcon(
+                        item: item,
+                        tint: iconColor,
+                        size: 36,
+                      ),
                     ),
                     const SizedBox(width: AppSpacing.md),
                     Expanded(
@@ -297,8 +296,9 @@ class _RamadanAccordionCard extends StatelessWidget {
                           Text(
                             item.description,
                             style: AppTypography.bodySm(
-                              color: colorScheme.onSurface
-                                  .withValues(alpha: 0.7),
+                              color: colorScheme.onSurface.withValues(
+                                alpha: 0.7,
+                              ),
                             ),
                           ),
                         ],
@@ -320,9 +320,7 @@ class _RamadanAccordionCard extends StatelessWidget {
                   ),
                   Text(
                     item.content,
-                    style: AppTypography.body(
-                      color: colorScheme.onSurface,
-                    ),
+                    style: AppTypography.body(color: colorScheme.onSurface),
                   ),
                 ],
               ],

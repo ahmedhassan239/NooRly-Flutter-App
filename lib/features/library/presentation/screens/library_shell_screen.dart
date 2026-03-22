@@ -16,7 +16,7 @@ import 'package:flutter_app/features/library/data/dto/content_scope_dto.dart';
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/features/library/presentation/widgets/library_state_views.dart';
 import 'package:flutter_app/features/library/utils/library_utils.dart'
-    show resolveContentScopeEmoji;
+    show libraryTabLeading, resolveContentScopeEmoji;
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 /// Fixed branch order: matches StatefulShellRoute branches (duas=0, adhkar=1, hadith=2, verses=3).
@@ -37,7 +37,6 @@ class LibraryShellScreen extends ConsumerWidget {
     final currentIndex = navigationShell.currentIndex;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -129,6 +128,7 @@ class LibraryShellScreen extends ConsumerWidget {
         children: List.generate(tabs.length, (index) {
           final t = tabs[index];
           final emoji = resolveContentScopeEmoji(t.icon, t.key);
+          final iconUrl = t.iconUrl?.trim();
           final isActive = index == currentIndex;
           return Expanded(
             child: Padding(
@@ -166,10 +166,7 @@ class LibraryShellScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        emoji,
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                      libraryTabLeading(emoji: emoji, iconUrl: iconUrl),
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(

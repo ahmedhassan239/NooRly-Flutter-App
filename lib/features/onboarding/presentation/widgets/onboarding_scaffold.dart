@@ -18,7 +18,6 @@ class OnboardingScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: OnboardingColors.background,
       body: SafeArea(
         child: Column(
           children: [

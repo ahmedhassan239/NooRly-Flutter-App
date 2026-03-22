@@ -12,6 +12,8 @@ _$ContentScopeDtoImpl _$$ContentScopeDtoImplFromJson(
       key: json['key'] as String,
       label: json['label'] as String,
       icon: json['icon'] as String?,
+      iconKey: json['icon_key'] as String?,
+      iconUrl: json['icon_url'] as String?,
       color: json['color'] as String?,
       displayOrder: (json['display_order'] as num?)?.toInt() ?? 0,
     );
@@ -22,6 +24,8 @@ Map<String, dynamic> _$$ContentScopeDtoImplToJson(
       'key': instance.key,
       'label': instance.label,
       'icon': instance.icon,
+      'icon_key': instance.iconKey,
+      'icon_url': instance.iconUrl,
       'color': instance.color,
       'display_order': instance.displayOrder,
     };

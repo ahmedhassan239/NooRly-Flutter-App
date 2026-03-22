@@ -97,7 +97,11 @@ class _ContentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final localeCode = Localizations.localeOf(context).languageCode;
-    final localized = resolveInspirationByLocale(inspiration, localeCode);
+    final localized = resolveInspirationByLocale(
+      inspiration,
+      localeCode,
+      AppLocalizations.of(context)!,
+    );
     final lightBlueBg = AppColors.primaryLightBlue.withValues(alpha: 0.08);
 
     return HomeCard(

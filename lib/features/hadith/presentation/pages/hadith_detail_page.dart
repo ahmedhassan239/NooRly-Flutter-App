@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/library_reference_format.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_app/design_system/widgets/bottom_nav.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/hadith/presentation/hadith_mock_data.dart';
 import 'package:flutter_app/features/hadith/presentation/widgets/save_hadith_button.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -24,7 +27,6 @@ class HadithDetailPage extends ConsumerWidget {
 
     if (hadith == null) {
       return Scaffold(
-        backgroundColor: colorScheme.surface,
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -49,7 +51,6 @@ class HadithDetailPage extends ConsumerWidget {
     final hadithIdInt = int.tryParse(hadithId) ?? 0;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -95,7 +96,7 @@ class HadithDetailPage extends ConsumerWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Hadith',
+            AppLocalizations.of(context)!.hadith,
             style: AppTypography.h2(color: colorScheme.onSurface),
           ),
         ],
@@ -110,88 +111,82 @@ class HadithDetailPage extends ConsumerWidget {
     int hadithIdInt,
     ColorScheme colorScheme,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Hadith label
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.accentCoral.withAlpha(25),
-            borderRadius: BorderRadius.circular(AppRadius.sm),
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: hadith.arabic,
+      translation: hadith.translation,
+    );
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final sourceLine = formatHadithSourcePlainLine(l10n, lc, hadith.source);
+
+    return Directionality(
+      textDirection: dir,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            decoration: BoxDecoration(
+              color: AppColors.accentCoral.withAlpha(25),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
+            ),
+            child: Text(
+              l10n.hadith,
+              style: AppTypography.caption(color: AppColors.accentCoral)
+                  .copyWith(fontWeight: FontWeight.w600),
+            ),
           ),
-          child: Text(
-            'Hadith',
-            style: AppTypography.caption(color: AppColors.accentCoral)
-                .copyWith(fontWeight: FontWeight.w600),
-          ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Arabic text
-        Text(
-          hadith.arabic,
-          style: AppTypography.arabicH1(color: colorScheme.onSurface),
-          textAlign: TextAlign.center,
-          textDirection: TextDirection.rtl,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Transliteration
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colorScheme.primary.withAlpha(25),
-            borderRadius: BorderRadius.circular(AppRadius.md),
-          ),
-          child: Text(
-            hadith.transliteration,
-            style: AppTypography.body(color: colorScheme.primary)
-                .copyWith(fontStyle: FontStyle.italic),
+          const SizedBox(height: AppSpacing.lg),
+          Text(
+            primary,
+            style: useArabic
+                ? AppTypography.arabicH1(color: colorScheme.onSurface)
+                : AppTypography.body(color: colorScheme.onSurface)
+                    .copyWith(fontSize: 20, height: 1.5),
             textAlign: TextAlign.center,
           ),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Translation
-        Text(
-          'Translation',
-          style: AppTypography.h3(color: colorScheme.onSurface),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppSpacing.sm),
-        Text(
-          hadith.translation,
-          style: AppTypography.body(color: colorScheme.onSurface),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        // Source
-        Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            border: Border.all(color: colorScheme.outline.withAlpha(128)),
+          const SizedBox(height: AppSpacing.lg),
+          Container(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(AppRadius.md),
+              border: Border.all(color: colorScheme.outline.withAlpha(128)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  LucideIcons.bookOpen,
+                  size: 18,
+                  color: colorScheme.onSurface.withAlpha(150),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Flexible(
+                  child: Text(
+                    '${l10n.sourceLabel}: $sourceLine',
+                    style: AppTypography.bodySm(color: colorScheme.onSurface),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                LucideIcons.bookOpen,
-                size: 18,
-                color: colorScheme.onSurface.withAlpha(150),
-              ),
-              const SizedBox(width: AppSpacing.sm),
-              Text(
-                'Source: ${hadith.source}',
-                style: AppTypography.bodySm(color: colorScheme.onSurface),
-              ),
-            ],
+          const SizedBox(height: AppSpacing.xl),
+          _buildActionButtons(
+            context,
+            ref,
+            hadith,
+            hadithIdInt,
+            colorScheme,
+            sourceLine,
           ),
-        ),
-        const SizedBox(height: AppSpacing.xl),
-        // Action buttons
-        _buildActionButtons(context, ref, hadith, hadithIdInt, colorScheme),
-      ],
+        ],
+      ),
     );
   }
 
@@ -201,7 +196,10 @@ class HadithDetailPage extends ConsumerWidget {
     HadithData hadith,
     int hadithIdInt,
     ColorScheme colorScheme,
+    String sourceLine,
   ) {
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -214,14 +212,19 @@ class HadithDetailPage extends ConsumerWidget {
             _buildActionButton(
                 context: context,
                 icon: LucideIcons.copy,
-                label: 'Copy',
+                label: l10n.copy,
                 colorScheme: colorScheme,
                 onTap: () {
-                  final textToCopy = '${hadith.arabic}\n\n${hadith.transliteration}\n\n"${hadith.translation}"\n\n- ${hadith.source}';
+                  final textToCopy = LocalizedReligiousContent.composePlainText(
+                    languageCode: lc,
+                    arabic: hadith.arabic,
+                    translation: hadith.translation,
+                    source: sourceLine,
+                  );
                   Clipboard.setData(ClipboardData(text: textToCopy));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: const Text('Copied to clipboard! ✓'),
+                      content: Text(l10n.copiedToClipboard),
                       duration: const Duration(seconds: 2),
                     ),
                   );
@@ -237,7 +240,7 @@ class HadithDetailPage extends ConsumerWidget {
             _buildActionButton(
               context: context,
               icon: LucideIcons.share2,
-              label: 'Share',
+              label: l10n.share,
               colorScheme: colorScheme,
               onTap: () {
                 ShareContentDialog.show(
@@ -247,8 +250,8 @@ class HadithDetailPage extends ConsumerWidget {
                     arabic: hadith.arabic,
                     transliteration: hadith.transliteration,
                     translation: hadith.translation,
-                    source: hadith.source,
-                    title: 'Share Hadith',
+                    source: sourceLine,
+                    title: '${l10n.share} ${l10n.hadith}',
                   ),
                 );
               },

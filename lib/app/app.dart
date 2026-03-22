@@ -12,6 +12,7 @@ import 'package:flutter_app/core/notifications/notification_service.dart';
 import 'package:flutter_app/core/notifications/pending_admin_campaign_sync.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/design_system/app_theme.dart';
+import 'package:flutter_app/design_system/widgets/app_pattern_background.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/notifications/providers/notification_preferences_providers.dart';
 import 'package:flutter_app/features/settings/providers/settings_providers.dart';
@@ -180,6 +181,8 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
           debugShowCheckedModeBanner: false,
           routerConfig: ref.watch(routerProvider),
           locale: locale,
+          builder: (context, child) =>
+              AppPatternBackground(child: child),
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
