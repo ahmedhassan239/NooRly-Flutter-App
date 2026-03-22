@@ -162,13 +162,21 @@ String _todayDate() {
   return '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 }
 
+String _cacheKeyForLocale(String localeCode) =>
+    '$_kDailyInspirationCacheKey\_${localeCode.replaceAll(RegExp(r'[^a-z]'), '')}';
+
 /// Returns cached DTO for today if mode is per_day and cache exists and is valid; otherwise null.
-Future<DailyInspirationDto?> _getCachedDailyInspiration(SharedPreferences prefs) async {
+/// [localeCode] is used so cache is per language (ar/en).
+Future<DailyInspirationDto?> _getCachedDailyInspiration(
+  SharedPreferences prefs,
+  String localeCode,
+) async {
   final modeKey = prefs.getString(_kDailyInspirationCacheModeKey);
   final mode = _cacheModeFromString(modeKey);
   if (mode == DailyInspirationCacheMode.perLaunch) return null;
 
-  final jsonStr = prefs.getString(_kDailyInspirationCacheKey);
+  final key = _cacheKeyForLocale(localeCode);
+  final jsonStr = prefs.getString(key);
   if (jsonStr == null || jsonStr.isEmpty) return null;
 
   try {
@@ -181,7 +189,7 @@ Future<DailyInspirationDto?> _getCachedDailyInspiration(SharedPreferences prefs)
     final dto = DailyInspirationDto.fromJson(dtoJson);
     if (!dto.isValid) return null;
     if (kDebugMode) {
-      debugPrint('[DailyInspiration] cache hit: type=${dto.type} id=${dto.id} date=$date');
+      debugPrint('[DailyInspiration] cache hit: type=${dto.type} id=${dto.id} date=$date locale=$localeCode');
     }
     return dto;
   } catch (_) {
@@ -189,7 +197,11 @@ Future<DailyInspirationDto?> _getCachedDailyInspiration(SharedPreferences prefs)
   }
 }
 
-Future<void> _setCachedDailyInspiration(SharedPreferences prefs, DailyInspirationDto dto) async {
+Future<void> _setCachedDailyInspiration(
+  SharedPreferences prefs,
+  DailyInspirationDto dto,
+  String localeCode,
+) async {
   try {
     final map = {
       'date': _todayDate(),
@@ -204,16 +216,16 @@ Future<void> _setCachedDailyInspiration(SharedPreferences prefs, DailyInspiratio
         'ayah_number': dto.ayahNumber,
       },
     };
-    await prefs.setString(_kDailyInspirationCacheKey, jsonEncode(map));
+    await prefs.setString(_cacheKeyForLocale(localeCode), jsonEncode(map));
   } catch (_) {}
 }
 
 /// Fetches daily inspiration with optional local cache.
-/// If cache mode is per_day and cache for today exists, returns cached item (no network).
-/// Otherwise calls API, validates, and if mode is per_day caches for the rest of the day.
-Future<DailyInspirationDto?> getDailyInspiration(Ref ref) async {
+/// [localeCode] (e.g. from app locale) is used for cache key so each language has its own cache.
+/// When locale changes, provider refetches and API returns translation in the new language.
+Future<DailyInspirationDto?> getDailyInspiration(Ref ref, {required String localeCode}) async {
   final prefs = ref.read(sharedPreferencesProvider);
-  final cached = await _getCachedDailyInspiration(prefs);
+  final cached = await _getCachedDailyInspiration(prefs, localeCode);
   if (cached != null) return cached;
 
   final dto = await fetchDailyInspiration(ref);
@@ -221,7 +233,7 @@ Future<DailyInspirationDto?> getDailyInspiration(Ref ref) async {
     final modeKey = prefs.getString(_kDailyInspirationCacheModeKey);
     final mode = _cacheModeFromString(modeKey);
     if (mode == DailyInspirationCacheMode.perDay) {
-      await _setCachedDailyInspiration(prefs, dto);
+      await _setCachedDailyInspiration(prefs, dto, localeCode);
     }
   }
   return dto;

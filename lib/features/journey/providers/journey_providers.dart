@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/journey/data/repositories/journey_repository_impl.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
@@ -14,19 +15,18 @@ final journeyRepositoryProvider = Provider<JourneyRepository>((ref) {
   return JourneyRepositoryImpl(apiClient: apiClient);
 });
 
-/// Journey data provider.
+/// Journey data provider. Watches app locale so content is fetched and cached per language.
 final journeyProvider = FutureProvider<JourneyEntity>((ref) async {
   final repository = ref.watch(journeyRepositoryProvider);
+  final localeCode = ref.watch(localeControllerProvider).languageCode;
 
-  // Try cached data first
-  final cached = await repository.getCachedJourney();
+  final cached = await repository.getCachedJourney(localeCode: localeCode);
   if (cached != null) {
-    // Refresh in background
-    repository.getJourney().ignore();
+    repository.getJourney(localeCode: localeCode).ignore();
     return cached;
   }
 
-  return repository.getJourney();
+  return repository.getJourney(localeCode: localeCode);
 });
 
 /// Current day provider.
@@ -56,19 +56,20 @@ final journeyWeeksProvider = Provider<List<WeekEntity>>((ref) {
   );
 });
 
-/// Journey profile summary for Profile screen (GET /journey/summary).
+/// Journey profile summary for Profile screen (GET /journey/summary). Locale-aware.
 final journeySummaryProvider =
     FutureProvider<JourneySummaryEntity>((ref) async {
   final repository = ref.watch(journeyRepositoryProvider);
-  return repository.getJourneySummary();
+  final localeCode = ref.watch(localeControllerProvider).languageCode;
+  return repository.getJourneySummary(localeCode: localeCode);
 });
 
-/// Today's / next lesson for home dashboard (GET /lessons/today). Fallback: first uncompleted from journey.
+/// Today's / next lesson for home dashboard (GET /lessons/today). Locale-aware; refetches when language changes.
 final todayLessonProvider = FutureProvider<LessonEntity?>((ref) async {
   final repository = ref.watch(journeyRepositoryProvider);
-  final today = await repository.getTodayLesson();
+  final localeCode = ref.watch(localeControllerProvider).languageCode;
+  final today = await repository.getTodayLesson(localeCode: localeCode);
   if (today != null) return today;
-  // Fallback: first uncompleted lesson from journey
   final journeyAsync = ref.watch(journeyProvider);
   final journey = journeyAsync.valueOrNull;
   if (journey == null) return null;

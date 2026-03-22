@@ -3,6 +3,7 @@ import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
+import 'package:flutter_app/features/home/data/inspiration_locale_resolver.dart';
 import 'package:flutter_app/features/home/presentation/widgets/home_card.dart';
 import 'package:flutter_app/features/saved/presentation/widgets/save_button.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
@@ -95,6 +96,8 @@ class _ContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final localized = resolveInspirationByLocale(inspiration, localeCode);
     final lightBlueBg = AppColors.primaryLightBlue.withValues(alpha: 0.08);
 
     return HomeCard(
@@ -118,27 +121,24 @@ class _ContentCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          if (inspiration.arabic.isNotEmpty)
+          if (localized.mainContent.isNotEmpty)
             Text(
-              inspiration.arabic,
-              style: AppTypography.arabicH2(color: colorScheme.onSurface),
+              localized.mainContent,
+              style: localized.isRtl
+                  ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                  : AppTypography.body(color: colorScheme.onSurface),
               textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
+              textDirection: localized.isRtl ? TextDirection.rtl : TextDirection.ltr,
             ),
-          const SizedBox(height: 12),
-          Text(
-            inspiration.translation,
-            style: AppTypography.body(color: colorScheme.onSurface),
-            textAlign: TextAlign.center,
-          ),
-          if (inspiration.reference.isNotEmpty) ...[
+          if (localized.reference.isNotEmpty) ...[
             const SizedBox(height: 8),
             Text(
-              '— ${inspiration.reference}',
+              '— ${localized.reference}',
               style: AppTypography.caption(
                 color: colorScheme.onSurface.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
+              textDirection: localized.isRtl ? TextDirection.rtl : TextDirection.ltr,
             ),
           ],
           const SizedBox(height: 20),
@@ -163,10 +163,10 @@ class _ContentCard extends StatelessWidget {
                       context,
                       ShareableContent(
                         id: inspiration.type,
-                        arabic: inspiration.arabic,
+                        arabic: localized.isRtl ? localized.mainContent : '',
                         transliteration: '',
-                        translation: inspiration.translation,
-                        source: inspiration.reference,
+                        translation: localized.isRtl ? '' : localized.mainContent,
+                        source: localized.reference,
                         title: _typeLabel(context),
                       ),
                     );

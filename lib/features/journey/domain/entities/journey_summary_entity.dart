@@ -8,21 +8,21 @@ import 'package:flutter/foundation.dart';
 class JourneySummaryEntity {
   const JourneySummaryEntity({
     this.dayIndex = 1,
-    this.totalDays = 90,
+    this.totalDays = 60,
     this.streakDays = 0,
     this.activeWeeks = 0,
     this.leftDays = 0,
     this.completedLessons = 0,
-    this.totalLessons = 90,
+    this.totalLessons = 60,
     this.completionPercent = 0.0,
     this.milestones = const [],
     this.currentLesson,
   });
 
-  /// Current day in the journey (1..90).
+  /// Current day in the journey (1..60).
   final int dayIndex;
 
-  /// Total days (90).
+  /// Total days (60).
   final int totalDays;
 
   /// Consecutive days with at least one lesson completed.

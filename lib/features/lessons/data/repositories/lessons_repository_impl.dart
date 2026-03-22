@@ -85,6 +85,7 @@ class LessonsRepositoryImpl implements LessonsRepository {
       if (kDebugMode) {
         print('[LessonRepo] blocks=${blocks.length}');
       }
+      final reflectionText = d['reflection_text'] as String?;
       return LessonEntity(
         id: (d['id'] ?? id).toString(),
         dayNumber: d['day_number'] as int? ?? 0,
@@ -98,6 +99,7 @@ class LessonsRepositoryImpl implements LessonsRepository {
         blocks: blocks,
         quranVerses: quranVerses,
         hadithItems: hadithItems,
+        reflectionText: reflectionText?.isNotEmpty == true ? reflectionText : null,
       );
     } catch (_) {
       // API failed (e.g. 500); fall back to local so user still sees content
@@ -136,7 +138,12 @@ class LessonsRepositoryImpl implements LessonsRepository {
   }
 
   @override
-  Future<void> saveReflection(int dayNumber, String text) async {
-    // TODO: PUT /api/v1/lessons/{id}/reflection when backend is ready
+  Future<void> saveReflection(String lessonId, String text) async {
+    final client = _apiClient;
+    if (client == null) return;
+    await client.put<void>(
+      LessonsEndpoints.reflection(lessonId),
+      data: <String, dynamic>{'reflection_text': text},
+    );
   }
 }

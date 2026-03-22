@@ -27,6 +27,7 @@ import 'package:flutter_app/features/notifications/providers/notification_prefer
 import 'package:flutter_app/features/prayer/data/prayer_models.dart';
 import 'package:flutter_app/features/prayer/providers/prayer_providers.dart';
 import 'package:flutter_app/features/profile/providers/profile_providers.dart';
+import 'package:flutter_app/app/theme_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -233,14 +234,34 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
               ],
             ),
           ),
-          IconButton(
-            onPressed: () => context.push('/settings'),
-            icon: const Icon(LucideIcons.moon),
-            style: IconButton.styleFrom(
-              backgroundColor: colorScheme.surfaceContainerHighest,
-              shape: const CircleBorder(),
-            ),
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () =>
+                    ref.read(themeModeProvider.notifier).toggleTheme(),
+                icon: Icon(
+                  ref.watch(themeModeProvider) == ThemeMode.dark
+                      ? LucideIcons.sun
+                      : LucideIcons.moon,
+                ),
+                style: IconButton.styleFrom(
+                  backgroundColor: colorScheme.surfaceContainerHighest,
+                  shape: const CircleBorder(),
+                ),
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+              const SizedBox(width: 8),
+              IconButton(
+                onPressed: () => context.push('/settings'),
+                icon: const Icon(LucideIcons.settings),
+                style: IconButton.styleFrom(
+                  backgroundColor: colorScheme.surfaceContainerHighest,
+                  shape: const CircleBorder(),
+                ),
+                color: colorScheme.onSurface.withValues(alpha: 0.7),
+              ),
+            ],
           ),
         ],
       ),

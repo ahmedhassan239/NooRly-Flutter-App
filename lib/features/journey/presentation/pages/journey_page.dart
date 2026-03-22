@@ -40,7 +40,8 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
                 Expanded(
                   child: ref.watch(journeyProvider).when(
                         data: (journey) {
-                          final weeks = journeyToWeekDataList(journey.weeks);
+                          final localeCode = Localizations.localeOf(context).languageCode;
+                          final weeks = journeyToWeekDataList(journey.weeks, localeCode);
                           final progressPercent =
                               journey.progressPercentage.round();
                           final doneCount = journey.doneDays;
@@ -193,7 +194,7 @@ class _JourneyPageState extends ConsumerState<JourneyPage> {
           const SizedBox(width: 12),
           Expanded(
             child: JourneyStatCard(
-              value: 'W$currentWeek',
+              value: l10n.journeyWeekLabel(currentWeek),
               label: l10n.journeyStatCurrent,
               icon: LucideIcons.flame,
               iconColor: AppColors.accentCoral,

@@ -121,7 +121,7 @@ class ProfilePage extends ConsumerWidget {
     AsyncValue<JourneySummaryEntity> summaryAsync,
   ) {
     final dayIndex = summaryAsync.valueOrNull?.dayIndex ?? 1;
-    final totalDays = summaryAsync.valueOrNull?.totalDays ?? 90;
+    final totalDays = summaryAsync.valueOrNull?.totalDays ?? 60;
     final initial = (name != null && name.isNotEmpty)
         ? name.substring(0, 1).toUpperCase()
         : (email != null && email.isNotEmpty)
@@ -687,7 +687,7 @@ class ProfilePage extends ConsumerWidget {
             iconColor: AppColors.accentCoral,
             title: AppLocalizations.of(context)!.profileYourReflections,
             subtitle: AppLocalizations.of(context)!.profileReviewReflections,
-            onTap: () {},
+            onTap: () => context.push('/reflections'),
             colorScheme: colorScheme,
           ),
           const SizedBox(height: AppSpacing.sm),

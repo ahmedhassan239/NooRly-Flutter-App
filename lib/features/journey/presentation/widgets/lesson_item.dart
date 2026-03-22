@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/colors.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/journey/presentation/journey_mock_data.dart';
@@ -69,14 +70,14 @@ class LessonItem extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              'Day ${lesson.dayNumber}',
+                              AppLocalizations.of(context)!.journeyDayLabel(lesson.dayNumber),
                               style: AppTypography.caption(color: colorScheme.onPrimary)
                                   .copyWith(fontWeight: FontWeight.w600),
                             ),
                           )
                         else
                           Text(
-                            'Day ${lesson.dayNumber}',
+                            AppLocalizations.of(context)!.journeyDayLabel(lesson.dayNumber),
                             style: AppTypography.caption(
                               color: isLocked
                                   ? colorScheme.onSurface.withValues(alpha: 0.7)
@@ -103,7 +104,9 @@ class LessonItem extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                lesson.category,
+                                lesson.category == 'Lesson'
+                                    ? AppLocalizations.of(context)!.journeyLessonLabel
+                                    : lesson.category,
                                 style: AppTypography.caption(
                                   color: colorScheme.onSurface.withValues(alpha: 0.7),
                                 ),
@@ -132,7 +135,7 @@ class LessonItem extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  'Start',
+                                  AppLocalizations.of(context)!.journeyStart,
                                   style: AppTypography.caption(
                                     color: AppColors.accentCoral,
                                   ).copyWith(fontWeight: FontWeight.w600),

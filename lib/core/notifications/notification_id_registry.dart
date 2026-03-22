@@ -6,6 +6,7 @@
 ///   300–302  Lessons (morning, evening-incomplete, streak)
 ///   400–409  Random dhikr (10 rotating slots)
 ///   500      Friday occasion
+///   10_000+  Admin campaign app-pull (delivery id mapped into range)
 library;
 
 abstract final class NotificationIds {
@@ -32,4 +33,10 @@ abstract final class NotificationIds {
 
   // Occasions
   static const int fridayReminder = 500;
+
+  static const int _adminCampaignBase = 10000;
+
+  /// Stable OS notification id for an admin campaign delivery (avoids clashes with scheduled IDs).
+  static int adminCampaignDelivery(int deliveryId) =>
+      _adminCampaignBase + (deliveryId % 2000000);
 }

@@ -96,7 +96,7 @@
   "ramadanGuideError": "Something went wrong. Please try again.",
 
   "journeyTitle": "Your Journey",
-  "journeyLearningPath": "90-Day Learning Path",
+  "journeyLearningPath": "60-Day Learning Path",
   "journeyStatProgress": "Progress",
   "journeyStatDone": "Done",
   "journeyStatCurrent": "Current",
@@ -104,6 +104,9 @@
   "journeyEncouragement": "Keep going! You're doing great!",
   "journeyCouldNotLoad": "Could not load journey",
   "journeyCompletePreviousFirst": "Complete previous lessons first.",
+  "journeyStart": "Start",
+  "journeyLessonLabel": "Lesson",
+  "journeyNoLessonsLoaded": "No lessons loaded",
   "journeyWeekLabel": "Week {week}",
   "@journeyWeekLabel": {
     "placeholders": {
@@ -186,6 +189,15 @@
   "profileViewSavedDuas": "View your saved duas collection",
   "profileYourReflections": "Your Reflections",
   "profileReviewReflections": "Review your lesson reflections",
+  "reflectionsTitle": "Your Reflections",
+  "reflectionsEmpty": "No reflections yet",
+  "reflectionsEmptyCta": "Start reflecting on your lessons from the Journey screen.",
+  "reflectionLessonContext": "Lesson · Day {day}",
+  "@reflectionLessonContext": { "placeholders": { "day": { "type": "int" } } },
+  "reflectionLessonContextWeek": "Week {week} · Day {day}",
+  "@reflectionLessonContextWeek": {
+    "placeholders": { "week": { "type": "int" }, "day": { "type": "int" } }
+  },
   "profileManagePreferences": "Manage app preferences",
   "profileLogOut": "Log Out",
   "profileLogOutTitle": "Log Out",
@@ -340,6 +352,10 @@
   "settingsUseDarkTheme": "Use dark theme",
   "settingsFontSize": "Font Size",
   "settingsFontSizeSubtitle": "Adjust text size",
+  "settingsFontSizeSmall": "Small",
+  "settingsFontSizeMedium": "Medium",
+  "settingsFontSizeLarge": "Large",
+  "settingsFontSizeExtraLarge": "Extra large",
   "settingsPrayerTimes": "Prayer Times",
   "settingsCalculationMethod": "Calculation Method",
   "settingsDefaultMadhab": "Default Madhab",
@@ -515,6 +531,11 @@
   "dashboardOnboardingIslamDate": "Islam date",
 
   "notificationSettings": "Notification Settings",
+  "notificationInboxTitle": "Messages",
+  "notificationInboxEmpty": "No messages yet. Announcements from your team will appear here.",
+  "notificationInboxSignIn": "Sign in to view messages.",
+  "notificationInboxOpen": "Open messages",
+  "notificationInboxSubtitle": "In-app announcements and updates",
   "notificationsPrayer": "Prayer Reminders",
   "notificationsPrayerDesc": "Get reminded at each prayer time",
   "notificationsPrayerAll": "All Prayer Reminders",

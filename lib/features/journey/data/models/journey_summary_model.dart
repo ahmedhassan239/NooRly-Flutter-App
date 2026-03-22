@@ -31,12 +31,12 @@ class JourneySummaryModel extends JourneySummaryEntity {
 
     return JourneySummaryModel(
       dayIndex: json['day_index'] as int? ?? 1,
-      totalDays: json['total_days'] as int? ?? 90,
+      totalDays: json['total_days'] as int? ?? 60,
       streakDays: json['streak_days'] as int? ?? 0,
       activeWeeks: json['active_weeks'] as int? ?? 0,
       leftDays: json['left_days'] as int? ?? 0,
       completedLessons: json['completed_lessons'] as int? ?? 0,
-      totalLessons: json['total_lessons'] as int? ?? 90,
+      totalLessons: json['total_lessons'] as int? ?? 60,
       completionPercent: (json['completion_percent'] as num?)?.toDouble() ?? 0.0,
       milestones: milestones,
       currentLesson: currentLesson,

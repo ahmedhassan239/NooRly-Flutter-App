@@ -4,7 +4,7 @@ import 'package:flutter_app/design_system/typography.dart';
 
 /// Animated horizontal journey timeline widget
 ///
-/// Displays a 90-day journey with 4 milestones (Start, Week 4, Week 8, Week 12)
+/// Displays a 60-day journey with 4 milestones (Start, Week 4, Week 8, Week 12)
 /// Features:
 /// - Animated progress line filling from Start → Week 12
 /// - Moving praying person icon along the progress line
@@ -17,7 +17,7 @@ class JourneyTimeline extends StatefulWidget {
     this.activeColor,
     this.inactiveColor,
     this.showTitle = true,
-    this.title = 'Your 90-Day Journey',
+    this.title = 'Your 60-Day Journey',
     this.subtitle,
     super.key,
   });

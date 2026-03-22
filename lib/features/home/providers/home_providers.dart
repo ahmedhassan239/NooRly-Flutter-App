@@ -1,6 +1,7 @@
 /// Home dashboard providers.
 library;
 
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/data/repositories/home_repository_impl.dart';
@@ -67,8 +68,11 @@ final quickStatsProvider = Provider<List<QuickStatEntity>>((ref) {
 
 /// Daily inspiration for home (GET /api/v1/daily-inspiration).
 /// One random item from library: ayah, hadith, dhikr, or dua.
-/// Uses local cache when mode is per_day (same item for the calendar day).
-final dailyInspirationProvider = FutureProvider<DailyInspirationDto?>(getDailyInspiration);
+/// Watches app locale so refetch runs when language changes (single-language content).
+final dailyInspirationProvider = FutureProvider<DailyInspirationDto?>((ref) async {
+  final localeCode = ref.watch(localeControllerProvider).languageCode;
+  return getDailyInspiration(ref, localeCode: localeCode);
+});
 
 /// Refresh home dashboard.
 final refreshHomeDashboardProvider = Provider<Future<void> Function()>((ref) {

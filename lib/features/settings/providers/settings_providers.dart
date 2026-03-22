@@ -1,6 +1,7 @@
 /// Settings providers.
 library;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/app/locale_provider.dart';
@@ -33,7 +34,12 @@ class SettingsNotifier extends StateNotifier<SettingsEntity> {
 
   Future<void> _loadSettings() async {
     final repository = _ref.read(settingsRepositoryProvider);
-    state = await repository.getLocalSettings();
+    final loaded = await repository.getLocalSettings();
+    state = loaded;
+    if (kDebugMode) {
+      // ignore: avoid_print
+      print('[FontSize] loaded on startup: ${loaded.fontSize.name} → scale ${fontSizeToScale(loaded.fontSize)}');
+    }
   }
 
   Future<void> setLanguage(String language) async {
@@ -85,6 +91,10 @@ class SettingsNotifier extends StateNotifier<SettingsEntity> {
   Future<void> setFontSize(FontSize fontSize) async {
     state = state.copyWith(fontSize: fontSize);
     await _saveAndSync();
+    if (kDebugMode) {
+      // ignore: avoid_print
+      print('[FontSize] user selected: ${fontSize.name} → scale ${fontSizeToScale(fontSize)}');
+    }
   }
 
   Future<void> setArabicFontSize(ArabicFontSize fontSize) async {
@@ -110,6 +120,26 @@ class SettingsNotifier extends StateNotifier<SettingsEntity> {
 final settingsNotifierProvider =
     StateNotifierProvider<SettingsNotifier, SettingsEntity>((ref) {
   return SettingsNotifier(ref);
+});
+
+/// Scale factors for [FontSize]: small 0.9, medium 1.0, large 1.15, extraLarge 1.3.
+double fontSizeToScale(FontSize size) {
+  switch (size) {
+    case FontSize.small:
+      return 0.9;
+    case FontSize.medium:
+      return 1.0;
+    case FontSize.large:
+      return 1.15;
+    case FontSize.extraLarge:
+      return 1.3;
+  }
+}
+
+/// Global text scale factor from current settings. Use in app root to apply font size.
+final textScaleFactorProvider = Provider<double>((ref) {
+  final settings = ref.watch(settingsNotifierProvider);
+  return fontSizeToScale(settings.fontSize);
 });
 
 /// Notification settings provider.

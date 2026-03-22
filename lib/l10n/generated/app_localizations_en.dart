@@ -201,7 +201,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journeyTitle => 'Your Journey';
 
   @override
-  String get journeyLearningPath => '90-Day Learning Path';
+  String get journeyLearningPath => '60-Day Learning Path';
 
   @override
   String get journeyStatProgress => 'Progress';
@@ -223,6 +223,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get journeyCompletePreviousFirst => 'Complete previous lessons first.';
+
+  @override
+  String get journeyStart => 'Start';
+
+  @override
+  String get journeyLessonLabel => 'Lesson';
+
+  @override
+  String get journeyNoLessonsLoaded => 'No lessons loaded';
 
   @override
   String journeyWeekLabel(int week) {
@@ -411,6 +420,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileReviewReflections => 'Review your lesson reflections';
+
+  @override
+  String get reflectionsTitle => 'Your Reflections';
+
+  @override
+  String get reflectionsEmpty => 'No reflections yet';
+
+  @override
+  String get reflectionsEmptyCta =>
+      'Start reflecting on your lessons from the Journey screen.';
+
+  @override
+  String reflectionLessonContext(int day) {
+    return 'Lesson · Day $day';
+  }
+
+  @override
+  String reflectionLessonContextWeek(int week, int day) {
+    return 'Week $week · Day $day';
+  }
 
   @override
   String get profileManagePreferences => 'Manage app preferences';
@@ -778,6 +807,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsFontSizeSubtitle => 'Adjust text size';
+
+  @override
+  String get settingsFontSizeSmall => 'Small';
+
+  @override
+  String get settingsFontSizeMedium => 'Medium';
+
+  @override
+  String get settingsFontSizeLarge => 'Large';
+
+  @override
+  String get settingsFontSizeExtraLarge => 'Extra large';
 
   @override
   String get settingsPrayerTimes => 'Prayer Times';
@@ -1262,6 +1303,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get notificationSettings => 'Notification Settings';
+
+  @override
+  String get notificationInboxTitle => 'Messages';
+
+  @override
+  String get notificationInboxEmpty =>
+      'No messages yet. Announcements from your team will appear here.';
+
+  @override
+  String get notificationInboxSignIn => 'Sign in to view messages.';
+
+  @override
+  String get notificationInboxOpen => 'Open messages';
+
+  @override
+  String get notificationInboxSubtitle => 'In-app announcements and updates';
 
   @override
   String get notificationsPrayer => 'Prayer Reminders';

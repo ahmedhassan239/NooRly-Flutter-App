@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/design_system/colors.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/journey/presentation/journey_mock_data.dart';
@@ -141,7 +142,7 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(
-                                  'Week ${week.weekNumber}',
+                                  AppLocalizations.of(context)!.journeyWeekLabel(week.weekNumber),
                                   style: AppTypography.caption(
                                     color: isCurrent
                                         ? colorScheme.primary
@@ -170,7 +171,7 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
                                       ),
                                       const SizedBox(width: 4),
                                       Text(
-                                        'Current',
+                                        AppLocalizations.of(context)!.journeyStatCurrent,
                                         style: AppTypography.caption(
                                           color: AppColors.accentGreen,
                                         ).copyWith(fontWeight: FontWeight.w600),
@@ -242,7 +243,7 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
                           padding: const EdgeInsets.all(16),
                           child: Center(
                             child: Text(
-                              'No lessons loaded',
+                              AppLocalizations.of(context)!.journeyNoLessonsLoaded,
                               style: AppTypography.caption(
                                 color: colorScheme.onSurface.withValues(alpha: 0.6),
                               ),

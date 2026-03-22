@@ -52,7 +52,9 @@ class SettingsModel extends SettingsEntity {
       case 'large':
         return FontSize.large;
       case 'extra_large':
+      case 'extraLarge':
         return FontSize.extraLarge;
+      case 'medium':
       default:
         return FontSize.medium;
     }
@@ -65,7 +67,9 @@ class SettingsModel extends SettingsEntity {
       case 'large':
         return ArabicFontSize.large;
       case 'extra_large':
+      case 'extraLarge':
         return ArabicFontSize.extraLarge;
+      case 'medium':
       default:
         return ArabicFontSize.medium;
     }

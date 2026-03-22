@@ -377,6 +377,8 @@ class _NotificationSettingsPageState
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (!kIsWeb) _buildPermissionBanner(l10n, colorScheme),
+                        _buildInAppInboxCard(l10n, colorScheme),
+                        const SizedBox(height: AppSpacing.lg),
                         _buildPrayerSection(l10n),
                         const SizedBox(height: AppSpacing.lg),
                         _buildLessonSection(l10n),
@@ -397,6 +399,51 @@ class _NotificationSettingsPageState
                 ),
               ),
             ),
+    );
+  }
+
+  Widget _buildInAppInboxCard(
+      AppLocalizations l10n, ColorScheme colorScheme) {
+    return Material(
+      color: colorScheme.surfaceContainerHighest,
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () => context.push('/notifications/inbox'),
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Row(
+            children: [
+              Icon(LucideIcons.inbox, color: colorScheme.primary, size: 28),
+              const SizedBox(width: AppSpacing.md),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      l10n.notificationInboxOpen,
+                      style: AppTypography.h3(color: colorScheme.onSurface),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      l10n.notificationInboxSubtitle,
+                      style: AppTypography.bodySm(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Directionality.of(context) == TextDirection.rtl
+                    ? LucideIcons.chevronLeft
+                    : LucideIcons.chevronRight,
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

@@ -47,6 +47,7 @@ import 'package:flutter_app/features/duas/presentation/widgets/duas_tab_content.
 import 'package:flutter_app/features/library/presentation/widgets/hadith_tab_view.dart';
 import 'package:flutter_app/features/verses/presentation/widgets/verses_tab_content.dart';
 import 'package:flutter_app/features/not_found/presentation/pages/not_found_page.dart';
+import 'package:flutter_app/features/notifications/presentation/pages/notification_inbox_page.dart';
 import 'package:flutter_app/features/notifications/presentation/pages/notification_settings_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/about_you_page.dart';
 import 'package:flutter_app/features/onboarding/presentation/pages/current_knowledge_page.dart';
@@ -57,6 +58,7 @@ import 'package:flutter_app/features/onboarding/presentation/pages/your_starting
 import 'package:flutter_app/features/prayer/presentation/pages/prayer_times_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/edit_profile_page.dart';
 import 'package:flutter_app/features/profile/presentation/pages/profile_page.dart';
+import 'package:flutter_app/features/reflections/presentation/pages/reflections_list_page.dart';
 import 'package:flutter_app/features/saved/presentation/pages/saved_items_page.dart';
 import 'package:flutter_app/features/settings/presentation/pages/settings_page.dart';
 import 'package:flutter_app/features/remote_config/presentation/pages/feature_disabled_page.dart';
@@ -88,6 +90,7 @@ abstract class AppRoutes {
   static const String prayerTimes = 'prayer-times';
   static const String profile = 'profile';
   static const String settings = 'settings';
+  static const String notificationInbox = 'notification-inbox';
   static const String editProfile = 'edit-profile';
   static const String ramadan = 'ramadan';
   static const String support = 'support';
@@ -116,6 +119,7 @@ abstract class AppRoutes {
 
   // Saved (unified: All / Duas / Adhkar / Verses / Hadith)
   static const String saved = 'saved';
+  static const String reflections = 'reflections';
 
   // Library (unified tabs from API)
   static const String library = 'library';
@@ -371,6 +375,11 @@ List<RouteBase> get _appRoutes => [
       builder: (context, state) => const SavedItemsPage(),
     ),
     GoRoute(
+      path: '/reflections',
+      name: AppRoutes.reflections,
+      builder: (context, state) => const ReflectionsListPage(),
+    ),
+    GoRoute(
       path: '/settings',
       name: AppRoutes.settings,
       builder: (context, state) => const SettingsPage(),
@@ -379,6 +388,11 @@ List<RouteBase> get _appRoutes => [
       path: '/settings/notifications',
       name: 'notificationSettings',
       builder: (context, state) => const NotificationSettingsPage(),
+    ),
+    GoRoute(
+      path: '/notifications/inbox',
+      name: AppRoutes.notificationInbox,
+      builder: (context, state) => const NotificationInboxPage(),
     ),
     GoRoute(
       path: '/edit-profile',
@@ -638,6 +652,8 @@ List<RouteBase> get _appRoutes => [
 bool _isProtectedRoute(String loc) {
   return loc.startsWith('/home') ||
       loc.startsWith('/profile') ||
+      loc.startsWith('/reflections') ||
+      loc.startsWith('/notifications') ||
       loc.startsWith('/saved') ||
       loc.startsWith('/journey') ||
       loc.startsWith('/prayer-times') ||

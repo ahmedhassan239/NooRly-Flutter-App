@@ -15,6 +15,9 @@ import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 /// Asset path for mosque silhouette (Flutter asset under assets/, not web-only).
 const String _kMosqueSvgAsset = 'assets/images/mosque_islam.svg';
 
+/// App logo — same source as launcher icon / native splash (`assets/branding/app_icon.png`).
+const String _kBrandingLogoAsset = 'assets/branding/app_icon.png';
+
 /// Welcome/landing page. Full-screen Stack: gradient → mosque silhouette → overlay → content.
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
@@ -28,26 +31,16 @@ class WelcomePage extends ConsumerWidget {
     final auth = ref.watch(authProvider);
 
     if (auth.status == AuthStatus.initial || auth.status == AuthStatus.loading) {
+      // Match native / web splash: warm off-white + centered logo (no generic spinner).
       return Scaffold(
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [_blueDark, _blueBottom],
-            ),
-          ),
-          child: const Center(
-            child: SizedBox(
-              width: 40,
-              height: 40,
-              child: CircularProgressIndicator(
-                color: Colors.white54,
-                strokeWidth: 2,
-              ),
-            ),
+        backgroundColor: const Color(0xFFF5F7FA),
+        body: Center(
+          child: Image.asset(
+            _kBrandingLogoAsset,
+            width: 168,
+            fit: BoxFit.contain,
+            filterQuality: FilterQuality.high,
+            semanticLabel: 'NooRly',
           ),
         ),
       );

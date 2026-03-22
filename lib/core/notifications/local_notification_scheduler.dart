@@ -43,6 +43,7 @@ class LocalNotificationScheduler {
   static const String channelPrayers   = 'noorly_prayers';
   static const String channelReminders = 'noorly_reminders';
   static const String channelLow       = 'noorly_low';
+  static const String channelAdminCampaigns = 'noorly_admin_campaigns';
 
   /// Initialize the plugin and timezone data.
   ///
@@ -184,6 +185,16 @@ class LocalNotificationScheduler {
         'General Reminders',
         description: 'Low-priority spiritual reminders',
         importance: Importance.low,
+      ),
+    );
+
+    await androidPlugin.createNotificationChannel(
+      const AndroidNotificationChannel(
+        channelAdminCampaigns,
+        'Announcements',
+        description: 'Messages from your team (shown when the app is open)',
+        importance: Importance.high,
+        playSound: true,
       ),
     );
   }
@@ -413,6 +424,34 @@ class LocalNotificationScheduler {
     }
   }
 
+  /// Show a notification immediately (foreground / app open). Not background push.
+  Future<void> showImmediate({
+    required int id,
+    required String title,
+    required String body,
+    required String channelId,
+    String? payload,
+  }) async {
+    if (kIsWeb) return;
+    if (!_initialized) {
+      throw StateError(
+        'LocalNotificationScheduler is not initialized. Cannot show notification id=$id.',
+      );
+    }
+    try {
+      await _plugin.show(
+        id,
+        title,
+        body,
+        _buildDetails(channelId),
+        payload: payload,
+      );
+    } catch (e) {
+      print('[LocalNotificationScheduler] ❌ showImmediate failed id=$id: $e');
+      rethrow;
+    }
+  }
+
   /// Cancel a single notification by ID.
   Future<void> cancel(int id) async {
     if (kIsWeb) return;
@@ -529,7 +568,11 @@ class LocalNotificationScheduler {
         // there is no ambiguity even if initialization used a different icon.
         icon: 'ic_notification',
         importance: _channelImportance(channelId),
-        priority: channelId == channelPrayers ? Priority.max : Priority.defaultPriority,
+        priority: channelId == channelPrayers
+            ? Priority.max
+            : channelId == channelAdminCampaigns
+                ? Priority.high
+                : Priority.defaultPriority,
         playSound: true,
       ),
       iOS: const DarwinNotificationDetails(
@@ -543,12 +586,14 @@ class LocalNotificationScheduler {
   String _channelName(String channelId) => switch (channelId) {
     channelPrayers   => 'Prayer Reminders',
     channelReminders => 'Lesson & Adhkar Reminders',
+    channelAdminCampaigns => 'Announcements',
     _                => 'General Reminders',
   };
 
   Importance _channelImportance(String channelId) => switch (channelId) {
     channelPrayers   => Importance.max,
     channelReminders => Importance.defaultImportance,
+    channelAdminCampaigns => Importance.high,
     _                => Importance.low,
   };
 }

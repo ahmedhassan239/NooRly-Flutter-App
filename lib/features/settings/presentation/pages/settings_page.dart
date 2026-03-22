@@ -9,6 +9,8 @@ import 'package:flutter_app/design_system/widgets/settings_card.dart';
 import 'package:flutter_app/design_system/widgets/settings_section_header.dart';
 import 'package:flutter_app/design_system/widgets/settings_tile.dart';
 import 'package:flutter_app/features/remote_config/providers/remote_config_provider.dart';
+import 'package:flutter_app/features/settings/domain/entities/settings_entity.dart';
+import 'package:flutter_app/features/settings/providers/settings_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -22,13 +24,17 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
+  /// Temporary: set to true to show Font Size in Appearance section.
+  static const bool _showFontSizeSetting = false;
+  /// Temporary: set to true to show Prayer Times section (Calculation Method, Madhab, Adjust Times).
+  static const bool _showPrayerTimesSection = false;
+  /// Temporary: set to true to show Privacy & Data section (Export, Delete All Data).
+  static const bool _showPrivacyDataSection = false;
+
   // Notification toggles (local overrides; remote config provides defaults)
   bool _prayerReminders = true;
   bool _dailyLesson = true;
   bool _milestoneAlerts = true;
-
-  // Appearance settings
-  String _fontSize = 'Medium';
 
   // Prayer method display name (synced from remote default or user choice)
   String _calculationMethod = 'Egyptian General';
@@ -78,10 +84,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                   _buildNotificationsSection(l10n),
                   const SizedBox(height: AppSpacing.lg),
                   _buildAppearanceSection(l10n),
-                  const SizedBox(height: AppSpacing.lg),
-                  _buildPrayerTimesSection(l10n),
-                  const SizedBox(height: AppSpacing.lg),
-                  _buildPrivacyDataSection(l10n),
+                  if (_showPrayerTimesSection) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    _buildPrayerTimesSection(l10n),
+                  ],
+                  if (_showPrivacyDataSection) ...[
+                    const SizedBox(height: AppSpacing.lg),
+                    _buildPrivacyDataSection(l10n),
+                  ],
                   const SizedBox(height: AppSpacing.lg),
                   _buildAboutSection(l10n),
                 ],
@@ -164,17 +174,29 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                     ),
                   );
                 },
+                showDivider: _showFontSizeSetting,
               ),
-              SettingsDropdownTile(
-                title: l10n.settingsFontSize,
-                subtitle: l10n.settingsFontSizeSubtitle,
-                value: _fontSize,
-                options: const ['Small', 'Medium', 'Large'],
-                onChanged: (value) {
-                  if (value != null) setState(() => _fontSize = value);
-                },
-                showDivider: false,
-              ),
+              if (_showFontSizeSetting)
+                SettingsDropdownTile(
+                  icon: LucideIcons.type,
+                  title: l10n.settingsFontSize,
+                  subtitle: l10n.settingsFontSizeSubtitle,
+                  value: ref.watch(settingsNotifierProvider).fontSize.name,
+                  options: FontSize.values.map((e) => e.name).toList(),
+                  optionLabels: {
+                    FontSize.small.name: l10n.settingsFontSizeSmall,
+                    FontSize.medium.name: l10n.settingsFontSizeMedium,
+                    FontSize.large.name: l10n.settingsFontSizeLarge,
+                    FontSize.extraLarge.name: l10n.settingsFontSizeExtraLarge,
+                  },
+                  onChanged: (value) {
+                    if (value != null) {
+                      final size = FontSize.values.byName(value);
+                      ref.read(settingsNotifierProvider.notifier).setFontSize(size);
+                    }
+                  },
+                  showDivider: false,
+                ),
             ],
           ),
         ),

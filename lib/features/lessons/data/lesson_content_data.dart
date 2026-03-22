@@ -1,5 +1,5 @@
 /// Mock data for lesson content
-/// This contains the full content for each lesson in the 90-day journey
+/// This contains the full content for each lesson in the 60-day journey
 
 class LessonContentData {
   LessonContentData._();
@@ -47,7 +47,7 @@ class LessonContentData {
         reference: 'Quran 39:53',
       ),
       whatToExpect: WhatToExpectData(
-        intro: "Over the next 90 days, we'll guide you through:",
+        intro: "Over the next 60 days, we'll guide you through:",
         items: [
           'Core beliefs — Understanding who Allah is and what Islam teaches',
           'Prayer (Salah) — Learning how to connect with Allah five times daily',

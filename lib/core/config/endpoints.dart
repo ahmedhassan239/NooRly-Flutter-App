@@ -169,8 +169,35 @@ abstract class LessonsEndpoints {
   /// GET - Single lesson by id
   static String detail(String id) => '/lessons/$id';
 
+  /// PUT - Save/update reflection for a lesson
+  static String reflection(String lessonId) => '/lessons/$lessonId/reflection';
+
   /// GET - Lessons by category
   static String byCategory(String categoryId) => '/lessons/category/$categoryId';
+}
+
+/// Admin campaign app-pull (pending deliveries for local notification display).
+abstract class UserPendingNotificationEndpoints {
+  static const String list = '/user/pending-notifications';
+
+  static String markShown(int deliveryId) =>
+      '/user/pending-notifications/$deliveryId/mark-shown';
+
+  static String markRead(int deliveryId) =>
+      '/user/pending-notifications/$deliveryId/mark-read';
+}
+
+/// In-app notification inbox (admin campaigns, etc.).
+abstract class NotificationInboxEndpoints {
+  static const String list = '/notifications/inbox';
+
+  static String markRead(int id) => '/notifications/inbox/$id/read';
+}
+
+/// User reflections (saved lesson reflections) endpoints.
+abstract class ReflectionEndpoints {
+  /// GET - List authenticated user's saved reflections (newest first).
+  static const String list = '/reflections';
 }
 
 /// Prayer times endpoints.

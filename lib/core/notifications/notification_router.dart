@@ -1,10 +1,13 @@
 /// Routes notification taps to the correct screen using go_router.
 library;
 
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:go_router/go_router.dart';
 
 import 'notification_payload_parser.dart';
+import 'pending_admin_campaign_sync.dart';
 
 class NotificationRouter {
   NotificationRouter._();
@@ -51,6 +54,13 @@ class NotificationRouter {
           router.go('/home');
         case 'support':
           router.go('/need-help');
+        case 'admin_campaign':
+          final id = payload.extra['delivery_id'];
+          final deliveryId = id is int ? id : int.tryParse(id?.toString() ?? '');
+          if (deliveryId != null && deliveryId > 0) {
+            unawaited(PendingAdminCampaignBridge.instance.markRead(deliveryId));
+          }
+          router.go(payload.route.isNotEmpty ? payload.route : '/notifications/inbox');
         default:
           router.go(payload.route.isNotEmpty ? payload.route : '/home');
       }

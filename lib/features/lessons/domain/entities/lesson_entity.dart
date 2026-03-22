@@ -18,6 +18,7 @@ class LessonEntity {
     this.blocks = const [],
     this.quranVerses = const [],
     this.hadithItems = const [],
+    this.reflectionText,
   });
 
   final String id;
@@ -25,6 +26,9 @@ class LessonEntity {
   final int weekNumber;
   final String title;
   final String description;
+
+  /// Saved reflection text for this lesson (from API when loaded for current user).
+  final String? reflectionText;
 
   /// Raw content string (kept for legacy fallback / debugging only).
   /// The UI renders [blocks] instead of this field.

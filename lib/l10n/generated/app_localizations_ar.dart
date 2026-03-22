@@ -201,7 +201,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get journeyTitle => 'رحلتك';
 
   @override
-  String get journeyLearningPath => 'مسار تعلم 90 يوماً';
+  String get journeyLearningPath => 'مسار تعلم 60 يوماً';
 
   @override
   String get journeyStatProgress => 'التقدم';
@@ -223,6 +223,15 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get journeyCompletePreviousFirst => 'أكمل الدروس السابقة أولاً.';
+
+  @override
+  String get journeyStart => 'ابدأ';
+
+  @override
+  String get journeyLessonLabel => 'درس';
+
+  @override
+  String get journeyNoLessonsLoaded => 'لا توجد دروس محملة';
 
   @override
   String journeyWeekLabel(int week) {
@@ -410,6 +419,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get profileReviewReflections => 'راجع تأملات دروسك';
+
+  @override
+  String get reflectionsTitle => 'تأملاتك';
+
+  @override
+  String get reflectionsEmpty => 'لا توجد تأملات بعد';
+
+  @override
+  String get reflectionsEmptyCta => 'ابدأ بتسجيل تأملاتك من شاشة الرحلة.';
+
+  @override
+  String reflectionLessonContext(int day) {
+    return 'الدرس · اليوم $day';
+  }
+
+  @override
+  String reflectionLessonContextWeek(int week, int day) {
+    return 'الأسبوع $week · اليوم $day';
+  }
 
   @override
   String get profileManagePreferences => 'إدارة تفضيلات التطبيق';
@@ -774,6 +802,18 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get settingsFontSizeSubtitle => 'ضبط حجم النص';
+
+  @override
+  String get settingsFontSizeSmall => 'صغير';
+
+  @override
+  String get settingsFontSizeMedium => 'متوسط';
+
+  @override
+  String get settingsFontSizeLarge => 'كبير';
+
+  @override
+  String get settingsFontSizeExtraLarge => 'كبير جداً';
 
   @override
   String get settingsPrayerTimes => 'أوقات الصلاة';
@@ -1251,6 +1291,22 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get notificationSettings => 'إعدادات الإشعارات';
+
+  @override
+  String get notificationInboxTitle => 'الرسائل';
+
+  @override
+  String get notificationInboxEmpty =>
+      'لا توجد رسائل بعد. ستظهر هنا إعلانات الفريق.';
+
+  @override
+  String get notificationInboxSignIn => 'سجّل الدخول لعرض الرسائل.';
+
+  @override
+  String get notificationInboxOpen => 'فتح الرسائل';
+
+  @override
+  String get notificationInboxSubtitle => 'إعلانات وتحديثات داخل التطبيق';
 
   @override
   String get notificationsPrayer => 'تذكيرات الصلاة';

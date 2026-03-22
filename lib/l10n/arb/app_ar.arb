@@ -96,7 +96,7 @@
   "startRamadanGuide": "ابدأ دليل رمضان",
 
   "journeyTitle": "رحلتك",
-  "journeyLearningPath": "مسار تعلم 90 يوماً",
+  "journeyLearningPath": "مسار تعلم 60 يوماً",
   "journeyStatProgress": "التقدم",
   "journeyStatDone": "منجز",
   "journeyStatCurrent": "الحالي",
@@ -104,6 +104,9 @@
   "journeyEncouragement": "واصل المسير! أنت تبلي حسناً!",
   "journeyCouldNotLoad": "تعذّر تحميل الرحلة",
   "journeyCompletePreviousFirst": "أكمل الدروس السابقة أولاً.",
+  "journeyStart": "ابدأ",
+  "journeyLessonLabel": "درس",
+  "journeyNoLessonsLoaded": "لا توجد دروس محملة",
   "journeyWeekLabel": "الأسبوع {week}",
   "@journeyWeekLabel": {
     "placeholders": {
@@ -186,6 +189,15 @@
   "profileViewSavedDuas": "عرض مجموعة أدعيتك المحفوظة",
   "profileYourReflections": "تأملاتك",
   "profileReviewReflections": "راجع تأملات دروسك",
+  "reflectionsTitle": "تأملاتك",
+  "reflectionsEmpty": "لا توجد تأملات بعد",
+  "reflectionsEmptyCta": "ابدأ بتسجيل تأملاتك من شاشة الرحلة.",
+  "reflectionLessonContext": "الدرس · اليوم {day}",
+  "@reflectionLessonContext": { "placeholders": { "day": { "type": "int" } } },
+  "reflectionLessonContextWeek": "الأسبوع {week} · اليوم {day}",
+  "@reflectionLessonContextWeek": {
+    "placeholders": { "week": { "type": "int" }, "day": { "type": "int" } }
+  },
   "profileManagePreferences": "إدارة تفضيلات التطبيق",
   "profileLogOut": "تسجيل الخروج",
   "profileLogOutTitle": "تسجيل الخروج",
@@ -340,6 +352,10 @@
   "settingsUseDarkTheme": "استخدام السمة الداكنة",
   "settingsFontSize": "حجم الخط",
   "settingsFontSizeSubtitle": "ضبط حجم النص",
+  "settingsFontSizeSmall": "صغير",
+  "settingsFontSizeMedium": "متوسط",
+  "settingsFontSizeLarge": "كبير",
+  "settingsFontSizeExtraLarge": "كبير جداً",
   "settingsPrayerTimes": "أوقات الصلاة",
   "settingsCalculationMethod": "طريقة الحساب",
   "settingsDefaultMadhab": "المذهب الافتراضي",
@@ -515,6 +531,11 @@
   "dashboardOnboardingIslamDate": "تاريخ الإسلام",
 
   "notificationSettings": "إعدادات الإشعارات",
+  "notificationInboxTitle": "الرسائل",
+  "notificationInboxEmpty": "لا توجد رسائل بعد. ستظهر هنا إعلانات الفريق.",
+  "notificationInboxSignIn": "سجّل الدخول لعرض الرسائل.",
+  "notificationInboxOpen": "فتح الرسائل",
+  "notificationInboxSubtitle": "إعلانات وتحديثات داخل التطبيق",
   "notificationsPrayer": "تذكيرات الصلاة",
   "notificationsPrayerDesc": "تذكير عند دخول وقت كل صلاة",
   "notificationsPrayerAll": "جميع تذكيرات الصلاة",

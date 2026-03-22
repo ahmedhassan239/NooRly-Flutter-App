@@ -196,6 +196,8 @@ class SettingsDropdownTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final effectiveValue = options.contains(value) ? value : (options.isNotEmpty ? options.first : value);
+    final selectedLabel = optionLabels?[effectiveValue] ?? effectiveValue;
 
     return SettingsTile(
       leading: icon != null
@@ -208,23 +210,25 @@ class SettingsDropdownTile extends StatelessWidget {
       title: title,
       subtitle: subtitle,
       trailing: Container(
+        constraints: const BoxConstraints(minWidth: 100, minHeight: 36),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: colorScheme.surface,
+          color: colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.circular(AppRadius.sm),
           border: Border.all(
-            color: colorScheme.outline.withAlpha(128),
+            color: colorScheme.outline,
           ),
         ),
         child: DropdownButton<String>(
-          value: value,
+          value: effectiveValue,
           onChanged: onChanged,
           underline: const SizedBox(),
           isDense: true,
+          isExpanded: true,
           icon: Icon(
             LucideIcons.chevronDown,
             size: 16,
-            color: colorScheme.onSurface.withValues(alpha: 0.7),
+            color: colorScheme.onSurface,
           ),
           style: AppTypography.bodySm(color: colorScheme.onSurface),
           dropdownColor: colorScheme.surfaceContainerHighest,

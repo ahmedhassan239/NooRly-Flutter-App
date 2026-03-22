@@ -12,6 +12,14 @@ import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart
 import 'package:flutter_app/features/journey/domain/entities/journey_summary_entity.dart';
 import 'package:flutter_app/features/journey/domain/repositories/journey_repository.dart';
 
+/// Cache key for journey per locale so switching language refetches.
+String _journeyCacheKey(String localeCode) =>
+    '${CacheKeys.journey}_${localeCode.replaceAll(RegExp(r'[^a-z]'), '')}';
+
+/// Cache key for today lesson per locale.
+String _currentLessonCacheKey(String localeCode) =>
+    '${CacheKeys.currentLesson}_${localeCode.replaceAll(RegExp(r'[^a-z]'), '')}';
+
 /// Implementation of [JourneyRepository].
 class JourneyRepositoryImpl implements JourneyRepository {
   JourneyRepositoryImpl({
@@ -21,38 +29,40 @@ class JourneyRepositoryImpl implements JourneyRepository {
   final ApiClient _apiClient;
 
   @override
-  Future<JourneyEntity> getJourney() async {
+  Future<JourneyEntity> getJourney({required String localeCode}) async {
+    final cacheKey = _journeyCacheKey(localeCode);
+    final lang = localeCode == 'ar' ? 'ar' : 'en';
     try {
       final response = await _apiClient.get<Map<String, dynamic>>(
         JourneyEndpoints.journey,
+        queryParameters: {'lang': lang},
       );
 
       if (!response.status) {
-        final cached = await getCachedJourney();
+        final cached = await getCachedJourney(localeCode: localeCode);
         if (cached != null) return cached;
         throw UnknownException(message: response.message);
       }
 
       final raw = response.data;
       if (raw == null || raw is! Map<String, dynamic>) {
-        final cached = await getCachedJourney();
+        final cached = await getCachedJourney(localeCode: localeCode);
         if (cached != null) return cached;
         throw UnknownException(message: 'Invalid journey response');
       }
 
       final journey = JourneyModel.fromJson(raw);
 
-      // Cache the journey
       await CacheManager.put(
         box: CacheBoxes.content,
-        key: CacheKeys.journey,
+        key: cacheKey,
         data: journey.toJson(),
         expiry: CacheDurations.homeData,
       );
 
       return journey;
     } on ApiException {
-      final cached = await getCachedJourney();
+      final cached = await getCachedJourney(localeCode: localeCode);
       if (cached != null) return cached;
       rethrow;
     } catch (e, st) {
@@ -60,16 +70,18 @@ class JourneyRepositoryImpl implements JourneyRepository {
         print('[Journey] Error fetching journey: $e');
         print(st);
       }
-      final cached = await getCachedJourney();
+      final cached = await getCachedJourney(localeCode: localeCode);
       if (cached != null) return cached;
       rethrow;
     }
   }
 
   @override
-  Future<JourneySummaryEntity> getJourneySummary() async {
+  Future<JourneySummaryEntity> getJourneySummary({required String localeCode}) async {
+    final lang = localeCode == 'ar' ? 'ar' : 'en';
     final response = await _apiClient.get<Map<String, dynamic>>(
       JourneyEndpoints.summary,
+      queryParameters: {'lang': lang},
     );
 
     if (!response.status || response.data == null) {
@@ -98,24 +110,26 @@ class JourneyRepositoryImpl implements JourneyRepository {
   }
 
   @override
-  Future<LessonEntity?> getTodayLesson() async {
+  Future<LessonEntity?> getTodayLesson({required String localeCode}) async {
     const path = LessonsEndpoints.today;
+    final lang = localeCode == 'ar' ? 'ar' : 'en';
+    final cacheKey = _currentLessonCacheKey(localeCode);
     if (kDebugMode) {
       final url = '${_apiClient.baseUrl}$path';
-      debugPrint('[Journey] getTodayLesson: GET $path  fullUrl=$url');
+      debugPrint('[Journey] getTodayLesson: GET $path  fullUrl=$url  lang=$lang');
     }
     try {
       final cached = await CacheManager.get<Map<String, dynamic>>(
         box: CacheBoxes.content,
-        key: CacheKeys.currentLesson,
+        key: cacheKey,
         fromJson: (json) => json as Map<String, dynamic>,
       );
       if (cached != null && cached.isNotEmpty) {
-        if (kDebugMode) debugPrint('[Journey] getTodayLesson: using cache');
-        _fetchAndCacheTodayLesson().catchError((_) {});
+        if (kDebugMode) debugPrint('[Journey] getTodayLesson: using cache (locale=$localeCode)');
+        _fetchAndCacheTodayLesson(localeCode: localeCode).catchError((_) {});
         return LessonModel.fromJson(cached);
       }
-      return _fetchAndCacheTodayLesson();
+      return _fetchAndCacheTodayLesson(localeCode: localeCode);
     } on ApiException catch (e) {
       if (kDebugMode) {
         debugPrint('[Journey] getTodayLesson ApiException: ${e.runtimeType} statusCode=${e.statusCode} message=${e.message}');
@@ -131,12 +145,15 @@ class JourneyRepositoryImpl implements JourneyRepository {
     }
   }
 
-  Future<LessonEntity?> _fetchAndCacheTodayLesson() async {
+  Future<LessonEntity?> _fetchAndCacheTodayLesson({required String localeCode}) async {
+    final lang = localeCode == 'ar' ? 'ar' : 'en';
+    final cacheKey = _currentLessonCacheKey(localeCode);
     final response = await _apiClient.get<Map<String, dynamic>>(
       LessonsEndpoints.today,
+      queryParameters: {'lang': lang},
     );
     if (kDebugMode) {
-      debugPrint('[Journey] _fetchAndCacheTodayLesson: status=${response.status} hasData=${response.data != null}');
+      debugPrint('[Journey] _fetchAndCacheTodayLesson: status=${response.status} hasData=${response.data != null} lang=$lang');
       if (response.data != null) {
         final preview = response.data is Map
             ? (response.data as Map).length
@@ -151,7 +168,7 @@ class JourneyRepositoryImpl implements JourneyRepository {
       final lesson = LessonModel.fromJson(data);
       await CacheManager.put(
         box: CacheBoxes.content,
-        key: CacheKeys.currentLesson,
+        key: cacheKey,
         data: lesson.toJson(),
         expiry: CacheDurations.homeData,
       );
@@ -220,11 +237,12 @@ class JourneyRepositoryImpl implements JourneyRepository {
   }
 
   @override
-  Future<JourneyEntity?> getCachedJourney() async {
+  Future<JourneyEntity?> getCachedJourney({required String localeCode}) async {
+    final cacheKey = _journeyCacheKey(localeCode);
     try {
       final cached = await CacheManager.get<Map<String, dynamic>>(
         box: CacheBoxes.content,
-        key: CacheKeys.journey,
+        key: cacheKey,
         fromJson: (json) => json as Map<String, dynamic>,
       );
 
@@ -241,13 +259,9 @@ class JourneyRepositoryImpl implements JourneyRepository {
 
   @override
   Future<void> clearCache() async {
-    await CacheManager.delete(
-      box: CacheBoxes.content,
-      key: CacheKeys.journey,
-    );
-    await CacheManager.delete(
-      box: CacheBoxes.content,
-      key: CacheKeys.currentLesson,
-    );
+    for (final locale in ['en', 'ar']) {
+      await CacheManager.delete(box: CacheBoxes.content, key: _journeyCacheKey(locale));
+      await CacheManager.delete(box: CacheBoxes.content, key: _currentLessonCacheKey(locale));
+    }
   }
 }

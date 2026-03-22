@@ -1,5 +1,5 @@
 /// Mock data for Journey page
-/// 90-day learning path with 13 weeks
+/// 60-day learning path
 
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 
@@ -7,7 +7,7 @@ class JourneyMockData {
   JourneyMockData._();
 
   // Progress stats
-  static const int totalLessons = 90;
+  static const int totalLessons = 60;
   static const int completedLessons = 0;
   static const int currentWeek = 1;
   static const int currentDay = 1;
@@ -271,7 +271,8 @@ String? resolveWeekIconEmoji(String? iconKeyOrUrl) {
 }
 
 /// Map journey entity to UI WeekData list and stats.
-List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks) {
+/// [localeCode] is used for localized week/lesson titles (e.g. 'ar', 'en').
+List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks, String localeCode) {
   const fallbackWeekIcons = ['🌙', '📖', '⭐', '🕌', '⚡', '📖', '🌙', '📖', '⭐', '🕌', '⚡', '📖', '🌙'];
   return weeks.map((w) {
     final String iconDisplay;
@@ -293,7 +294,7 @@ List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks) {
     return WeekData(
       weekId: w.id?.toString(),
       weekNumber: w.weekNumber,
-      title: w.title,
+      title: w.getTitle(localeCode),
       icon: iconDisplay,
       iconUrl: iconUrl,
       isCurrent: w.isCurrent,
@@ -312,7 +313,7 @@ List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks) {
         return LessonData(
           id: l.id,
           dayNumber: l.dayNumber,
-          title: l.title,
+          title: l.getTitle(localeCode),
           category: 'Lesson',
           duration: duration,
           status: status,

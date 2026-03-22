@@ -8,16 +8,16 @@ class ProfileMockData {
   static const String userRole = 'New Muslim';
   static const String userInitial = 'F';
   static const int currentDay = 7;
-  static const int totalDays = 90;
+  static const int totalDays = 60;
 
   // Progress stats
   static const int streakDays = 6;
   static const int activeWeeks = 1;
-  static const int daysLeft = 84;
+  static const int daysLeft = 54;
 
   // Journey progress
   static const int lessonsCompleted = 6;
-  static const int totalLessons = 90;
+  static const int totalLessons = 60;
   static double get progressPercent => lessonsCompleted / totalLessons;
   static int get progressPercentInt => (progressPercent * 100).toInt();
 

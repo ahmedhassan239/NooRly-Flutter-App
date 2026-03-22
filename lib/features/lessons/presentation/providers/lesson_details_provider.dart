@@ -41,11 +41,13 @@ class LessonDetailsNotifier extends StateNotifier<LessonDetailsState> {
         state = const LessonDetailsError('Lesson not found');
         return;
       }
+      final existingReflection = lesson.reflectionText ?? '';
       state = LessonDetailsLoaded(
         lesson: lesson,
         isCompleted: false,
-        reflectionText: '',
+        reflectionText: existingReflection,
         nextLessonId: null,
+        reflectionSaved: existingReflection.isNotEmpty,
       );
     } catch (e) {
       state = LessonDetailsError(e.toString());
@@ -73,7 +75,7 @@ class LessonDetailsNotifier extends StateNotifier<LessonDetailsState> {
     final current = state;
     if (current is! LessonDetailsLoaded) return;
     try {
-      await _repository.saveReflection(current.lesson.dayNumber, text);
+      await _repository.saveReflection(current.lesson.id, text);
       state = LessonDetailsLoaded(
         lesson: current.lesson,
         isCompleted: current.isCompleted,

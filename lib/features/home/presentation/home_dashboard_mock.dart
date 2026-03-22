@@ -7,7 +7,7 @@ class HomeMockData {
   // User info
   static const String userName = 'Abdullah';
   static const int currentDay = 1;
-  static const int totalDays = 90;
+  static const int totalDays = 60;
   static const int streakDays = 0;
   static const int completedLessons = 0;
   static const double progressPercent = 0.0;

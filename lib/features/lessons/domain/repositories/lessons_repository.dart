@@ -23,6 +23,6 @@ abstract class LessonsRepository {
   /// Mark lesson as complete by ID (calls backend API).
   Future<void> completeLessonById(String id);
 
-  /// Save reflection for a lesson (by day number).
-  Future<void> saveReflection(int dayNumber, String text);
+  /// Save reflection for a lesson (by lesson id). Uses PUT /lessons/{id}/reflection.
+  Future<void> saveReflection(String lessonId, String text);
 }

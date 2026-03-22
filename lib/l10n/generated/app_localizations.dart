@@ -461,7 +461,7 @@ abstract class AppLocalizations {
   /// No description provided for @journeyLearningPath.
   ///
   /// In en, this message translates to:
-  /// **'90-Day Learning Path'**
+  /// **'60-Day Learning Path'**
   String get journeyLearningPath;
 
   /// No description provided for @journeyStatProgress.
@@ -505,6 +505,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Complete previous lessons first.'**
   String get journeyCompletePreviousFirst;
+
+  /// No description provided for @journeyStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get journeyStart;
+
+  /// No description provided for @journeyLessonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson'**
+  String get journeyLessonLabel;
+
+  /// No description provided for @journeyNoLessonsLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'No lessons loaded'**
+  String get journeyNoLessonsLoaded;
 
   /// No description provided for @journeyWeekLabel.
   ///
@@ -859,6 +877,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Review your lesson reflections'**
   String get profileReviewReflections;
+
+  /// No description provided for @reflectionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Reflections'**
+  String get reflectionsTitle;
+
+  /// No description provided for @reflectionsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No reflections yet'**
+  String get reflectionsEmpty;
+
+  /// No description provided for @reflectionsEmptyCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reflecting on your lessons from the Journey screen.'**
+  String get reflectionsEmptyCta;
+
+  /// No description provided for @reflectionLessonContext.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson · Day {day}'**
+  String reflectionLessonContext(int day);
+
+  /// No description provided for @reflectionLessonContextWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week {week} · Day {day}'**
+  String reflectionLessonContextWeek(int week, int day);
 
   /// No description provided for @profileManagePreferences.
   ///
@@ -1543,6 +1591,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Adjust text size'**
   String get settingsFontSizeSubtitle;
+
+  /// No description provided for @settingsFontSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get settingsFontSizeSmall;
+
+  /// No description provided for @settingsFontSizeMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get settingsFontSizeMedium;
+
+  /// No description provided for @settingsFontSizeLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get settingsFontSizeLarge;
+
+  /// No description provided for @settingsFontSizeExtraLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra large'**
+  String get settingsFontSizeExtraLarge;
 
   /// No description provided for @settingsPrayerTimes.
   ///
@@ -2485,6 +2557,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Notification Settings'**
   String get notificationSettings;
+
+  /// No description provided for @notificationInboxTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get notificationInboxTitle;
+
+  /// No description provided for @notificationInboxEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No messages yet. Announcements from your team will appear here.'**
+  String get notificationInboxEmpty;
+
+  /// No description provided for @notificationInboxSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in to view messages.'**
+  String get notificationInboxSignIn;
+
+  /// No description provided for @notificationInboxOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'Open messages'**
+  String get notificationInboxOpen;
+
+  /// No description provided for @notificationInboxSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app announcements and updates'**
+  String get notificationInboxSubtitle;
 
   /// No description provided for @notificationsPrayer.
   ///
