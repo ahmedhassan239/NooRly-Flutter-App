@@ -1,7 +1,11 @@
 /// Profile providers.
 library;
 
+import 'dart:typed_data';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_app/core/config/api_config.dart';
 import 'package:flutter_app/core/providers/core_providers.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/profile/data/repositories/profile_repository_impl.dart';
@@ -13,6 +17,20 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   return ProfileRepositoryImpl(apiClient: apiClient);
 });
+
+/// Bumped after avatar upload to bust browser/image cache for the same base URL.
+final avatarImageCacheNonceProvider = StateProvider<int>((ref) => 0);
+
+/// Public URL for avatar widgets; increment [cacheNonce] after uploads to bust web image cache.
+String? avatarImageNetworkUrl(String? avatarPathOrUrl, int cacheNonce) {
+  if (avatarPathOrUrl == null) return null;
+  final trimmed = avatarPathOrUrl.trim();
+  if (trimmed.isEmpty) return null;
+  final base = ApiConfig.resolvePublicUrl(trimmed) ?? trimmed;
+  if (cacheNonce <= 0) return base;
+  final sep = base.contains('?') ? '&' : '?';
+  return '$base${sep}_nc=$cacheNonce';
+}
 
 /// Profile provider.
 final profileProvider = FutureProvider<ProfileEntity>((ref) async {
@@ -54,26 +72,88 @@ class UpdateProfileNotifier extends StateNotifier<AsyncValue<ProfileEntity?>> {
       _ref.invalidate(profileProvider);
 
       // Update auth user if needed
-      _ref.read(authProvider.notifier).refreshUser();
+      await _ref.read(authProvider.notifier).refreshUser();
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }
   }
 
-  Future<void> uploadAvatar(String filePath) async {
+  Future<void> uploadAvatar({
+    String? filePath,
+    Uint8List? fileBytes,
+    String? fileName,
+  }) async {
     state = const AsyncValue.loading();
+    var stage = 'start';
     try {
-      await _ref.read(profileRepositoryProvider).uploadAvatar(filePath);
+      stage = 'uploadAvatar(api)';
+      final uploaded = await _ref.read(profileRepositoryProvider).uploadAvatar(
+        filePath: filePath,
+        fileBytes: fileBytes,
+        fileName: fileName,
+      );
 
-      // Refresh profile
+      if (kDebugMode) {
+        debugPrint('[Avatar] upload response uploaded.avatarUrl: ${uploaded.avatarUrl}');
+        debugPrint(
+          '[Avatar] currentUser.avatarUrl before updateUser: ${_ref.read(currentUserProvider)?.avatarUrl}',
+        );
+      }
+
+      final current = _ref.read(currentUserProvider);
+      if (current != null) {
+        stage = 'auth.updateUser(local)';
+        _ref.read(authProvider.notifier).updateUser(
+              current.copyWith(
+                avatarUrl: uploaded.avatarUrl,
+                updatedAt: uploaded.updatedAt ?? current.updatedAt,
+              ),
+            );
+      }
+
+      if (kDebugMode) {
+        debugPrint(
+          '[Avatar] currentUser.avatarUrl after updateUser: ${_ref.read(currentUserProvider)?.avatarUrl}',
+        );
+      }
+
+      // Bump cache nonce immediately so avatar widgets request a fresh URL.
+      stage = 'avatar.cacheNonce.bump';
+      _ref.read(avatarImageCacheNonceProvider.notifier).state++;
+
+      stage = 'profile.invalidate';
       _ref.invalidate(profileProvider);
 
+      stage = 'profile.getProfile(refresh)';
       final profile = await _ref.read(profileRepositoryProvider).getProfile();
       state = AsyncValue.data(profile);
 
-      // Update auth user
-      _ref.read(authProvider.notifier).refreshUser();
+      if (kDebugMode) {
+        debugPrint(
+          '[Avatar] profile refreshed avatarUrl: ${profile.avatarUrl}',
+        );
+      }
+
+      final authoritativeAvatar = uploaded.avatarUrl?.trim();
+      stage = 'auth.refreshUser(server)';
+      await _ref.read(authProvider.notifier).refreshUser(
+            avatarUrlOverride:
+                authoritativeAvatar != null && authoritativeAvatar.isNotEmpty
+                    ? uploaded.avatarUrl
+                    : null,
+          );
+
+      if (kDebugMode) {
+        debugPrint(
+          '[Avatar] currentUser.avatarUrl after refreshUser: ${_ref.read(currentUserProvider)?.avatarUrl}',
+        );
+      }
     } catch (e, st) {
+      if (kDebugMode) {
+        debugPrint('[Avatar] uploadAvatar failed at stage=$stage');
+        debugPrint('[Avatar] exception type=${e.runtimeType} message=$e');
+        debugPrint('[Avatar] stack=$st');
+      }
       state = AsyncValue.error(e, st);
     }
   }

@@ -77,7 +77,7 @@ StateProvider<Map<String, bool>> _overrideProviderForType(String type) {
 final savedHadithIdsProvider = FutureProvider<Set<String>>((ref) async {
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) return {};
-  final result = await fetchSavedHadith(ref: ref, page: 1, perPage: 200);
+  final result = await fetchSavedHadith(ref: ref, page: 1, perPage: 100);
   return result.items.map((e) => e.id.toString()).toSet();
 });
 
@@ -85,7 +85,7 @@ final savedHadithIdsProvider = FutureProvider<Set<String>>((ref) async {
 final savedVerseIdsProvider = FutureProvider<Set<String>>((ref) async {
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) return {};
-  final result = await fetchSavedVerses(ref: ref, page: 1, perPage: 200);
+  final result = await fetchSavedVerses(ref: ref, page: 1, perPage: 100);
   return result.items.map((e) => e.id.toString()).toSet();
 });
 
@@ -93,7 +93,7 @@ final savedVerseIdsProvider = FutureProvider<Set<String>>((ref) async {
 final savedAdhkarIdsProvider = FutureProvider<Set<String>>((ref) async {
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) return {};
-  final result = await fetchSavedAdhkar(ref: ref, page: 1, perPage: 200);
+  final result = await fetchSavedAdhkar(ref: ref, page: 1, perPage: 100);
   return result.items.map((e) => e.id.toString()).toSet();
 });
 
@@ -101,7 +101,7 @@ final savedAdhkarIdsProvider = FutureProvider<Set<String>>((ref) async {
 final savedDuaIdsProvider = FutureProvider<Set<String>>((ref) async {
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) return {};
-  final result = await fetchSavedDuas(ref: ref, page: 1, perPage: 200);
+  final result = await fetchSavedDuas(ref: ref, page: 1, perPage: 100);
   return result.items.map((e) => e.id.toString()).toSet();
 });
 
@@ -109,7 +109,7 @@ final savedDuaIdsProvider = FutureProvider<Set<String>>((ref) async {
 final savedLessonIdsProvider = FutureProvider<Set<String>>((ref) async {
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) return {};
-  final result = await fetchSavedLessons(ref: ref, page: 1, perPage: 200);
+  final result = await fetchSavedLessons(ref: ref, page: 1, perPage: 100);
   return result.items.map((e) => e.id.toString()).toSet();
 });
 

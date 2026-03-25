@@ -338,7 +338,7 @@ abstract class ProfileEndpoints {
   static const String update = '/me/profile';
 
   /// POST - Upload avatar
-  static const String avatar = '/profile/avatar';
+  static const String avatar = '/me/profile/avatar';
 
   /// DELETE - Delete account
   static const String delete = '/profile';

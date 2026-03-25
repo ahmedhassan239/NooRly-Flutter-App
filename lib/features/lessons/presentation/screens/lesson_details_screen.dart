@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_app/features/lessons/presentation/providers/lesson_detai
 import 'package:flutter_app/features/lessons/presentation/state/lesson_details_state.dart';
 import 'package:flutter_app/features/lessons/presentation/widgets/lesson_renderer.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
+import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 class LessonDetailsScreen extends ConsumerWidget {
@@ -27,7 +30,7 @@ class LessonDetailsScreen extends ConsumerWidget {
     final state = ref.watch(lessonDetailsProvider(lessonId));
 
     return Scaffold(
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(context, ref, state),
       body: switch (state) {
         LessonDetailsLoading() => const Center(child: CircularProgressIndicator()),
         LessonDetailsLoaded(:final lesson, :final isCompleted,
@@ -64,8 +67,19 @@ class LessonDetailsScreen extends ConsumerWidget {
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  PreferredSizeWidget _buildAppBar(
+    BuildContext context,
+    WidgetRef ref,
+    LessonDetailsState state,
+  ) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
+
+    final lesson = state is LessonDetailsLoaded ? state.lesson : null;
+    final lessonIdStr = lesson?.id.toString();
+    final isSaved = (lessonIdStr == null) ? false : (isItemSaved(ref, 'lesson', lessonIdStr) ?? false);
+    final isPending = (lessonIdStr == null) ? false : isItemPending(ref, 'lesson', lessonIdStr);
+
     return AppBar(
       leading: IconButton(
         icon: Icon(LucideIcons.arrowLeft, color: colorScheme.onSurface),
@@ -76,14 +90,117 @@ class LessonDetailsScreen extends ConsumerWidget {
       title: null,
       actions: [
         IconButton(
-          icon: Icon(LucideIcons.heart, color: colorScheme.onSurface),
-          onPressed: () {},
+          icon: Icon(
+            LucideIcons.heart,
+            color: isSaved ? colorScheme.primary : colorScheme.onSurface,
+          ),
+          tooltip: isSaved ? l10n.actionSaved : l10n.actionSave,
+          onPressed: (lessonIdStr == null || isPending)
+              ? null
+              : () => _toggleSaveLesson(
+                    context: context,
+                    ref: ref,
+                    lessonId: lessonIdStr,
+                    currentIsSaved: isSaved,
+                  ),
         ),
         IconButton(
           icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
-          onPressed: () {},
+          tooltip: MaterialLocalizations.of(context).showMenuTooltip,
+          onPressed: lesson == null ? null : () => _showMoreMenu(context, lesson),
         ),
       ],
+    );
+  }
+
+  Future<void> _toggleSaveLesson({
+    required BuildContext context,
+    required WidgetRef ref,
+    required String lessonId,
+    required bool currentIsSaved,
+  }) async {
+    final notifier = ref.read(toggleSaveProvider.notifier);
+    final result = await notifier.toggle(
+      type: 'lesson',
+      itemId: lessonId,
+      currentIsSaved: currentIsSaved,
+    );
+
+    if (!context.mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    switch (result) {
+      case ToggleSaveResult.success:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(currentIsSaved ? l10n.removedFromSaved : l10n.savedToFavorites),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        break;
+      case ToggleSaveResult.notAuthenticated:
+        // Reuse existing auth gate route.
+        context.push('/login');
+        break;
+      case ToggleSaveResult.failure:
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.couldNotUpdateSavedState),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+        break;
+      case ToggleSaveResult.skipped:
+        break;
+    }
+  }
+
+  Future<void> _showMoreMenu(BuildContext context, LessonEntity lesson) async {
+    final l10n = AppLocalizations.of(context)!;
+    final colorScheme = Theme.of(context).colorScheme;
+
+    final deepLinkPath = '/lessons/${lesson.id}';
+    final shareText = '${lesson.title}\n$deepLinkPath';
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      backgroundColor: colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(LucideIcons.share2),
+                title: Text(l10n.share),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  await Share.share(shareText, subject: lesson.title);
+                },
+              ),
+              ListTile(
+                leading: const Icon(LucideIcons.copy),
+                title: Text(l10n.copy),
+                subtitle: Text(deepLinkPath, maxLines: 1, overflow: TextOverflow.ellipsis),
+                onTap: () {
+                  Clipboard.setData(ClipboardData(text: deepLinkPath));
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.copiedToClipboard),
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -111,11 +228,13 @@ class _LessonContent extends ConsumerStatefulWidget {
 
 class _LessonContentState extends ConsumerState<_LessonContent> {
   late TextEditingController _reflectionController;
+  late bool _isEditingReflection;
 
   @override
   void initState() {
     super.initState();
     _reflectionController = TextEditingController(text: widget.reflectionText);
+    _isEditingReflection = widget.reflectionText.trim().isEmpty;
   }
 
   @override
@@ -124,6 +243,9 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
     if (oldWidget.reflectionText != widget.reflectionText &&
         _reflectionController.text != widget.reflectionText) {
       _reflectionController.text = widget.reflectionText;
+    }
+    if (!_isEditingReflection && widget.reflectionText.trim().isEmpty) {
+      _isEditingReflection = true;
     }
   }
 
@@ -234,65 +356,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
                   ],
 
                   // Personal Reflection
-                  Text(
-                    l10n.lessonPersonalReflection,
-                    style: AppTypography.h3(color: colorScheme.onSurface),
-                  ),
-                  const SizedBox(height: AppSpacing.sm),
-                  TextField(
-                    controller: _reflectionController,
-                    maxLines: 4,
-                    onChanged: (_) {
-                      ref.read(lessonDetailsProvider(widget.lessonId).notifier).setReflectionText(
-                            _reflectionController.text,
-                          );
-                    },
-                    cursorColor: colorScheme.primary,
-                    decoration: InputDecoration(
-                      hintText: l10n.lessonWriteThoughts,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.input),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.input),
-                        borderSide: BorderSide(
-                          color: colorScheme.outline.withValues(alpha: 0.5),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppRadius.input),
-                        borderSide: BorderSide(color: colorScheme.primary, width: 2),
-                      ),
-                      filled: true,
-                      fillColor: colorScheme.surfaceContainerHighest,
-                      hintStyle: AppTypography.body(
-                        color: colorScheme.onSurface.withValues(alpha: 0.45),
-                      ),
-                      contentPadding: const EdgeInsets.all(AppSpacing.md),
-                    ),
-                    style: AppTypography.body(color: colorScheme.onSurface),
-                  ),
-                  Row(
-                    children: [
-                      if (widget.reflectionSaved)
-                        Text(
-                          l10n.lessonSaved,
-                          style: AppTypography.caption(color: colorScheme.primary),
-                        )
-                      else
-                        TextButton(
-                          onPressed: () {
-                            ref
-                                .read(lessonDetailsProvider(widget.lessonId).notifier)
-                                .saveReflection(_reflectionController.text);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(l10n.lessonReflectionSaved)),
-                            );
-                          },
-                          child: Text(l10n.lessonSaveReflection),
-                        ),
-                    ],
-                  ),
+                  _buildReflectionSection(context, ref, l10n, colorScheme),
                   const SizedBox(height: AppSpacing.lg),
                 ],
               ),
@@ -305,6 +369,194 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
           lessonId: widget.lessonId,
           isCompleted: widget.isCompleted,
           nextLessonId: widget.nextLessonId,
+        ),
+      ],
+    );
+  }
+
+  bool get _hasSavedReflection => widget.reflectionText.trim().isNotEmpty;
+
+  Widget _buildReflectionSection(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    ColorScheme colorScheme,
+  ) {
+    final subtitleColor = colorScheme.onSurface.withValues(alpha: 0.65);
+    final cardColor = colorScheme.surfaceContainerHighest.withValues(alpha: 0.35);
+    final borderColor = colorScheme.outline.withValues(alpha: 0.24);
+    final textDirection = Directionality.of(context);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          l10n.lessonPersonalReflection,
+          style: AppTypography.h3(color: colorScheme.onSurface).copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          l10n.lessonWriteThoughts,
+          style: AppTypography.caption(color: subtitleColor),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          curve: Curves.easeOut,
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: borderColor),
+          ),
+          child: _isEditingReflection || !_hasSavedReflection
+              ? _buildReflectionEditor(context, ref, l10n, colorScheme)
+              : _buildSavedReflectionView(context, ref, l10n, colorScheme, textDirection),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildReflectionEditor(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    ColorScheme colorScheme,
+  ) {
+    final inputFill = colorScheme.surface;
+    final inputBorder = colorScheme.outline.withValues(alpha: 0.22);
+    final hintColor = colorScheme.onSurface.withValues(alpha: 0.42);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: _reflectionController,
+          minLines: 4,
+          maxLines: 8,
+          onChanged: (_) {
+            ref.read(lessonDetailsProvider(widget.lessonId).notifier).setReflectionText(
+                  _reflectionController.text,
+                );
+          },
+          cursorColor: colorScheme.primary,
+          decoration: InputDecoration(
+            hintText: l10n.lessonWriteThoughts,
+            hintStyle: AppTypography.body(color: hintColor),
+            filled: true,
+            fillColor: inputFill,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.md,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.input),
+              borderSide: BorderSide(color: inputBorder),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.input),
+              borderSide: BorderSide(color: inputBorder),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(AppRadius.input),
+              borderSide: BorderSide(color: colorScheme.primary.withValues(alpha: 0.8), width: 1.5),
+            ),
+          ),
+          style: AppTypography.body(color: colorScheme.onSurface).copyWith(height: 1.55),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            if (_hasSavedReflection)
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isEditingReflection = false;
+                    _reflectionController.text = widget.reflectionText;
+                  });
+                },
+                child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+              )
+            else
+              const SizedBox.shrink(),
+            TextButton(
+              onPressed: _reflectionController.text.trim().isEmpty
+                  ? null
+                  : () {
+                      ref
+                          .read(lessonDetailsProvider(widget.lessonId).notifier)
+                          .saveReflection(_reflectionController.text);
+                      setState(() => _isEditingReflection = false);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(l10n.lessonReflectionSaved)),
+                      );
+                    },
+              child: Text(
+                l10n.lessonSaveReflection,
+                style: AppTypography.bodySm(
+                  color: colorScheme.primary,
+                ).copyWith(fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSavedReflectionView(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+    ColorScheme colorScheme,
+    TextDirection direction,
+  ) {
+    final bodyColor = colorScheme.onSurface.withValues(alpha: 0.92);
+    final muted = colorScheme.onSurface.withValues(alpha: 0.58);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.reflectionText,
+          style: AppTypography.body(color: bodyColor).copyWith(height: 1.6),
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        Align(
+          alignment: direction == TextDirection.rtl ? Alignment.centerLeft : Alignment.centerRight,
+          child: Wrap(
+            spacing: AppSpacing.sm,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isEditingReflection = true;
+                  });
+                },
+                child: const Text('Edit'),
+              ),
+              TextButton(
+                onPressed: () {
+                  ref.read(lessonDetailsProvider(widget.lessonId).notifier).saveReflection('');
+                  setState(() {
+                    _isEditingReflection = true;
+                    _reflectionController.clear();
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(l10n.removedFromSaved)),
+                  );
+                },
+                child: Text(
+                  l10n.actionDelete,
+                  style: AppTypography.bodySm(color: muted).copyWith(fontWeight: FontWeight.w600),
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

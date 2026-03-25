@@ -313,21 +313,40 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Update user data (after profile edit, etc.).
   void updateUser(UserEntity user) {
     if (state.isAuthenticated) {
-      state = AuthState.authenticated(user);
+      state = AuthState.authenticated(user, onboarding: state.onboarding);
     }
   }
 
   /// Refresh current user from server.
-  Future<void> refreshUser() async {
+  ///
+  /// When [avatarUrlOverride] is non-empty, it is applied after GET [/me] so a
+  /// just-uploaded avatar cannot be overwritten by a stale or mis-mapped response.
+  Future<void> refreshUser({String? avatarUrlOverride}) async {
     if (!state.isAuthenticated) return;
 
     try {
-      final user = await _authRepository.getCurrentUser();
+      var user = await _authRepository.getCurrentUser();
+
+      if (kDebugMode) {
+        debugPrint('[Auth] refreshUser GET /me avatarUrl: ${user.avatarUrl}');
+      }
+
+      final override = avatarUrlOverride?.trim();
+      if (override != null && override.isNotEmpty) {
+        final server = user.avatarUrl?.trim() ?? '';
+        if (kDebugMode && server != override) {
+          debugPrint(
+            '[Auth] refreshUser avatarUrlOverride: server="$server" -> keeping upload="$override"',
+          );
+        }
+        user = user.copyWith(avatarUrl: override);
+      }
+
       final onboarding = await _fetchOnboardingSafe();
       state = AuthState.authenticated(user, onboarding: onboarding);
     } catch (e) {
       if (kDebugMode) {
-        print('[Auth] Refresh user error: $e');
+        debugPrint('[Auth] Refresh user error: $e');
       }
     }
   }

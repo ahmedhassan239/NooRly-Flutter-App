@@ -103,6 +103,19 @@ class ApiConfig {
     final trimmed = url.trim();
     if (trimmed.isEmpty) return null;
     if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+      final parsed = Uri.tryParse(trimmed);
+      final host = parsed?.host.toLowerCase();
+      final isLocalhost = host == 'localhost' || host == '127.0.0.1' || host == '::1';
+
+      // Device builds cannot reach backend localhost from API payloads.
+      if (isLocalhost) {
+        final path = parsed?.path ?? '';
+        if (path.isNotEmpty) {
+          final normalizedPath = path.startsWith('/') ? path : '/$path';
+          final query = (parsed?.hasQuery ?? false) ? '?${parsed!.query}' : '';
+          return '$apiOrigin$normalizedPath$query';
+        }
+      }
       return trimmed;
     }
     if (trimmed.startsWith('//')) {

@@ -20,6 +20,14 @@ import 'package:flutter_app/features/lessons/data/lesson_quran_hadith_parser.dar
 ///   quranVerses / hadithItems if the blocks list contains none).
 ///   No `blocks` key     → convert Markdown `content` + verse/hadith data.
 List<LessonBlock> parseBlocks(Map<String, dynamic> json) {
+  // Prefer rich HTML when present, even if `blocks` exists.
+  // Some backend payloads include both fields; `blocks` can lose inline styling
+  // (span colors, callout classes, highlights) that is preserved in `content`.
+  final content = _contentString(json);
+  if (_isHtml(content) && _hasRichHtmlStyling(content)) {
+    return [HtmlBlock(html: content)];
+  }
+
   final rawBlocks = json['blocks'];
 
   if (rawBlocks is List && rawBlocks.isNotEmpty) {
@@ -41,7 +49,6 @@ List<LessonBlock> parseBlocks(Map<String, dynamic> json) {
   }
 
   // Legacy path: detect content format then route appropriately.
-  final content = _contentString(json);
 
   // HTML from backend (inline styles, tags) → flutter_html fallback.
   // MarkdownToBlocks cannot parse HTML; it would produce a single
@@ -57,6 +64,15 @@ List<LessonBlock> parseBlocks(Map<String, dynamic> json) {
   blocks.addAll(_versesFromJson(json));
   blocks.addAll(_hadithFromJson(json));
   return blocks;
+}
+
+bool _hasRichHtmlStyling(String html) {
+  // Heuristics for editor-authored rich content that should preserve HTML
+  // semantics instead of simplified block conversion.
+  return html.contains(RegExp(
+    r'(style\s*=|class\s*=|<span\b|<mark\b|<u\b|<blockquote\b|callout-|tiptap-embed-chip)',
+    caseSensitive: false,
+  ));
 }
 
 /// Returns true when [s] looks like HTML rather than Markdown.

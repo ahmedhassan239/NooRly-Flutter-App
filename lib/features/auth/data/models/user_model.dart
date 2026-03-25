@@ -26,11 +26,21 @@ class UserModel extends UserEntity {
   /// Create from JSON (GET /me or auth response user).
   factory UserModel.fromJson(Map<String, dynamic> json) {
     final onboarding = json['onboarding'] as Map<String, dynamic>?;
+    final profile = json['profile'] as Map<String, dynamic>?;
+    final rootAvatar =
+        json['avatar_url'] as String? ?? json['avatar'] as String?;
+    final nestedAvatar = profile != null
+        ? (profile['avatar_url'] as String? ?? profile['avatar'] as String?)
+        : null;
+    final avatarUrl = (rootAvatar != null && rootAvatar.trim().isNotEmpty)
+        ? rootAvatar
+        : nestedAvatar;
+
     return UserModel(
       id: (json['id'] ?? json['_id'] ?? '').toString(),
       email: json['email'] as String? ?? '',
       name: json['name'] as String?,
-      avatarUrl: json['avatar_url'] as String? ?? json['avatar'] as String?,
+      avatarUrl: avatarUrl,
       phone: json['phone'] as String?,
       gender: json['gender'] as String?,
       birthDate: json['birth_date'] != null

@@ -74,14 +74,15 @@ class LessonDetailsNotifier extends StateNotifier<LessonDetailsState> {
   Future<void> saveReflection(String text) async {
     final current = state;
     if (current is! LessonDetailsLoaded) return;
+    final normalized = text.trim();
     try {
-      await _repository.saveReflection(current.lesson.id, text);
+      await _repository.saveReflection(current.lesson.id, normalized);
       state = LessonDetailsLoaded(
         lesson: current.lesson,
         isCompleted: current.isCompleted,
-        reflectionText: text,
+        reflectionText: normalized,
         nextLessonId: current.nextLessonId,
-        reflectionSaved: true,
+        reflectionSaved: normalized.isNotEmpty,
       );
     } catch (_) {
       // Keep state; could show error

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 /// Global subtle Islamic pattern behind the whole app.
 ///
-/// **Source artwork (update here, then copy into assets):**
-/// `web/islamic-pattern.png` — bundled at runtime as [assetPath] for mobile + web.
+/// **Source artwork:** Illustrator export `web/Islamic Pattern Background.svg` →
+/// `assets/images/islamic_pattern_background.svg` (background rect stripped so
+/// [ColorScheme.surface] shows through).
 ///
 /// Place as the [MaterialApp.builder] wrapper so it sits under the [Navigator].
 /// Pair with [ThemeData.scaffoldBackgroundColor] `Colors.transparent` so each
@@ -14,7 +16,7 @@ class AppPatternBackground extends StatelessWidget {
     super.key,
   });
 
-  static const String assetPath = 'assets/images/islamic-pattern.png';
+  static const String assetPath = 'assets/images/islamic_pattern_background.svg';
 
   final Widget? child;
 
@@ -26,10 +28,9 @@ class AppPatternBackground extends StatelessWidget {
     0, 0, 0, 1, 0,
   ]);
 
-  /// Tile opacity for the repeating pattern — keep below ~0.15 so cards/text stay dominant.
-  /// Bumped for clearer texture while staying a background (not foreground noise).
-  static const double _patternOpacityLight = 0.11;
-  static const double _patternOpacityDark = 0.14;
+  /// Roughly 20% visual strength: present as texture, never competing with UI.
+  static const double _patternOpacityLight = 0.02;
+  static const double _patternOpacityDark = 0.03;
 
   @override
   Widget build(BuildContext context) {
@@ -38,32 +39,26 @@ class AppPatternBackground extends StatelessWidget {
     final patternOpacity =
         isDark ? _patternOpacityDark : _patternOpacityLight;
 
+    final pattern = SvgPicture.asset(
+      assetPath,
+      fit: BoxFit.cover,
+      allowDrawingOutsideViewBox: true,
+    );
+
     return Stack(
       fit: StackFit.expand,
       children: [
         ColoredBox(color: scheme.surface),
-        Opacity(
-          opacity: patternOpacity,
-          child: isDark
-              ? ColorFiltered(
-                  colorFilter: _darkPatternFilter,
-                  child: Image.asset(
-                    assetPath,
-                    repeat: ImageRepeat.repeat,
-                    fit: BoxFit.none,
-                    alignment: Alignment.topLeft,
-                    filterQuality: FilterQuality.medium,
-                    gaplessPlayback: true,
-                  ),
-                )
-              : Image.asset(
-                  assetPath,
-                  repeat: ImageRepeat.repeat,
-                  fit: BoxFit.none,
-                  alignment: Alignment.topLeft,
-                  filterQuality: FilterQuality.medium,
-                  gaplessPlayback: true,
-                ),
+        Positioned.fill(
+          child: Opacity(
+            opacity: patternOpacity,
+            child: isDark
+                ? ColorFiltered(
+                    colorFilter: _darkPatternFilter,
+                    child: pattern,
+                  )
+                : pattern,
+          ),
         ),
         if (child != null) child!,
       ],

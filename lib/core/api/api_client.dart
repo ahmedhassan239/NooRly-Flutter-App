@@ -223,16 +223,27 @@ class ApiClient {
   /// Upload a file with multipart form data.
   Future<ApiResponse<T>> uploadFile<T>(
     String path, {
-    required String filePath,
     required String fieldName,
+    String? filePath,
+    Uint8List? fileBytes,
+    String? fileName,
     Map<String, dynamic>? additionalFields,
     T Function(dynamic json)? fromJson,
     void Function(int sent, int total)? onSendProgress,
     CancelToken? cancelToken,
   }) async {
     try {
+      assert(
+        (filePath != null && filePath.isNotEmpty) || fileBytes != null,
+        'Either filePath or fileBytes must be provided',
+      );
       final formData = FormData.fromMap({
-        fieldName: await MultipartFile.fromFile(filePath),
+        fieldName: fileBytes != null
+            ? MultipartFile.fromBytes(
+                fileBytes,
+                filename: fileName ?? 'upload.bin',
+              )
+            : await MultipartFile.fromFile(filePath!),
         ...?additionalFields,
       });
 

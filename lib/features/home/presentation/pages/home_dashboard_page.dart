@@ -6,7 +6,6 @@ import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/core/config/api_config.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/home/data/daily_inspiration_api.dart';
 import 'package:flutter_app/features/home/presentation/widgets/daily_inspiration_card.dart';
@@ -196,7 +195,11 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
         : header.displayName;
     final initial = name.isNotEmpty ? name[0].toUpperCase() : 'F';
     final avatarUrl = ref.watch(currentUserProvider)?.avatarUrl?.trim();
-    final hasAvatar = avatarUrl != null && avatarUrl.isNotEmpty;
+    final avatarCacheNonce = ref.watch(avatarImageCacheNonceProvider);
+    final displayAvatarUrl =
+        avatarImageNetworkUrl(avatarUrl, avatarCacheNonce);
+    final hasAvatar =
+        displayAvatarUrl != null && displayAvatarUrl.isNotEmpty;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.sm),
@@ -210,7 +213,8 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
                     child: Padding(
                       padding: const EdgeInsets.all(6),
                       child: Image.network(
-                        ApiConfig.resolvePublicUrl(avatarUrl) ?? avatarUrl,
+                        displayAvatarUrl,
+                        key: ValueKey(displayAvatarUrl),
                         fit: BoxFit.contain,
                         alignment: Alignment.center,
                         filterQuality: FilterQuality.high,

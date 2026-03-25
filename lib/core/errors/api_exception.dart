@@ -167,7 +167,13 @@ ApiException mapDioException(DioException error) {
   // Extract message from response if available
   String? serverMessage;
   if (data is Map<String, dynamic>) {
-    serverMessage = data['message'] as String?;
+    serverMessage = (data['message'] as String?) ??
+        (data['error'] as String?) ??
+        (data['meta'] is Map<String, dynamic>
+            ? (data['meta'] as Map<String, dynamic>)['message'] as String?
+            : null);
+  } else if (data is String && data.trim().isNotEmpty) {
+    serverMessage = data;
   }
 
   switch (error.type) {
@@ -215,7 +221,11 @@ ApiException mapDioException(DioException error) {
         );
       }
       return UnknownException(
-        message: serverMessage ?? error.message ?? 'An unexpected error occurred.',
+        message: serverMessage ??
+            error.message ??
+            (statusCode != null
+                ? 'Request failed with status $statusCode.'
+                : 'An unexpected error occurred.'),
         statusCode: statusCode,
         data: data,
       );
@@ -293,7 +303,10 @@ ApiException _mapStatusCodeException({
         );
       }
       return UnknownException(
-        message: message ?? 'An unexpected error occurred.',
+        message: message ??
+            (statusCode != null
+                ? 'Request failed with status $statusCode.'
+                : 'An unexpected error occurred.'),
         statusCode: statusCode,
         data: data,
       );

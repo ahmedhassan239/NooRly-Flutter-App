@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_app/app/theme_provider.dart';
+import 'package:flutter_app/core/errors/api_exception.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
-import 'package:flutter_app/core/config/api_config.dart';
 import 'package:flutter_app/design_system/app_icons.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -14,19 +15,32 @@ import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_summary_entity.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 import 'package:flutter_app/features/profile/presentation/profile_mock_data.dart';
+import 'package:flutter_app/features/profile/providers/profile_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
+  static const int _maxAvatarBytes = 2 * 1024 * 1024;
+  static const Set<String> _allowedAvatarExtensions = {
+    'jpg',
+    'jpeg',
+    'png',
+    'webp',
+  };
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
     final isDarkMode = ref.watch(isDarkModeProvider);
     final journeySummaryAsync = ref.watch(journeySummaryProvider);
+    final avatarImageCacheNonce = ref.watch(avatarImageCacheNonceProvider);
+    final avatarUploadState = ref.watch(updateProfileProvider);
+    final isAvatarUploading = avatarUploadState.isLoading;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -52,6 +66,9 @@ class ProfilePage extends ConsumerWidget {
                           user?.email,
                           user?.avatarUrl,
                           journeySummaryAsync,
+                          avatarImageCacheNonce: avatarImageCacheNonce,
+                          isAvatarUploading: isAvatarUploading,
+                          onEditTap: () => _onEditAvatarTapped(context, ref),
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         _buildYourProgress(context, ref, colorScheme, journeySummaryAsync),
@@ -121,6 +138,9 @@ class ProfilePage extends ConsumerWidget {
     String? email,
     String? avatarUrl,
     AsyncValue<JourneySummaryEntity> summaryAsync,
+    {required int avatarImageCacheNonce,
+    required bool isAvatarUploading,
+    required Future<void> Function() onEditTap,}
   ) {
     final dayIndex = summaryAsync.valueOrNull?.dayIndex ?? 1;
     final totalDays = summaryAsync.valueOrNull?.totalDays ?? 60;
@@ -130,64 +150,82 @@ class ProfilePage extends ConsumerWidget {
             ? email.substring(0, 1).toUpperCase()
             : '?';
     final resolvedAvatar = avatarUrl?.trim();
+    final displayAvatarUrl =
+        avatarImageNetworkUrl(resolvedAvatar, avatarImageCacheNonce);
     final showNetworkAvatar =
-        resolvedAvatar != null && resolvedAvatar.isNotEmpty;
+        displayAvatarUrl != null && displayAvatarUrl.isNotEmpty;
     return Center(
       child: Column(
         children: [
           Stack(
             children: [
-              Container(
-                width: 88,
-                height: 88,
-                decoration: BoxDecoration(
-                  color: colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: showNetworkAvatar
-                    ? Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Image.network(
-                          ApiConfig.resolvePublicUrl(resolvedAvatar) ??
-                              resolvedAvatar,
-                          fit: BoxFit.contain,
-                          alignment: Alignment.center,
-                          filterQuality: FilterQuality.high,
-                          errorBuilder: (_, __, ___) => Center(
-                            child: Text(
-                              initial,
-                              style: AppTypography.displayLg(
-                                color: colorScheme.onPrimary,
+              InkWell(
+                onTap: isAvatarUploading ? null : onEditTap,
+                customBorder: const CircleBorder(),
+                child: Container(
+                  width: 88,
+                  height: 88,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: showNetworkAvatar
+                      ? Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Image.network(
+                            displayAvatarUrl,
+                            key: ValueKey(displayAvatarUrl),
+                            fit: BoxFit.contain,
+                            alignment: Alignment.center,
+                            filterQuality: FilterQuality.high,
+                            errorBuilder: (_, __, ___) => Center(
+                              child: Text(
+                                initial,
+                                style: AppTypography.displayLg(
+                                  color: colorScheme.onPrimary,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    : Center(
-                        child: Text(
-                          initial,
-                          style: AppTypography.displayLg(
-                            color: colorScheme.onPrimary,
+                        )
+                      : Center(
+                          child: Text(
+                            initial,
+                            style: AppTypography.displayLg(
+                              color: colorScheme.onPrimary,
+                            ),
                           ),
                         ),
-                      ),
+                ),
               ),
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: colorScheme.surface, width: 2),
-                  ),
-                  child: Icon(
-                    LucideIcons.pencil,
-                    size: 14,
-                    color: colorScheme.onPrimary,
+                child: InkWell(
+                  onTap: isAvatarUploading ? null : onEditTap,
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary,
+                      shape: BoxShape.circle,
+                      border: Border.all(color: colorScheme.surface, width: 2),
+                    ),
+                    child: isAvatarUploading
+                        ? Padding(
+                            padding: const EdgeInsets.all(7),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: colorScheme.onPrimary,
+                            ),
+                          )
+                        : Icon(
+                            LucideIcons.pencil,
+                            size: 14,
+                            color: colorScheme.onPrimary,
+                          ),
                   ),
                 ),
               ),
@@ -224,6 +262,121 @@ class ProfilePage extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _onEditAvatarTapped(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    if (kDebugMode) {
+      debugPrint('[Avatar] Edit tapped');
+    }
+    XFile? picked;
+    try {
+      picked = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 90,
+        maxWidth: 1400,
+        maxHeight: 1400,
+      );
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[Avatar] Picker error: $e');
+      }
+      _showMessage(messenger, 'Could not open image picker. Please try again.');
+      return;
+    }
+
+    if (picked == null) {
+      if (kDebugMode) {
+        debugPrint('[Avatar] Picker returned null (user cancelled)');
+      }
+      _showMessage(messenger, 'Image selection cancelled.');
+      return;
+    }
+
+    final extension = picked.name.split('.').last.toLowerCase();
+    if (kDebugMode) {
+      debugPrint('[Avatar] Picked file: ${picked.name} (ext: $extension)');
+    }
+    if (!_allowedAvatarExtensions.contains(extension)) {
+      _showMessage(messenger, 'Unsupported image type. Please select JPG, PNG, or WEBP.');
+      return;
+    }
+
+    final fileSize = await picked.length();
+    if (kDebugMode) {
+      debugPrint('[Avatar] Picked file size: $fileSize bytes');
+    }
+    if (fileSize > _maxAvatarBytes) {
+      _showMessage(messenger, 'Image is too large. Maximum size is 2 MB.');
+      return;
+    }
+
+    final notifier = ref.read(updateProfileProvider.notifier);
+    try {
+      if (kIsWeb) {
+        final bytes = await picked.readAsBytes();
+        if (kDebugMode) {
+          debugPrint('[Avatar] Uploading as web bytes to /me/profile/avatar');
+        }
+        await notifier.uploadAvatar(
+          fileBytes: bytes,
+          fileName: picked.name,
+        );
+      } else {
+        if (kDebugMode) {
+          debugPrint('[Avatar] Uploading as file path to /me/profile/avatar: ${picked.path}');
+        }
+        await notifier.uploadAvatar(filePath: picked.path);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('[Avatar] Upload threw: $e');
+      }
+    }
+
+    final uploadState = ref.read(updateProfileProvider);
+    if (uploadState.hasError) {
+      final message = _uploadErrorMessage(uploadState.error);
+      _showMessage(messenger, message);
+      return;
+    }
+
+    _showMessage(messenger, 'Profile picture updated successfully.');
+  }
+
+  String _uploadErrorMessage(Object? error) {
+    if (kDebugMode) {
+      debugPrint(
+        '[Avatar] _uploadErrorMessage errorType=${error.runtimeType} value=$error',
+      );
+      if (error is ApiException) {
+        debugPrint(
+          '[Avatar] _uploadErrorMessage api status=${error.statusCode} data=${error.data}',
+        );
+      }
+    }
+    if (error is ValidationException) {
+      return error.getFieldError('avatar') ?? error.message;
+    }
+    if (error is NetworkException || error is TimeoutException) {
+      return 'Upload failed due to network issues. Please try again.';
+    }
+    if (error is ServerException) {
+      final status = error.statusCode != null ? ' (HTTP ${error.statusCode})' : '';
+      return '${error.message}$status';
+    }
+    if (error is ApiException) {
+      final status = error.statusCode != null ? ' (HTTP ${error.statusCode})' : '';
+      return '${error.message}$status';
+    }
+    return 'Failed to upload profile picture. Please try again.';
+  }
+
+  void _showMessage(ScaffoldMessengerState? messenger, String message) {
+    if (messenger == null) return;
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   Widget _buildYourProgress(

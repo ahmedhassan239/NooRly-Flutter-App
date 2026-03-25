@@ -2,10 +2,12 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_app/core/api/api_client.dart';
 import 'package:flutter_app/core/cache/cache_manager.dart';
 import 'package:flutter_app/core/config/endpoints.dart';
 import 'package:flutter_app/core/errors/api_exception.dart';
+import 'package:flutter_app/features/auth/data/models/user_model.dart';
 import 'package:flutter_app/features/profile/data/models/profile_model.dart';
 import 'package:flutter_app/features/profile/domain/entities/profile_entity.dart';
 import 'package:flutter_app/features/profile/domain/repositories/profile_repository.dart';
@@ -81,20 +83,37 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<String> uploadAvatar(String filePath) async {
-    final response = await _apiClient.uploadFile<Map<String, dynamic>>(
-      ProfileEndpoints.avatar,
-      filePath: filePath,
-      fieldName: 'avatar',
-    );
+  Future<UserEntity> uploadAvatar({
+    String? filePath,
+    Uint8List? fileBytes,
+    String? fileName,
+  }) async {
+    try {
+      final response = await _apiClient.uploadFile<Map<String, dynamic>>(
+        ProfileEndpoints.avatar,
+        filePath: filePath,
+        fileBytes: fileBytes,
+        fileName: fileName,
+        fieldName: 'avatar',
+      );
 
-    if (!response.status || response.data == null) {
-      throw UnknownException(message: response.message);
+      if (!response.status || response.data == null) {
+        throw UnknownException(message: response.message);
+      }
+
+      final data = response.data!;
+
+      await clearCache();
+
+      return UserModel.fromJson(data).toEntity();
+    } on ApiException catch (e) {
+      if (kDebugMode) {
+        debugPrint(
+          '[Avatar] upload API error: type=${e.runtimeType} status=${e.statusCode} message=${e.message} data=${e.data}',
+        );
+      }
+      rethrow;
     }
-
-    return response.data!['avatar_url'] as String? ??
-        response.data!['url'] as String? ??
-        '';
   }
 
   @override

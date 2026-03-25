@@ -60,7 +60,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 children: [
                    // Back Button
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
                     icon: Icon(
                       LucideIcons.arrowLeft,
                       color: colorScheme.onSurface,
