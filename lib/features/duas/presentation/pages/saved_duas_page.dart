@@ -13,8 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 /// Saved Duas page: list of saved duas (hydrated from GET /saved?type=dua).
-/// Matches the design: back arrow, "Saved Duas" title, subtitle count,
-/// each card shows title (bold), arabic text, source — with a chevron right.
+/// Cards are display-only (no navigation from this list).
 class SavedDuasPage extends ConsumerWidget {
   const SavedDuasPage({super.key});
 
@@ -249,7 +248,6 @@ class SavedDuasPage extends ConsumerWidget {
     );
   }
 
-  /// Card matching the design: title (bold), arabic text, source — chevron right.
   Widget _buildDuaCard(
     BuildContext context,
     SavedDuaItem dua,
@@ -271,60 +269,44 @@ class SavedDuasPage extends ConsumerWidget {
       sourceAr: dua.sourceAr,
     );
 
-    return InkWell(
-      onTap: () => context.push('/duas/${dua.id}'),
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: colorScheme.surface,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: colorScheme.outline.withAlpha(100)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: AppTypography.bodySm(color: colorScheme.onSurface)
-                        .copyWith(fontWeight: FontWeight.w700),
-                  ),
-                  if (arabic.isNotEmpty) ...[
-                    const SizedBox(height: 6),
-                    Text(
-                      arabic,
-                      style: AppTypography.arabicBody(
-                        color: colorScheme.onSurface.withAlpha(200),
-                      ),
-                      textDirection: TextDirection.rtl,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                  if (source.isNotEmpty) ...[
-                    const SizedBox(height: 6),
-                    Text(
-                      source,
-                      style: AppTypography.caption(
-                        color: colorScheme.onSurface.withAlpha(120),
-                      ),
-                      textDirection: LocalizedReligiousContent.textDirectionFor(lc),
-                    ),
-                  ],
-                ],
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: colorScheme.outline.withAlpha(100)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: AppTypography.bodySm(color: colorScheme.onSurface)
+                .copyWith(fontWeight: FontWeight.w700),
+          ),
+          if (arabic.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              arabic,
+              style: AppTypography.arabicBody(
+                color: colorScheme.onSurface.withAlpha(200),
               ),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-            Icon(
-              LucideIcons.chevronRight,
-              size: 20,
-              color: colorScheme.onSurface.withAlpha(100),
+              textDirection: TextDirection.rtl,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
-        ),
+          if (source.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              source,
+              style: AppTypography.caption(
+                color: colorScheme.onSurface.withAlpha(120),
+              ),
+              textDirection: LocalizedReligiousContent.textDirectionFor(lc),
+            ),
+          ],
+        ],
       ),
     );
   }

@@ -13,6 +13,43 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Valid types from the library API. Content must be one of these.
 const Set<String> kDailyInspirationValidTypes = {'ayah', 'hadith', 'dhikr', 'dua'};
 
+final RegExp _htmlTagRegExp = RegExp(r'<[^>]*>', multiLine: true);
+final RegExp _htmlBreakRegExp = RegExp(r'<br\s*/?>', caseSensitive: false);
+final RegExp _htmlBlockCloseRegExp =
+    RegExp(r'</(p|div|li|blockquote|h[1-6])\s*>', caseSensitive: false);
+final RegExp _zeroWidthRegExp = RegExp(r'[\u200B-\u200F\uFEFF]');
+final RegExp _repeatNewlinesRegExp = RegExp(r'\n{3,}');
+final RegExp _repeatPunctuationRegExp = RegExp(r'([,،.;:!?؟])(?:\s*\1){1,}');
+final RegExp _commaAfterTerminalPunctuationRegExp = RegExp(r'([.!?؟])\s*[,،]+');
+final RegExp _commasBeforeTerminalPunctuationRegExp = RegExp(r'[,،]+\s*([.!?؟])');
+
+String _normalizeInspirationText(String? raw) {
+  if (raw == null || raw.isEmpty) return '';
+  var text = raw
+      .replaceAll('\r\n', '\n')
+      .replaceAll('\r', '\n')
+      .replaceAll(_htmlBreakRegExp, '\n')
+      .replaceAll(_htmlBlockCloseRegExp, '\n')
+      .replaceAll(_htmlTagRegExp, '')
+      .replaceAll('&nbsp;', ' ')
+      .replaceAll('&amp;', '&')
+      .replaceAll(_zeroWidthRegExp, '');
+
+  final normalizedLines = text
+      .split('\n')
+      .map((line) => line.trim().replaceAll(RegExp(r'[ \t]{2,}'), ' '))
+      .toList();
+  text = normalizedLines.join('\n').trim();
+  text = text.replaceAll(_repeatNewlinesRegExp, '\n\n');
+
+  text = text
+      .replaceAllMapped(_commaAfterTerminalPunctuationRegExp, (m) => m.group(1) ?? '')
+      .replaceAllMapped(_commasBeforeTerminalPunctuationRegExp, (m) => m.group(1) ?? '')
+      .replaceAllMapped(_repeatPunctuationRegExp, (m) => m.group(1) ?? '');
+
+  return text.trim();
+}
+
 /// Unified daily inspiration item from the API.
 /// Type is one of: ayah, hadith, dhikr, dua.
 class DailyInspirationDto {
@@ -60,11 +97,11 @@ class DailyInspirationDto {
     return DailyInspirationDto(
       type: type.isEmpty ? 'unknown' : type,
       id: id,
-      arabic: (data['arabic'] as String?) ?? '',
-      translation: (data['translation'] as String?) ?? '',
-      title: data['title'] as String?,
-      source: data['source'] as String?,
-      surah: data['surah'] as String?,
+      arabic: _normalizeInspirationText(data['arabic'] as String?),
+      translation: _normalizeInspirationText(data['translation'] as String?),
+      title: _normalizeInspirationText(data['title'] as String?),
+      source: _normalizeInspirationText(data['source'] as String?),
+      surah: _normalizeInspirationText(data['surah'] as String?),
       ayahNumber: data['ayah_number'] is num
           ? (data['ayah_number'] as num).toInt()
           : data['ayah_number'] as int?,
@@ -224,12 +261,24 @@ Future<void> _setCachedDailyInspiration(
 /// [localeCode] (e.g. from app locale) is used for cache key so each language has its own cache.
 /// When locale changes, provider refetches and API returns translation in the new language.
 Future<DailyInspirationDto?> getDailyInspiration(Ref ref, {required String localeCode}) async {
+  if (kDebugMode) {
+    debugPrint('[DailyInspiration] request locale=$localeCode');
+  }
   final prefs = ref.read(sharedPreferencesProvider);
   final cached = await _getCachedDailyInspiration(prefs, localeCode);
   if (cached != null) return cached;
 
   final dto = await fetchDailyInspiration(ref);
   if (dto != null && dto.isValid) {
+    if (kDebugMode) {
+      final preview = (dto.translation.isNotEmpty ? dto.translation : dto.arabic);
+      final shortPreview =
+          preview.length > 70 ? '${preview.substring(0, 70)}...' : preview;
+      debugPrint(
+        '[DailyInspiration] response locale=$localeCode '
+        'type=${dto.type} id=${dto.id} preview="$shortPreview"',
+      );
+    }
     final modeKey = prefs.getString(_kDailyInspirationCacheModeKey);
     final mode = _cacheModeFromString(modeKey);
     if (mode == DailyInspirationCacheMode.perDay) {

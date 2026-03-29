@@ -3,6 +3,7 @@ import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
 /// Segmented Tab Switch for Share Dialog
 ///
@@ -20,6 +21,7 @@ class ShareTabSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -32,7 +34,7 @@ class ShareTabSwitch extends StatelessWidget {
           Expanded(
             child: _buildTab(
               context,
-              label: 'Text',
+              label: l10n.shareModeText,
               mode: ShareMode.text,
               colorScheme: colorScheme,
             ),
@@ -40,7 +42,7 @@ class ShareTabSwitch extends StatelessWidget {
           Expanded(
             child: _buildTab(
               context,
-              label: 'Image',
+              label: l10n.shareModeImage,
               mode: ShareMode.image,
               colorScheme: colorScheme,
             ),

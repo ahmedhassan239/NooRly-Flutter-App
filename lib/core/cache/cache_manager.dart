@@ -133,6 +133,41 @@ class CacheManager {
     }
   }
 
+  /// Removes API-backed cache entries that are not keyed by locale.
+  ///
+  /// Call when the app language changes so the next fetch uses [Accept-Language]
+  /// and does not immediately re-serve stale text from another language.
+  static Future<void> clearLocaleSensitiveApiCache() async {
+    const contentKeys = <String>[
+      CacheKeys.homeData,
+      CacheKeys.duasList,
+      CacheKeys.hadithList,
+      CacheKeys.versesList,
+      CacheKeys.adhkarList,
+      CacheKeys.categories,
+      CacheKeys.savedItems,
+      CacheKeys.remoteConfig,
+      CacheKeys.prayerTimes,
+      CacheKeys.lessons,
+    ];
+    for (final key in contentKeys) {
+      try {
+        await delete(box: CacheBoxes.content, key: key);
+      } catch (e) {
+        if (kDebugMode) {
+          print('[Cache] clearLocaleSensitiveApiCache: skip $key — $e');
+        }
+      }
+    }
+    try {
+      await delete(box: CacheBoxes.user, key: CacheKeys.userProfile);
+    } catch (e) {
+      if (kDebugMode) {
+        print('[Cache] clearLocaleSensitiveApiCache: skip userProfile — $e');
+      }
+    }
+  }
+
   /// Delete a cache entry.
   static Future<void> delete({
     required String box,

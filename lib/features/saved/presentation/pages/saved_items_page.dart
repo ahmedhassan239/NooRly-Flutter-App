@@ -1,21 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/design_system/radius.dart';
-import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
-/// Saved items screen: All / Duas / Adhkar / Verses / Hadith with tabs.
-/// Navigate from Profile "Saved Duas" quick action.
+/// Saved items screen: All / Duas / Adhkar / Verses / Hadith / Lessons with tabs.
+/// Unified saved items screen (Profile quick action and `/saved`).
 class SavedItemsPage extends ConsumerWidget {
   const SavedItemsPage({super.key});
 
-  static const List<String> _tabTypes = ['all', 'dua', 'adhkar', 'verse', 'hadith'];
+  /// First non-empty raw field, normalized for list preview (no huge gaps / tail noise).
+  static String _savedSnippetPreview(String? a, [String? b, String? c]) {
+    final raw = (a != null && a.trim().isNotEmpty)
+        ? a
+        : (b != null && b.trim().isNotEmpty)
+            ? b
+            : (c ?? '');
+    final n = ContentDisplayNormalize.forDisplay(raw);
+    if (n.length <= 80) return n;
+    return '${n.substring(0, 80)}…';
+  }
+
+  static const List<String> _tabTypes = [
+    'all',
+    'dua',
+    'adhkar',
+    'verse',
+    'hadith',
+    'lesson',
+  ];
 
   List<String> _tabLabels(AppLocalizations l10n) => [
     l10n.savedTabAll,
@@ -23,6 +44,7 @@ class SavedItemsPage extends ConsumerWidget {
     l10n.savedTabAdhkar,
     l10n.savedTabVerses,
     l10n.savedTabHadith,
+    l10n.savedTabLessons,
   ];
 
   @override
@@ -90,10 +112,10 @@ class _TabContent extends ConsumerWidget {
           colorScheme,
           result.items
               .map((u) => _DisplayItem(
-                    type: u.type,
+                    type: _normalizeSavedType(u.type),
                     title: u.title,
                     snippet: u.snippet,
-                    referenceId: u.referenceId?.toString() ?? '',
+                    referenceId: _resolveReferenceId(u.referenceId, fallback: u.id),
                   ))
               .toList(),
           isEmpty: result.items.isEmpty,
@@ -115,9 +137,10 @@ class _TabContent extends ConsumerWidget {
               .map((u) => _DisplayItem(
                     type: 'dua',
                     title: u.title ?? AppLocalizations.of(context)!.savedTypeDua,
-                    snippet: (u.text ?? u.textAr ?? '').length > 80
-                        ? '${(u.text ?? u.textAr ?? '').substring(0, 80)}…'
-                        : (u.text ?? u.textAr ?? ''),
+                    snippet: SavedItemsPage._savedSnippetPreview(
+                      u.text,
+                      u.textAr,
+                    ),
                     referenceId: u.id.toString(),
                   ))
               .toList(),
@@ -140,9 +163,10 @@ class _TabContent extends ConsumerWidget {
               .map((u) => _DisplayItem(
                     type: 'adhkar',
                     title: u.title ?? AppLocalizations.of(context)!.savedTypeAdhkar,
-                    snippet: (u.text ?? u.textAr ?? '').length > 80
-                        ? '${(u.text ?? u.textAr ?? '').substring(0, 80)}…'
-                        : (u.text ?? u.textAr ?? ''),
+                    snippet: SavedItemsPage._savedSnippetPreview(
+                      u.text,
+                      u.textAr,
+                    ),
                     referenceId: u.id.toString(),
                   ))
               .toList(),
@@ -165,9 +189,10 @@ class _TabContent extends ConsumerWidget {
               .map((u) => _DisplayItem(
                     type: 'verse',
                     title: u.reference ?? '${u.surahNameEn ?? ''} ${u.ayahNumber}',
-                    snippet: (u.text ?? u.textAr ?? '').length > 80
-                        ? '${(u.text ?? u.textAr ?? '').substring(0, 80)}…'
-                        : (u.text ?? u.textAr ?? ''),
+                    snippet: SavedItemsPage._savedSnippetPreview(
+                      u.text,
+                      u.textAr,
+                    ),
                     referenceId: u.id.toString(),
                   ))
               .toList(),
@@ -190,9 +215,11 @@ class _TabContent extends ConsumerWidget {
               .map((u) => _DisplayItem(
                     type: 'hadith',
                     title: u.collectionName ?? u.collection ?? AppLocalizations.of(context)!.savedTypeHadith,
-                    snippet: (u.text ?? u.textAr ?? u.textEn ?? '').length > 80
-                        ? '${(u.text ?? u.textAr ?? u.textEn ?? '').substring(0, 80)}…'
-                        : (u.text ?? u.textAr ?? u.textEn ?? ''),
+                    snippet: SavedItemsPage._savedSnippetPreview(
+                      u.text,
+                      u.textAr,
+                      u.textEn,
+                    ),
                     referenceId: u.id.toString(),
                   ))
               .toList(),
@@ -204,7 +231,55 @@ class _TabContent extends ConsumerWidget {
       );
     }
 
+    if (type == 'lesson') {
+      final async = ref.watch(savedLessonListProvider);
+      final l10n = AppLocalizations.of(context)!;
+      final localeCode = ref.watch(localeControllerProvider).languageCode;
+      return async.when(
+        data: (items) => _buildList(
+          context,
+          ref,
+          colorScheme,
+          items
+              .map(
+                (u) => _DisplayItem(
+                  type: 'lesson',
+                  title: _lessonDisplayTitle(u, localeCode, l10n.savedTypeLesson),
+                  snippet: _lessonDisplaySnippet(u, localeCode),
+                  referenceId: u.id.toString(),
+                ),
+              )
+              .toList(),
+          isEmpty: items.isEmpty,
+          onRefresh: () => ref.invalidate(savedLessonListProvider),
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => _buildError(context, ref, colorScheme, () => ref.invalidate(savedLessonListProvider)),
+      );
+    }
+
     return const SizedBox.shrink();
+  }
+
+  static String _lessonDisplayTitle(
+    SavedLessonItem u,
+    String localeCode,
+    String placeholder,
+  ) {
+    final t = u.localizedTitle(localeCode).trim();
+    return t.isNotEmpty ? t : placeholder;
+  }
+
+  static String _lessonDisplaySnippet(SavedLessonItem u, String localeCode) {
+    final fromApi = u.localizedSnippet(localeCode);
+    if (fromApi.isNotEmpty) return fromApi;
+    final d = u.dayNumber;
+    final w = u.weekNumber;
+    if (d == null && w == null) return '';
+    final parts = <String>[];
+    if (d != null) parts.add('Day $d');
+    if (w != null) parts.add('Week $w');
+    return parts.join(' · ');
   }
 
   Widget _buildList(
@@ -239,29 +314,28 @@ class _TabContent extends ConsumerWidget {
         itemBuilder: (context, index) => _SavedItemCard(
           item: items[index],
           colorScheme: colorScheme,
-          onTap: () => _navigateToDetail(context, items[index]),
         ),
       ),
     );
   }
 
-  void _navigateToDetail(BuildContext context, _DisplayItem item) {
-    switch (item.type) {
-      case 'hadith':
-        context.push('/hadith/${item.referenceId}');
-        break;
-      case 'verse':
-        context.push('/verses/${item.referenceId}');
-        break;
-      case 'dua':
-        context.push('/dua/${item.referenceId}');
-        break;
-      case 'adhkar':
-        context.push('/adhkar/${item.referenceId}');
-        break;
-      default:
-        break;
-    }
+  static String _normalizeSavedType(String rawType) {
+    final t = rawType.trim().toLowerCase();
+    if (t == 'dhikr') return 'adhkar';
+    if (t == 'adhkars') return 'adhkar';
+    if (t == 'ayah' || t == 'quran') return 'verse';
+    if (t == 'verses') return 'verse';
+    if (t == 'duas') return 'dua';
+    if (t == 'hadiths') return 'hadith';
+    if (t == 'lessons') return 'lesson';
+    return t;
+  }
+
+  static String _resolveReferenceId(dynamic rawId, {required int fallback}) {
+    if (rawId == null) return fallback > 0 ? fallback.toString() : '';
+    final id = rawId.toString().trim();
+    if (id.isNotEmpty && id != '0' && id != 'null') return id;
+    return fallback > 0 ? fallback.toString() : '';
   }
 
   Widget _buildError(
@@ -309,15 +383,14 @@ class _DisplayItem {
   final String referenceId;
 }
 
+/// Saved list rows are display-only except rows with type `lesson` (opens lesson detail).
 class _SavedItemCard extends StatelessWidget {
   const _SavedItemCard({
     required this.item,
     required this.colorScheme,
-    required this.onTap,
   });
   final _DisplayItem item;
   final ColorScheme colorScheme;
-  final VoidCallback onTap;
 
   static String _typeLabel(BuildContext context, String type) {
     final l10n = AppLocalizations.of(context)!;
@@ -330,61 +403,81 @@ class _SavedItemCard extends StatelessWidget {
         return l10n.savedTypeDua;
       case 'adhkar':
         return l10n.savedTypeAdhkar;
+      case 'lesson':
+        return l10n.savedTypeLesson;
       default:
         return type;
     }
   }
 
+  bool get _lessonNavigable =>
+      item.type == 'lesson' && item.referenceId.trim().isNotEmpty;
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: colorScheme.outline.withAlpha(128)),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _typeLabel(context, item.type),
-                    style: AppTypography.caption(
-                      color: colorScheme.primary,
-                    ).copyWith(fontWeight: FontWeight.w600),
-                  ),
+    final card = Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: colorScheme.outline.withAlpha(128)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  _typeLabel(context, item.type),
+                  style: AppTypography.caption(
+                    color: colorScheme.primary,
+                  ).copyWith(fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.title,
+                  style: AppTypography.bodySm(color: colorScheme.onSurface)
+                      .copyWith(fontWeight: FontWeight.w500),
+                ),
+                if (item.snippet.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
-                    item.title,
-                    style: AppTypography.bodySm(color: colorScheme.onSurface)
-                        .copyWith(fontWeight: FontWeight.w500),
-                  ),
-                  if (item.snippet.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      item.snippet,
-                      style: AppTypography.caption(
-                        color: colorScheme.onSurface.withAlpha(180),
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                    item.snippet,
+                    style: AppTypography.caption(
+                      color: colorScheme.onSurface.withAlpha(180),
                     ),
-                  ],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ],
-              ),
+              ],
             ),
+          ),
+          if (_lessonNavigable) ...[
             const SizedBox(width: AppSpacing.sm),
-            Icon(LucideIcons.chevronRight, size: 20, color: colorScheme.onSurface.withAlpha(150)),
+            Icon(
+              LucideIcons.chevronRight,
+              size: 20,
+              color: colorScheme.onSurface.withAlpha(150),
+            ),
           ],
-        ),
+        ],
       ),
+    );
+
+    if (!_lessonNavigable) {
+      return card;
+    }
+
+    return InkWell(
+      onTap: () {
+        final id = Uri.encodeComponent(item.referenceId.trim());
+        context.push('/lessons/$id');
+      },
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      child: card,
     );
   }
 }

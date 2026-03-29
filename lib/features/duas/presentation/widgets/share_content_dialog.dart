@@ -8,7 +8,7 @@ import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
-import 'package:flutter_app/features/duas/presentation/widgets/dua_image_card.dart';
+import 'package:flutter_app/design_system/widgets/library_share_image_card.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/dua_text_preview.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_tab_switch.dart';
@@ -26,6 +26,7 @@ class ShareableContent {
     required this.transliteration,
     required this.translation,
     required this.source,
+    required this.shareBadgeLabel,
     this.title,
   });
 
@@ -34,6 +35,8 @@ class ShareableContent {
   final String transliteration;
   final String translation;
   final String source;
+  /// Localized type label for the share image (e.g. [AppLocalizations.hadith]).
+  final String shareBadgeLabel;
   final String? title;
 }
 
@@ -159,7 +162,7 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
     } else {
       return RepaintBoundary(
         key: _imageCardKey,
-        child: _buildImageCard(context, colorScheme),
+        child: _buildImageCard(context),
       );
     }
   }
@@ -213,52 +216,17 @@ class _ShareContentDialogState extends State<ShareContentDialog> {
     );
   }
 
-  Widget _buildImageCard(BuildContext context, ColorScheme colorScheme) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+  Widget _buildImageCard(BuildContext context) {
     final lc = Localizations.localeOf(context).languageCode;
-    final dir = LocalizedReligiousContent.textDirectionFor(lc);
     final primary = LocalizedReligiousContent.primaryBody(
       languageCode: lc,
       arabic: widget.content.arabic,
       translation: widget.content.translation,
     );
-    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
-
-    final cardBackground = isDark ? const Color(0xFF1E1E1E) : Colors.white;
-    final bodyColor = isDark ? Colors.white : const Color(0xFF1F2937);
-    final footerColor = isDark ? const Color(0xFF9CA3AF) : const Color(0xFF6B7280);
-
-    return Container(
-      width: double.infinity,
-      constraints: const BoxConstraints(minHeight: 400),
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      decoration: BoxDecoration(
-        color: cardBackground,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-      ),
-      child: Directionality(
-        textDirection: dir,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              primary,
-              textAlign: TextAlign.center,
-              style: useArabic
-                  ? AppTypography.arabicH1(color: bodyColor)
-                  : AppTypography.body(color: bodyColor).copyWith(height: 1.7, fontSize: 22),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              '— ${widget.content.source}',
-              textAlign: TextAlign.center,
-              style: AppTypography.bodySm(color: footerColor)
-                  .copyWith(fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
-      ),
+    return LibraryShareImageCard(
+      badgeLabel: widget.content.shareBadgeLabel,
+      primaryBody: primary,
+      sourcePlain: widget.content.source,
     );
   }
 

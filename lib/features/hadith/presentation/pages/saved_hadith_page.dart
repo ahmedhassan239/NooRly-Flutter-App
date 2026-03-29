@@ -8,6 +8,7 @@ import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/hadith/presentation/widgets/save_hadith_button.dart';
+import 'package:flutter_app/features/library/presentation/widgets/library_card_compact_action_button.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
@@ -369,11 +370,9 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
               children: [
                 SaveHadithButton(hadithId: hadith.id, compact: true),
                 const SizedBox(width: AppSpacing.sm),
-                _buildActionButton(
-                  context: context,
+                LibraryCardCompactSecondaryButton(
                   icon: LucideIcons.copy,
                   label: l10n.copy,
-                  colorScheme: colorScheme,
                   onTap: () {
                     final toCopy = LocalizedReligiousContent.composePlainText(
                       languageCode: lc,
@@ -391,11 +390,9 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                   },
                 ),
                 const SizedBox(width: AppSpacing.sm),
-                _buildActionButton(
-                  context: context,
+                LibraryCardCompactSecondaryButton(
                   icon: LucideIcons.share2,
                   label: l10n.share,
-                  colorScheme: colorScheme,
                   onTap: () {
                     ShareContentDialog.show(
                       context,
@@ -405,6 +402,7 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
                         transliteration: '',
                         translation: text,
                         source: source,
+                        shareBadgeLabel: l10n.hadith,
                         title: '${l10n.share} ${l10n.hadith}',
                       ),
                     );
@@ -418,49 +416,4 @@ class _SavedHadithPageState extends ConsumerState<SavedHadithPage> {
     );
   }
 
-  Widget _buildActionButton({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required ColorScheme colorScheme,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.sm),
-      child: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 12,
-        ),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: Border.all(
-            color: colorScheme.outline.withAlpha(100),
-          ),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: colorScheme.onSurface.withAlpha(150),
-            ),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: colorScheme.onSurface.withAlpha(150),
-              ).copyWith(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }

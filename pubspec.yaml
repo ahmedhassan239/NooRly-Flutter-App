@@ -153,34 +153,31 @@ flutter:
           weight: 400
         - asset: assets/fonts/Inter-Medium.ttf
           weight: 500
-    - family: Amiri
-      fonts:
-        - asset: assets/fonts/Amiri-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/Amiri-Bold.ttf
-          weight: 700
 
 # Flutter Launcher Icons Configuration
+# Canonical branding: web/logo.png. assets/branding/app_icon.png is kept in sync for in-app widgets (pubspec assets).
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/branding/app_icon.png"
+  image_path: "web/logo.png"
+  remove_alpha_ios: true
   min_sdk_android: 21
   adaptive_icon_background: "#F5F7FA"
-  adaptive_icon_foreground: "assets/branding/app_icon.png"
+  adaptive_icon_foreground: "web/logo.png"
   web:
     generate: true
-    image_path: "assets/branding/app_icon.png"
-    background_color: "#F5F7FA"
+    image_path: "web/logo.png"
+    # Omit background_color so manifest is not forced to match a solid icon matte;
+    # icons are generated with transparency from the source artwork.
     theme_color: "#1E40AF"
 
 # Native splash (Android / iOS / Web) — matches NOORly background token (AppColors.background)
 flutter_native_splash:
   color: "#F5F7FA"
-  image: assets/branding/app_icon.png
+  image: web/logo.png
   android: true
   ios: true
   web: true
   android_12:
     color: "#F5F7FA"
-    image: assets/branding/app_icon.png
+    image: web/logo.png

@@ -76,7 +76,13 @@ class _RegisterEmailPageState extends ConsumerState<RegisterEmailPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => context.pop(),
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/auth/register');
+            }
+          },
           icon: Icon(LucideIcons.arrowLeft, color: colorScheme.onSurface),
         ),
         backgroundColor: Colors.transparent,

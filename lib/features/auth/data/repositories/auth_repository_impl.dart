@@ -210,9 +210,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> forgotPassword({required String email}) async {
+  Future<void> requestPasswordResetOtp({required String email}) async {
     final response = await _apiClient.post<void>(
-      AuthEndpoints.forgotPassword,
+      AuthEndpoints.forgotPasswordRequestOtp,
       data: {'email': email},
     );
 
@@ -222,17 +222,42 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<String> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  }) async {
+    final response = await _apiClient.post<Map<String, dynamic>>(
+      AuthEndpoints.forgotPasswordVerifyOtp,
+      data: {
+        'email': email,
+        'otp': otp,
+      },
+    );
+
+    if (!response.status || response.data == null) {
+      throw UnknownException(message: response.message);
+    }
+
+    final resetToken = (response.data!['reset_token'] as String?)?.trim() ?? '';
+    if (resetToken.isEmpty) {
+      throw UnknownException(message: 'Invalid reset session response.');
+    }
+
+    return resetToken;
+  }
+
+  @override
   Future<void> resetPassword({
     required String email,
-    required String token,
+    required String resetToken,
     required String password,
     required String passwordConfirmation,
   }) async {
     final response = await _apiClient.post<void>(
-      AuthEndpoints.resetPassword,
+      AuthEndpoints.forgotPasswordReset,
       data: {
         'email': email,
-        'token': token,
+        'reset_token': resetToken,
         'password': password,
         'password_confirmation': passwordConfirmation,
       },

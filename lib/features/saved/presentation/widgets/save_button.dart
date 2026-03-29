@@ -3,15 +3,12 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_app/design_system/colors.dart';
-import 'package:flutter_app/design_system/radius.dart';
-import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
+import 'package:flutter_app/features/saved/presentation/widgets/compact_save_button_chrome.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 /// Generic save button for any content type.
 /// [type] must be one of: 'dua', 'hadith', 'verse', 'lesson', 'adhkar'
@@ -40,73 +37,17 @@ class SaveButton extends ConsumerWidget {
     final isAuthenticated = auth.isAuthenticated;
     final isSaved = isItemSaved(ref, type, _itemIdStr) ?? false;
     final isPending = isItemPending(ref, type, _itemIdStr);
-    final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
-    return InkWell(
-      onTap: isPending ? null : () => _onTap(context, ref, isAuthenticated, isSaved),
-      borderRadius: BorderRadius.circular(compact ? AppRadius.sm : AppRadius.md),
-      child: Opacity(
-        opacity: isPending ? 0.7 : 1,
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            vertical: compact ? 10 : 14,
-            horizontal: 12,
-          ),
-          decoration: BoxDecoration(
-            color: isSaved
-                ? AppColors.accentGreen.withAlpha(25)
-                : colorScheme.surfaceContainerHighest,
-            borderRadius: BorderRadius.circular(compact ? AppRadius.sm : AppRadius.md),
-            border: Border.all(
-              color: isSaved
-                  ? AppColors.accentGreen.withAlpha(80)
-                  : colorScheme.outline.withAlpha(100),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (isPending)
-                SizedBox(
-                  width: compact ? 18 : 20,
-                  height: compact ? 18 : 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: colorScheme.primary,
-                  ),
-                )
-              else
-                Icon(
-                  isSaved ? LucideIcons.heartOff : LucideIcons.heart,
-                  size: compact ? 18 : 20,
-                  color: isSaved
-                      ? AppColors.accentGreen
-                      : colorScheme.onSurface.withAlpha(150),
-                ),
-              SizedBox(width: compact ? 6 : 8),
-              Text(
-                isPending ? '...' : (isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.actionSave),
-                style: (compact
-                        ? AppTypography.caption(
-                            color: isSaved
-                                ? AppColors.accentGreen
-                                : colorScheme.onSurface.withAlpha(150),
-                          )
-                        : AppTypography.bodySm(
-                            color: isSaved
-                                ? AppColors.accentGreen
-                                : colorScheme.onSurface.withAlpha(150),
-                          ))
-                    .copyWith(
-                  fontSize: compact ? 12 : null,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return CompactSaveButtonChrome(
+      compact: compact,
+      isSaved: isSaved,
+      isPending: isPending,
+      savedLabel: l10n.actionSaved,
+      saveLabel: l10n.actionSave,
+      onTap: isPending
+          ? null
+          : () => _onTap(context, ref, isAuthenticated, isSaved),
     );
   }
 

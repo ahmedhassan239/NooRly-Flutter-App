@@ -805,22 +805,6 @@ class ProfilePage extends ConsumerWidget {
               ],
             ),
           ),
-          const SizedBox(height: AppSpacing.sm),
-          InkWell(
-            onTap: () => context.push('/edit-profile'),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  l10n.profileEditProfile,
-                  style: AppTypography.bodySm(color: colorScheme.primary)
-                      .copyWith(fontWeight: FontWeight.w500),
-                ),
-                const SizedBox(width: 4),
-                Icon(LucideIcons.chevronRight, size: 16, color: colorScheme.primary),
-              ],
-            ),
-          ),
         ],
       ),
     );
@@ -855,8 +839,8 @@ class ProfilePage extends ConsumerWidget {
             icon: LucideIcons.bookMarked,
             iconBgColor: colorScheme.primary.withAlpha(25),
             iconColor: colorScheme.primary,
-            title: AppLocalizations.of(context)!.profileSavedDuas,
-            subtitle: AppLocalizations.of(context)!.profileViewSavedDuas,
+            title: AppLocalizations.of(context)!.savedTitle,
+            subtitle: AppLocalizations.of(context)!.profileSavedItemsSubtitle,
             onTap: () => context.push('/saved'),
             colorScheme: colorScheme,
           ),

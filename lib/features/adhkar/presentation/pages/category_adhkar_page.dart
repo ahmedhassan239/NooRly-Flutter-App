@@ -6,20 +6,18 @@ import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/content/domain/entities/content_entity.dart'
     show DhikrEntity;
 import 'package:flutter_app/core/utils/locale_digits.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/adhkar/providers/adhkar_by_category_id_provider.dart';
-import 'package:flutter_app/features/adhkar/providers/saved_adhkar_provider.dart';
+import 'package:flutter_app/features/adhkar/presentation/widgets/save_adhkar_button.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_content_dialog.dart';
 import 'package:flutter_app/features/library/data/dto/category_dto.dart';
+import 'package:flutter_app/features/library/presentation/widgets/library_card_compact_action_button.dart';
 import 'package:flutter_app/features/library/presentation/providers/library_providers.dart';
 import 'package:flutter_app/design_system/widgets/noorly_section_icon.dart'
     show NoorlySectionIcon, noorlySectionIconGap;
 import 'package:flutter_app/features/library/utils/noorly_icon_mapper.dart';
-import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart'
-    show ToggleSaveResult;
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -277,10 +275,6 @@ class CategoryAdhkarPage extends ConsumerWidget {
   ) {
     final locale = ref.watch(localeControllerProvider).languageCode;
     final l10n = AppLocalizations.of(context)!;
-    final overrides = ref.watch(adhkarSaveOverrideProvider);
-    final pending = ref.watch(adhkarSavePendingProvider);
-    final isSaved = overrides[dhikr.id] ?? dhikr.isSaved;
-    final isSavePending = pending.contains(dhikr.id);
     final arabic = dhikr.arabicText;
     final translation = dhikr.translation ?? '';
     final transliteration = dhikr.transliteration ?? '';
@@ -359,15 +353,12 @@ class CategoryAdhkarPage extends ConsumerWidget {
               _buildActionButtons(
                 context,
                 ref,
-                categoryId,
-                dhikr,
-                isSaved,
-                isSavePending,
                 colorScheme,
                 arabic: arabic,
                 transliteration: transliteration,
                 translation: translation,
                 source: source,
+                dhikrId: dhikr.id,
               ),
             ],
           ),
@@ -379,212 +370,59 @@ class CategoryAdhkarPage extends ConsumerWidget {
   Widget _buildActionButtons(
     BuildContext context,
     WidgetRef ref,
-    String categoryId,
-    DhikrEntity dhikr,
-    bool isSaved,
-    bool isSavePending,
     ColorScheme colorScheme, {
     required String arabic,
     required String transliteration,
     required String translation,
     required String source,
+    required String dhikrId,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: _buildSaveButton(
-            context: context,
-            ref: ref,
-            dhikr: dhikr,
-            isSaved: isSaved,
-            isSavePending: isSavePending,
-            colorScheme: colorScheme,
-          ),
+        SaveAdhkarButton(adhkarId: dhikrId, compact: true),
+        const SizedBox(width: AppSpacing.sm),
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.copy,
+          label: l10n.copy,
+          onTap: () {
+            final lc = ref.read(localeControllerProvider).languageCode;
+            final textToCopy = LocalizedReligiousContent.composePlainText(
+              languageCode: lc,
+              arabic: arabic,
+              translation: translation,
+              source: source,
+            );
+            Clipboard.setData(ClipboardData(text: textToCopy));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.copiedToClipboard),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
         ),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.copy,
-            label: AppLocalizations.of(context)!.copy,
-            colorScheme: colorScheme,
-            onTap: () {
-              final lc =
-                  ref.read(localeControllerProvider).languageCode;
-              final textToCopy = LocalizedReligiousContent.composePlainText(
-                languageCode: lc,
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.share2,
+          label: l10n.share,
+          onTap: () {
+            ShareContentDialog.show(
+              context,
+              ShareableContent(
+                id: dhikrId,
                 arabic: arabic,
+                transliteration: transliteration,
                 translation: translation,
                 source: source,
-              );
-              Clipboard.setData(ClipboardData(text: textToCopy));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(AppLocalizations.of(context)!.copiedToClipboard),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.share2,
-            label: AppLocalizations.of(context)!.share,
-            colorScheme: colorScheme,
-            onTap: () {
-              final l10n = AppLocalizations.of(context)!;
-              ShareContentDialog.show(
-                context,
-                ShareableContent(
-                  id: dhikr.id,
-                  arabic: arabic,
-                  transliteration: transliteration,
-                  translation: translation,
-                  source: source,
-                  title: '${l10n.share} ${l10n.adhkar}',
-                ),
-              );
-            },
-          ),
+                shareBadgeLabel: l10n.adhkar,
+                title: '${l10n.share} ${l10n.adhkar}',
+              ),
+            );
+          },
         ),
       ],
-    );
-  }
-
-  Future<void> _toggleSaveAdhkar(
-    BuildContext context,
-    WidgetRef ref,
-    DhikrEntity dhikr,
-    bool currentlySaved,
-  ) async {
-    final result = await ref.read(toggleSaveAdhkarProvider.notifier).toggle(
-          dhikr.id,
-          currentlySaved,
-        );
-    if (!context.mounted) return;
-    final l10n = AppLocalizations.of(context)!;
-    switch (result) {
-      case ToggleSaveResult.success:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              currentlySaved
-                  ? l10n.removedFromSaved
-                  : l10n.savedToFavorites,
-            ),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      case ToggleSaveResult.failure:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.couldNotUpdateSavedState),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      case ToggleSaveResult.notAuthenticated:
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.pleaseSignInToSave),
-            duration: const Duration(seconds: 2),
-          ),
-        );
-      case ToggleSaveResult.skipped:
-        break;
-    }
-  }
-
-  Widget _buildSaveButton({
-    required BuildContext context,
-    required WidgetRef ref,
-    required DhikrEntity dhikr,
-    required bool isSaved,
-    required bool isSavePending,
-    required ColorScheme colorScheme,
-  }) {
-    return _buildActionButton(
-      context: context,
-      icon: LucideIcons.heart,
-      label: isSaved ? AppLocalizations.of(context)!.actionSaved : AppLocalizations.of(context)!.save,
-      colorScheme: colorScheme,
-      isActive: isSaved,
-      isEnabled: !isSavePending,
-      isLoading: isSavePending,
-      onTap: isSavePending
-          ? null
-          : () => _toggleSaveAdhkar(context, ref, dhikr, isSaved),
-    );
-  }
-
-  Widget _buildActionButton({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required ColorScheme colorScheme,
-    VoidCallback? onTap,
-    bool isActive = false,
-    bool isEnabled = true,
-    bool isLoading = false,
-  }) {
-    final enabled = isEnabled && onTap != null && !isLoading;
-    return InkWell(
-      onTap: enabled ? onTap : null,
-      borderRadius: BorderRadius.circular(AppRadius.sm),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isActive
-              ? colorScheme.primary.withAlpha(25)
-              : colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: Border.all(
-            color: isActive
-                ? colorScheme.primary.withAlpha(50)
-                : colorScheme.outline.withAlpha(100),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isLoading)
-              SizedBox(
-                width: 18,
-                height: 18,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: colorScheme.primary,
-                ),
-              )
-            else
-              Icon(
-                icon,
-                size: 18,
-                color: !enabled
-                    ? colorScheme.onSurface.withAlpha(80)
-                    : isActive
-                        ? colorScheme.primary
-                        : colorScheme.onSurface.withAlpha(150),
-              ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: !enabled
-                    ? colorScheme.onSurface.withAlpha(80)
-                    : isActive
-                        ? colorScheme.primary
-                        : colorScheme.onSurface.withAlpha(150),
-              ).copyWith(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

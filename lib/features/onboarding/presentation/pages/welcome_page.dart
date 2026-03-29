@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,10 +15,8 @@ import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 /// Asset path for mosque silhouette (Flutter asset under assets/, not web-only).
 const String _kMosqueSvgAsset = 'assets/images/mosque_islam.svg';
 
-/// App logo — same source as launcher icon / native splash (`assets/branding/app_icon.png`).
-const String _kBrandingLogoAsset = 'assets/branding/app_icon.png';
-
-/// Welcome/landing page. Full-screen Stack: gradient → mosque silhouette → overlay → content.
+/// Welcome/landing page. Uses an opaque brand backdrop so the global app pattern does not
+/// show here; other routes still use the shared pattern from `MaterialApp.builder` unchanged.
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
@@ -27,14 +24,16 @@ class WelcomePage extends ConsumerWidget {
   static const Color _blueBottom = Color(0xFF1A2F47);
   static const Color _accentOrange = Color(0xFFF7943E);
 
+  static const double _readabilityOverlayAlpha = 0.18;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
 
     if (auth.status == AuthStatus.initial || auth.status == AuthStatus.loading) {
-      // Match native / web splash: warm off-white + centered logo (no generic spinner).
-      // Square box + [BoxFit.contain] matches web/native splash (no circular crop).
+      // Match native / web splash: warm surface + centered logo (opaque — hides global pattern).
       return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
         body: Center(
           child: AppBrandLogo(size: 168),
         ),
@@ -52,6 +51,7 @@ class WelcomePage extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: _blueDark,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final size = MediaQuery.sizeOf(context);
@@ -70,40 +70,11 @@ class WelcomePage extends ConsumerWidget {
           return Stack(
             fit: StackFit.expand,
             children: [
-              // Layer 1: full-screen vertical gradient (dark blue top → lighter blue bottom)
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [_blueDark, _blueBottom],
-                  ),
-                ),
+              _WelcomeAtmosphere(
+                svgWidth: svgWidth,
               ).animate().fadeIn(duration: 800.ms),
 
-              // Layer 2: mosque SVG — large centered hero silhouette behind entire content
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Opacity(
-                    opacity: 0.3,
-                    child: SvgPicture.asset(
-                      _kMosqueSvgAsset,
-                      width: svgWidth,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Layer 3: subtle dark overlay for readability (black 0.12–0.25)
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.18),
-                ),
-              ),
-
-              // Layer 4: foreground content (headline + subtitle + buttons) centered, max width 480
+              // Foreground: headline + subtitle + buttons, max width 480
               SafeArea(
                 child: Center(
                   child: SingleChildScrollView(
@@ -274,6 +245,53 @@ class WelcomePage extends ConsumerWidget {
   }
 }
 
+/// Opaque brand gradient + mosque + darken layer (covers global pattern on this route only).
+class _WelcomeAtmosphere extends StatelessWidget {
+  const _WelcomeAtmosphere({required this.svgWidth});
+
+  final double svgWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                WelcomePage._blueDark,
+                WelcomePage._blueBottom,
+              ],
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: Align(
+            alignment: Alignment.center,
+            child: Opacity(
+              opacity: 0.3,
+              child: SvgPicture.asset(
+                _kMosqueSvgAsset,
+                width: svgWidth,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        ),
+        Positioned.fill(
+          child: Container(
+            color: Colors.black
+                .withValues(alpha: WelcomePage._readabilityOverlayAlpha),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 /// Shown when auth initialization fails (e.g. network error). Offers retry and fallbacks.
 class _StartupErrorScreen extends StatelessWidget {
   const _StartupErrorScreen({
@@ -305,145 +323,84 @@ class _StartupErrorScreen extends StatelessWidget {
     final icon    = isConn ? LucideIcons.wifiOff  : LucideIcons.alertCircle;
 
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [WelcomePage._blueDark, WelcomePage._blueBottom],
-          ),
-        ),
-        child: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    icon,
-                    size: 48,
-                    color: Colors.white.withValues(alpha: 0.8),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    heading,
-                    style: AppTypography.h1(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    message,
-                    style: AppTypography.body().copyWith(
-                      color: Colors.white.withValues(alpha: 0.85),
+      backgroundColor: WelcomePage._blueDark,
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final screenWidth = MediaQuery.sizeOf(context).width;
+          final svgWidthPercent = screenWidth > 1200 ? 0.6 : 0.9;
+          final svgWidth = screenWidth * svgWidthPercent;
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              _WelcomeAtmosphere(svgWidth: svgWidth),
+              SafeArea(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          icon,
+                          size: 48,
+                          color: Colors.white.withValues(alpha: 0.8),
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          heading,
+                          style: AppTypography.h1(color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          message,
+                          style: AppTypography.body().copyWith(
+                            color: Colors.white.withValues(alpha: 0.85),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: onRetry,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: WelcomePage._accentOrange,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            child: const Text('Retry'),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: onLogin,
+                          child: Text(
+                            'Sign in',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: onGuest,
+                          child: Text(
+                            'Continue as guest',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.9),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 32),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: onRetry,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: WelcomePage._accentOrange,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
-                      child: const Text('Retry'),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(onPressed: onLogin, child: const Text('Sign in')),
-                  TextButton(onPressed: onGuest, child: const Text('Continue as guest')),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
+            ],
+          );
+        },
       ),
     );
   }
-}
-
-/// Loads mosque SVG from asset; on failure prints error and shows fallback dome shape.
-class _MosqueSilhouetteLayer extends StatelessWidget {
-  const _MosqueSilhouetteLayer({required this.assetPath});
-  final String assetPath;
-
-  /// Opacity for silhouette (0.25–0.45) so it's visible but not overpowering.
-  static const double _silhouetteOpacity = 0.35;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<String>(
-      future: rootBundle.loadString(assetPath),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          if (kDebugMode) {
-            debugPrint('❌ [WelcomePage] Mosque SVG failed to load: ${snapshot.error}');
-          }
-          return const _FallbackDomeShape(opacity: _silhouetteOpacity);
-        }
-        if (!snapshot.hasData) {
-          return const SizedBox.shrink();
-        }
-        return Opacity(
-          opacity: _silhouetteOpacity,
-          child: SvgPicture.string(
-            snapshot.data!,
-            fit: BoxFit.contain,
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// Simple dome shape used when mosque SVG fails to load.
-class _FallbackDomeShape extends StatelessWidget {
-  const _FallbackDomeShape({required this.opacity});
-  final double opacity;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final w = constraints.maxWidth;
-        final h = constraints.maxHeight;
-        return CustomPaint(
-          size: Size(w, h),
-          painter: _DomePainter(opacity: opacity),
-        );
-      },
-    );
-  }
-}
-
-class _DomePainter extends CustomPainter {
-  _DomePainter({required this.opacity});
-  final double opacity;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = Colors.black.withValues(alpha: opacity)
-      ..style = PaintingStyle.fill;
-    final path = Path()
-      ..moveTo(0, size.height)
-      ..lineTo(0, size.height * 0.5)
-      ..quadraticBezierTo(
-        size.width * 0.5,
-        size.height * 0.2,
-        size.width,
-        size.height * 0.5,
-      )
-      ..lineTo(size.width, size.height)
-      ..close();
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

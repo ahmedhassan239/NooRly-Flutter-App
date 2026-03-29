@@ -650,6 +650,9 @@ class _NotificationSettingsPageState
                   _formatTime(prefs.effectiveQuietStart),
                   style: AppTypography.body(
                       color: Theme.of(context).colorScheme.primary),
+                  textAlign: TextAlign.end,
+                  maxLines: 2,
+                  softWrap: true,
                 ),
                 onTap: () => _pickTime(
                   initial: prefs.effectiveQuietStart,
@@ -664,6 +667,9 @@ class _NotificationSettingsPageState
                   _formatTime(prefs.effectiveQuietEnd),
                   style: AppTypography.body(
                       color: Theme.of(context).colorScheme.primary),
+                  textAlign: TextAlign.end,
+                  maxLines: 2,
+                  softWrap: true,
                 ),
                 onTap: () => _pickTime(
                   initial: prefs.effectiveQuietEnd,
@@ -766,11 +772,13 @@ class _NotificationSettingsPageState
     );
   }
 
+  /// Locale- and device-setting-aware (12h vs 24h, Arabic numerals/script when applicable).
   String _formatTime(TimeOfDay t) {
-    final h = t.hourOfPeriod == 0 ? 12 : t.hourOfPeriod;
-    final m = t.minute.toString().padLeft(2, '0');
-    final period = t.period == DayPeriod.am ? 'AM' : 'PM';
-    return '$h:$m $period';
+    final localizations = MaterialLocalizations.of(context);
+    return localizations.formatTimeOfDay(
+      t,
+      alwaysUse24HourFormat: MediaQuery.of(context).alwaysUse24HourFormat,
+    );
   }
 
   Future<void> _pickTime({

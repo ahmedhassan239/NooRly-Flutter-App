@@ -6,8 +6,8 @@ import 'package:flutter_app/design_system/typography.dart';
 
 enum AppButtonVariant { primary, secondary, outline, ghost, destructive }
 
-/// Theme-aware button: resolves colors from [Theme.of(context).colorScheme] so
-/// light and dark modes stay readable (avoids hardcoded [AppColors] on dark UI).
+/// Theme-aware button: resolves colors from `Theme.of(context).colorScheme` so
+/// light and dark modes stay readable (avoids hardcoded `AppColors` on dark UI).
 class AppButton extends StatelessWidget {
   const AppButton({
     required this.text,
@@ -30,7 +30,8 @@ class AppButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final colors = _variantColors(colorScheme);
-    final style = _getButtonStyle(colorScheme, colors);
+    final style = _getButtonStyle(context, colorScheme, colors);
+    final labelStyle = AppTypography.buttonLabel(context, color: colors.fg);
 
     final Widget content = Row(
       mainAxisSize: MainAxisSize.min,
@@ -38,7 +39,7 @@ class AppButton extends StatelessWidget {
       children: [
         if (isLoading)
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsetsDirectional.only(end: 8),
             child: SizedBox(
               width: 18,
               height: 18,
@@ -50,7 +51,7 @@ class AppButton extends StatelessWidget {
           )
         else if (icon != null)
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: const EdgeInsetsDirectional.only(end: 8),
             child: IconTheme(
               data: IconThemeData(size: 18, color: colors.fg),
               child: icon!,
@@ -58,7 +59,8 @@ class AppButton extends StatelessWidget {
           ),
         Text(
           text,
-          style: AppTypography.body().copyWith(fontWeight: FontWeight.w600),
+          style: labelStyle,
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -108,6 +110,7 @@ class AppButton extends StatelessWidget {
   }
 
   ButtonStyle _getButtonStyle(
+    BuildContext context,
     ColorScheme cs,
     ({Color bg, Color fg, BorderSide border}) colors,
   ) {
@@ -136,7 +139,7 @@ class AppButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppRadius.defaultRadius),
         side: colors.border,
       ),
-      textStyle: AppTypography.body().copyWith(fontWeight: FontWeight.w600),
+      textStyle: AppTypography.buttonLabel(context, color: colors.fg),
     );
   }
 }

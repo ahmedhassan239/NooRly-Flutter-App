@@ -399,17 +399,62 @@ class SavedLessonItem {
   final String? thumbnailUrl;
   final bool isSaved;
 
+  /// Localized title for [languageCode] (`ar` → Arabic when present, else English).
+  String localizedTitle(String languageCode) {
+    final code = languageCode.toLowerCase().split(RegExp('[-_]')).first;
+    final en = (title ?? '').trim();
+    final ar = (titleAr ?? '').trim();
+    if (code == 'ar') {
+      if (ar.isNotEmpty) return ar;
+      if (en.isNotEmpty) return en;
+      return '';
+    }
+    if (en.isNotEmpty) return en;
+    if (ar.isNotEmpty) return ar;
+    return '';
+  }
+
+  /// Short description / summary for the current [languageCode].
+  String localizedSnippet(String languageCode, {int maxLen = 80}) {
+    final code = languageCode.toLowerCase().split(RegExp('[-_]')).first;
+    final en = (description ?? '').trim();
+    final ar = (descriptionAr ?? '').trim();
+    String raw;
+    if (code == 'ar') {
+      raw = ar.isNotEmpty ? ar : en;
+    } else {
+      raw = en.isNotEmpty ? en : ar;
+    }
+    if (raw.isEmpty) return '';
+    if (raw.length <= maxLen) return raw;
+    return '${raw.substring(0, maxLen)}…';
+  }
+
   static SavedLessonItem fromJson(Map<String, dynamic> json) {
     final rawId = json['item_id'] ?? json['id'];
     final int contentId = rawId is num
         ? rawId.toInt()
         : int.tryParse(rawId?.toString() ?? '') ?? 0;
+    final titleEn = (json['title_en'] as String?)?.trim();
+    final titleLegacy = (json['title'] as String?)?.trim();
+    final resolvedEn = (titleEn != null && titleEn.isNotEmpty)
+        ? titleEn
+        : (titleLegacy != null && titleLegacy.isNotEmpty ? titleLegacy : null);
+    final titleArRaw = (json['title_ar'] as String?)?.trim();
+    final titleAr = titleArRaw != null && titleArRaw.isNotEmpty ? titleArRaw : null;
+    final descEn = (json['description_en'] as String?)?.trim();
+    final descLegacy = (json['description'] as String?)?.trim();
+    final resolvedDescEn = (descEn != null && descEn.isNotEmpty)
+        ? descEn
+        : (descLegacy != null && descLegacy.isNotEmpty ? descLegacy : null);
+    final descArRaw = (json['description_ar'] as String?)?.trim();
+    final descAr = descArRaw != null && descArRaw.isNotEmpty ? descArRaw : null;
     return SavedLessonItem(
       id: contentId,
-      title: json['title'] as String? ?? json['title_en'] as String?,
-      titleAr: json['title_ar'] as String?,
-      description: json['description'] as String? ?? json['description_en'] as String?,
-      descriptionAr: json['description_ar'] as String?,
+      title: resolvedEn,
+      titleAr: titleAr,
+      description: resolvedDescEn,
+      descriptionAr: descAr,
       weekNumber: (json['week_number'] as num?)?.toInt(),
       dayNumber: (json['day_number'] as num?)?.toInt(),
       contentType: json['content_type'] as String?,

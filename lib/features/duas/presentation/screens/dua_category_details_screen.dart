@@ -11,7 +11,9 @@ import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/duas/domain/entities/dua_entity.dart';
 import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
+import 'package:flutter_app/features/duas/presentation/widgets/save_dua_button.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
+import 'package:flutter_app/features/library/presentation/widgets/library_card_compact_action_button.dart';
 import 'package:flutter_app/features/duas/providers/duas_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -204,7 +206,6 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     ContentEntity e,
     ColorScheme colorScheme,
   ) {
-    final isSaved = e.isSaved;
     final l10n = AppLocalizations.of(context)!;
     final lc = ref.watch(localeControllerProvider).languageCode;
     final dir = LocalizedReligiousContent.textDirectionFor(lc);
@@ -266,7 +267,7 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
               ),
             ],
             const SizedBox(height: AppSpacing.md),
-            _buildActionButtons(context, ref, e, isSaved, colorScheme, l10n, sourceLine),
+            _buildActionButtons(context, ref, e, l10n, sourceLine),
           ],
         ),
       ),
@@ -277,140 +278,51 @@ class DuaCategoryDetailsScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     ContentEntity e,
-    bool isSaved,
-    ColorScheme colorScheme,
     AppLocalizations l10n,
     String sourceLine,
   ) {
     final lc = ref.read(localeControllerProvider).languageCode;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: isSaved ? LucideIcons.heartOff : LucideIcons.heart,
-            label: isSaved ? l10n.actionSaved : l10n.save,
-            colorScheme: colorScheme,
-            isActive: isSaved,
-            onTap: () async {
-              final notifier = ref.read(content_providers.saveContentProvider.notifier);
-              if (isSaved) {
-                await notifier.unsaveDua(e.id);
-              } else {
-                await notifier.saveDua(e.id);
-              }
-              ref.invalidate(content_providers.duasByCategoryProvider(categoryId));
-              ref.invalidate(content_providers.savedDuasProvider);
-              if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      isSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
-                    ),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              }
-            },
-          ),
+        SaveDuaButton(duaId: e.id, compact: true),
+        const SizedBox(width: AppSpacing.sm),
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.copy,
+          label: l10n.copy,
+          onTap: () {
+            final textToCopy = LocalizedReligiousContent.composePlainText(
+              languageCode: lc,
+              arabic: e.arabicText,
+              translation: e.translation ?? '',
+              source: sourceLine,
+            );
+            Clipboard.setData(ClipboardData(text: textToCopy));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.copiedToClipboard),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
         ),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.copy,
-            label: l10n.copy,
-            colorScheme: colorScheme,
-            onTap: () {
-              final textToCopy = LocalizedReligiousContent.composePlainText(
-                languageCode: lc,
-                arabic: e.arabicText,
-                translation: e.translation ?? '',
-                source: sourceLine,
-              );
-              Clipboard.setData(ClipboardData(text: textToCopy));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.copiedToClipboard),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.share2,
-            label: l10n.share,
-            colorScheme: colorScheme,
-            onTap: () {
-              final duaData = DuaData(
-                id: e.id,
-                arabic: e.arabicText,
-                transliteration: e.transliteration ?? '',
-                translation: e.translation ?? '',
-                source: e.source ?? '',
-                sourceAr: e.sourceAr,
-              );
-              ShareDuaDialog.show(context, duaData);
-            },
-          ),
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.share2,
+          label: l10n.share,
+          onTap: () {
+            final duaData = DuaData(
+              id: e.id,
+              arabic: e.arabicText,
+              transliteration: e.transliteration ?? '',
+              translation: e.translation ?? '',
+              source: e.source ?? '',
+              sourceAr: e.sourceAr,
+            );
+            ShareDuaDialog.show(context, duaData);
+          },
         ),
       ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required ColorScheme colorScheme,
-    required VoidCallback onTap,
-    bool isActive = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.sm),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isActive
-              ? colorScheme.primary.withAlpha(25)
-              : colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: Border.all(
-            color: isActive
-                ? colorScheme.primary.withAlpha(50)
-                : colorScheme.outline.withAlpha(100),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isActive
-                  ? colorScheme.primary
-                  : colorScheme.onSurface.withAlpha(150),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: isActive
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withAlpha(150),
-              ).copyWith(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

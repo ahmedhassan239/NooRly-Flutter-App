@@ -17,6 +17,7 @@ import 'package:flutter_app/features/home/presentation/widgets/prayer_next_card.
 import 'package:flutter_app/features/home/presentation/widgets/ramadan_banner_card.dart';
 import 'package:flutter_app/features/home/presentation/widgets/today_focus_card.dart';
 import 'package:flutter_app/features/home/providers/home_providers.dart';
+import 'package:flutter_app/features/home/providers/ramadan_home_banner_provider.dart';
 import 'package:flutter_app/core/errors/api_exception.dart';
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 import 'package:flutter_app/features/journey/providers/journey_providers.dart';
@@ -294,8 +295,14 @@ class _HomeDashboardPageState extends ConsumerState<HomeDashboardPage> {
 
   Widget _buildRamadanSection() {
     if (kDebugMode) debugPrint('[HomeDashboardPage] _buildRamadanSection');
+    final visible = ref.watch(ramadanHomeBannerVisibleProvider);
+    if (!visible) {
+      return const SizedBox.shrink();
+    }
     return RamadanBannerCard(
-      onDismiss: () {}, // Card always visible; dismiss is no-op
+      onDismiss: () {
+        ref.read(ramadanHomeBannerVisibleProvider.notifier).dismiss();
+      },
       onCta: () {
         if (kDebugMode) debugPrint('NAVIGATE /ramadan');
         context.push('/ramadan');

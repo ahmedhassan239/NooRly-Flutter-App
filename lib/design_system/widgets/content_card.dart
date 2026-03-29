@@ -152,6 +152,7 @@ class _ContentCardState extends State<ContentCard> {
         transliteration: widget.transliteration ?? '',
         translation: widget.translation,
         source: widget.source,
+        shareBadgeLabel: _typeLabel(l10n),
         title: '${l10n.share} ${_typeLabel(l10n)}',
       ),
     );

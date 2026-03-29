@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_app/core/content/content_display_normalize.dart';
+
 /// Shared rules for duas, adhkar, hadith, and verses:
 /// - Arabic UI (`ar`): show Arabic body only, RTL.
 /// - English UI: show English translation only, LTR (fallback to Arabic if translation empty).
@@ -29,11 +31,11 @@ abstract final class LocalizedReligiousContent {
     required String arabic,
     required String translation,
   }) {
-    final ar = arabic.trim();
+    final ar = ContentDisplayNormalize.forDisplay(arabic);
     if (isArabicLocale(languageCode)) {
       return ar;
     }
-    final en = normalizedTranslation(translation);
+    final en = normalizedTranslation(ContentDisplayNormalize.forDisplay(translation));
     if (en.isNotEmpty) return en;
     return ar;
   }
@@ -73,7 +75,7 @@ abstract final class LocalizedReligiousContent {
   }) {
     return primaryBody(
       languageCode: languageCode,
-      arabic: textAr?.trim() ?? '',
+      arabic: textAr ?? '',
       translation: translationOrEn,
     );
   }

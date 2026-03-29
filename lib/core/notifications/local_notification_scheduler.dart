@@ -18,6 +18,9 @@ import 'notification_payload_parser.dart';
 // Re-export Day for use in OccasionScheduler without importing flutter_local_notifications directly
 export 'package:flutter_local_notifications/flutter_local_notifications.dart' show Day;
 
+/// Maps plugin `Day` (Sun=1 … Sat=7, Android calendar style) to Dart `weekday` (Mon=1 … Sun=7, ISO 8601).
+int _isoWeekdayFromPluginDay(Day day) => day == Day.sunday ? 7 : day.value - 1;
+
 /// Callback invoked when user taps a notification.
 typedef OnNotificationTap = void Function(NotificationPayload payload);
 
@@ -391,14 +394,23 @@ class LocalNotificationScheduler {
       );
     }
 
-    final now     = tz.TZDateTime.now(tz.local);
+    final now = tz.TZDateTime.now(tz.local);
     var scheduled = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
-    // Advance to the next target weekday
-    while (scheduled.weekday != dayOfWeek.value) {
+    // Compare using ISO weekday — do not use dayOfWeek.value (different numbering than DateTime.weekday).
+    final targetIsoWeekday = _isoWeekdayFromPluginDay(dayOfWeek);
+    while (scheduled.weekday != targetIsoWeekday) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
     if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 7));
+    }
+
+    if (kDebugMode) {
+      debugPrint(
+        '[LocalNotificationScheduler] scheduleWeeklyAt id=$id pluginDay=$dayOfWeek '
+        '(value=${dayOfWeek.value}) isoWeekday=$targetIsoWeekday '
+        'tz=${tz.local.name} firstFire=$scheduled',
+      );
     }
 
     final mode = scheduleMode ?? await resolveScheduleMode();
@@ -567,6 +579,9 @@ class LocalNotificationScheduler {
         // Explicit icon on every notification — overrides the default so
         // there is no ambiguity even if initialization used a different icon.
         icon: 'ic_notification',
+        // Full-color brand (drawable/ic_notification_large.png). Status-bar
+        // small icon remains monochrome ic_notification.xml — Android requirement.
+        largeIcon: const DrawableResourceAndroidBitmap('ic_notification_large'),
         importance: _channelImportance(channelId),
         priority: channelId == channelPrayers
             ? Priority.max

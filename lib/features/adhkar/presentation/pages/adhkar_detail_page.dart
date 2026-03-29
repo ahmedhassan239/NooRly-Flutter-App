@@ -267,6 +267,7 @@ class AdhkarDetailPage extends ConsumerWidget {
                       transliteration: adhkar.transliteration,
                       translation: adhkar.translation,
                       source: sourceLine,
+                      shareBadgeLabel: l10n.adhkar,
                       title: '${l10n.share} ${l10n.adhkar}',
                     ),
                   );

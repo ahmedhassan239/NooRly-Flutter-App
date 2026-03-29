@@ -240,54 +240,49 @@ class SavedAdhkarPage extends ConsumerWidget {
     final title = item.title ?? item.text ?? item.textAr ?? 'Dhikr';
     final preview = item.text ?? item.textAr ?? '';
 
-    final adhkarId = item.id.toString();
-    return InkWell(
-      onTap: () => context.push('/adhkar/$adhkarId'),
-      borderRadius: BorderRadius.circular(AppRadius.lg),
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        decoration: BoxDecoration(
-          color: colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.lg),
-          border: Border.all(color: colorScheme.outline.withAlpha(128)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: AppTypography.bodySm(color: colorScheme.onSurface)
-                        .copyWith(fontWeight: FontWeight.w600),
-                  ),
+    return Container(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        border: Border.all(color: colorScheme.outline.withAlpha(128)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTypography.bodySm(color: colorScheme.onSurface)
+                      .copyWith(fontWeight: FontWeight.w600),
                 ),
-                SaveAdhkarButton(adhkarId: item.id, compact: true),
-              ],
+              ),
+              SaveAdhkarButton(adhkarId: item.id, compact: true),
+            ],
+          ),
+          if (preview.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.sm),
+            Text(
+              preview.length > 120 ? '${preview.substring(0, 120)}...' : preview,
+              style: AppTypography.caption(
+                color: colorScheme.onSurface.withAlpha(150),
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            if (preview.isNotEmpty) ...[
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                preview.length > 120 ? '${preview.substring(0, 120)}...' : preview,
-                style: AppTypography.caption(
-                  color: colorScheme.onSurface.withAlpha(150),
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-            if (item.count != null && item.count! > 1) ...[
-              const SizedBox(height: 4),
-              Text(
-                'Repeat ${item.count}x',
-                style: AppTypography.caption(
-                  color: colorScheme.primary.withAlpha(180),
-                ),
-              ),
-            ],
           ],
-        ),
+          if (item.count != null && item.count! > 1) ...[
+            const SizedBox(height: 4),
+            Text(
+              'Repeat ${item.count}x',
+              style: AppTypography.caption(
+                color: colorScheme.primary.withAlpha(180),
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }

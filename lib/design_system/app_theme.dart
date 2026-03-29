@@ -38,8 +38,7 @@ class AppTheme {
       // Scaffold (transparent so [AppPatternBackground] shows through)
       scaffoldBackgroundColor: Colors.transparent,
 
-      // Typography - Bundled fonts
-      fontFamily: AppTypography.defaultFontFamily,
+      // Typography
       textTheme: TextTheme(
         displayLarge: AppTypography.displayLg(),
         displayMedium: AppTypography.displayMd(),
@@ -301,8 +300,7 @@ class AppTheme {
 
       scaffoldBackgroundColor: Colors.transparent,
 
-      // Typography - Bundled fonts
-      fontFamily: AppTypography.defaultFontFamily,
+      // Typography
       textTheme: TextTheme(
         displayLarge: AppTypography.displayLg(),
         displayMedium: AppTypography.displayMd(),

@@ -268,6 +268,7 @@ class VerseDetailPage extends ConsumerWidget {
                       transliteration: verse.transliteration,
                       translation: verse.translation,
                       source: sourceLine,
+                      shareBadgeLabel: l10n.verse,
                       title: '${l10n.share} ${l10n.verse}',
                     ),
                   );

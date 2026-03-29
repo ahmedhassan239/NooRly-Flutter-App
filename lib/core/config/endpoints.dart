@@ -25,11 +25,14 @@ abstract class AuthEndpoints {
   /// POST - Refresh access token (if supported)
   static const String refresh = '/auth/refresh';
 
-  /// POST - Request password reset
-  static const String forgotPassword = '/auth/forgot-password';
+  /// POST - Request password-reset OTP
+  static const String forgotPasswordRequestOtp = '/auth/forgot-password/request-otp';
 
-  /// POST - Reset password with token
-  static const String resetPassword = '/auth/reset-password';
+  /// POST - Verify password-reset OTP
+  static const String forgotPasswordVerifyOtp = '/auth/forgot-password/verify-otp';
+
+  /// POST - Reset password with verified reset token
+  static const String forgotPasswordReset = '/auth/forgot-password/reset';
 
   /// POST - Social login (Google, Apple, Facebook)
   static const String socialLogin = '/auth/social-login';

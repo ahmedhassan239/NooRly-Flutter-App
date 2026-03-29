@@ -39,9 +39,15 @@ class RegisterPage extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back Button
+                  // Back Button — go() from welcome/login leaves no stack; pop() would no-op.
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () {
+                      if (context.canPop()) {
+                        context.pop();
+                      } else {
+                        context.go('/');
+                      }
+                    },
                     icon: Icon(
                       LucideIcons.arrowLeft,
                       color: colorScheme.onSurface,

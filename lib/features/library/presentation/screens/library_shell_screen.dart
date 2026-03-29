@@ -68,9 +68,7 @@ class LibraryShellScreen extends ConsumerWidget {
                         ],
                       );
                     },
-                    loading: () => const Expanded(
-                      child: LibraryLoadingView(),
-                    ),
+                    loading: () => const LibraryLoadingView(),
                     error: (e, _) => LibraryErrorView(
                       message: e.toString(),
                       onRetry: () => ref.invalidate(libraryTabsProvider),

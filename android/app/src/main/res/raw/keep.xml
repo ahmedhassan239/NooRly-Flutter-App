@@ -9,4 +9,4 @@
   the compiled APK — causing PlatformException(invalid_icon, …) at runtime.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/ic_notification" />
+    tools:keep="@drawable/ic_notification,@drawable/ic_notification_large" />

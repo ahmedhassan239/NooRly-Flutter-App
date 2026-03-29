@@ -5,6 +5,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -90,6 +91,8 @@ class _ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mainText = ContentDisplayNormalize.forDisplay(item.text);
+    final translation = ContentDisplayNormalize.forDisplay(item.translation);
     return Container(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -104,15 +107,15 @@ class _ItemCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            item.text,
+            mainText,
             style: AppTypography.body(color: colorScheme.onSurface),
             textAlign: TextAlign.center,
             textDirection: TextDirection.rtl,
           ),
-          if (item.translation != null && item.translation!.isNotEmpty) ...[
+          if (translation.isNotEmpty) ...[
             const SizedBox(height: AppSpacing.sm),
             Text(
-              item.translation!,
+              translation,
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withAlpha(180),
               ),

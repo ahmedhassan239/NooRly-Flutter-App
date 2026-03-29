@@ -185,8 +185,7 @@
   "profileLabelLearningGoals": "أهداف التعلم",
   "profileEditProfile": "تعديل الملف الشخصي",
   "profileQuickActions": "إجراءات سريعة",
-  "profileSavedDuas": "الأدعية المحفوظة",
-  "profileViewSavedDuas": "عرض مجموعة أدعيتك المحفوظة",
+  "profileSavedItemsSubtitle": "اعرض كل ما حفظته في مكان واحد.",
   "profileYourReflections": "تأملاتك",
   "profileReviewReflections": "راجع تأملات دروسك",
   "reflectionsTitle": "تأملاتك",
@@ -317,13 +316,14 @@
     }
   },
 
-  "savedTitle": "المحفوظات",
+  "savedTitle": "العناصر المحفوظة",
   "savedSignInToView": "سجل دخولك لعرض العناصر المحفوظة",
   "savedTabAll": "الكل",
   "savedTabDuas": "أدعية",
   "savedTabAdhkar": "أذكار",
   "savedTabVerses": "آيات",
   "savedTabHadith": "أحاديث",
+  "savedTabLessons": "دروس",
   "savedNoItems": "لا توجد عناصر محفوظة",
   "savedEmptyHint": "احفظ العناصر من المكتبة لتراها هنا.",
   "savedNoSearchResults": "لا توجد عناصر تطابق البحث",
@@ -333,6 +333,7 @@
   "savedTypeAdhkar": "ذكر",
   "savedTypeHadith": "حديث",
   "savedTypeVerse": "آية",
+  "savedTypeLesson": "درس",
 
   "editProfileTitle": "تعديل الملف الشخصي",
   "editProfileTapToChange": "اضغط لتغيير الصورة",
@@ -606,5 +607,8 @@
   "hadith": "حديث",
   "verses": "آيات",
   "contentCopiedShort": "تم النسخ",
-  "shareGeneratingImage": "جارٍ الإنشاء…"
+  "shareGeneratingImage": "جارٍ الإنشاء…",
+  "shareModeText": "نص",
+  "shareModeImage": "صورة",
+  "shareAsImage": "مشاركة كصورة"
 }

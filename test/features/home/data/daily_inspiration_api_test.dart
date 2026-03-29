@@ -135,5 +135,37 @@ void main() {
         'hadith',
       );
     });
+
+    test('fromJson normalizes excessive newlines and html blocks', () {
+      final json = {
+        'data': {
+          'type': 'hadith',
+          'id': 55,
+          'arabic': '<p>النص</p><p><br></p><div>الثاني</div>',
+          'translation': 'First line\n\n\n\nSecond line',
+          'source': 'Sahih Muslim',
+        },
+      };
+      final dto = DailyInspirationDto.fromJson(json);
+      expect(dto.arabic, 'النص\n\nالثاني');
+      expect(dto.translation, 'First line\n\nSecond line');
+      expect(dto.isValid, isTrue);
+    });
+
+    test('fromJson collapses broken repeated punctuation', () {
+      final json = {
+        'data': {
+          'type': 'ayah',
+          'id': 99,
+          'arabic': 'نص',
+          'translation': 'Most Merciful.,,,,,,,,,,,,',
+          'surah': 'Al-Fatiha',
+          'ayah_number': 3,
+        },
+      };
+      final dto = DailyInspirationDto.fromJson(json);
+      expect(dto.translation, 'Most Merciful.');
+      expect(dto.isValid, isTrue);
+    });
   });
 }

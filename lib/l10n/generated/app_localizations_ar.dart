@@ -409,10 +409,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileQuickActions => 'إجراءات سريعة';
 
   @override
-  String get profileSavedDuas => 'الأدعية المحفوظة';
-
-  @override
-  String get profileViewSavedDuas => 'عرض مجموعة أدعيتك المحفوظة';
+  String get profileSavedItemsSubtitle => 'اعرض كل ما حفظته في مكان واحد.';
 
   @override
   String get profileYourReflections => 'تأملاتك';
@@ -689,7 +686,7 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
-  String get savedTitle => 'المحفوظات';
+  String get savedTitle => 'العناصر المحفوظة';
 
   @override
   String get savedSignInToView => 'سجل دخولك لعرض العناصر المحفوظة';
@@ -708,6 +705,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savedTabHadith => 'أحاديث';
+
+  @override
+  String get savedTabLessons => 'دروس';
 
   @override
   String get savedNoItems => 'لا توجد عناصر محفوظة';
@@ -735,6 +735,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savedTypeVerse => 'آية';
+
+  @override
+  String get savedTypeLesson => 'درس';
 
   @override
   String get editProfileTitle => 'تعديل الملف الشخصي';
@@ -1496,4 +1499,13 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get shareGeneratingImage => 'جارٍ الإنشاء…';
+
+  @override
+  String get shareModeText => 'نص';
+
+  @override
+  String get shareModeImage => 'صورة';
+
+  @override
+  String get shareAsImage => 'مشاركة كصورة';
 }

@@ -5,6 +5,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
@@ -80,8 +81,10 @@ class HadithCollectionDetailsScreen extends ConsumerWidget {
 }
 
 bool _hadithTextDifferent(String? a, String b) {
-  if (a == null || a.trim().isEmpty) return b.trim().isNotEmpty;
-  return a.trim() != b.trim();
+  final na = ContentDisplayNormalize.forDisplay(a);
+  final nb = ContentDisplayNormalize.forDisplay(b);
+  if (na.isEmpty) return nb.isNotEmpty;
+  return na != nb;
 }
 
 class _HadithItemCard extends StatelessWidget {
@@ -95,9 +98,9 @@ class _HadithItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = item.text.trim();
-    final textAr = item.textAr?.trim() ?? '';
-    final textEn = item.textEn?.trim() ?? '';
+    final text = ContentDisplayNormalize.forDisplay(item.text);
+    final textAr = ContentDisplayNormalize.forDisplay(item.textAr);
+    final textEn = ContentDisplayNormalize.forDisplay(item.textEn);
     final showText = text.isNotEmpty;
     final showTextAr = textAr.isNotEmpty && _hadithTextDifferent(item.text, textAr);
     final showTextEn = textEn.isNotEmpty &&
@@ -119,7 +122,7 @@ class _HadithItemCard extends StatelessWidget {
         children: [
           if (showText)
             Text(
-              item.text,
+              text,
               style: AppTypography.body(
                 color: colorScheme.onSurface,
               ),
@@ -129,7 +132,7 @@ class _HadithItemCard extends StatelessWidget {
           if (showTextAr) ...[
             if (showText) const SizedBox(height: AppSpacing.sm),
             Text(
-              item.textAr!,
+              textAr,
               style: AppTypography.body(
                 color: colorScheme.onSurface.withAlpha(200),
               ),
@@ -140,7 +143,7 @@ class _HadithItemCard extends StatelessWidget {
           if (showTextEn) ...[
             if (showText || showTextAr) const SizedBox(height: AppSpacing.sm),
             Text(
-              item.textEn!,
+              textEn,
               style: AppTypography.bodySm(
                 color: colorScheme.onSurface.withAlpha(180),
               ),

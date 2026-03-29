@@ -854,17 +854,11 @@ abstract class AppLocalizations {
   /// **'Quick Actions'**
   String get profileQuickActions;
 
-  /// No description provided for @profileSavedDuas.
+  /// No description provided for @profileSavedItemsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Saved Duas'**
-  String get profileSavedDuas;
-
-  /// No description provided for @profileViewSavedDuas.
-  ///
-  /// In en, this message translates to:
-  /// **'View your saved duas collection'**
-  String get profileViewSavedDuas;
+  /// **'View everything you\'ve saved in one place.'**
+  String get profileSavedItemsSubtitle;
 
   /// No description provided for @profileYourReflections.
   ///
@@ -1361,7 +1355,7 @@ abstract class AppLocalizations {
   /// No description provided for @savedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Saved'**
+  /// **'Saved Items'**
   String get savedTitle;
 
   /// No description provided for @savedSignInToView.
@@ -1399,6 +1393,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hadith'**
   String get savedTabHadith;
+
+  /// No description provided for @savedTabLessons.
+  ///
+  /// In en, this message translates to:
+  /// **'Lessons'**
+  String get savedTabLessons;
 
   /// No description provided for @savedNoItems.
   ///
@@ -1453,6 +1453,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Verse'**
   String get savedTypeVerse;
+
+  /// No description provided for @savedTypeLesson.
+  ///
+  /// In en, this message translates to:
+  /// **'Lesson'**
+  String get savedTypeLesson;
 
   /// No description provided for @editProfileTitle.
   ///
@@ -2953,6 +2959,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Generating…'**
   String get shareGeneratingImage;
+
+  /// No description provided for @shareModeText.
+  ///
+  /// In en, this message translates to:
+  /// **'Text'**
+  String get shareModeText;
+
+  /// No description provided for @shareModeImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Image'**
+  String get shareModeImage;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In en, this message translates to:
+  /// **'Share as image'**
+  String get shareAsImage;
 }
 
 class _AppLocalizationsDelegate

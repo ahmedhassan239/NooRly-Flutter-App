@@ -72,15 +72,23 @@ class SettingsTile extends StatelessWidget {
               ],
             ),
           ),
-          // Trailing widget
+          // Trailing: Switches need intrinsic width; Icons stay in a tight box for
+          // vertical alignment with the title row. Other widgets (time text, dropdown
+          // chips, etc.) must not be forced into 24×24 — that clips content.
           if (trailing != null)
-            SizedBox(
-              width: trailing is Switch ? null : 24,
-              height: 24,
-              child: trailing is Switch
-                  ? trailing!
-                  : Center(child: trailing!),
-            ),
+            if (trailing is Switch)
+              trailing!
+            else if (trailing is Icon)
+              SizedBox(
+                width: 24,
+                height: 24,
+                child: Center(child: trailing!),
+              )
+            else
+              Padding(
+                padding: const EdgeInsetsDirectional.only(start: AppSpacing.sm),
+                child: trailing!,
+              ),
         ],
       ),
     );

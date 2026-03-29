@@ -4,10 +4,11 @@ import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/content/library_reference_format.dart';
 import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
-import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/features/library/presentation/widgets/library_card_compact_action_button.dart';
+import 'package:flutter_app/features/saved/presentation/widgets/compact_save_button_chrome.dart';
 import 'package:flutter_app/features/duas/presentation/duas_mock_data.dart';
 import 'package:flutter_app/features/duas/providers/saved_duas_provider.dart';
 import 'package:flutter_app/features/duas/presentation/widgets/share_dua_dialog.dart';
@@ -220,7 +221,7 @@ class CategoryDuasPage extends ConsumerWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: AppSpacing.md),
-            _buildActionButtons(context, ref, dua, isSaved, colorScheme, l10n, sourceLine),
+            _buildActionButtons(context, ref, dua, isSaved, l10n, sourceLine),
           ],
         ),
       ),
@@ -232,122 +233,60 @@ class CategoryDuasPage extends ConsumerWidget {
     WidgetRef ref,
     DuaData dua,
     bool isSaved,
-    ColorScheme colorScheme,
     AppLocalizations l10n,
     String sourceLine,
   ) {
     final lc = ref.read(localeControllerProvider).languageCode;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: isSaved ? LucideIcons.heartOff : LucideIcons.heart,
-            label: isSaved ? l10n.actionSaved : l10n.save,
-            colorScheme: colorScheme,
-            isActive: isSaved,
-            onTap: () {
-              ref.read(savedDuasProvider.notifier).toggleSaveDua(dua.id);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    isSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
-                  ),
-                  duration: const Duration(seconds: 2),
+        CompactSaveButtonChrome(
+          compact: true,
+          isSaved: isSaved,
+          isPending: false,
+          savedLabel: l10n.actionSaved,
+          saveLabel: l10n.actionSave,
+          onTap: () {
+            ref.read(savedDuasProvider.notifier).toggleSaveDua(dua.id);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  isSaved ? l10n.removedFromSaved : l10n.savedToFavorites,
                 ),
-              );
-            },
-          ),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
         ),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.copy,
-            label: l10n.copy,
-            colorScheme: colorScheme,
-            onTap: () {
-              final textToCopy = LocalizedReligiousContent.composePlainText(
-                languageCode: lc,
-                arabic: dua.arabic,
-                translation: dua.translation,
-                source: sourceLine,
-              );
-              Clipboard.setData(ClipboardData(text: textToCopy));
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.copiedToClipboard),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
-            },
-          ),
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.copy,
+          label: l10n.copy,
+          onTap: () {
+            final textToCopy = LocalizedReligiousContent.composePlainText(
+              languageCode: lc,
+              arabic: dua.arabic,
+              translation: dua.translation,
+              source: sourceLine,
+            );
+            Clipboard.setData(ClipboardData(text: textToCopy));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.copiedToClipboard),
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          },
         ),
         const SizedBox(width: AppSpacing.sm),
-        Expanded(
-          child: _buildActionButton(
-            context: context,
-            icon: LucideIcons.share2,
-            label: l10n.share,
-            colorScheme: colorScheme,
-            onTap: () {
-              ShareDuaDialog.show(context, dua);
-            },
-          ),
+        LibraryCardCompactSecondaryButton(
+          icon: LucideIcons.share2,
+          label: l10n.share,
+          onTap: () {
+            ShareDuaDialog.show(context, dua);
+          },
         ),
       ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required ColorScheme colorScheme,
-    required VoidCallback onTap,
-    bool isActive = false,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(AppRadius.sm),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
-        decoration: BoxDecoration(
-          color: isActive
-              ? colorScheme.primary.withAlpha(25)
-              : colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(AppRadius.sm),
-          border: Border.all(
-            color: isActive
-                ? colorScheme.primary.withAlpha(50)
-                : colorScheme.outline.withAlpha(100),
-          ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 18,
-              color: isActive
-                  ? colorScheme.primary
-                  : colorScheme.onSurface.withAlpha(150),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: AppTypography.caption(
-                color: isActive
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withAlpha(150),
-              ).copyWith(
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

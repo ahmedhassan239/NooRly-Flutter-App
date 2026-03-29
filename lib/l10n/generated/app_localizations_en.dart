@@ -410,10 +410,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileQuickActions => 'Quick Actions';
 
   @override
-  String get profileSavedDuas => 'Saved Duas';
-
-  @override
-  String get profileViewSavedDuas => 'View your saved duas collection';
+  String get profileSavedItemsSubtitle =>
+      'View everything you\'ve saved in one place.';
 
   @override
   String get profileYourReflections => 'Your Reflections';
@@ -693,7 +691,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get savedTitle => 'Saved';
+  String get savedTitle => 'Saved Items';
 
   @override
   String get savedSignInToView => 'Sign in to view saved items';
@@ -712,6 +710,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedTabHadith => 'Hadith';
+
+  @override
+  String get savedTabLessons => 'Lessons';
 
   @override
   String get savedNoItems => 'No saved items';
@@ -740,6 +741,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedTypeVerse => 'Verse';
+
+  @override
+  String get savedTypeLesson => 'Lesson';
 
   @override
   String get editProfileTitle => 'Edit Profile';
@@ -1513,4 +1517,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get shareGeneratingImage => 'Generating…';
+
+  @override
+  String get shareModeText => 'Text';
+
+  @override
+  String get shareModeImage => 'Image';
+
+  @override
+  String get shareAsImage => 'Share as image';
 }

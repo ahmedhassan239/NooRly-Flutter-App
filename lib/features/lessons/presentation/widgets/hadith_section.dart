@@ -4,6 +4,7 @@ library;
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_quran_hadith_models.dart';
@@ -111,6 +112,7 @@ class _HadithTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final body = ContentDisplayNormalize.forDisplay(item.textEn);
     return Padding(
       padding: EdgeInsets.all(padding),
       child: Column(
@@ -118,7 +120,7 @@ class _HadithTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            item.textEn,
+            body,
             style: AppTypography.body(color: colorScheme.onSurface).copyWith(
                   height: 1.55,
                   fontSize: 15,

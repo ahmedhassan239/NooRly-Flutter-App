@@ -185,8 +185,7 @@
   "profileLabelLearningGoals": "Learning Goals",
   "profileEditProfile": "Edit Profile",
   "profileQuickActions": "Quick Actions",
-  "profileSavedDuas": "Saved Duas",
-  "profileViewSavedDuas": "View your saved duas collection",
+  "profileSavedItemsSubtitle": "View everything you've saved in one place.",
   "profileYourReflections": "Your Reflections",
   "profileReviewReflections": "Review your lesson reflections",
   "reflectionsTitle": "Your Reflections",
@@ -317,13 +316,14 @@
     }
   },
 
-  "savedTitle": "Saved",
+  "savedTitle": "Saved Items",
   "savedSignInToView": "Sign in to view saved items",
   "savedTabAll": "All",
   "savedTabDuas": "Duas",
   "savedTabAdhkar": "Adhkar",
   "savedTabVerses": "Verses",
   "savedTabHadith": "Hadith",
+  "savedTabLessons": "Lessons",
   "savedNoItems": "No saved items",
   "savedEmptyHint": "Save items from the library to see them here.",
   "savedNoSearchResults": "No items match your search",
@@ -333,6 +333,7 @@
   "savedTypeAdhkar": "Dhikr",
   "savedTypeHadith": "Hadith",
   "savedTypeVerse": "Verse",
+  "savedTypeLesson": "Lesson",
 
   "editProfileTitle": "Edit Profile",
   "editProfileTapToChange": "Tap to change photo",
@@ -606,5 +607,8 @@
   "hadith": "Hadith",
   "verses": "Verses",
   "contentCopiedShort": "Copied",
-  "shareGeneratingImage": "Generating…"
+  "shareGeneratingImage": "Generating…",
+  "shareModeText": "Text",
+  "shareModeImage": "Image",
+  "shareAsImage": "Share as image"
 }

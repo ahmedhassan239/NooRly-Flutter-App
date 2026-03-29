@@ -14,11 +14,11 @@ class ResetPasswordPage extends ConsumerStatefulWidget {
   const ResetPasswordPage({
     super.key,
     this.initialEmail,
-    this.initialToken,
+    this.initialResetToken,
   });
 
   final String? initialEmail;
-  final String? initialToken;
+  final String? initialResetToken;
 
   @override
   ConsumerState<ResetPasswordPage> createState() => _ResetPasswordPageState();
@@ -26,28 +26,25 @@ class ResetPasswordPage extends ConsumerStatefulWidget {
 
 class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
   late final TextEditingController _emailController;
-  late final TextEditingController _tokenController;
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirm = true;
   bool _isLoading = false;
 
-  bool get _hasDeepLinkParams =>
+  bool get _hasResetContext =>
       (widget.initialEmail?.trim().isNotEmpty ?? false) &&
-      (widget.initialToken?.trim().isNotEmpty ?? false);
+      (widget.initialResetToken?.trim().isNotEmpty ?? false);
 
   @override
   void initState() {
     super.initState();
     _emailController = TextEditingController(text: widget.initialEmail ?? '');
-    _tokenController = TextEditingController(text: widget.initialToken ?? '');
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _tokenController.dispose();
     _passwordController.dispose();
     _confirmController.dispose();
     super.dispose();
@@ -55,7 +52,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
 
   Future<void> _resetPassword() async {
     final email = _emailController.text.trim();
-    final token = _tokenController.text.trim();
+    final resetToken = widget.initialResetToken?.trim() ?? '';
     final password = _passwordController.text;
     final confirm = _confirmController.text;
 
@@ -63,8 +60,8 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
       _showSnack('Please enter your email.');
       return;
     }
-    if (token.isEmpty) {
-      _showSnack('Please enter the reset token from your email.');
+    if (resetToken.isEmpty) {
+      _showSnack('Reset session has expired. Please verify code again.');
       return;
     }
     if (password.length < 8) {
@@ -81,7 +78,7 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
     try {
       await ref.read(authRepositoryProvider).resetPassword(
             email: email,
-            token: token,
+            resetToken: resetToken,
             password: password,
             passwordConfirmation: confirm,
           );
@@ -159,26 +156,13 @@ class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage> {
                     controller: _emailController,
                     hintText: 'Email',
                     keyboardType: TextInputType.emailAddress,
-                    readOnly: _hasDeepLinkParams,
+                    readOnly: _hasResetContext,
                     prefixIcon: Icon(
                       LucideIcons.mail,
                       size: 20,
                       color: colorScheme.onSurface.withValues(alpha: 0.5),
                     ),
                   ).animate().fadeIn(delay: 300.ms).moveY(begin: 20, end: 0),
-                  if (!_hasDeepLinkParams) ...[
-                    const SizedBox(height: AppSpacing.md),
-                    AppTextField(
-                      controller: _tokenController,
-                      hintText: 'Reset token (from email link)',
-                      obscureText: true,
-                      prefixIcon: Icon(
-                        LucideIcons.key,
-                        size: 20,
-                        color: colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
-                    ).animate().fadeIn(delay: 350.ms).moveY(begin: 20, end: 0),
-                  ],
                   const SizedBox(height: AppSpacing.md),
                   AppTextField(
                     controller: _passwordController,

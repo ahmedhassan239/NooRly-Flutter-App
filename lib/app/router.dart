@@ -6,6 +6,7 @@ import 'package:flutter_app/features/auth/domain/entities/user_entity.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/onboarding/domain/entities/onboarding_entity.dart';
 import 'package:flutter_app/features/duas/presentation/pages/duas_hub_page.dart';
+import 'package:flutter_app/features/duas/presentation/pages/dua_detail_page.dart';
 import 'package:flutter_app/features/duas/presentation/pages/saved_duas_page.dart';
 import 'package:flutter_app/features/duas/presentation/screens/dua_category_details_screen.dart';
 import 'package:flutter_app/features/hadith/presentation/pages/category_hadith_page.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_app/features/auth/presentation/pages/login_page.dart';
 import 'package:flutter_app/features/auth/presentation/pages/register_email_page.dart';
 import 'package:flutter_app/features/auth/presentation/pages/email_otp_screen.dart';
 import 'package:flutter_app/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:flutter_app/features/auth/presentation/pages/forgot_password_verify_otp_page.dart';
 import 'package:flutter_app/features/auth/presentation/pages/reset_password_page.dart';
 import 'package:flutter_app/features/auth/presentation/pages/debug_auth_screen.dart';
 import 'package:flutter_app/features/debug/presentation/pages/debug_network_screen.dart';
@@ -279,12 +281,23 @@ List<RouteBase> get _appRoutes => [
       builder: (context, state) => const ForgotPasswordPage(),
     ),
     GoRoute(
-      path: '/reset-password',
-      name: 'reset-password',
+      path: '/forgot-password/verify-otp',
+      name: 'forgot-password-verify-otp',
       builder: (context, state) {
         final email = state.uri.queryParameters['email'] ?? '';
-        final token = state.uri.queryParameters['token'] ?? '';
-        return ResetPasswordPage(initialEmail: email.isEmpty ? null : email, initialToken: token.isEmpty ? null : token);
+        return ForgotPasswordVerifyOtpPage(email: email);
+      },
+    ),
+    GoRoute(
+      path: '/forgot-password/reset',
+      name: 'forgot-password-reset',
+      builder: (context, state) {
+        final email = state.uri.queryParameters['email'] ?? '';
+        final resetToken = state.uri.queryParameters['reset_token'] ?? '';
+        return ResetPasswordPage(
+          initialEmail: email.isEmpty ? null : email,
+          initialResetToken: resetToken.isEmpty ? null : resetToken,
+        );
       },
     ),
     GoRoute(
@@ -571,7 +584,7 @@ List<RouteBase> get _appRoutes => [
       name: AppRoutes.duaDetail,
       builder: (context, state) {
         final duaId = state.pathParameters['duaId'] ?? 'unknown';
-        return PlaceholderPage(title: 'Dua: $duaId');
+        return DuaDetailPage(duaId: duaId);
       },
     ),
     GoRoute(
@@ -679,7 +692,7 @@ String? _redirect(Ref ref, GoRouterState state) {
   if (maintenance) {
     final allowed = loc == '/maintenance' || loc == '/' ||
         loc == '/login' || loc == '/register' ||
-        loc == '/forgot-password' || loc.startsWith('/reset-password') ||
+        loc == '/forgot-password' || loc.startsWith('/forgot-password/') ||
         loc.startsWith('/auth/');
     if (!allowed) return '/maintenance';
     return null;
@@ -712,7 +725,7 @@ String? _redirect(Ref ref, GoRouterState state) {
 
   final isLoginOrRegister = loc == '/login' || loc == '/register' ||
       loc.startsWith('/auth/login') || loc.startsWith('/auth/register');
-  final isPasswordRecovery = loc == '/forgot-password' || loc.startsWith('/reset-password');
+  final isPasswordRecovery = loc == '/forgot-password' || loc.startsWith('/forgot-password/');
   final isPublicRoute = loc == '/' ||
       isLoginOrRegister ||
       isPasswordRecovery ||

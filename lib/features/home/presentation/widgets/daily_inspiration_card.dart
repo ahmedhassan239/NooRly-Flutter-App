@@ -91,6 +91,17 @@ class _ContentCard extends StatelessWidget {
     return _capitalize(inspiration.type);
   }
 
+  /// Short localized label for share-image badge (matches [ShareableContent.shareBadgeLabel]).
+  String _shareBadgeLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final t = inspiration.type.toLowerCase();
+    if (t == 'hadith') return l10n.hadith;
+    if (t == 'quran' || t == 'verse') return l10n.verse;
+    if (t == 'dua') return l10n.dua;
+    if (t == 'dhikr' || t == 'adhkar') return l10n.adhkar;
+    return _typeLabel(context);
+  }
+
   static String _capitalize(String s) =>
       s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
 
@@ -171,6 +182,7 @@ class _ContentCard extends StatelessWidget {
                         transliteration: '',
                         translation: localized.isRtl ? '' : localized.mainContent,
                         source: localized.reference,
+                        shareBadgeLabel: _shareBadgeLabel(context),
                         title: _typeLabel(context),
                       ),
                     );

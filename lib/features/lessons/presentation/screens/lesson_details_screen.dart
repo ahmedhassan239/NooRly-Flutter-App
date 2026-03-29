@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:share_plus/share_plus.dart';
 
 import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
@@ -104,11 +102,6 @@ class LessonDetailsScreen extends ConsumerWidget {
                     currentIsSaved: isSaved,
                   ),
         ),
-        IconButton(
-          icon: Icon(Icons.more_vert, color: colorScheme.onSurface),
-          tooltip: MaterialLocalizations.of(context).showMenuTooltip,
-          onPressed: lesson == null ? null : () => _showMoreMenu(context, lesson),
-        ),
       ],
     );
   }
@@ -153,55 +146,6 @@ class LessonDetailsScreen extends ConsumerWidget {
       case ToggleSaveResult.skipped:
         break;
     }
-  }
-
-  Future<void> _showMoreMenu(BuildContext context, LessonEntity lesson) async {
-    final l10n = AppLocalizations.of(context)!;
-    final colorScheme = Theme.of(context).colorScheme;
-
-    final deepLinkPath = '/lessons/${lesson.id}';
-    final shareText = '${lesson.title}\n$deepLinkPath';
-
-    await showModalBottomSheet<void>(
-      context: context,
-      showDragHandle: true,
-      backgroundColor: colorScheme.surface,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: const Icon(LucideIcons.share2),
-                title: Text(l10n.share),
-                onTap: () async {
-                  Navigator.of(context).pop();
-                  await Share.share(shareText, subject: lesson.title);
-                },
-              ),
-              ListTile(
-                leading: const Icon(LucideIcons.copy),
-                title: Text(l10n.copy),
-                subtitle: Text(deepLinkPath, maxLines: 1, overflow: TextOverflow.ellipsis),
-                onTap: () {
-                  Clipboard.setData(ClipboardData(text: deepLinkPath));
-                  Navigator.of(context).pop();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(l10n.copiedToClipboard),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }
 
@@ -728,6 +672,8 @@ class _LessonCompletedBanner extends StatelessWidget {
             l10n.lessonCompleted,
             style: AppTypography.body(color: colorScheme.onSurface).copyWith(
               fontWeight: FontWeight.w600,
+              letterSpacing: 0,
+              wordSpacing: 0,
             ),
           ),
         ],

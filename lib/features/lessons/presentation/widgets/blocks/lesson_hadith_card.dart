@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
@@ -30,6 +31,10 @@ class LessonHadithCard extends StatelessWidget {
     final labelColor = isDark ? const Color(0xFFFBBF24) : _labelLight;
     final arabicColor = isDark ? const Color(0xFFFCD34D) : _border;
     final bodyText = colorScheme.onSurface;
+    final arabicDisplay =
+        ContentDisplayNormalize.forDisplay(block.arabic);
+    final englishDisplay =
+        ContentDisplayNormalize.forDisplay(block.text);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -91,9 +96,9 @@ class LessonHadithCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Arabic text
-                  if (block.arabic != null && block.arabic!.isNotEmpty) ...[
+                  if (arabicDisplay.isNotEmpty) ...[
                     SelectableText(
-                      block.arabic!,
+                      arabicDisplay,
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.right,
                       style: AppTypography.arabicH3(color: arabicColor),
@@ -104,7 +109,7 @@ class LessonHadithCard extends StatelessWidget {
                   ],
                   // English text
                   SelectableText(
-                    '"${block.text}"',
+                    '"$englishDisplay"',
                     style: AppTypography.body(color: bodyText).copyWith(
                       height: 1.65,
                       fontStyle: FontStyle.italic,

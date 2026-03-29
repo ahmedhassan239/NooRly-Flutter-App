@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app/app/locale_provider.dart';
 import 'package:flutter_app/features/auth/providers/auth_provider.dart';
 import 'package:flutter_app/features/saved/data/saved_api.dart';
 import 'package:flutter_app/features/saved/data/saved_repository.dart';
@@ -136,6 +137,7 @@ FutureProvider<Set<String>> _idsProviderForType(String type) {
 
 /// Unified list of all saved items for Saved (All) tab. GET /saved?type=all.
 final savedAllListProvider = FutureProvider<SavedAllListResult>((ref) async {
+  ref.watch(localeControllerProvider);
   final auth = ref.watch(authProvider);
   if (!auth.isAuthenticated) {
     return const SavedAllListResult(items: [], pagination: SavedAllPagination());

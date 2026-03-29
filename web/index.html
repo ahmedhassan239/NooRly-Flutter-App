@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!DOCTYPE html><html><head>
   <!--
     IMPORTANT FOR FLUTTER WEB ROUTING:
     
@@ -32,22 +30,30 @@
   <!-- Theme color for browser chrome (NOORly primary) -->
   <meta name="theme-color" content="#1E40AF">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Favicon (source: logo.png — same artwork as app branding) -->
+  <link rel="icon" type="image/png" href="logo.png">
 
   <title>NooRly</title>
   <link rel="manifest" href="manifest.json">
 
+  
+  
+  
+  
+  
+  
+  
+  
   <style id="splash-screen-style">
     html {
-      height: 100%;
+      height: 100%
     }
 
     body {
       margin: 0;
       min-height: 100%;
       background-color: #F5F7FA;
-      background-size: 100% 100%;
+          background-size: 100% 100%;
     }
 
     .center {
@@ -60,22 +66,19 @@
     }
 
     .contain {
-      display: block;
-      width: 100%;
-      height: 100%;
+      display:block;
+      width:100%; height:100%;
       object-fit: contain;
     }
 
     .stretch {
-      display: block;
-      width: 100%;
-      height: 100%;
+      display:block;
+      width:100%; height:100%;
     }
 
     .cover {
-      display: block;
-      width: 100%;
-      height: 100%;
+      display:block;
+      width:100%; height:100%;
       object-fit: cover;
     }
 
@@ -108,12 +111,16 @@
   </script>
 </head>
 <body>
-  <!-- Branded splash (flutter_native_splash) — no spinner; removed when Flutter paints first frame -->
   <picture id="splash">
-    <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-    <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
+      <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
+      <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
+      <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
   </picture>
+  
+  
+  
+  <!-- Branded splash (flutter_native_splash) — no spinner; removed when Flutter paints first frame -->
+  
 
   <script>
     window.addEventListener('flutter-first-frame', function () {
@@ -121,6 +128,7 @@
     });
   </script>
 
-  <script src="flutter_bootstrap.js" async></script>
-</body>
-</html>
+  <script src="flutter_bootstrap.js" async=""></script>
+
+
+</body></html>

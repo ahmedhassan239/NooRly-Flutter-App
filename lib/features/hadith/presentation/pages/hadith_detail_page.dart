@@ -251,6 +251,7 @@ class HadithDetailPage extends ConsumerWidget {
                     transliteration: hadith.transliteration,
                     translation: hadith.translation,
                     source: sourceLine,
+                    shareBadgeLabel: l10n.hadith,
                     title: '${l10n.share} ${l10n.hadith}',
                   ),
                 );

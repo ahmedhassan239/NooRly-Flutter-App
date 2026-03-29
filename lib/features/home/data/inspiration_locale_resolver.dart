@@ -3,6 +3,7 @@
 /// Ensures the card shows only Arabic or only English (no mixed language).
 library;
 
+import 'package:flutter_app/core/content/content_display_normalize.dart';
 import 'package:flutter_app/core/content/library_reference_format.dart';
 import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/core/utils/locale_digits.dart';
@@ -51,7 +52,7 @@ LocalizedInspirationContent resolveInspirationByLocale(
   }
 
   return LocalizedInspirationContent(
-    mainContent: mainContent,
+    mainContent: ContentDisplayNormalize.forDisplay(mainContent),
     isRtl: isArabic,
     reference: _localizedReferenceLine(dto, localeCode, l10n),
   );

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/core/content/localized_religious_content.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
+import 'package:flutter_app/design_system/widgets/library_share_image_card.dart';
+import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'dart:ui' as ui;
@@ -54,6 +57,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -109,9 +113,9 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
               labelColor: colorScheme.primary,
               unselectedLabelColor: colorScheme.onSurface.withValues(alpha: 0.6),
               indicatorColor: colorScheme.primary,
-              tabs: const [
-                Tab(text: 'Text'),
-                Tab(text: 'Image'),
+              tabs: [
+                Tab(text: l10n.shareModeText),
+                Tab(text: l10n.shareModeImage),
               ],
             ),
 
@@ -121,8 +125,8 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  _buildTextTab(colorScheme),
-                  _buildImageTab(colorScheme),
+                  _buildTextTab(context, colorScheme),
+                  _buildImageTab(context, colorScheme),
                 ],
               ),
             ),
@@ -132,14 +136,15 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildTextTab(ColorScheme colorScheme) {
+  Widget _buildTextTab(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: _buildContentPreview(colorScheme, forImage: false),
+              child: _buildContentPreview(context, colorScheme),
             ),
           ),
           const SizedBox(height: AppSpacing.md),
@@ -149,7 +154,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
                 child: OutlinedButton.icon(
                   onPressed: () => _copyText(context),
                   icon: const Icon(LucideIcons.copy, size: 18),
-                  label: const Text('Copy'),
+                  label: Text(l10n.copy),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
@@ -160,7 +165,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
                 child: ElevatedButton.icon(
                   onPressed: () => _shareText(),
                   icon: const Icon(LucideIcons.share2, size: 18),
-                  label: const Text('Share'),
+                  label: Text(l10n.share),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
@@ -173,7 +178,15 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildImageTab(ColorScheme colorScheme) {
+  Widget _buildImageTab(BuildContext context, ColorScheme colorScheme) {
+    final l10n = AppLocalizations.of(context)!;
+    final lc = Localizations.localeOf(context).languageCode;
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: widget.arabicText,
+      translation: widget.translation ?? '',
+    );
+
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
@@ -181,13 +194,10 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
           Expanded(
             child: RepaintBoundary(
               key: _shareKey,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(AppRadius.md),
-                ),
-                padding: const EdgeInsets.all(AppSpacing.xl),
-                child: _buildContentPreview(colorScheme, forImage: true),
+              child: LibraryShareImageCard(
+                badgeLabel: '',
+                primaryBody: primary,
+                sourcePlain: widget.source ?? '',
               ),
             ),
           ),
@@ -197,7 +207,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
             child: ElevatedButton.icon(
               onPressed: () => _shareImage(context),
               icon: const Icon(LucideIcons.share2, size: 18),
-              label: const Text('Share as Image'),
+              label: Text(l10n.shareAsImage),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -208,20 +218,32 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
     );
   }
 
-  Widget _buildContentPreview(ColorScheme colorScheme, {required bool forImage}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        // Arabic Text
-        Text(
-          widget.arabicText,
-          textAlign: TextAlign.center,
-          style: AppTypography.h2(color: colorScheme.onSurface).copyWith(
-            fontFamily: 'Amiri',
-            height: 2.0,
-            fontSize: forImage ? 24 : 20,
+  Widget _buildContentPreview(BuildContext context, ColorScheme colorScheme) {
+    final lc = Localizations.localeOf(context).languageCode;
+    final dir = LocalizedReligiousContent.textDirectionFor(lc);
+    final useArabic = LocalizedReligiousContent.useArabicTypography(lc);
+    final primary = LocalizedReligiousContent.primaryBody(
+      languageCode: lc,
+      arabic: widget.arabicText,
+      translation: widget.translation ?? '',
+    );
+
+    return Directionality(
+      textDirection: dir,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            primary,
+            textAlign: TextAlign.center,
+            style: useArabic
+                ? AppTypography.arabicH2(color: colorScheme.onSurface)
+                    .copyWith(height: 2.0, fontSize: 20)
+                : AppTypography.body(color: colorScheme.onSurface).copyWith(
+                    height: 1.65,
+                    fontSize: 18,
+                  ),
           ),
-        ),
         if (widget.transliteration != null) ...[
           const SizedBox(height: AppSpacing.lg),
           Text(
@@ -234,7 +256,9 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
             ),
           ),
         ],
-        if (widget.translation != null) ...[
+        if (widget.translation != null &&
+            widget.translation!.trim().isNotEmpty &&
+            useArabic) ...[
           const SizedBox(height: AppSpacing.md),
           Container(
             padding: const EdgeInsets.all(AppSpacing.md),
@@ -249,29 +273,19 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
             ),
           ),
         ],
-        if (widget.source != null) ...[
+        if (widget.source != null && widget.source!.trim().isNotEmpty) ...[
           const SizedBox(height: AppSpacing.lg),
           Text(
-            widget.source!,
+            '— ${widget.source!.trim()}',
             textAlign: TextAlign.center,
             style: AppTypography.caption(
               color: colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],
-        if (forImage) ...[
-          const SizedBox(height: AppSpacing.xl),
-          Center(
-            child: Text(
-              'NooRly',
-              style: AppTypography.body(
-                color: colorScheme.primary,
-              ).copyWith(fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
       ],
-    );
+    ),
+  );
   }
 
   void _copyText(BuildContext context) {
@@ -291,10 +305,11 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
     }
 
     Clipboard.setData(ClipboardData(text: buffer.toString()));
+    final l10n = AppLocalizations.of(context)!;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Copied to clipboard'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: Text(l10n.copiedToClipboard),
+        duration: const Duration(seconds: 2),
       ),
     );
     Navigator.pop(context);

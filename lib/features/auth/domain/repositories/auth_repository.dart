@@ -38,13 +38,19 @@ abstract class AuthRepository {
     required String token,
   });
 
-  /// Request password reset.
-  Future<void> forgotPassword({required String email});
+  /// Request password-reset OTP by email.
+  Future<void> requestPasswordResetOtp({required String email});
 
-  /// Reset password with token.
+  /// Verify password-reset OTP and get short-lived reset token.
+  Future<String> verifyPasswordResetOtp({
+    required String email,
+    required String otp,
+  });
+
+  /// Reset password with verified reset token.
   Future<void> resetPassword({
     required String email,
-    required String token,
+    required String resetToken,
     required String password,
     required String passwordConfirmation,
   });
