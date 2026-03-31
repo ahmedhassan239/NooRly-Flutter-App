@@ -3,6 +3,14 @@
 
 import 'package:flutter_app/features/journey/domain/entities/journey_entity.dart';
 
+/// How to render the clock row for a locked lesson (localized in the lesson list UI).
+enum JourneyLessonLockedSubtitle {
+  /// API default: user must finish prior lessons.
+  completePrevious,
+  unlocksTomorrow,
+  unlocksInDays,
+}
+
 class JourneyMockData {
   JourneyMockData._();
 
@@ -29,64 +37,71 @@ class JourneyMockData {
           id: '1',
           dayNumber: 1,
           title: 'Welcome to Islam',
-          category: 'Faith',
-          duration: '3 min read',
+          category: 'Lesson',
+          durationMinutes: 3,
           status: LessonStatus.start,
-          unlockInfo: null,
+          lockedSubtitle: null,
+          unlockInDays: null,
         ),
         LessonData(
           id: '2',
           dayNumber: 2,
           title: 'The Meaning of Shahada',
-          category: 'Faith',
-          duration: '5 min read',
+          category: 'Lesson',
+          durationMinutes: 5,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks Tomorrow',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksTomorrow,
+          unlockInDays: null,
         ),
         LessonData(
           id: '3',
           dayNumber: 3,
           title: 'Understanding Tawheed',
-          category: 'Faith',
-          duration: '7 min read',
+          category: 'Lesson',
+          durationMinutes: 7,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks 2 days',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+          unlockInDays: 2,
         ),
         LessonData(
           id: '4',
           dayNumber: 4,
           title: 'The Five Pillars',
-          category: 'Faith',
-          duration: '6 min read',
+          category: 'Lesson',
+          durationMinutes: 6,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks 3 days',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+          unlockInDays: 3,
         ),
         LessonData(
           id: '5',
           dayNumber: 5,
           title: 'Who is Allah?',
-          category: 'Faith',
-          duration: '8 min read',
+          category: 'Lesson',
+          durationMinutes: 8,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks 4 days',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+          unlockInDays: 4,
         ),
         LessonData(
           id: '6',
           dayNumber: 6,
           title: 'Angels & Revelation',
-          category: 'Faith',
-          duration: '6 min read',
+          category: 'Lesson',
+          durationMinutes: 6,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks 5 days',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+          unlockInDays: 5,
         ),
         LessonData(
           id: '7',
           dayNumber: 7,
           title: 'Week 1 Reflection',
-          category: 'Faith',
-          duration: '4 min read',
+          category: 'Lesson',
+          durationMinutes: 4,
           status: LessonStatus.locked,
-          unlockInfo: 'Unlocks 6 days',
+          lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+          unlockInDays: 6,
         ),
       ],
     ),
@@ -99,7 +114,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(2, 'Faith Basics (Cont.)', 'Faith'),
+      lessons: _generateWeekLessons(2, 'Faith Basics (Cont.)'),
     ),
     WeekData(
       weekId: null,
@@ -110,7 +125,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(3, 'Understanding Prayer', 'Prayer'),
+      lessons: _generateWeekLessons(3, 'Understanding Prayer'),
     ),
     WeekData(
       weekId: null,
@@ -121,7 +136,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(4, 'Learning Salah', 'Prayer'),
+      lessons: _generateWeekLessons(4, 'Learning Salah'),
     ),
     WeekData(
       weekId: null,
@@ -132,7 +147,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(5, 'Salah Practice', 'Prayer'),
+      lessons: _generateWeekLessons(5, 'Salah Practice'),
     ),
     WeekData(
       weekId: null,
@@ -143,7 +158,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(6, 'Quran Introduction', 'Quran'),
+      lessons: _generateWeekLessons(6, 'Quran Introduction'),
     ),
     WeekData(
       weekId: null,
@@ -154,7 +169,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(7, 'Quran Connection', 'Quran'),
+      lessons: _generateWeekLessons(7, 'Quran Connection'),
     ),
     WeekData(
       weekId: null,
@@ -165,7 +180,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(8, 'Daily Habits', 'Lifestyle'),
+      lessons: _generateWeekLessons(8, 'Daily Habits'),
     ),
     WeekData(
       weekId: null,
@@ -176,7 +191,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(9, 'Islamic Character', 'Character'),
+      lessons: _generateWeekLessons(9, 'Islamic Character'),
     ),
     WeekData(
       weekId: null,
@@ -187,7 +202,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(10, 'Community & Ummah', 'Community'),
+      lessons: _generateWeekLessons(10, 'Community & Ummah'),
     ),
     WeekData(
       weekId: null,
@@ -198,7 +213,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(11, 'Deepening Faith', 'Faith'),
+      lessons: _generateWeekLessons(11, 'Deepening Faith'),
     ),
     WeekData(
       weekId: null,
@@ -209,7 +224,7 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 7,
-      lessons: _generateWeekLessons(12, 'Journey Completion', 'Completion'),
+      lessons: _generateWeekLessons(12, 'Journey Completion'),
     ),
     WeekData(
       weekId: null,
@@ -220,14 +235,13 @@ class JourneyMockData {
       isCurrent: false,
       doneCount: 0,
       totalCount: 6,
-      lessons: _generateWeekLessons(13, 'Bonus Week', 'Bonus', lessonCount: 6),
+      lessons: _generateWeekLessons(13, 'Bonus Week', lessonCount: 6),
     ),
   ];
 
   static List<LessonData> _generateWeekLessons(
     int weekNumber,
-    String weekTitle,
-    String category, {
+    String weekTitle, {
     int lessonCount = 7,
   }) {
     final startDay = (weekNumber - 1) * 7 + 1;
@@ -238,10 +252,11 @@ class JourneyMockData {
         id: lessonId,
         dayNumber: dayNumber,
         title: '$weekTitle - Day ${index + 1}',
-        category: category,
-        duration: '${5 + (index % 4)} min read',
+        category: 'Lesson',
+        durationMinutes: 5 + (index % 4),
         status: LessonStatus.locked,
-        unlockInfo: 'Unlocks in ${dayNumber - currentDay} days',
+        lockedSubtitle: JourneyLessonLockedSubtitle.unlocksInDays,
+        unlockInDays: dayNumber - currentDay,
       );
     });
   }
@@ -312,17 +327,17 @@ List<WeekData> journeyToWeekDataList(List<WeekEntity> weeks, String localeCode) 
         } else {
           status = LessonStatus.locked;
         }
-        final duration = l.duration != null ? '${l.duration} min read' : '—';
         return LessonData(
           id: l.id,
           dayNumber: l.dayNumber,
           title: l.getTitle(localeCode),
           category: 'Lesson',
-          duration: duration,
+          durationMinutes: l.duration,
           status: status,
-          unlockInfo: status == LessonStatus.locked
-              ? 'Complete previous lesson'
+          lockedSubtitle: status == LessonStatus.locked
+              ? JourneyLessonLockedSubtitle.completePrevious
               : null,
+          unlockInDays: null,
         );
       }).toList(),
     );
@@ -371,18 +386,23 @@ class LessonData {
   final int dayNumber;
   final String title;
   final String category;
-  final String duration;
+  /// Estimated read time in minutes; shown when the lesson is not locked.
+  final int? durationMinutes;
   final LessonStatus status;
-  final String? unlockInfo;
+  /// When [status] is [LessonStatus.locked], drives localized subtitle text.
+  final JourneyLessonLockedSubtitle? lockedSubtitle;
+  /// Used with [JourneyLessonLockedSubtitle.unlocksInDays] only.
+  final int? unlockInDays;
 
   const LessonData({
     required this.id,
     required this.dayNumber,
     required this.title,
     required this.category,
-    required this.duration,
+    required this.durationMinutes,
     required this.status,
-    this.unlockInfo,
+    this.lockedSubtitle,
+    this.unlockInDays,
   });
 
   bool get isLocked => status == LessonStatus.locked;

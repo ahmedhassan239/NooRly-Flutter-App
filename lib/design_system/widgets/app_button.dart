@@ -33,16 +33,26 @@ class AppButton extends StatelessWidget {
     final style = _getButtonStyle(context, colorScheme, colors);
     final labelStyle = AppTypography.buttonLabel(context, color: colors.fg);
 
+    final textWidget = Text(
+      text,
+      style: labelStyle,
+      textAlign: TextAlign.center,
+      maxLines: 2,
+      softWrap: true,
+      overflow: TextOverflow.clip,
+    );
+
     final Widget content = Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: fullWidth ? MainAxisSize.max : MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         if (isLoading)
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 8),
+            padding: const EdgeInsetsDirectional.only(end: 10),
             child: SizedBox(
-              width: 18,
-              height: 18,
+              width: 20,
+              height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 2,
                 color: colors.fg,
@@ -51,17 +61,13 @@ class AppButton extends StatelessWidget {
           )
         else if (icon != null)
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 8),
+            padding: const EdgeInsetsDirectional.only(end: 10),
             child: IconTheme(
-              data: IconThemeData(size: 18, color: colors.fg),
+              data: IconThemeData(size: 20, color: colors.fg),
               child: icon!,
             ),
           ),
-        Text(
-          text,
-          style: labelStyle,
-          textAlign: TextAlign.center,
-        ),
+        if (fullWidth) Expanded(child: textWidget) else textWidget,
       ],
     );
 
@@ -132,11 +138,11 @@ class AppButton extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.lg,
-        vertical: AppSpacing.md,
+        vertical: 12,
       ),
-      minimumSize: const Size(64, 52),
+      minimumSize: const Size(64, 48),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.defaultRadius),
+        borderRadius: BorderRadius.circular(AppRadius.button),
         side: colors.border,
       ),
       textStyle: AppTypography.buttonLabel(context, color: colors.fg),

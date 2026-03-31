@@ -104,6 +104,14 @@
   "journeyEncouragement": "واصل المسير! أنت تبلي حسناً!",
   "journeyCouldNotLoad": "تعذّر تحميل الرحلة",
   "journeyCompletePreviousFirst": "أكمل الدروس السابقة أولاً.",
+  "journeyLessonLockedHint": "أكمل الدرس السابق أولاً",
+  "journeyUnlocksTomorrow": "يُفتح غداً",
+  "journeyUnlocksInDays": "يُفتح خلال {days} أيام",
+  "@journeyUnlocksInDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
   "journeyStart": "ابدأ",
   "journeyLessonLabel": "درس",
   "journeyNoLessonsLoaded": "لا توجد دروس محملة",

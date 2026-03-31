@@ -279,7 +279,7 @@ class _WeekCardState extends State<WeekCard> with SingleTickerProviderStateMixin
         ),
       );
     }
-    if (week.weekNumber == 13 && week.title == 'Bonus Week') {
+    if (week.weekNumber == 13) {
       return Padding(
         padding: const EdgeInsets.all(8),
         child: SvgPicture.asset(

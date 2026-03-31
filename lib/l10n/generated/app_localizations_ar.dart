@@ -225,6 +225,17 @@ class AppLocalizationsAr extends AppLocalizations {
   String get journeyCompletePreviousFirst => 'أكمل الدروس السابقة أولاً.';
 
   @override
+  String get journeyLessonLockedHint => 'أكمل الدرس السابق أولاً';
+
+  @override
+  String get journeyUnlocksTomorrow => 'يُفتح غداً';
+
+  @override
+  String journeyUnlocksInDays(int days) {
+    return 'يُفتح خلال $days أيام';
+  }
+
+  @override
   String get journeyStart => 'ابدأ';
 
   @override

@@ -4,6 +4,7 @@ library;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_app/app/locale_provider.dart';
+import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 import 'package:flutter_app/features/lessons/domain/repositories/lessons_repository.dart';
 import 'package:flutter_app/features/lessons/presentation/state/lesson_details_state.dart';
 import 'package:flutter_app/features/lessons/providers/lessons_providers.dart';
@@ -59,6 +60,11 @@ class LessonDetailsNotifier extends StateNotifier<LessonDetailsState> {
     if (current is! LessonDetailsLoaded || current.isCompleted) return;
     try {
       await _repository.completeLessonById(current.lesson.id);
+      // Completion changes progression gates; invalidate all dependent journey
+      // sources so returning to Journey reflects unlocked lessons immediately.
+      _ref.invalidate(journeyProvider);
+      _ref.invalidate(todayLessonProvider);
+      _ref.invalidate(journeySummaryProvider);
       state = LessonDetailsLoaded(
         lesson: current.lesson,
         isCompleted: true,

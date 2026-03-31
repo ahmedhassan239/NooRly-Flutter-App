@@ -506,6 +506,24 @@ abstract class AppLocalizations {
   /// **'Complete previous lessons first.'**
   String get journeyCompletePreviousFirst;
 
+  /// No description provided for @journeyLessonLockedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete previous lesson'**
+  String get journeyLessonLockedHint;
+
+  /// No description provided for @journeyUnlocksTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks tomorrow'**
+  String get journeyUnlocksTomorrow;
+
+  /// No description provided for @journeyUnlocksInDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlocks in {days} days'**
+  String journeyUnlocksInDays(int days);
+
   /// No description provided for @journeyStart.
   ///
   /// In en, this message translates to:

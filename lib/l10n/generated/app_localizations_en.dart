@@ -225,6 +225,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get journeyCompletePreviousFirst => 'Complete previous lessons first.';
 
   @override
+  String get journeyLessonLockedHint => 'Complete previous lesson';
+
+  @override
+  String get journeyUnlocksTomorrow => 'Unlocks tomorrow';
+
+  @override
+  String journeyUnlocksInDays(int days) {
+    return 'Unlocks in $days days';
+  }
+
+  @override
   String get journeyStart => 'Start';
 
   @override

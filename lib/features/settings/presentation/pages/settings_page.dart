@@ -15,6 +15,7 @@ import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends ConsumerStatefulWidget {
   const SettingsPage({super.key});
@@ -24,6 +25,9 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
+  static const String _privacyPolicyUrl = 'https://noorly.net/privacy-policy';
+  static const String _helpSupportUrl = 'https://noorly.net/help';
+
   /// Temporary: set to true to show Font Size in Appearance section.
   static const bool _showFontSizeSetting = false;
   /// Temporary: set to true to show Prayer Times section (Calculation Method, Madhab, Adjust Times).
@@ -294,12 +298,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               SettingsExternalLinkTile(
                 icon: LucideIcons.shield,
                 title: l10n.settingsPrivacyPolicy,
-                onTap: () => _openUrl(l10n, 'https://noorjourney.app/privacy'),
+                onTap: () => _openUrl(l10n, _privacyPolicyUrl),
               ),
               SettingsExternalLinkTile(
                 icon: LucideIcons.helpCircle,
                 title: l10n.settingsHelpSupport,
-                onTap: () => _openUrl(l10n, 'https://noorjourney.app/support'),
+                onTap: () => _openUrl(l10n, _helpSupportUrl),
               ),
               SettingsExternalLinkTile(
                 icon: LucideIcons.messageSquare,
@@ -718,6 +722,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   void _openUrl(AppLocalizations l10n, String url) {
+    final uri = Uri.parse(url);
     final colorScheme = Theme.of(context).colorScheme;
     showDialog<void>(
       context: context,
@@ -763,9 +768,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
               _showSnackBar(l10n.dialogOpeningInBrowser);
+              await launchUrl(uri, mode: LaunchMode.externalApplication);
             },
             child: Text(
               l10n.actionOpen,

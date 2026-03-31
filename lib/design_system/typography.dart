@@ -116,15 +116,26 @@ class AppTypography {
   static TextStyle arabicH3({Color? color}) => h3(color: color);
 
   /// Label style for `AppButton` / elevated buttons.
+  ///
+  /// Arabic: does **not** force Inter (Latin metrics break shaping/spacing). Uses
+  /// an explicit non-inherited style so [DefaultTextStyle] from [ElevatedButton]
+  /// cannot merge Inter onto RTL text. English keeps Inter for consistency with
+  /// the rest of the UI.
   static TextStyle buttonLabel(BuildContext context, {Color? color}) {
-    return _applyInterFont(
-      TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        height: 1.5,
-        color: color,
-      ),
-    ).copyWith(letterSpacing: 0, wordSpacing: 0);
+    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+    final base = TextStyle(
+      inherit: false,
+      color: color,
+      fontSize: 15,
+      fontWeight: FontWeight.w600,
+      height: 1.25,
+      letterSpacing: 0,
+      wordSpacing: 0,
+    );
+    if (isArabic) {
+      return base;
+    }
+    return _applyInterFont(base);
   }
 }
 

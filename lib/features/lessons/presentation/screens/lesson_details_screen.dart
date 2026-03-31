@@ -12,8 +12,8 @@ import 'package:flutter_app/design_system/widgets/app_button.dart';
 import 'package:flutter_app/features/lessons/domain/entities/lesson_entity.dart';
 import 'package:flutter_app/features/lessons/presentation/providers/lesson_details_provider.dart';
 import 'package:flutter_app/features/lessons/presentation/state/lesson_details_state.dart';
+import 'package:flutter_app/features/lessons/presentation/widgets/lesson_bottom_action_bar.dart';
 import 'package:flutter_app/features/lessons/presentation/widgets/lesson_renderer.dart';
-import 'package:flutter_app/features/journey/providers/journey_providers.dart';
 import 'package:flutter_app/features/saved/presentation/providers/saved_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 
@@ -309,7 +309,7 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
         ),
 
         // Sticky bottom bar
-        _BottomBar(
+        LessonBottomActionBar(
           lessonId: widget.lessonId,
           isCompleted: widget.isCompleted,
           nextLessonId: widget.nextLessonId,
@@ -506,7 +506,6 @@ class _LessonContentState extends ConsumerState<_LessonContent> {
     );
   }
 
-
   String _categoryLabel(dynamic category) {
     if (category is String) {
       if (category.isEmpty) return 'Lesson';
@@ -557,127 +556,3 @@ class _Chip extends StatelessWidget {
   }
 }
 
-class _BottomBar extends ConsumerWidget {
-  const _BottomBar({
-    required this.lessonId,
-    required this.isCompleted,
-    this.nextLessonId,
-  });
-
-  final String lessonId;
-  final bool isCompleted;
-  final int? nextLessonId;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final notifier = ref.read(lessonDetailsProvider(lessonId).notifier);
-
-    return Material(
-      color: colorScheme.surface,
-      elevation: 0,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: colorScheme.outline.withValues(alpha: 0.28)),
-          ),
-        ),
-        child: SafeArea(
-          top: false,
-          minimum: EdgeInsets.zero,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.lg,
-              AppSpacing.md,
-              AppSpacing.lg,
-              AppSpacing.md,
-            ),
-            child: Align(
-              alignment: Alignment.center,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 600),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: isCompleted
-                          ? _LessonCompletedBanner(colorScheme: colorScheme)
-                          : AppButton(
-                              text: AppLocalizations.of(context)!.lessonMarkAsCompleted,
-                              fullWidth: true,
-                              onPressed: () async {
-                                await notifier.completeLesson();
-                                ref.invalidate(journeyProvider);
-                              },
-                              icon: Icon(
-                                LucideIcons.check,
-                                size: 18,
-                                color: colorScheme.onPrimary,
-                              ),
-                            ),
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: AppButton(
-                        fullWidth: true,
-                        variant: AppButtonVariant.secondary,
-                        text: nextLessonId != null
-                            ? AppLocalizations.of(context)!.lessonNextLesson
-                            : AppLocalizations.of(context)!.lessonNoMoreLessons,
-                        onPressed: nextLessonId != null
-                            ? () => context.push('/lessons/$nextLessonId')
-                            : null,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// Non-interactive, theme-aware “completed” row — avoids disabled [OutlinedButton]
-/// styling that was unreadable in dark mode.
-class _LessonCompletedBanner extends StatelessWidget {
-  const _LessonCompletedBanner({required this.colorScheme});
-
-  final ColorScheme colorScheme;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: colorScheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(AppRadius.button),
-        border: Border.all(
-          color: colorScheme.primary.withValues(alpha: 0.45),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(LucideIcons.check, size: 20, color: colorScheme.primary),
-          const SizedBox(width: 10),
-          Text(
-            l10n.lessonCompleted,
-            style: AppTypography.body(color: colorScheme.onSurface).copyWith(
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0,
-              wordSpacing: 0,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}

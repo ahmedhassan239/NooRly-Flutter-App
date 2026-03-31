@@ -21,12 +21,14 @@ final journeyProvider = FutureProvider<JourneyEntity>((ref) async {
   final localeCode = ref.watch(localeControllerProvider).languageCode;
 
   final cached = await repository.getCachedJourney(localeCode: localeCode);
-  if (cached != null) {
-    repository.getJourney(localeCode: localeCode).ignore();
-    return cached;
+  try {
+    // Always try network first so progression/unlock state stays current after
+    // mutations (lesson completion). If network fails, we still return cache.
+    return await repository.getJourney(localeCode: localeCode);
+  } catch (_) {
+    if (cached != null) return cached;
+    rethrow;
   }
-
-  return repository.getJourney(localeCode: localeCode);
 });
 
 /// Current day provider.

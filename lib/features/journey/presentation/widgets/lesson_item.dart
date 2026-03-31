@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/core/utils/locale_digits.dart';
 import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
 import 'package:flutter_app/design_system/radius.dart';
@@ -161,15 +162,19 @@ class LessonItem extends StatelessWidget {
                     Row(
                       children: [
                         Icon(
-                          isLocked ? LucideIcons.clock : LucideIcons.clock,
+                          LucideIcons.clock,
                           size: 12,
                           color: colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          isLocked ? (lesson.unlockInfo ?? '') : lesson.duration,
-                          style: AppTypography.caption(
-                            color: colorScheme.onSurface.withValues(alpha: 0.7),
+                        Expanded(
+                          child: Text(
+                            _clockRowText(context),
+                            style: AppTypography.caption(
+                              color: colorScheme.onSurface.withValues(alpha: 0.7),
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
@@ -190,6 +195,30 @@ class LessonItem extends StatelessWidget {
       ),
       ),
     );
+  }
+
+  /// Duration (unlocked) or lock hint (localized); uses [AppLocalizations] + [toLocaleDigits].
+  String _clockRowText(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
+    if (lesson.isLocked) {
+      final kind = lesson.lockedSubtitle ?? JourneyLessonLockedSubtitle.completePrevious;
+      switch (kind) {
+        case JourneyLessonLockedSubtitle.completePrevious:
+          return l10n.journeyLessonLockedHint;
+        case JourneyLessonLockedSubtitle.unlocksTomorrow:
+          return l10n.journeyUnlocksTomorrow;
+        case JourneyLessonLockedSubtitle.unlocksInDays:
+          final d = lesson.unlockInDays ?? 0;
+          final safe = d < 0 ? 0 : d;
+          return toLocaleDigits(l10n.journeyUnlocksInDays(safe), lang);
+      }
+    }
+    final minutes = lesson.durationMinutes;
+    if (minutes != null && minutes > 0) {
+      return toLocaleDigits(l10n.journeyDurationMinRead(minutes), lang);
+    }
+    return '—';
   }
 
   Widget _buildStatusIcon(bool isStart, bool isCompleted, bool isLocked, ColorScheme colorScheme) {

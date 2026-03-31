@@ -104,6 +104,14 @@
   "journeyEncouragement": "Keep going! You're doing great!",
   "journeyCouldNotLoad": "Could not load journey",
   "journeyCompletePreviousFirst": "Complete previous lessons first.",
+  "journeyLessonLockedHint": "Complete previous lesson",
+  "journeyUnlocksTomorrow": "Unlocks tomorrow",
+  "journeyUnlocksInDays": "Unlocks in {days} days",
+  "@journeyUnlocksInDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
   "journeyStart": "Start",
   "journeyLessonLabel": "Lesson",
   "journeyNoLessonsLoaded": "No lessons loaded",
