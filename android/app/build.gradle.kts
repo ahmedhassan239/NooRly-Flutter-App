@@ -36,8 +36,10 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
-            isMinifyEnabled = false
-            isShrinkResources = false
+                // Enable code shrinking and resource shrinking to reduce APK size.
+                // R8/ProGuard will run and respect rules in proguard-rules.pro.
+                isMinifyEnabled = true
+                isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -52,4 +54,14 @@ dependencies {
 
 flutter {
     source = "../.."
+
+    // ABI splits to avoid shipping all native ABIs in a single fat APK.
+    // Flutter CLI also supports `--split-per-abi`; this keeps Gradle consistent.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+        }
+    }
 }
