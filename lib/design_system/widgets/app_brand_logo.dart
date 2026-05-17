@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Raster app mark — same file as launcher / native splash (`flutter_launcher_icons`).
 /// Square canvas; wordmark may sit low in the art; use [AppBrandLogoCircular] for round masks.
-const String kAppBrandLogoAsset = 'assets/branding/app_icon.png';
+const String kAppBrandLogoAsset = 'web/logo.png';
 
 /// Full wordmark / logo without circular clipping (splash, wide headers).
 ///
@@ -26,7 +26,7 @@ class AppBrandLogo extends StatelessWidget {
         fit: BoxFit.contain,
         alignment: Alignment.center,
         filterQuality: FilterQuality.high,
-        semanticLabel: 'NooRly',
+        semanticLabel: 'Noor Journey',
       ),
     );
   }
@@ -73,7 +73,7 @@ class AppBrandLogoCircular extends StatelessWidget {
               fit: BoxFit.contain,
               alignment: alignment,
               filterQuality: FilterQuality.high,
-              semanticLabel: 'NooRly',
+              semanticLabel: 'Noor Journey',
             ),
           ),
         ),
