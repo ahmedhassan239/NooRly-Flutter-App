@@ -9,10 +9,10 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Noor Journey';
+  String get appTitle => 'ق';
 
   @override
-  String get welcomeTitle => 'Welcome to Noor Journey';
+  String get welcomeTitle => 'Welcome to ق';
 
   @override
   String get getStarted => 'Get Started';
@@ -122,7 +122,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeExitTitle => 'Exit app?';
 
   @override
-  String get homeExitContent => 'Do you want to exit NooRly?';
+  String get homeExitContent => 'Do you want to exit ق?';
 
   @override
   String get homeExitConfirm => 'Exit';

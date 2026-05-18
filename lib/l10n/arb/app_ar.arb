@@ -1,8 +1,8 @@
 {
   "@@locale": "ar",
 
-  "appTitle": "رحلة النور",
-  "welcomeTitle": "مرحباً برحلة النور",
+  "appTitle": "ق",
+  "welcomeTitle": "مرحباً بـ ق",
   "getStarted": "ابدأ الآن",
   "home": "الرئيسية",
   "settings": "الإعدادات",
@@ -51,7 +51,7 @@
   "homeEncouragement": "أنت تسير بشكل رائع. كل خطوة تُحسب.",
   "homeFriendFallback": "صديقي",
   "homeExitTitle": "الخروج من التطبيق؟",
-  "homeExitContent": "هل تريد الخروج من نُورلي؟",
+  "homeExitContent": "هل تريد الخروج من ق؟",
   "homeExitConfirm": "خروج",
 
   "nextPrayer": "الصلاة القادمة",

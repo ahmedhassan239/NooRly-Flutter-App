@@ -242,7 +242,7 @@ class _AppState extends ConsumerState<App> with WidgetsBindingObserver {
       data: mediaData,
       child: OverlaySupport.global(
         child: MaterialApp.router(
-          title: 'Noor Journey',
+          title: 'ق',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,

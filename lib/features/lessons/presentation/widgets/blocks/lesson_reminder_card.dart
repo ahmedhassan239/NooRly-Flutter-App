@@ -2,11 +2,12 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 
-const _amberBorder = Color(0xFFD97706);
+const _amberBorder = Color(0xFFC69B62);
 
 class LessonReminderCard extends StatelessWidget {
   const LessonReminderCard({required this.block, super.key});
@@ -22,10 +23,10 @@ class LessonReminderCard extends StatelessWidget {
             _amberBorder.withValues(alpha: 0.12),
             colorScheme.surfaceContainerHighest,
           )
-        : const Color(0xFFFFFBEB);
+        : AppColors.accentGold.withAlpha(18);
     final border = _amberBorder.withValues(alpha: isDark ? 0.45 : 0.35);
     final textColor = colorScheme.onSurface;
-    final titleColor = isDark ? const Color(0xFFFBBF24) : const Color(0xFF78350F);
+    final titleColor = isDark ? AppColors.accentGold.withAlpha(220) : const Color(0xFF7B6344);
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),

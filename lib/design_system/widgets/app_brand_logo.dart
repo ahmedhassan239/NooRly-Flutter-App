@@ -26,7 +26,7 @@ class AppBrandLogo extends StatelessWidget {
         fit: BoxFit.contain,
         alignment: Alignment.center,
         filterQuality: FilterQuality.high,
-        semanticLabel: 'Noor Journey',
+        semanticLabel: 'ق',
       ),
     );
   }
@@ -73,7 +73,7 @@ class AppBrandLogoCircular extends StatelessWidget {
               fit: BoxFit.contain,
               alignment: alignment,
               filterQuality: FilterQuality.high,
-              semanticLabel: 'Noor Journey',
+              semanticLabel: 'ق',
             ),
           ),
         ),

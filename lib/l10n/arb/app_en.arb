@@ -1,8 +1,8 @@
 {
   "@@locale": "en",
 
-  "appTitle": "Noor Journey",
-  "welcomeTitle": "Welcome to Noor Journey",
+  "appTitle": "ق",
+  "welcomeTitle": "Welcome to ق",
   "getStarted": "Get Started",
   "home": "Home",
   "settings": "Settings",
@@ -51,7 +51,7 @@
   "homeEncouragement": "You're doing great. Every step counts.",
   "homeFriendFallback": "Friend",
   "homeExitTitle": "Exit app?",
-  "homeExitContent": "Do you want to exit NooRly?",
+  "homeExitContent": "Do you want to exit ق?",
   "homeExitConfirm": "Exit",
 
   "nextPrayer": "Next Prayer",

@@ -9,10 +9,10 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get appTitle => 'رحلة النور';
+  String get appTitle => 'ق';
 
   @override
-  String get welcomeTitle => 'مرحباً برحلة النور';
+  String get welcomeTitle => 'مرحباً بـ ق';
 
   @override
   String get getStarted => 'ابدأ الآن';
@@ -122,7 +122,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get homeExitTitle => 'الخروج من التطبيق؟';
 
   @override
-  String get homeExitContent => 'هل تريد الخروج من نُورلي؟';
+  String get homeExitContent => 'هل تريد الخروج من ق؟';
 
   @override
   String get homeExitConfirm => 'خروج';

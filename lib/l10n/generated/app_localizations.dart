@@ -101,13 +101,13 @@ abstract class AppLocalizations {
   /// No description provided for @appTitle.
   ///
   /// In en, this message translates to:
-  /// **'Noor Journey'**
+  /// **'ق'**
   String get appTitle;
 
   /// No description provided for @welcomeTitle.
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Noor Journey'**
+  /// **'Welcome to ق'**
   String get welcomeTitle;
 
   /// No description provided for @getStarted.
@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeExitContent.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to exit NooRly?'**
+  /// **'Do you want to exit ق?'**
   String get homeExitContent;
 
   /// No description provided for @homeExitConfirm.

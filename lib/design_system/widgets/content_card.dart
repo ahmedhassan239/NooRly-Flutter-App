@@ -176,11 +176,11 @@ class _ContentCardState extends State<ContentCard> {
       case ContentType.dua:
         return AppColors.primary;
       case ContentType.hadith:
-        return const Color(0xFFD97706); // Amber
+        return AppColors.accentGold;
       case ContentType.verse:
-        return const Color(0xFF059669); // Emerald
+        return AppColors.secondary;
       case ContentType.adhkar:
-        return const Color(0xFF7C3AED); // Purple
+        return AppColors.accentGreen;
     }
   }
 

@@ -3,14 +3,15 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/core/content/content_display_normalize.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 
 // Warm gold palette (knowledge, wisdom feel for Hadith) — light mode
-const _bgLight = Color(0xFFFFFBEB); // amber-50
-const _border = Color(0xFFD97706); // amber-600
-const _labelLight = Color(0xFF92400E); // amber-800
+const _bgLight = Color(0xFFFFF6EB); // soft gold tone
+const _border = Color(0xFFC69B62); // premium gold
+const _labelLight = Color(0xFF8B6E44); // warm gold text
 
 class LessonHadithCard extends StatelessWidget {
   const LessonHadithCard({required this.block, super.key});
@@ -27,9 +28,9 @@ class LessonHadithCard extends StatelessWidget {
             colorScheme.surfaceContainerHighest,
           )
         : _bgLight;
-    final borderColor = _border.withValues(alpha: isDark ? 0.42 : 0.6);
-    final labelColor = isDark ? const Color(0xFFFBBF24) : _labelLight;
-    final arabicColor = isDark ? const Color(0xFFFCD34D) : _border;
+    final borderColor = _border.withValues(alpha: isDark ? 0.36 : 0.6);
+    final labelColor = isDark ? AppColors.accentGold.withAlpha(220) : _labelLight;
+    final arabicColor = isDark ? AppColors.accentGold.withAlpha(200) : _border;
     final bodyText = colorScheme.onSurface;
     final arabicDisplay =
         ContentDisplayNormalize.forDisplay(block.arabic);

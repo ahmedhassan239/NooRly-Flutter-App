@@ -66,7 +66,7 @@ class RegisterPage extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Join Noorly',
+                        'Join ق',
                         style: AppTypography.h1(color: colorScheme.onSurface),
                       ).animate().fadeIn(delay: 100.ms).moveY(begin: 20, end: 0),
                       const SizedBox(height: AppSpacing.xs),

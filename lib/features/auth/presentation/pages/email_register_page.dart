@@ -97,7 +97,7 @@ class _EmailRegisterPageState extends State<EmailRegisterPage> {
                     const SizedBox(height: AppSpacing.xs),
 
                     Text(
-                      'Join Noorly with email',
+                      'Join ق with email',
                       style: AppTypography.body(
                         color: colorScheme.onSurface.withValues(alpha: 0.7),
                       ),

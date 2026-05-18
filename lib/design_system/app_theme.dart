@@ -18,10 +18,12 @@ class AppTheme {
       onPrimary: AppColors.primaryForeground,
       secondary: AppColors.secondary,
       onSecondary: AppColors.secondaryForeground,
-      tertiary: AppColors.accentCoral,
+      tertiary: AppColors.accentGold,
       onTertiary: AppColors.accentForeground,
       error: AppColors.error,
-      surface: AppColors.background,
+      background: AppColors.background,
+      onBackground: AppColors.foreground,
+      surface: AppColors.surface,
       onSurface: AppColors.foreground,
       surfaceContainerHighest: AppColors.card,
       outline: AppColors.border,
@@ -161,7 +163,7 @@ class AppTheme {
 
       // Floating Action Button
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.accentCoral,
+        backgroundColor: AppColors.accentGold,
         foregroundColor: AppColors.accentForeground,
         elevation: 4,
       ),
@@ -277,18 +279,20 @@ class AppTheme {
   static ThemeData get darkTheme {
     const colorScheme = ColorScheme.dark(
       primary: AppColors.darkPrimary,
-      onPrimary: AppColors.darkBackground,
-      secondary: Color(0xFF2A2A2A),
+      onPrimary: AppColors.darkForeground,
+      secondary: AppColors.darkSecondary,
       onSecondary: AppColors.darkForeground,
-      tertiary: AppColors.accentCoral,
-      onTertiary: AppColors.accentForeground,
+      tertiary: AppColors.accentGold,
+      onTertiary: AppColors.darkForeground,
       error: AppColors.error,
       onError: Colors.white,
-      surface: AppColors.darkBackground,
+      background: AppColors.darkBackground,
+      onBackground: AppColors.darkForeground,
+      surface: AppColors.darkSurface,
       onSurface: AppColors.darkForeground,
       surfaceContainerHighest: AppColors.darkCard,
       outline: AppColors.darkBorder,
-      outlineVariant: Color(0xFF2A2A2A),
+      outlineVariant: AppColors.darkSurfaceAlt,
     );
 
     return ThemeData(
@@ -339,9 +343,9 @@ class AppTheme {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.darkPrimary,
-          foregroundColor: AppColors.darkBackground,
-          disabledBackgroundColor: const Color(0xFF2A2A2A),
-          disabledForegroundColor: const Color(0xFF666666),
+          foregroundColor: AppColors.darkForeground,
+          disabledBackgroundColor: AppColors.darkSurfaceAlt,
+          disabledForegroundColor: AppColors.darkMutedForeground,
           elevation: 0,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(
@@ -357,7 +361,7 @@ class AppTheme {
       // Input Decoration
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: const Color(0xFF1F1F1F),
+        fillColor: AppColors.darkSurfaceAlt,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppRadius.input),
           borderSide: const BorderSide(color: AppColors.darkBorder),
@@ -370,7 +374,7 @@ class AppTheme {
           borderRadius: BorderRadius.circular(AppRadius.input),
           borderSide: const BorderSide(color: AppColors.darkPrimary, width: 2),
         ),
-        hintStyle: AppTypography.body(color: const Color(0xFF666666)),
+        hintStyle: AppTypography.body(color: AppColors.darkMutedForeground),
         labelStyle: AppTypography.bodySm(color: AppColors.darkForeground),
       ),
 
@@ -399,13 +403,13 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) {
             return AppColors.darkPrimary;
           }
-          return const Color(0xFF666666);
+          return AppColors.darkMutedForeground;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return AppColors.darkPrimary.withValues(alpha: 0.5);
           }
-          return const Color(0xFF2A2A2A);
+          return AppColors.darkSurfaceAlt;
         }),
       ),
 
@@ -424,15 +428,15 @@ class AppTheme {
       // Progress Indicator
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppColors.darkPrimary,
-        linearTrackColor: Color(0xFF2A2A2A),
-        circularTrackColor: Color(0xFF2A2A2A),
+        linearTrackColor: AppColors.darkSurfaceAlt,
+        circularTrackColor: AppColors.darkSurfaceAlt,
       ),
 
       // Bottom Navigation Bar
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: AppColors.darkCard,
         selectedItemColor: AppColors.darkPrimary,
-        unselectedItemColor: Color(0xFF666666),
+        unselectedItemColor: AppColors.darkMutedForeground,
         type: BottomNavigationBarType.fixed,
         elevation: 8,
       ),

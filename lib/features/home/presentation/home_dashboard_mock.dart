@@ -1,6 +1,8 @@
 /// Mock data for Home Dashboard
 /// Replace with actual data from providers/API later
 
+import 'package:flutter_app/design_system/colors.dart';
+
 class HomeMockData {
   HomeMockData._();
 
@@ -90,28 +92,28 @@ class HomeMockData {
       title: 'Duas',
       icon: '🤲',
       route: '/duas',
-      color: 0xFF1E40AF,
+      color: AppColors.primary.value,
     ),
     HubItem(
       id: 'hadith',
       title: 'Hadith',
       icon: '📜',
       route: '/hadith',
-      color: 0xFFF59E0B,
+      color: AppColors.accentGold.value,
     ),
     HubItem(
       id: 'verses',
       title: 'Verses',
       icon: '📖',
       route: '/verses',
-      color: 0xFF10B981,
+      color: AppColors.secondary.value,
     ),
     HubItem(
       id: 'adhkar',
       title: 'Adhkar',
       icon: '📿',
       route: '/adhkar',
-      color: 0xFF8B5CF6,
+      color: AppColors.accentGreen.value,
     ),
   ];
 }

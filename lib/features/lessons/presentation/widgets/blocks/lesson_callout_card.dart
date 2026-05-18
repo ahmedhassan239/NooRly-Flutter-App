@@ -2,6 +2,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
@@ -70,23 +71,23 @@ class LessonCalloutCard extends StatelessWidget {
   ) {
     return switch (variant) {
       CalloutVariant.tip => (
-          isDark ? const Color(0xFF059669).withAlpha(20) : const Color(0xFFECFDF5),
-          const Color(0xFF059669),
+          isDark ? AppColors.success.withAlpha(20) : AppColors.success.withAlpha(18),
+          AppColors.success,
           '💡',
         ),
       CalloutVariant.info => (
-          isDark ? const Color(0xFF3B82F6).withAlpha(20) : const Color(0xFFEFF6FF),
-          const Color(0xFF3B82F6),
+          isDark ? AppColors.secondary.withAlpha(20) : AppColors.secondary.withAlpha(18),
+          AppColors.secondary,
           'ℹ️',
         ),
       CalloutVariant.warning => (
-          isDark ? const Color(0xFFD97706).withAlpha(20) : const Color(0xFFFFFBEB),
-          const Color(0xFFD97706),
+          isDark ? AppColors.warning.withAlpha(20) : AppColors.warning.withAlpha(18),
+          AppColors.warning,
           '⚠️',
         ),
       CalloutVariant.success => (
-          isDark ? const Color(0xFF10B981).withAlpha(20) : const Color(0xFFF0FDF4),
-          const Color(0xFF10B981),
+          isDark ? AppColors.accentGreen.withAlpha(20) : AppColors.accentGreen.withAlpha(18),
+          AppColors.accentGreen,
           '✅',
         ),
     };

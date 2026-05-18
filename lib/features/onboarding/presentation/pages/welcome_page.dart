@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/spacing.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/design_system/widgets/app_brand_logo.dart';
@@ -20,9 +21,9 @@ const String _kMosqueSvgAsset = 'assets/images/mosque_islam.svg';
 class WelcomePage extends ConsumerWidget {
   const WelcomePage({super.key});
 
-  static const Color _blueDark = Color(0xFF0D2137);
-  static const Color _blueBottom = Color(0xFF1A2F47);
-  static const Color _accentOrange = Color(0xFFF7943E);
+  static const Color _heroDark = AppColors.primary;
+  static const Color _heroBottom = AppColors.primarySoftPurple;
+  static const Color _accentGold = AppColors.accentGold;
 
   static const double _readabilityOverlayAlpha = 0.18;
 
@@ -51,7 +52,7 @@ class WelcomePage extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: _blueDark,
+      backgroundColor: _heroDark,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final size = MediaQuery.sizeOf(context);
@@ -128,9 +129,9 @@ class WelcomePage extends ConsumerWidget {
                 ),
               ),
               const TextSpan(
-                text: 'Noorly',
+                text: 'ق',
                 style: TextStyle(
-                  color: _accentOrange,
+                  color: _accentGold,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -172,7 +173,7 @@ class WelcomePage extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () => context.go('/register'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _accentOrange,
+                backgroundColor: _accentGold,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
@@ -262,8 +263,8 @@ class _WelcomeAtmosphere extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                WelcomePage._blueDark,
-                WelcomePage._blueBottom,
+                WelcomePage._heroDark,
+                WelcomePage._heroBottom,
               ],
             ),
           ),
@@ -323,7 +324,7 @@ class _StartupErrorScreen extends StatelessWidget {
     final icon    = isConn ? LucideIcons.wifiOff  : LucideIcons.alertCircle;
 
     return Scaffold(
-      backgroundColor: WelcomePage._blueDark,
+      backgroundColor: WelcomePage._heroDark,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final screenWidth = MediaQuery.sizeOf(context).width;
@@ -366,7 +367,7 @@ class _StartupErrorScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: onRetry,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: WelcomePage._accentOrange,
+                              backgroundColor: WelcomePage._accentGold,
                               foregroundColor: Colors.white,
                               padding: const EdgeInsets.symmetric(vertical: 16),
                             ),

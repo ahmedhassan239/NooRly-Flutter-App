@@ -203,8 +203,8 @@ final defaultMadhabConfigProvider = Provider<int>((ref) {
 final appNameConfigProvider = Provider<String>((ref) {
   final configAsync = ref.watch(appConfigProvider);
   return configAsync.maybeWhen(
-    data: (config) => config.appName ?? 'NooRly',
-    orElse: () => 'NooRly',
+    data: (config) => config.appName ?? 'ق',
+    orElse: () => 'ق',
   );
 });
 

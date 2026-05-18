@@ -12,7 +12,7 @@ import 'package:flutter_app/features/library/data/dto/content_scope_dto.dart';
 /// Parses "#RRGGBB" (or "#AARRGGBB") to [Color]. Returns [fallback] if invalid.
 Color parseHexColor(String? hex, [Color? fallback]) {
   final c = AppColors.fromHex(hex);
-  return c ?? fallback ?? const Color(0xFF8B5CF6);
+  return c ?? fallback ?? AppColors.primary;
 }
 
 /// Maps backend icon key to [IconData]. Safe fallback for unknown keys.

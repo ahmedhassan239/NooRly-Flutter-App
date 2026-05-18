@@ -331,7 +331,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
       buffer.writeln('— ${widget.source!}');
     }
     buffer.writeln();
-    buffer.writeln('Shared from NooRly');
+    buffer.writeln('Shared from ق');
 
     Share.share(buffer.toString());
     Navigator.pop(context);
@@ -356,7 +356,7 @@ class _ShareModalState extends State<ShareModal> with SingleTickerProviderStateM
       // Share the image
       await Share.shareXFiles(
         [XFile(filePath)],
-        text: 'Shared from NooRly',
+        text: 'Shared from ق',
       );
 
       if (context.mounted) {

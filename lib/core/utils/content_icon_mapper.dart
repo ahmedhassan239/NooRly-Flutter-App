@@ -3,6 +3,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/features/duas/utils/category_icon_mapping.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -145,27 +146,27 @@ IconData iconDataFromKey(String? key) {
 
 /// Color for Ramadan accordion icon badges (warm palette).
 Color ramadanIconColorFromKey(String? key) {
-  if (key == null || key.isEmpty) return const Color(0xFFE8A317);
+  if (key == null || key.isEmpty) return AppColors.accentGold;
   final k = key.trim().toLowerCase().replaceAll('_', '-');
   switch (k) {
     case 'warning':
     case 'halal-icon':
     case 'firecrackers-icon':
-      return const Color(0xFFF5A623);
+      return AppColors.warning;
     case 'hands':
     case 'pray-icon':
-      return const Color(0xFFE8B923);
+      return AppColors.accentGreen;
     case 'sparkles':
     case 'sparkle':
     case 'eid-icon':
     case 'islmaic-festival-icon':
-      return const Color(0xFFF7E5A3);
+      return AppColors.accentGold.withAlpha(180);
     case 'zakat-icon':
-      return const Color(0xFF059669);
+      return AppColors.success;
     case 'mosque-icon':
     case 'mosque-icons':
-      return const Color(0xFF1E40AF);
+      return AppColors.primary;
     default:
-      return const Color(0xFFE8A317);
+      return AppColors.accentGold;
   }
 }

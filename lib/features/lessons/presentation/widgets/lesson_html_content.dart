@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 /// Renders lesson HTML content (from API) with callout styling aligned to the
@@ -80,26 +81,26 @@ class LessonHtmlContent extends StatelessWidget {
     Color tintBg(Color light, Color darkTint) =>
         isDark ? darkTint.withValues(alpha: 0.22) : light;
 
-    final noteBg = tintBg(_calloutNoteBg, const Color(0xFF9CA3AF));
-    final infoBg = tintBg(_calloutInfoBg, const Color(0xFF2563EB));
-    final warnBg = tintBg(_calloutWarnBg, const Color(0xFFCA8A04));
-    final okBg = tintBg(_calloutOkBg, const Color(0xFF16A34A));
+    final noteBg = tintBg(_calloutNoteBg, AppColors.darkSurfaceAlt.withAlpha(18));
+    final infoBg = tintBg(AppColors.secondary.withAlpha(18), AppColors.darkSecondary.withAlpha(28));
+    final warnBg = tintBg(AppColors.warning.withAlpha(18), AppColors.warning.withAlpha(28));
+    final okBg = tintBg(AppColors.success.withAlpha(18), AppColors.success.withAlpha(28));
     final dangerBg = tintBg(_calloutDangerBg, const Color(0xFFDC2626));
 
     final noteHeading =
-        isDark ? const Color(0xFFE5E7EB) : const Color(0xFF4B5563);
+        isDark ? AppColors.darkForeground.withAlpha(220) : const Color(0xFF4B5563);
     final infoHeading =
-        isDark ? const Color(0xFF93C5FD) : _calloutInfoBorder;
+        isDark ? AppColors.secondary.withAlpha(200) : AppColors.secondary;
     final warnHeading =
-        isDark ? const Color(0xFFFCD34D) : _calloutWarnBorder;
+        isDark ? AppColors.warning.withAlpha(220) : AppColors.warning;
     final okHeading =
-        isDark ? const Color(0xFF86EFAC) : _calloutOkBorder;
+        isDark ? AppColors.success.withAlpha(220) : AppColors.success;
     final dangerHeading =
         isDark ? const Color(0xFFFCA5A5) : _calloutDangerBorder;
 
     final markBg = isDark
         ? colorScheme.primary.withValues(alpha: 0.35)
-        : const Color(0xFFFEF08A); // yellow-200
+        : AppColors.accentGold.withAlpha(30);
 
     return Html(
       data: _preprocessHtml(html),
@@ -205,18 +206,18 @@ class LessonHtmlContent extends StatelessWidget {
         ),
         'span.tiptap-embed-chip--hadith': Style(
           backgroundColor: isDark
-              ? const Color(0xFF22C55E).withValues(alpha: 0.18)
-              : const Color(0xFF22C55E).withValues(alpha: 0.10),
+              ? AppColors.accentGold.withAlpha(40)
+              : AppColors.accentGold.withAlpha(25),
           border: Border.all(
-            color: const Color(0xFF22C55E).withValues(alpha: 0.35),
+            color: AppColors.accentGold.withAlpha(60),
           ),
         ),
         'span.tiptap-embed-chip--ayah': Style(
           backgroundColor: isDark
-              ? const Color(0xFF3B82F6).withValues(alpha: 0.18)
-              : const Color(0xFF3B82F6).withValues(alpha: 0.10),
+              ? AppColors.secondary.withAlpha(28)
+              : AppColors.secondary.withAlpha(20),
           border: Border.all(
-            color: const Color(0xFF3B82F6).withValues(alpha: 0.35),
+            color: AppColors.secondary.withAlpha(60),
           ),
         ),
 

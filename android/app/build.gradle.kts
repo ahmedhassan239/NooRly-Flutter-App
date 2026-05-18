@@ -46,6 +46,18 @@ android {
             )
         }
     }
+
+    // ABI splits to avoid shipping all native ABIs in a single fat APK.
+    // Flutter CLI also supports `--split-per-abi`; keep Gradle consistent here.
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86_64")
+            // Do not build a universal APK by default; Flutter CLI handles universals.
+            isUniversalApk = false
+        }
+    }
 }
 
 dependencies {
@@ -54,14 +66,4 @@ dependencies {
 
 flutter {
     source = "../.."
-
-    // ABI splits to avoid shipping all native ABIs in a single fat APK.
-    // Flutter CLI also supports `--split-per-abi`; this keeps Gradle consistent.
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("armeabi-v7a", "arm64-v8a", "x86_64")
-        }
-    }
 }

@@ -2,14 +2,15 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_app/design_system/radius.dart';
 import 'package:flutter_app/design_system/typography.dart';
 import 'package:flutter_app/features/lessons/domain/models/lesson_block.dart';
 
-// Emerald palette (calm, sacred feel for Quran verses) — light mode
-const _bgLight = Color(0xFFECFDF5); // emerald-50
-const _border = Color(0xFF059669); // emerald-600
-const _labelLight = Color(0xFF065F46); // emerald-800
+// Quran verse palette — calm sacred green feel
+const _bgLight = Color(0xFFEBF4EE); // soft verse background
+const _border = Color(0xFF1F7F69); // rich teal border
+const _labelLight = Color(0xFF1F6F5B); // deep teal label
 
 class LessonVerseCard extends StatelessWidget {
   const LessonVerseCard({required this.block, super.key});
@@ -27,8 +28,8 @@ class LessonVerseCard extends StatelessWidget {
           )
         : _bgLight;
     final borderColor = _border.withValues(alpha: isDark ? 0.42 : 0.6);
-    final labelColor = isDark ? const Color(0xFF6EE7B7) : _labelLight;
-    final arabicColor = isDark ? const Color(0xFF34D399) : _border;
+    final labelColor = isDark ? AppColors.darkSecondary.withAlpha(220) : _labelLight;
+    final arabicColor = isDark ? AppColors.success.withAlpha(220) : _border;
     final secondaryText = colorScheme.onSurface.withValues(alpha: 0.74);
     final bodyText = colorScheme.onSurface;
 

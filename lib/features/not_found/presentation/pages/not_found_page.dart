@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:go_router/go_router.dart';
 
 class NotFoundPage extends StatelessWidget {
@@ -23,13 +24,13 @@ class NotFoundPage extends StatelessWidget {
                 width: 120,
                 height: 120,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E40AF).withAlpha(25),
+                  color: AppColors.primary.withAlpha(25),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(
                   Icons.search_off_rounded,
                   size: 64,
-                  color: Color(0xFF1E40AF),
+                  color: AppColors.primary,
                 ),
               ),
               const SizedBox(height: 32),
@@ -39,7 +40,7 @@ class NotFoundPage extends StatelessWidget {
                 '404',
                 style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: const Color(0xFF1F2937),
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
               ),
               const SizedBox(height: 8),
@@ -48,7 +49,7 @@ class NotFoundPage extends StatelessWidget {
               Text(
                 'Page Not Found',
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      color: const Color(0xFF6B7280),
+                      color: Theme.of(context).colorScheme.onSurface.withAlpha(200),
                     ),
               ),
               const SizedBox(height: 16),
@@ -58,7 +59,7 @@ class NotFoundPage extends StatelessWidget {
                 "The page you're looking for doesn't exist or has been moved.",
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: const Color(0xFF9CA3AF),
+                      color: Theme.of(context).colorScheme.onSurface.withAlpha(180),
                     ),
               ),
 
@@ -99,8 +100,8 @@ class NotFoundPage extends StatelessWidget {
                     icon: const Icon(Icons.arrow_back),
                     label: const Text('Go Back'),
                     style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFF1E40AF),
-                      side: const BorderSide(color: Color(0xFF1E40AF)),
+                      foregroundColor: AppColors.primary,
+                      side: BorderSide(color: AppColors.primary),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -115,8 +116,8 @@ class NotFoundPage extends StatelessWidget {
                     icon: const Icon(Icons.home),
                     label: const Text('Go Home'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1E40AF),
-                      foregroundColor: Colors.white,
+                      backgroundColor: AppColors.primary,
+                      foregroundColor: AppColors.primaryForeground,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,

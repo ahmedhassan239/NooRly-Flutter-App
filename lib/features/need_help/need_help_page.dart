@@ -3,6 +3,7 @@ import 'package:flutter_app/core/utils/content_icon_mapper.dart';
 import 'package:flutter_app/features/help_now/data/help_now_models.dart';
 import 'package:flutter_app/features/help_now/providers/help_now_providers.dart';
 import 'package:flutter_app/l10n/generated/app_localizations.dart';
+import 'package:flutter_app/design_system/colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
@@ -16,13 +17,13 @@ abstract final class NeedHelpTokens {
 
   /// Light-mode-only spec (Figma). Do not use directly for surfaces/text in
   /// widgets — use [NeedHelpThemeColors.of] so dark mode follows [ColorScheme].
-  static const Color background = Color(0xFFF7F8FB);
-  static const Color card = Color(0xFFFFFFFF);
-  static const Color border = Color(0xFFE9ECF2);
-  static const Color textPrimary = Color(0xFF1F2937);
-  static const Color textSecondary = Color(0xFF6B7280);
-  static const Color iconGold = Color(0xFFD97706);
-  static const Color iconGreen = Color(0xFF059669);
+  static const Color background = AppColors.background;
+  static const Color card = AppColors.card;
+  static const Color border = AppColors.border;
+  static const Color textPrimary = AppColors.foreground;
+  static const Color textSecondary = AppColors.mutedForeground;
+  static const Color iconGold = AppColors.accentGold;
+  static const Color iconGreen = AppColors.accentGreen;
 
   static const double cardRadius = 15.0;
   static const double s8 = 8.0;
