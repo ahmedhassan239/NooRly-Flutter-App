@@ -17,7 +17,7 @@ The Production Safety Layer prevents the app from accidentally connecting to non
 The app automatically sets the environment based on the build mode:
 
 - **Debug Mode** → `AppEnvironment.dev` (uses `http://localhost:8000/api/v1`)
-- **Profile/Release Mode** → `AppEnvironment.prod` (uses `https://admin.noorly.net/api/v1`)
+- **Profile/Release Mode** → `AppEnvironment.prod` (uses `https://admin.theqaf.org/api/v1`)
 
 You can manually override this in `main.dart` by calling:
 ```dart
@@ -28,7 +28,7 @@ ApiConfig.setEnvironment(AppEnvironment.staging);
 
 Every `login` and `register` call checks:
 ```dart
-if (environment == prod && baseUrl != "https://admin.noorly.net/api/v1") {
+if (environment == prod && baseUrl != "https://admin.theqaf.org/api/v1") {
   throw ProdSafetyException("Action blocked...");
 }
 ```
@@ -73,7 +73,7 @@ To confirm your app is using production APIs:
 1. Build the app in release mode: `flutter build apk --release` (or `flutter build ios --release`).
 2. Run the app on a physical device.
 3. Open the Debug Network Screen.
-4. Check the **Base URL**. It should be `https://admin.noorly.net/api/v1`.
+4. Check the **Base URL**. It should be `https://admin.theqaf.org/api/v1`.
 5. Try to **Ping Health**. You should see a successful response.
 6. Check the network logs. The **Environment** column should show `prod`.
 

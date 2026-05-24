@@ -15,7 +15,7 @@ class NotificationContentLocalizer {
   // ── Test notification ────────────────────────────────────────────────────
 
   String get testNotificationTitle =>
-      isArabic ? 'اختبار إشعارات نورلي' : 'Test Noorly Notification';
+      isArabic ? 'اختبار إشعارات ق' : 'Test ق Notification';
 
   String get testNotificationBody => isArabic
       ? 'إذا وصلتك هذه الإشعارية، فالإشعارات تعمل بشكل صحيح.'

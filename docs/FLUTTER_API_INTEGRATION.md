@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document describes the API integration architecture for the NooRly Flutter app. The app connects to a Laravel backend at `https://admin.noorly.net/api/v1`.
+This document describes the API integration architecture for the NooRly Flutter app. The app connects to a Laravel backend at `https://admin.theqaf.org/api/v1`.
 
 ## Table of Contents
 
@@ -27,7 +27,7 @@ The app supports three environments:
 |-------------|----------|
 | `dev` | `http://localhost:8000/api/v1` |
 | `staging` | `https://staging.noorly.net/api/v1` |
-| `prod` | `https://admin.noorly.net/api/v1` |
+| `prod` | `https://admin.theqaf.org/api/v1` |
 
 **Important:** The base URL already includes `/api/v1`. All endpoint paths should be relative.
 
@@ -61,7 +61,7 @@ class ApiConfig {
       case AppEnvironment.staging:
         return 'https://staging.noorly.net/api/v1';
       case AppEnvironment.prod:
-        return 'https://admin.noorly.net/api/v1';
+        return 'https://admin.theqaf.org/api/v1';
     }
   }
 }

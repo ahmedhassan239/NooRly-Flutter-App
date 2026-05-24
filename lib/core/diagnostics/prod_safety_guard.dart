@@ -13,7 +13,7 @@ class ProdSafetyGuard {
   const ProdSafetyGuard();
 
   /// The expected production URL.
-  static const String _expectedProdUrl = 'https://admin.noorly.net/api/v1';
+  static const String _expectedProdUrl = 'https://admin.theqaf.org/api/v1';
 
   /// Checks if the current configuration is safe.
   /// 

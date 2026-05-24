@@ -14,7 +14,7 @@ void main() {
 
     test('prod baseUrl includes /api/v1', () {
       ApiConfig.setEnvironment(AppEnvironment.prod);
-      expect(ApiConfig.baseUrl, 'https://admin.noorly.net/api/v1');
+      expect(ApiConfig.baseUrl, 'https://admin.theqaf.org/api/v1');
       expect(ApiConfig.baseUrl.endsWith('/api/v1'), isTrue);
     });
 
@@ -81,7 +81,7 @@ void main() {
       const endpoint = '/auth/login';
       final fullUrl = '${ApiConfig.baseUrl}$endpoint';
 
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/login');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/login');
     });
   });
 }

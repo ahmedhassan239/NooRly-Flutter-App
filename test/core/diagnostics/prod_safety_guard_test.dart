@@ -26,7 +26,7 @@ void main() {
       // However, ApiConfig.baseUrl depends on ApiConfig.environment.
       // So if we set Env to PROD, baseUrl becomes the prod url automatically in the real class.
       // Let's verify that behavior first.
-      expect(ApiConfig.baseUrl, 'https://admin.noorly.net/api/v1');
+      expect(ApiConfig.baseUrl, 'https://admin.theqaf.org/api/v1');
       
       expect(guard.isSafeToProceed, isTrue);
     });

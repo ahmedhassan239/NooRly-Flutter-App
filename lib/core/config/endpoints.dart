@@ -5,7 +5,7 @@
 ///
 /// Example:
 ///   Endpoint: `/auth/login`
-///   Full URL: `https://admin.noorly.net/api/v1/auth/login`
+///   Full URL: `https://admin.theqaf.org/api/v1/auth/login`
 library;
 
 /// Authentication endpoints.

@@ -42,7 +42,7 @@ void main() async {
 
   // Always print startup context so release APK failures are diagnosable
   // via `adb logcat | grep flutter`.
-  print('[App] ── NooRly starting ─────────────────────────');
+  print('[App] ── ق starting ─────────────────────────');
   print('[App] build      : ${kDebugMode ? "debug" : kProfileMode ? "profile" : "release"}');
   print('[App] environment: ${ApiConfig.environment.name}');
   print('[App] apiBaseUrl : ${ApiConfig.baseUrl}');

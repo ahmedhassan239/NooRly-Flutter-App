@@ -1,7 +1,7 @@
 /// API Configuration for different environments/flavors.
 ///
 /// The base URL already includes `/api/v1` - all endpoints should be relative.
-/// Example: `GET /auth/me` becomes `https://admin.noorly.net/api/v1/auth/me`
+/// Example: `GET /auth/me` becomes `https://admin.theqaf.org/api/v1/auth/me`
 library;
 
 /// Environment flavors for the app.
@@ -61,7 +61,7 @@ class ApiConfig {
       case AppEnvironment.staging:
         return 'https://staging.noorly.net/api/v1';
       case AppEnvironment.prod:
-        return 'https://admin.noorly.net/api/v1';
+        return 'https://admin.theqaf.org/api/v1';
     }
   }
 
@@ -89,7 +89,7 @@ class ApiConfig {
   /// Whether to enable request/response logging.
   static bool get enableLogging => _environment == AppEnvironment.dev;
 
-  /// Scheme + host (+ port) of the API server, without path (e.g. `https://admin.noorly.net`).
+  /// Scheme + host (+ port) of the API server, without path (e.g. `https://admin.theqaf.org`).
   /// Used to turn relative `icon_url` paths from the API into absolute URLs for `Image.network` / SVG.
   static String get apiOrigin {
     final u = Uri.parse(baseUrl);

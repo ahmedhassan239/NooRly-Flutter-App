@@ -25,8 +25,8 @@ class SettingsPage extends ConsumerStatefulWidget {
 }
 
 class _SettingsPageState extends ConsumerState<SettingsPage> {
-  static const String _privacyPolicyUrl = 'https://noorly.net/privacy-policy';
-  static const String _helpSupportUrl = 'https://noorly.net/help';
+  static const String _privacyPolicyUrl = 'https://theqaf.org/privacy-policy';
+  static const String _helpSupportUrl = 'https://theqaf.org/help';
 
   /// Temporary: set to true to show Font Size in Appearance section.
   static const bool _showFontSizeSetting = false;

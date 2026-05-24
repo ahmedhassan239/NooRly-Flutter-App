@@ -14,27 +14,27 @@ void main() {
 
     test('login endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.login}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/login');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/login');
     });
 
     test('register endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.register}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/register');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/register');
     });
 
     test('logout endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.logout}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/logout');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/logout');
     });
 
     test('me endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.me}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/me');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/me');
     });
 
     test('refresh endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.refresh}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/refresh');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/refresh');
     });
   });
 
@@ -45,27 +45,27 @@ void main() {
 
     test('duas list endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${DuasEndpoints.list}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/duas');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/duas');
     });
 
     test('duas detail endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${DuasEndpoints.detail("123")}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/duas/123');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/duas/123');
     });
 
     test('duas category endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${DuasEndpoints.byCategory("morning")}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/duas/category/morning');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/duas/category/morning');
     });
 
     test('hadith search endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${HadithEndpoints.search}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/hadith/search');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/hadith/search');
     });
 
     test('verses search endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${VersesEndpoints.search}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/verses/search');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/verses/search');
     });
   });
 
@@ -76,12 +76,12 @@ void main() {
 
     test('app config endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${ConfigEndpoints.appConfig}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/app-config');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/app-config');
     });
 
     test('home dashboard endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${HomeEndpoints.dashboard}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/home/dashboard');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/home/dashboard');
     });
   });
 
@@ -92,17 +92,17 @@ void main() {
 
     test('journey endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${JourneyEndpoints.journey}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/journey');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/journey');
     });
 
     test('lesson detail endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${LessonsEndpoints.detail('5')}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/lessons/5');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/lessons/5');
     });
 
     test('complete lesson endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${JourneyEndpoints.completeLesson('10')}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/lessons/10/complete');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/lessons/10/complete');
     });
   });
 
@@ -113,7 +113,7 @@ void main() {
 
     test('prayer times endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${PrayerEndpoints.times}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/prayer-times');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/prayer-times');
     });
   });
 
@@ -124,12 +124,12 @@ void main() {
 
     test('profile endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${ProfileEndpoints.profile}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/profile');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/profile');
     });
 
     test('settings endpoint constructs correct URL', () {
       final fullUrl = '${ApiConfig.baseUrl}${SettingsEndpoints.settings}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/settings');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/settings');
     });
   });
 
@@ -152,10 +152,10 @@ void main() {
 
     test('switching to prod changes base URL', () {
       ApiConfig.setEnvironment(AppEnvironment.prod);
-      expect(ApiConfig.baseUrl, 'https://admin.noorly.net/api/v1');
+      expect(ApiConfig.baseUrl, 'https://admin.theqaf.org/api/v1');
 
       final fullUrl = '${ApiConfig.baseUrl}${AuthEndpoints.login}';
-      expect(fullUrl, 'https://admin.noorly.net/api/v1/auth/login');
+      expect(fullUrl, 'https://admin.theqaf.org/api/v1/auth/login');
     });
   });
 }
