@@ -83,6 +83,8 @@ class ProfilePage extends ConsumerWidget {
                         const SizedBox(height: AppSpacing.lg),
                         _buildLogoutButton(context, ref, colorScheme),
                         const SizedBox(height: AppSpacing.md),
+                        _buildDeleteAccountButton(context, ref, colorScheme),
+                        const SizedBox(height: AppSpacing.md),
                         _buildAppVersion(context, colorScheme),
                       ],
                     ),
@@ -962,6 +964,143 @@ class ProfilePage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildDeleteAccountButton(BuildContext context, WidgetRef ref, ColorScheme colorScheme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+      child: InkWell(
+        onTap: () => _showDeleteAccountDialog(context, ref, colorScheme),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: colorScheme.surfaceContainerHighest,
+            borderRadius: BorderRadius.circular(AppRadius.lg),
+            border: Border.all(color: colorScheme.outline.withAlpha(128)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(LucideIcons.trash2, size: 18, color: AppColors.error),
+              const SizedBox(width: 8),
+              Text(
+                AppLocalizations.of(context)!.profileDeleteAccount,
+                style: AppTypography.body(color: AppColors.error).copyWith(fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDeleteAccountDialog(BuildContext context, WidgetRef ref, ColorScheme colorScheme) {
+    final textController = TextEditingController();
+    bool isLoading = false;
+    String? errorText;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: colorScheme.surface,
+              title: Row(
+                children: [
+                  Icon(LucideIcons.alertTriangle, color: AppColors.error),
+                  const SizedBox(width: 8),
+                  Text(AppLocalizations.of(context)!.profileDeleteAccountTitle, style: AppTypography.h3(color: AppColors.error)),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.profileDeleteAccountWarning,
+                    style: AppTypography.bodySm(color: colorScheme.onSurface),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    AppLocalizations.of(context)!.profileDeleteAccountConfirmHint,
+                    style: AppTypography.bodySm(color: colorScheme.onSurface.withAlpha(180)),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  TextField(
+                    controller: textController,
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.profileDeleteAccountHintText,
+                      errorText: errorText,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        borderSide: BorderSide(color: AppColors.error, width: 2),
+                      ),
+                    ),
+                    onChanged: (_) {
+                      if (errorText != null) {
+                        setState(() => errorText = null);
+                      }
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: isLoading ? null : () => Navigator.pop(dialogContext),
+                  child: Text(AppLocalizations.of(context)!.actionCancel, style: TextStyle(color: colorScheme.onSurface)),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.error,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          final input = textController.text.trim().toUpperCase();
+                          if (input != 'DELETE' && input != 'حذف') {
+                            setState(() => errorText = AppLocalizations.of(context)!.profileDeleteAccountTypeError);
+                            return;
+                          }
+
+                          setState(() {
+                            isLoading = true;
+                            errorText = null;
+                          });
+
+                          try {
+                            await ref.read(authProvider.notifier).deleteAccount(confirmationText: input);
+                            if (dialogContext.mounted) {
+                              Navigator.pop(dialogContext);
+                            }
+                          } catch (e) {
+                            setState(() {
+                              isLoading = false;
+                              errorText = AppLocalizations.of(context)!.profileDeleteAccountFailed;
+                            });
+                          }
+                        },
+                  child: isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : Text(AppLocalizations.of(context)!.profileDeleteAccountPermanently),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 

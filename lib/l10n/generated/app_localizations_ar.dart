@@ -460,6 +460,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get profileLogOutConfirm => 'هل أنت متأكد من تسجيل الخروج؟';
 
   @override
+  String get profileDeleteAccount => 'حذف الحساب';
+
+  @override
+  String get profileDeleteAccountTitle => 'حذف الحساب';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'هذا الإجراء دائم ولا يمكن التراجع عنه. سيتم حذف جميع بياناتك وتقدمك والعناصر المحفوظة.';
+
+  @override
+  String get profileDeleteAccountConfirmHint =>
+      'للتأكيد، يرجى كتابة \"حذف\" أدناه:';
+
+  @override
+  String get profileDeleteAccountHintText => 'حذف';
+
+  @override
+  String get profileDeleteAccountTypeError =>
+      'يرجى كتابة كلمة \"حذف\" بشكل صحيح';
+
+  @override
+  String get profileDeleteAccountFailed =>
+      'فشل حذف الحساب. يرجى المحاولة مرة أخرى.';
+
+  @override
+  String get profileDeleteAccountPermanently => 'حذف نهائي';
+
+  @override
   String profileDayOfTotal(int day, int total) {
     return 'اليوم $day من $total';
   }

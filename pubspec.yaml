@@ -167,17 +167,15 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "web/logo.png"
-    # Omit background_color so manifest is not forced to match a solid icon matte;
-    # icons are generated with transparency from the source artwork.
-    theme_color: "#1E40AF"
+    background_color: "#F5F7FA"
+    theme_color: "#0F5F41"
 
-# Native splash (Android / iOS / Web) — matches NOORly background token (AppColors.background)
+# Native splash (Android / iOS)
 flutter_native_splash:
-  color: "#F5F7FA"
-  image: web/logo.png
+  color: "#F5F3EE"
+  image: web/entry.png
   android: true
   ios: true
-  web: true
-  android_12:
-    color: "#F5F7FA"
-    image: web/logo.png
+  web: false
+  android_gravity: center
+  ios_content_mode: scaleAspectFit

@@ -278,6 +278,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Delete the current user account.
+  Future<void> deleteAccount({required String confirmationText}) async {
+    try {
+      await _authRepository.deleteAccount(confirmationText: confirmationText);
+    } finally {
+      state = const AuthState.unauthenticated();
+      _router.go('/');
+    }
+  }
+
   /// Enter guest mode.
   Future<void> enterGuestMode() async {
     await _authRepository.enterGuestMode();

@@ -123,6 +123,19 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<void> deleteAccount({required String confirmationText}) async {
+    try {
+      await _apiClient.delete<void>(
+        AuthEndpoints.me,
+        data: {'confirmation_text': confirmationText},
+      );
+    } finally {
+      // Clear local tokens unconditionally upon deletion attempt
+      await _tokenStorage.clearAll();
+    }
+  }
+
+  @override
   Future<UserEntity> getCurrentUser() async {
     final response = await _apiClient.get<Map<String, dynamic>>(
       AuthEndpoints.me,

@@ -209,6 +209,14 @@
   "profileLogOut": "Log Out",
   "profileLogOutTitle": "Log Out",
   "profileLogOutConfirm": "Are you sure you want to log out?",
+  "profileDeleteAccount": "Delete Account",
+  "profileDeleteAccountTitle": "Delete Account",
+  "profileDeleteAccountWarning": "This action is permanent and cannot be undone. All your data, progress, and saved items will be deleted.",
+  "profileDeleteAccountConfirmHint": "To confirm, please type \"DELETE\" below:",
+  "profileDeleteAccountHintText": "DELETE",
+  "profileDeleteAccountTypeError": "Please type exactly \"DELETE\"",
+  "profileDeleteAccountFailed": "Failed to delete account. Try again.",
+  "profileDeleteAccountPermanently": "Delete Permanently",
   "profileDayOfTotal": "Day {day} of {total}",
   "@profileDayOfTotal": {
     "placeholders": {

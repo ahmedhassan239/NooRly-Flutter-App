@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Raster app mark — same file as launcher / native splash (`flutter_launcher_icons`).
 /// Square canvas; wordmark may sit low in the art; use [AppBrandLogoCircular] for round masks.
-const String kAppBrandLogoAsset = 'web/logo.png';
+const String kAppBrandLogoAsset = 'assets/brand/logo.png';
 
 /// Full wordmark / logo without circular clipping (splash, wide headers).
 ///

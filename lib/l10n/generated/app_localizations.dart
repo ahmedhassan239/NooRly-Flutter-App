@@ -944,6 +944,54 @@ abstract class AppLocalizations {
   /// **'Are you sure you want to log out?'**
   String get profileLogOutConfirm;
 
+  /// No description provided for @profileDeleteAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get profileDeleteAccount;
+
+  /// No description provided for @profileDeleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Account'**
+  String get profileDeleteAccountTitle;
+
+  /// No description provided for @profileDeleteAccountWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This action is permanent and cannot be undone. All your data, progress, and saved items will be deleted.'**
+  String get profileDeleteAccountWarning;
+
+  /// No description provided for @profileDeleteAccountConfirmHint.
+  ///
+  /// In en, this message translates to:
+  /// **'To confirm, please type \"DELETE\" below:'**
+  String get profileDeleteAccountConfirmHint;
+
+  /// No description provided for @profileDeleteAccountHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'DELETE'**
+  String get profileDeleteAccountHintText;
+
+  /// No description provided for @profileDeleteAccountTypeError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please type exactly \"DELETE\"'**
+  String get profileDeleteAccountTypeError;
+
+  /// No description provided for @profileDeleteAccountFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete account. Try again.'**
+  String get profileDeleteAccountFailed;
+
+  /// No description provided for @profileDeleteAccountPermanently.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Permanently'**
+  String get profileDeleteAccountPermanently;
+
   /// No description provided for @profileDayOfTotal.
   ///
   /// In en, this message translates to:

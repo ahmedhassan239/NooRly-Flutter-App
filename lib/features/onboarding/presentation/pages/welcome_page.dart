@@ -18,7 +18,7 @@ const String _kMosqueSvgAsset = 'assets/images/mosque_islam.svg';
 
 /// Welcome/landing page. Uses an opaque brand backdrop so the global app pattern does not
 /// show here; other routes still use the shared pattern from `MaterialApp.builder` unchanged.
-class WelcomePage extends ConsumerWidget {
+class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
 
   static const Color _heroDark = AppColors.primary;
@@ -26,17 +26,84 @@ class WelcomePage extends ConsumerWidget {
   static const Color _accentGold = AppColors.accentGold;
 
   static const double _readabilityOverlayAlpha = 0.18;
+  static const Duration _minimumSplashDuration = Duration(milliseconds: 1800);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
+  ConsumerState<WelcomePage> createState() => _WelcomePageState();
+}
 
-    if (auth.status == AuthStatus.initial || auth.status == AuthStatus.loading) {
-      // Match native / web splash: warm surface + centered logo (opaque — hides global pattern).
+class _WelcomePageState extends ConsumerState<WelcomePage> {
+  bool _splashMinimumElapsed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future<void>.delayed(WelcomePage._minimumSplashDuration).then((_) {
+      if (!mounted) return;
+      setState(() {
+        _splashMinimumElapsed = true;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final auth = ref.watch(authProvider);
+    final screenWidth = MediaQuery.sizeOf(context).width;
+    final splashLogoSize = (screenWidth * 0.42).clamp(140.0, 280.0);
+    final showSplashLoading = !_splashMinimumElapsed ||
+        auth.status == AuthStatus.initial ||
+        auth.status == AuthStatus.loading;
+
+    if (showSplashLoading) {
+      // Keep the splash visible until both auth initialization completes and the
+      // minimum splash duration has elapsed.
+      final imageWidth = (screenWidth * 0.7).clamp(150.0, 320.0);
+      
       return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: const Color(0xFFF5F3EE),
         body: Center(
-          child: AppBrandLogo(size: 168),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: 400,
+              maxHeight: 400,
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                // Subtle ambient glow for depth
+                Container(
+                  width: imageWidth * 0.65,
+                  height: imageWidth * 0.65,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 40,
+                        spreadRadius: 10,
+                      ),
+                      BoxShadow(
+                        color: Colors.white.withValues(alpha: 0.6),
+                        blurRadius: 60,
+                        spreadRadius: 20,
+                      ),
+                    ],
+                  ),
+                ),
+                // Main Logo/Image
+                Padding(
+                  padding: const EdgeInsets.all(32.0),
+                  child: Image.asset(
+                    'assets/brand/entry.png',
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                    width: imageWidth,
+                  ),
+                ),
+              ],
+            ).animate().fadeIn(duration: 800.ms, curve: Curves.easeOutQuint),
+          ),
         ),
       );
     }
@@ -52,7 +119,7 @@ class WelcomePage extends ConsumerWidget {
     }
 
     return Scaffold(
-      backgroundColor: _heroDark,
+      backgroundColor: WelcomePage._heroDark,
       body: LayoutBuilder(
         builder: (context, constraints) {
           final size = MediaQuery.sizeOf(context);
@@ -131,7 +198,7 @@ class WelcomePage extends ConsumerWidget {
               const TextSpan(
                 text: 'ق',
                 style: TextStyle(
-                  color: _accentGold,
+                  color: WelcomePage._accentGold,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -173,7 +240,7 @@ class WelcomePage extends ConsumerWidget {
             child: ElevatedButton(
               onPressed: () => context.go('/register'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _accentGold,
+                backgroundColor: WelcomePage._accentGold,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(

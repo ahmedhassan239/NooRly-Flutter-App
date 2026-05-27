@@ -26,6 +26,9 @@ abstract class AuthRepository {
   /// Logout the current user.
   Future<void> logout();
 
+  /// Delete the current user account securely.
+  Future<void> deleteAccount({required String confirmationText});
+
   /// Get the current authenticated user.
   Future<UserEntity> getCurrentUser();
 

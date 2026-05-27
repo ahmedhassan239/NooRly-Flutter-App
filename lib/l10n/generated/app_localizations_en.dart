@@ -463,6 +463,33 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileLogOutConfirm => 'Are you sure you want to log out?';
 
   @override
+  String get profileDeleteAccount => 'Delete Account';
+
+  @override
+  String get profileDeleteAccountTitle => 'Delete Account';
+
+  @override
+  String get profileDeleteAccountWarning =>
+      'This action is permanent and cannot be undone. All your data, progress, and saved items will be deleted.';
+
+  @override
+  String get profileDeleteAccountConfirmHint =>
+      'To confirm, please type \"DELETE\" below:';
+
+  @override
+  String get profileDeleteAccountHintText => 'DELETE';
+
+  @override
+  String get profileDeleteAccountTypeError => 'Please type exactly \"DELETE\"';
+
+  @override
+  String get profileDeleteAccountFailed =>
+      'Failed to delete account. Try again.';
+
+  @override
+  String get profileDeleteAccountPermanently => 'Delete Permanently';
+
+  @override
   String profileDayOfTotal(int day, int total) {
     return 'Day $day of $total';
   }
