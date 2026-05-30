@@ -38,10 +38,10 @@ android {
         create("release") {
 
             storeFile = file("../upload-keystore.jks")
-            storePassword = "YOUR_STORE_PASSWORD"
+            storePassword = "android"
 
             keyAlias = "upload"
-            keyPassword = "YOUR_KEY_PASSWORD"
+            keyPassword = "android"
         }
     }
 
@@ -66,23 +66,7 @@ android {
         }
     }
 
-    splits {
 
-        abi {
-
-            isEnable = true
-
-            reset()
-
-            include(
-                "armeabi-v7a",
-                "arm64-v8a",
-                "x86_64"
-            )
-
-            isUniversalApk = false
-        }
-    }
 }
 
 dependencies {
