@@ -1,4 +1,4 @@
-package com.omicron.app.flutter_app
+package org.theqaf.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -10,12 +10,26 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  // Global crash handlers
+  FlutterError.onError = (FlutterErrorDetails details) {
+    print('[App Crash] FlutterError: ${details.exception}');
+    if (kDebugMode) FlutterError.dumpErrorToConsole(details);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    print('[App Crash] PlatformDispatcher Error: $error');
+    if (kDebugMode) print(stack);
+    return true; // Prevent default propagation
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
+  print('[Startup] WidgetsFlutterBinding initialized');
 
   // Use path-based URL strategy for Flutter Web (clean URLs without #)
   // This enables URLs like /home instead of /#/home
   // IMPORTANT: Requires server-side rewrite rules for direct URL access
   usePathUrlStrategy();
+  print('[Startup] usePathUrlStrategy executed');
 
   // Set environment: --dart-define=ENV=dev|staging|prod, or debug=dev / release=prod
   const envDefine = String.fromEnvironment('ENV', defaultValue: '');
@@ -48,8 +62,13 @@ void main() async {
   print('[App] apiBaseUrl : ${ApiConfig.baseUrl}');
 
   try {
+    print('[Startup] Initializing SharedPreferences...');
     final sharedPreferences = await SharedPreferences.getInstance();
+    print('[Startup] SharedPreferences initialized');
+    
+    print('[Startup] Initializing CacheManager...');
     await CacheManager.initialize();
+    print('[Startup] CacheManager initialized');
 
     // Initialize local notifications.
     // Wrapped in its own try-catch — a plugin failure must NEVER block launch.
