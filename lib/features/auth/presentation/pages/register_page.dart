@@ -92,24 +92,6 @@ class RegisterPage extends ConsumerWidget {
                   ).animate().fadeIn(delay: 500.ms).moveY(begin: 20, end: 0),
 
                   const Spacer(),
-
-                  // Continue as Guest
-                  Center(
-                    child: TextButton.icon(
-                      onPressed: () => _handleGuestContinue(context, ref),
-                      icon: Icon(
-                        LucideIcons.user,
-                        size: 18,
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
-                      label: Text(
-                        'Continue as Guest',
-                        style: AppTypography.body(
-                          color: colorScheme.onSurface.withValues(alpha: 0.6),
-                        ),
-                      ),
-                    ),
-                  ).animate().fadeIn(delay: 600.ms),
                 ],
               ),
             ),
@@ -121,11 +103,6 @@ class RegisterPage extends ConsumerWidget {
 
   void _handleEmailLogin(BuildContext context) {
     context.go('/auth/register/email'); // keep nested route for register flow
-  }
-
-  void _handleGuestContinue(BuildContext context, WidgetRef ref) {
-    ref.read(authProvider.notifier).enterGuestMode();
-    context.go('/onboarding/about-you');
   }
 }
 

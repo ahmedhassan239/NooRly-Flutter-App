@@ -21,8 +21,8 @@ const String _kMosqueSvgAsset = 'assets/images/mosque_islam.svg';
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
 
-  static const Color _heroDark = AppColors.primary;
-  static const Color _heroBottom = AppColors.primarySoftPurple;
+  static const Color _heroDark = Color(0xFF0A1F14); // Deep dark forest green (matches store screenshots)
+  static const Color _heroBottom = Color(0xFF163D2B); // Dark teal gradient bottom
   static const Color _accentGold = AppColors.accentGold;
 
   static const double _readabilityOverlayAlpha = 0.18;
@@ -113,7 +113,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       return _StartupErrorScreen(
         message: auth.errorMessage!,
         onRetry: () => ref.read(authProvider.notifier).initialize(),
-        onGuest: () => context.go('/onboarding/about-you'),
         onLogin: () => context.go('/login'),
       );
     }
@@ -288,26 +287,6 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             .animate(delay: 500.ms)
             .fadeIn(duration: 500.ms)
             .moveY(begin: 20, end: 0),
-
-        const SizedBox(height: 16),
-
-        TextButton.icon(
-          onPressed: () => context.go('/onboarding/about-you'),
-          icon: Icon(
-            LucideIcons.user,
-            size: 18,
-            color: Colors.white.withValues(alpha: 0.8),
-          ),
-          label: Text(
-            'Continue as Guest',
-            style: AppTypography.body().copyWith(
-              color: Colors.white.withValues(alpha: 0.8),
-            ),
-          ),
-        )
-            .animate(delay: 600.ms)
-            .fadeIn(duration: 500.ms)
-            .moveY(begin: 20, end: 0),
       ],
     );
   }
@@ -365,13 +344,11 @@ class _StartupErrorScreen extends StatelessWidget {
   const _StartupErrorScreen({
     required this.message,
     required this.onRetry,
-    required this.onGuest,
     required this.onLogin,
   });
 
   final String message;
   final VoidCallback onRetry;
-  final VoidCallback onGuest;
   final VoidCallback onLogin;
 
   /// Whether the message describes a genuine network / connectivity problem.
@@ -446,15 +423,6 @@ class _StartupErrorScreen extends StatelessWidget {
                           onPressed: onLogin,
                           child: Text(
                             'Sign in',
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.9),
-                            ),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: onGuest,
-                          child: Text(
-                            'Continue as guest',
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.9),
                             ),
